@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",
-  "manifestVersion": "1.3",
+  "manifestVersion": "1.5",
   "version": "1.0.0",
   "id": "6afb1380-d092-4f9d-b4cf-dd3286344cdf",
   "packageName": "com.contoso.helloworld",
@@ -23,40 +23,26 @@
     "color": "outline.png"
   },
   "accentColor": "#60A18E",
-  "bots": [
-    {
-      "botId": "6afb1380-d092-4f9d-b4cf-dd3286344cdf",
-      "needsChannelSelector": false,
-      "isNotificationOnly": false,
-      "scopes": [
-        "team",
-        "groupchat"
-      ]
-    }
-  ],
   "composeExtensions": [
     {
-      "botId": "bf0fb57b-4fe9-42b2-8c9f-b996159d2963",
-      "canUpdateConfiguration": false,
+      "botId": "6afb1380-d092-4f9d-b4cf-dd3286344cdf",
+      "canUpdateConfiguration": true,
       "commands": [
-        {
-          "id": "EventsAndTrainings",
-          "description": "Find a card for Events and Training",
-          "title": "Events and Trainings",
-          "initialRun": true,
-          "parameters": [
-            {
-              "title": "query",
-              "name": "EventsAndTrainingstitle",
-              "description": "Events and Training details"
-            }
-          ]
-        },
         {
           "id": "reflection",
           "description": "Create new reflection",
           "title": "Create reflection",
-          "type": "action"
+          "type": "action",
+          "context": [ "commandBox", "message", "compose" ],
+          "fetchTask": true,
+          "parameters": [
+            {
+              "name": "Name",
+              "description": "To Do Title",
+              "title": "Title",
+              "inputType": "text"
+            }
+          ]
         }
       ]
     }

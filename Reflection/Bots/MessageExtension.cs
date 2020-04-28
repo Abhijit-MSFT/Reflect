@@ -27,31 +27,29 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     //return ShareMessageCommand(turnContext, action);
                     return null;
                 default:
-                    throw new NotImplementedException($"Invalid CommandId: {action.CommandId}");
+                    //throw new NotImplementedException($"Invalid CommandId: {action.CommandId}");
+                    return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
             }
         }
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            string placeholder = "Not invoked from message";
-
             if (action.MessagePayload != null)
             {
                 var messageText = action.MessagePayload.Body.Content;
                 var fromId = action.MessagePayload.From.User.Id;
-                placeholder = "Invoked from message";
             }
 
             var response = new MessagingExtensionActionResponse()
             {
                 Task = new TaskModuleContinueResponse()
-                {
+                {                    
                     Value = new TaskModuleTaskInfo()
                     {
                         Height = 500,
                         Width = 600,
                         Title = "Reflect",
-                        Url = "https://www.google.com" // pass view path here
+                        Url = "https://4f6c8ed2.ngrok.io/Index"
                     },
                 },
             };
