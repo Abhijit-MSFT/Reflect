@@ -4,14 +4,19 @@
     font-style: normal;
 }
 
-.custom-mc {
+/*.custom-mc {
     height: 600px;
-}
+    width:100%;
+}*/
 
 .custom-mh {
     margin: 32px 32px 0 32px;
     padding: 0;
     border-bottom: none;
+}
+
+.custom-mc{
+    border:none;
 }
 
 .close {
@@ -48,7 +53,7 @@
 }
 
 .modal-mb {
-    margin: 32px;
+    margin-top: 32px;
     padding: 0;
 }
 
@@ -326,5 +331,5 @@ span.time-icon {
     color: #6266a5;
     float: left;
     padding-top: 2px;
-    margin-left: 12px;
+    margin-left: 10px;
 }

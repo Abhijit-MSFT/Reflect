@@ -19,8 +19,8 @@
     "full": "This bot is to check the students emotional health"
   },
   "icons": {
-    "outline": "color.png",
-    "color": "outline.png"
+    "outline": "outline.png",
+    "color": "logo.png"
   },
   "accentColor": "#60A18E",
   "composeExtensions": [
@@ -52,5 +52,7 @@
     "identity",
     "messageTeamMembers"
   ],
-  "validDomains": []
+  "validDomains": [
+    "*.ngrok.io"
+  ]
 }

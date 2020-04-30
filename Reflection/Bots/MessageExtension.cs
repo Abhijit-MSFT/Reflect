@@ -9,7 +9,11 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using Bogus;
-
+using Newtonsoft.Json;
+using AdaptiveCards;
+using Reflection.Helper;
+using Reflection.Model;
+using System.Net;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
@@ -17,19 +21,19 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
     {
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            switch (action.CommandId)
-            {
-                // These commandIds are defined in the Teams App Manifest.
-                case "createCard":
-                    return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
+            string val = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString()).action;
 
-                case "shareMessage":
-                    //return ShareMessageCommand(turnContext, action);
-                    return null;
-                default:
-                    //throw new NotImplementedException($"Invalid CommandId: {action.CommandId}");
+            switch (val)
+            {
+                case "reflection":
                     return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
-            }
+                case "sendAdaptiveCard":
+                    return await CardHelper.DefaultCard(turnContext, action, cancellationToken);
+                case "closeFirstTaskModule":
+                    return null; ;
+                default:
+                    return null;
+            };            
         }
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
@@ -46,14 +50,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 {                    
                     Value = new TaskModuleTaskInfo()
                     {
-                        Height = 500,
-                        Width = 600,
+                        Height = 550,
+                        Width = 780,
                         Title = "Reflect",
-                        Url = "https://4f6c8ed2.ngrok.io/Index"
+                        Url = "https://e8fb5b48.ngrok.io/"
                     },
                 },
             };
-
 
             return response;
         }
@@ -125,6 +128,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             });
         }
 
+        protected async override Task OnTeamsMessagingExtensionCardButtonClickedAsync(ITurnContext<IInvokeActivity> turnContext, JObject cardData, CancellationToken cancellationToken)
+        {
+        var reply = MessageFactory.Text("OnTeamsMessagingExtensionCardButtonClickedAsync Value: " + JsonConvert.SerializeObject(turnContext.Activity.Value));
+        await turnContext.SendActivityAsync(reply, cancellationToken);
+
+            //return base.OnTeamsMessagingExtensionCardButtonClickedAsync(turnContext, cardData, cancellationToken);
+        }
 
     }
 }
