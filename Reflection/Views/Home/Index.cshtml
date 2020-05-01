@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
-    <link href="~/CSS/screen1.css" rel="stylesheet" type="text/css" />
+    <link href="~/CSS/Index.css" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
     <title>Reflect</title>
@@ -29,12 +29,15 @@
                 });
             }).change();
         });
+
         function SendAdaptiveCard() {
             let taskInfo = {
-                //title: "",
-                //height: "",
-                //width: "",
-                //card: "",
+                question: "How are you feeling?",
+                anonymousflag: "false",
+                postCreateBy:"Arun Kumar",
+                postDate: "",
+                postSendNow: "",
+                repeatFrequency: "",
                 
                 action: "sendAdaptiveCard"
             };
@@ -43,20 +46,31 @@
             taskInfo.width = "medium";
             microsoftTeams.tasks.submitTask(taskInfo);
             return true;
+        };         
+
+        submitHandler = (err, result) => {
+            //if (result.action == "Chaining") {
+            //        let taskInfo = {
+            //        title: "",
+            //        height: "",
+            //        width: "",
+            //        Url: "" 
+            //    };
+            //    taskInfo.Url = "https://1a48ca6e.ngrok.io/First";
+            //    taskInfo.height = 550;
+            //    taskInfo.width = 780;
+            //    microsoftTeams.tasks.startTask(taskInfo, submitHandler)
+            //}
+            console.log("Reached submithandler!")
+          
         };
-        submitHandler = (err, result) => {};
 
         function openTaskModule() {
-                 let taskInfo = {
-                title: "",
-                height: "",
-                width: "",
-                Url: "" 
+            let linkInfo = {
+            action: "Chaining",
             };
-            taskInfo.Url = "https://1a48ca6e.ngrok.io/First";
-            taskInfo.height = 550;
-            taskInfo.width = 780;
-            microsoftTeams.tasks.startTask(taskInfo, submitHandler)
+            microsoftTeams.tasks.submitTask(linkInfo );
+            return true;
         };   
 
         function closeTaskModule() {
@@ -74,16 +88,6 @@
     <div class="container">  
         <div class="" role="document">
             <div class="modal-content custom-mc">
-                @*<div class="modal-header custom-mh">
-                    <div class="media">
-                        <img class="align-self-center mr-3 head-logo" src="~/Images/logo.png"
-                             alt="Generic placeholder image">
-                        <div class="media-body media-mb">
-                            <div class="heading">Reflect</div>
-                            <span class="head-desc"> Invite people to share how they feel </span>
-                        </div>
-                    </div>                    
-                </div>*@
                 <div class="modal-body modal-mb">
                     <div class="question">Question</div>
                     <div class="input-group custom-in">

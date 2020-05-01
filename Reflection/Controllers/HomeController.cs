@@ -20,8 +20,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View("Index");
         }
 
-        [Route("first")]
-        public ActionResult First()
+        [Route("manageRecurringPosts")]
+        public ActionResult ManageRecurringPosts()
         {
             return View();
         }

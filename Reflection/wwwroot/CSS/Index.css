@@ -332,4 +332,5 @@ span.time-icon {
     float: left;
     padding-top: 2px;
     margin-left: 10px;
+    cursor: pointer;
 }

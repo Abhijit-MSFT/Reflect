@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AdaptiveCards;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
-using Microsoft.Teams.Samples.HelloWorld.Web;
 
 namespace Reflection.Helper
 {
     public class CardHelper
     {
-      public async static Task<MessagingExtensionActionResponse> DefaultCard(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
+      public async static Task<MessagingExtensionActionResponse> SendNewPost(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken, string Data)
         {
             var adaptiveCard1 = new AdaptiveCard("1.0")
             {

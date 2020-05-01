@@ -21,19 +21,35 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
     {
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            string val = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString()).action;
+            var val = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString()).action;
+            //var cardData = JsonConvert.DeserializeObject
 
             switch (val)
             {
                 case "reflection":
                     return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
                 case "sendAdaptiveCard":
-                    return await CardHelper.DefaultCard(turnContext, action, cancellationToken);
-                case "closeFirstTaskModule":
-                    return null; ;
+                    return await CardHelper.SendNewPost(turnContext, action, cancellationToken, action.Data.ToString()); //create model for action data
+                case "Chaining":
+                    var response = new MessagingExtensionActionResponse()
+                    {
+                        Task = new TaskModuleContinueResponse()
+                        {
+                            Value = new TaskModuleTaskInfo()
+                            {
+                                Height = 550,
+                                Width = 780,
+                                Title = "Check the pulse on emotinal well-being",
+                                Url = "https://1a48ca6e.ngrok.io/ManageRecurringPosts"
+                            },
+                        },
+                    };
+
+                    return response;
                 default:
                     return null;
-            };            
+            };
+            
         }
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
@@ -47,13 +63,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             var response = new MessagingExtensionActionResponse()
             {
                 Task = new TaskModuleContinueResponse()
-                {                    
+                {
                     Value = new TaskModuleTaskInfo()
                     {
                         Height = 550,
                         Width = 780,
-                        Title = "Reflect",
-                        Url = "https://e8fb5b48.ngrok.io/"
+                        Title = "Check the pulse on emotinal well-being",
+                        Url = "https://1a48ca6e.ngrok.io/"
                     },
                 },
             };
