@@ -40,7 +40,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 Height = 550,
                                 Width = 780,
                                 Title = "Check the pulse on emotinal well-being",
-                                Url = "https://1a48ca6e.ngrok.io/ManageRecurringPosts"
+                                Url = "https://29b9edc3.ngrok.io/ManageRecurringPosts"
                             },
                         },
                     };
@@ -69,7 +69,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Height = 550,
                         Width = 780,
                         Title = "Check the pulse on emotinal well-being",
-                        Url = "https://1a48ca6e.ngrok.io/"
+                        Url = "https://29b9edc3.ngrok.io/"
                     },
                 },
             };
