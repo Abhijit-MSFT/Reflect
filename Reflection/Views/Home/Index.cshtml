@@ -34,11 +34,11 @@
             let taskInfo = {
                 question: "How are you feeling?",
                 anonymousflag: "false",
-                postCreateBy:"Arun Kumar",
+                postCreateBy: "Arun Kumar",
                 postDate: "",
                 postSendNow: "",
                 repeatFrequency: "",
-                
+
                 action: "sendAdaptiveCard"
             };
             taskInfo.card = "";
@@ -46,7 +46,7 @@
             taskInfo.width = "medium";
             microsoftTeams.tasks.submitTask(taskInfo);
             return true;
-        };         
+        };
 
         submitHandler = (err, result) => {
             //if (result.action == "Chaining") {
@@ -54,7 +54,7 @@
             //        title: "",
             //        height: "",
             //        width: "",
-            //        Url: "" 
+            //        Url: ""
             //    };
             //    taskInfo.Url = "https://1a48ca6e.ngrok.io/First";
             //    taskInfo.height = 550;
@@ -62,20 +62,20 @@
             //    microsoftTeams.tasks.startTask(taskInfo, submitHandler)
             //}
             console.log("Reached submithandler!")
-          
+
         };
 
         function openTaskModule() {
             let linkInfo = {
-            action: "Chaining",
+                action: "Chaining",
             };
-            microsoftTeams.tasks.submitTask(linkInfo );
+            microsoftTeams.tasks.submitTask(linkInfo);
             return true;
-        };   
+        };
 
         function closeTaskModule() {
             let closeTaskInfo = {
-                action:"closeFirstTaskModule"
+                action: "closeFirstTaskModule"
             };
             microsoftTeams.tasks.submitTask(closeTaskInfo);
             return true;
@@ -85,52 +85,82 @@
 </head>
 
 <body>
-    <div class="container">  
-        <div class="" role="document">
-            <div class="modal-content custom-mc">
+    <div class="container">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                @*<div class="modal-header custom-mh">
+                    <div class="media">
+                        <img class="align-self-center mr-3 head-logo" src="~/Images/logo.png"
+                             alt="Generic placeholder image">
+                        <div class="media-body media-mb">
+                            <div class="heading">Reflect</div>
+                            <span class="head-desc"> Invite people to share how they feel </span>
+                        </div>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>*@
                 <div class="modal-body modal-mb">
                     <div class="question">Question</div>
                     <div class="input-group custom-in">
-                        <select class="cs" id="ddQuestion">
-                            <!-- <option selected>Choose...</option> -->
-                            <option value="1" selected>How are you feeling?</option>
-                            <option value="2">How did the week go?</option>
-                            <option value="3">How do you feel abouy today's project?</option>
+                        <select class="cs" onChange="getSelectedOption(this)">
+                            <option selected disabled class="default-opt">Select a question</option>
+                            <option class="default-opt" value="1" selected>How are you feeling?</option>
+                            <option class="default-opt" value="2">Two</option>
+                            <option class="default-opt" value="3">Three</option>
+                            <option class="default-opt sel-add-q">Add custom question</option>
                         </select>
                         <span class="sel-chev"></span>
                     </div>
-                    <div class="custom-control custom-checkbox cc">
-                        <input type="checkbox" class="custom-control-input" id="1">
-                        <label class="custom-control-label cc-l" for="1">Reflections are anonymous</label>
-                        <img src="~/Images/ex.png" alt="!" class="excla">
+                    <div class="privacy">Privacy</div>
+                    <div class="input-group custom-in">
+                        <select class="cs">
+                            <!-- <option selected>Choose...</option> -->
+                            <option value="1" selected>Public - Anyone in this chat will see responses</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                        <span class="sel-chev"></span>
                     </div>
                     <div class="post">
-                        <div class="send-post">Send post at</div>
-                        <div class="date">
-                            <input type="date" alt="date" class="date-ip" />
-                            @*<span class="date-icon"></span>*@
-                        </div>
-                        <div class="time-ip ml-1">
-                            Send now
-                            <span class="time-icon"></span>
-                        </div>
-                        <div class="selc ml-1">
-                            <select class="cs">
-                                <option value="1" selected>Does not repeat </option>
-                                <option value="2">Every weekday (Mon-Fri)</option>
-                                <option value="3">Weekly</option>
-                                <option value="3">Monthly</option>
-                                <option value="3">Custom</option>
-                            </select>
-                            <span class="sel-chev2"></span>
+                        <div class="row custom-rw">
+                            <div class="col-6 custom-col">
+                                <div class="date">
+                                    <div class="blk-head">Date</div>
+                                    <input type="date" alt="date" class="date-ip" />
+                                    <span class="date-icon"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 custom-col">
+                                <div class="blk-head">Time</div>
+                                <div class="time-ip">
+                                    Send now
+                                    <span class="time-icon"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 custom-col">
+                                <div class="blk-head rec">Recurrence</div>
+                                <div class="selc">
+                                    <select class="cs">
+                                        <option value="1" selected>Does not repeat </option>
+                                        <option value="2">Every weekday (Mon-Fri)</option>
+                                        <option value="3">Weekly</option>
+                                        <option value="3">Monthly</option>
+                                        <option value="3">Custom</option>
+                                    </select>
+                                    <span class="sel-chev2"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
                     <div class="prev">Preview</div>
                     <div class="br-blk">
                         <div class="created">Created by: Cara Coleman</div>
                         <span class="divider">|</span>
                         <div class="reflections">Reflections are public</div>
-                        <div class="feeling">How are you feeling?</div>
+                        <div class="feeling" id="selectedTxt">How are you feeling?</div>
                         <div class="smiles">
                             <span class="ava">
                                 <img src="~/Images/1.png" alt="smile1" class="avatars">
@@ -166,5 +196,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script src="~/Scripts/screen1.1.js"></script>
+
 
 </html>

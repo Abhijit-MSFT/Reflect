@@ -40,7 +40,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 Height = 550,
                                 Width = 780,
                                 Title = "Check the pulse on emotinal well-being",
-                                Url = "https://29b9edc3.ngrok.io/ManageRecurringPosts"
+                                Url = "https://cd013f78.ngrok.io/ManageRecurringPosts"
                             },
                         },
                     };
@@ -66,10 +66,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 {
                     Value = new TaskModuleTaskInfo()
                     {
-                        Height = 550,
-                        Width = 780,
-                        Title = "Check the pulse on emotinal well-being",
-                        Url = "https://29b9edc3.ngrok.io/"
+                        Height = 720,
+                        Width = 900,
+                        Title = "Invite people to share how they feel",
+                        Url = "https://cd013f78.ngrok.io/"
                     },
                 },
             };

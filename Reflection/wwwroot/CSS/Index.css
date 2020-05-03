@@ -4,19 +4,10 @@
     font-style: normal;
 }
 
-/*.custom-mc {
-    height: 600px;
-    width:100%;
-}*/
-
 .custom-mh {
     margin: 32px 32px 0 32px;
     padding: 0;
     border-bottom: none;
-}
-
-.custom-mc{
-    border:none;
 }
 
 .close {
@@ -53,11 +44,12 @@
 }
 
 .modal-mb {
-    margin-top: 32px;
+    margin: 32px;
     padding: 0;
 }
 
-.question {
+.question,
+.privacy {
     font-family: Segoe UI;
     font-size: 14px;
     display: flex;
@@ -65,6 +57,10 @@
     color: #252424;
     font-weight: 500;
     margin-bottom: 12px;
+}
+
+.privacy {
+    margin-top: 25px;
 }
 
 .custom-in {
@@ -91,6 +87,23 @@
         outline: none !important;
     }
 
+.default-opt {
+    background-color: white;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.149457);
+}
+
+.sel-add-q {
+    font-size: 14px;
+    color: #6266a5;
+}
+
+    .sel-add-q::before {
+        content: "\E447";
+        font-family: "Teams Assets";
+        pointer-events: none;
+        color: #6264a7;
+    }
+
 .sel-chev::before {
     content: "\E447";
     font-family: "Teams Assets";
@@ -115,37 +128,28 @@
         color: #6264a7;
     }
 
-.cc {
-    margin-top: 10px;
-}
-
-.cc-l {
-    font-size: 14px;
-    color: #252424;
-}
-
-.excla {
-    width: 14px;
-    height: 14px;
-    vertical-align: baseline;
-}
-
 .post {
     margin-top: 27px;
 }
 
-.send-post {
+.blk-head {
     font-family: Segoe UI;
     font-size: 14px;
     color: #252424;
     font-weight: 500;
+    margin-bottom: 12px;
 }
 
-.date,
-.selc,
-.time-ip {
-    margin-top: 10px;
-    display: inline-flex;
+.rec {
+    margin-top: 25px;
+}
+
+.custom-rw {
+    margin: 0;
+}
+
+.custom-col {
+    padding: 0 3px;
 }
 
 .date-ip,
@@ -172,16 +176,9 @@ input[type="date"] {
 }
 
 .time-ip {
-    width: 112px;
     padding-left: 12px;
-    font-size: 14px;
     line-height: 2.3;
     cursor: pointer;
-}
-
-span.time-icon {
-    position: relative;
-    left: 14%;
 }
 
 .time-icon::before {
@@ -189,12 +186,15 @@ span.time-icon {
     font-family: "Teams Assets";
     font-size: 14px;
     color: #6266a5;
+    float: right;
+    margin-right: 6px;
 }
 
 .date-icon {
     position: relative;
-    right: 15%;
-    margin-top: 3%;
+    right: 6%;
+    top: 4px;
+    cursor: pointer;
 }
 
     .date-icon::before {
@@ -205,12 +205,8 @@ span.time-icon {
         position: absolute;
     }
 
-.selc {
-    width: 200px;
-}
-
 .date-ip {
-    width: 147px;
+    width: 100%;
 }
 
 .prev {
@@ -250,16 +246,8 @@ span.time-icon {
     color: #666666;
     margin: 11px 8px 10px 0px;
     display: inline-flex;
-    /* position: absolute; */
-    /* width: 100%; */
 }
-/* .reflections::before {
-  content: "\E329";
-  font-family: "Teams Assets";
-  font-size: 14px;
-  color: #6266a5;
-  margin-right: 1%;
-} */
+
 .feeling {
     font-family: Segoe UI;
     font-size: 14px;
@@ -331,6 +319,5 @@ span.time-icon {
     color: #6266a5;
     float: left;
     padding-top: 2px;
-    margin-left: 10px;
-    cursor: pointer;
+    margin-left: 12px;
 }
