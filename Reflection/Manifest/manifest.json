@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",
   "manifestVersion": "1.5",
   "version": "1.0.0",
-  "id": "79ba459a-1630-42f4-b435-53ea7de49803",
+  "id": "6afb1380-d092-4f9d-b4cf-dd3286344cdf",
   "packageName": "com.contoso.helloworld",
   "developer": {
     "name": "Contoso",
@@ -25,7 +25,7 @@
   "accentColor": "#60A18E",
   "composeExtensions": [
     {
-      "botId": "79ba459a-1630-42f4-b435-53ea7de49803",
+      "botId": "6afb1380-d092-4f9d-b4cf-dd3286344cdf",
       "canUpdateConfiguration": true,
       "commands": [
         {

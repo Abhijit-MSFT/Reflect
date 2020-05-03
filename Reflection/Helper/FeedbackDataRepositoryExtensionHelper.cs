@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Reflection.Repositories.QuestionsData
+namespace Reflection.Helper
 {
-    public class QuestionDataRepository
+    public class FeedbackDataRepositoryExtensionHelper
     {
     }
 }

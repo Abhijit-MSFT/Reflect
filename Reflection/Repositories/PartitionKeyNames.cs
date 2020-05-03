@@ -28,5 +28,33 @@ namespace Reflection.Repositories
             /// </summary>
             public static readonly string UserDataPartition = "UserData";
         }
+
+        public static class ReflectionDataTable
+        {
+            /// <summary>
+            /// Table name for Reflection data table
+            /// </summary>
+            public static readonly string TableName = "ReflectionData";
+
+            /// <summary>
+            /// Reflection data partition key name.
+            /// </summary>
+            public static readonly string UserDataPartition = "ReflectionData";
+        }
+
+        public static class QuestionsDataTable
+        {
+            /// <summary>
+            /// Table name for Reflection data table
+            /// </summary>
+            public static readonly string TableName = "QuestionsData";
+
+            /// <summary>
+            /// Reflection data partition key name.
+            /// </summary>
+            public static readonly string UserDataPartition = "QuestionsData";
+        }
+
+
     }
 }

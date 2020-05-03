@@ -88,27 +88,14 @@
     <div class="container">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
-                @*<div class="modal-header custom-mh">
-                    <div class="media">
-                        <img class="align-self-center mr-3 head-logo" src="~/Images/logo.png"
-                             alt="Generic placeholder image">
-                        <div class="media-body media-mb">
-                            <div class="heading">Reflect</div>
-                            <span class="head-desc"> Invite people to share how they feel </span>
-                        </div>
-                    </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>*@
                 <div class="modal-body modal-mb">
                     <div class="question">Question</div>
                     <div class="input-group custom-in">
                         <select class="cs" onChange="getSelectedOption(this)">
                             <option selected disabled class="default-opt">Select a question</option>
                             <option class="default-opt" value="1" selected>How are you feeling?</option>
-                            <option class="default-opt" value="2">Two</option>
-                            <option class="default-opt" value="3">Three</option>
+                            <option class="default-opt" value="2">How did the week go?</option>
+                            <option class="default-opt" value="3">How do you feel about today's project?</option>
                             <option class="default-opt sel-add-q">Add custom question</option>
                         </select>
                         <span class="sel-chev"></span>
@@ -154,7 +141,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="prev">Preview</div>
                     <div class="br-blk">
                         <div class="created">Created by: Cara Coleman</div>
