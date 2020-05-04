@@ -16,7 +16,7 @@ namespace Reflection.Repositories.ReflectionData
             : base(
                 configuration,
                 PartitionKeyNames.ReflectionDataTable.TableName,
-                PartitionKeyNames.ReflectionDataTable.UserDataPartition,
+                PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition,
                 isFromAzureFunction)
         {
         }

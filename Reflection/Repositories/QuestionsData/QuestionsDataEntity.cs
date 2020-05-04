@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Cosmos.Table;
+﻿using Bogus.DataSets;
+using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Bot.Schema;
 using System;
 using System.Collections.Generic;
@@ -20,14 +21,19 @@ namespace Reflection.Repositories.QuestionsData
         public string Question { get; set; }
 
         /// <summary>
+        /// Gets or sets CreatedDate.
+        /// </summary>
+        public DateTime QuestionCreatedDate { get; set; }
+
+        /// <summary>
         /// Gets or sets IsDefaultFlag.
         /// </summary>
         public bool IsDefaultFlag { get; set; }
 
         /// <summary>
-        /// Gets or sets UserID.
+        /// Gets or sets user email id.
         /// </summary>
-        public string UserID { get; set; }
+        public string CreatedBy { get; set; }
         
     }
 }

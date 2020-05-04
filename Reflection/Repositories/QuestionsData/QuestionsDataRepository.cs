@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,11 +16,26 @@ namespace Reflection.Repositories.QuestionsData
             : base(
                 configuration,
                 PartitionKeyNames.QuestionsDataTable.TableName,
-                PartitionKeyNames.QuestionsDataTable.UserDataPartition,
+                PartitionKeyNames.QuestionsDataTable.QuestionsDataPartition,
                 isFromAzureFunction)
         {
         }
+
+        /// <summary>
+        /// Get the default questions.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>Questions which have default flag true</returns>
+        /// 
+        public async Task<List<string>> GetAllDefaultQuestions()
+        {
+            var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
+            var result = allRows.Where(d => d.IsDefaultFlag == true).Select(c => c.Question);
+            return result.ToList();
+        }
     }
+
+
 }
 
 

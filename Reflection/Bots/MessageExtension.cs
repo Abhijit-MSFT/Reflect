@@ -10,14 +10,10 @@ using System;
 using System.Collections.Generic;
 using Bogus;
 using Newtonsoft.Json;
-using AdaptiveCards;
 using Reflection.Helper;
 using Reflection.Model;
-using System.Net;
-using Reflection.Repositories.ReflectionData;
-using System.Net.Http;
 using Microsoft.Extensions.Configuration;
-using Bogus.DataSets;
+
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
@@ -30,44 +26,25 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         }
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            var val = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString()).action;
+            TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
             //var cardData = JsonConvert.DeserializeObject            
 
-            switch (val)
+            switch (taskInfo.action)
             {
                 case "reflection":
                     return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
                 case "sendAdaptiveCard":
                     try
                     {
-                        ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration);
-                        ReflectionDataEntity reflectEntity = new ReflectionDataEntity();
-                        reflectEntity.PartitionKey = "ReflectionDataEntity";
-                        reflectEntity.RowKey = "270712";
-                        reflectEntity.ReflectionID = new Guid();
-                        reflectEntity.CreatedBy = "Arun Kumar";
-                        reflectEntity.Question = "How are you feeling today?";
-                        reflectEntity.Privacy = "personal";
-                        reflectEntity.RecurringFlag = "false";
-                        reflectEntity.ExecutionDate = DateTime.Now;
-                        reflectEntity.ExecutionTime = DateTime.Now;
-                        reflectEntity.RecurringFlag = "daily";
-                        reflectEntity.IsActive = false;
-
-
-                        //await ReflectionDataRepositoryExtensionHelper.SaveReflectionDataAsync(reflectionDataRepository, turnContext);
-                        await reflectionDataRepository.CreateOrUpdateAsync(reflectEntity);
-
+                        await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration, turnContext);
+                        return await CardHelper.SendNewPost(turnContext, action, cancellationToken, action.Data.ToString()); //create model for action data
                     }
                     catch (Exception ex)
                     {
-
                         throw ex;
-                    }
+                    }                    
                     
-                    //await re.SaveReflectionDataAsync()
-                    return await CardHelper.SendNewPost(turnContext, action, cancellationToken, action.Data.ToString()); //create model for action data
-                case "Chaining":
+                case "ManageRecurringPosts":
                     var response = new MessagingExtensionActionResponse()
                     {
                         Task = new TaskModuleContinueResponse()
@@ -77,7 +54,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 Height = 550,
                                 Width = 780,
                                 Title = "Check the pulse on emotinal well-being",
-                                Url = "https://bc5066ec.ngrok.io/ManageRecurringPosts"
+                                Url = this._configuration["BaseUri"] + "/ManageRecurringPosts"
                             },
                         },
                     };
@@ -106,7 +83,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Height = 720,
                         Width = 900,
                         Title = "Invite people to share how they feel",
-                        Url = "https://bc5066ec.ngrok.io"
+                        Url = this._configuration["BaseUri"]
+                        //Url = "https://bc5066ec.ngrok.io"
                     },
                 },
             };

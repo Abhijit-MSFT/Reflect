@@ -39,22 +39,35 @@ namespace Reflection.Repositories
             /// <summary>
             /// Reflection data partition key name.
             /// </summary>
-            public static readonly string UserDataPartition = "ReflectionData";
+            public static readonly string ReflectionDataPartition = "ReflectionDataEntity";
         }
 
         public static class QuestionsDataTable
         {
             /// <summary>
-            /// Table name for Reflection data table
+            /// Table name for Questions data table
             /// </summary>
             public static readonly string TableName = "QuestionsData";
 
             /// <summary>
-            /// Reflection data partition key name.
+            /// Questions data partition key name.
             /// </summary>
-            public static readonly string UserDataPartition = "QuestionsData";
+            public static readonly string QuestionsDataPartition = "QuestionsData";
         }
 
+        public static class RecurssionDataTable
+        {
+            /// <summary>
+            /// Table name for Recurssion data table
+            /// </summary>
+            public static readonly string TableName = "RecurssionData";
 
+            /// <summary>
+            /// Recurssion data partition key name.
+            /// </summary>
+            public static readonly string RecurssionDataPartition = "RecurssionData";
+        }
     }
 }
+
+

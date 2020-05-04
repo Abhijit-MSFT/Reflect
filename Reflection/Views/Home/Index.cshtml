@@ -32,13 +32,14 @@
 
         function SendAdaptiveCard() {
             let taskInfo = {
-                question: "How are you feeling?",
-                anonymousflag: "false",
-                postCreateBy: "Arun Kumar",
+                postCreateBy: "v-abjodh@microsoft.com",
+                question: "How was the new project session?",
+                privacy:"Personal",
+                ExecutionDate:"",
+                ExecutionTime:"",
                 postDate: "",
-                postSendNow: "",
-                repeatFrequency: "",
-
+                postSendNowFlag: "true",
+                recurssionType: "Monthly",
                 action: "sendAdaptiveCard"
             };
             taskInfo.card = "";
@@ -67,7 +68,7 @@
 
         function openTaskModule() {
             let linkInfo = {
-                action: "Chaining",
+                action: "ManageRecurringPosts",
             };
             microsoftTeams.tasks.submitTask(linkInfo);
             return true;

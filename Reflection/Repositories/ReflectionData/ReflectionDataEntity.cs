@@ -20,9 +20,14 @@ namespace Reflection.Repositories.ReflectionData
         public string CreatedBy { get; set; }
 
         /// <summary>
+        /// Gets or sets Reflection creation date.
+        /// </summary>
+        public DateTime RefCreatedDate { get; set; }
+
+        /// <summary>
         /// Gets or sets question.
         /// </summary>
-        public string Question { get; set; }
+        public Guid QuestionID { get; set; }
 
         /// <summary>
         /// Gets or sets privacy.
@@ -30,19 +35,19 @@ namespace Reflection.Repositories.ReflectionData
         public string Privacy { get; set; }
 
         /// <summary>
-        /// Gets or sets execution Date.
+        /// Gets or sets recurring ID.
         /// </summary>
-        public DateTime ExecutionDate { get; set; }
+        public Guid RecurrsionID { get; set; }
 
         /// <summary>
-        /// Gets or sets execution Time.
+        /// Gets or sets Message ID.
         /// </summary>
-        public DateTime ExecutionTime { get; set; }
+        public Guid MessageID { get; set; }
 
         /// <summary>
-        /// Gets or sets recurring flag.
+        /// Gets or sets Channel ID.
         /// </summary>
-        public string RecurringFlag { get; set; }
+        public Guid ChannelID { get; set; }
 
         /// <summary>
         /// Gets or sets active flag.
