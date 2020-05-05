@@ -23,6 +23,15 @@
     "color": "logo.png"
   },
   "accentColor": "#60A18E",
+  "bots": [
+    {
+      "botId": "6afb1380-d092-4f9d-b4cf-dd3286344cdf",
+      "scopes": [
+        "team",
+        "groupchat"
+      ]
+    }
+  ],
   "composeExtensions": [
     {
       "botId": "6afb1380-d092-4f9d-b4cf-dd3286344cdf",
@@ -33,6 +42,7 @@
           "description": "Create new reflection",
           "title": "Create reflection",
           "type": "action",
+          "initialRun": false,
           "context": [ "message", "compose" ],
           "fetchTask": true,
           "parameters": [

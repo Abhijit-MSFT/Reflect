@@ -12,14 +12,22 @@ namespace Reflection.Repositories.FeedbackData
         /// Gets or sets Feedback Id.
         /// </summary>
         public Guid FeedbackID { get; set; }
+
+        /// <summary>
+        /// Gets or sets full name.
+        /// </summary>
+        public string FullName { get; set; }
+
         /// <summary>
         /// Gets or sets reflection Id.
         /// </summary>
         public Guid ReflectionID { get; set; }
+
         /// <summary>
         /// Gets or sets FeedbackGivenBy.
-        /// </summary>
-        public Guid FeedbackGivenBy { get; set; }
+        /// </summary>        
+        public string FeedbackGivenBy { get; set; }
+
         /// <summary>
         /// Gets or sets Feedback.
         /// </summary>

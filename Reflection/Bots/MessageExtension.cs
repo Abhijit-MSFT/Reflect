@@ -26,24 +26,38 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         }
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
+            
             TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
-            //var cardData = JsonConvert.DeserializeObject            
-
+            
             switch (taskInfo.action)
             {
-                case "reflection":
+                case "reflection":  
                     return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
                 case "sendAdaptiveCard":
                     try
                     {
+                        taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
+                        taskInfo.messageID = turnContext.Activity.Id; //this is not correct id - check and change it
+                        taskInfo.postCreateBy = await DBHelper.GetUserEmailId(turnContext);
+
                         await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration, turnContext);
-                        return await CardHelper.SendNewPost(turnContext, action, cancellationToken, action.Data.ToString()); //create model for action data
+                        if (taskInfo.postSendNowFlag == true)
+                        {
+                            return await CardHelper.SendNewPost(action, cancellationToken, action.Data.ToString(), taskInfo.reflectionID);
+                        }
+                        else
+                        {
+                            return null;
+                        }
+
                     }
                     catch (Exception ex)
                     {
                         throw ex;
-                    }                    
-                    
+                    }
+                case "userFeedback":
+                     //Dictionary<int, int> feedback = await DBHelper.SaveReflectionFeedbackDataAsync(taskInfo, _configuration, turnContext);
+                    return null;
                 case "ManageRecurringPosts":
                     var response = new MessagingExtensionActionResponse()
                     {
@@ -83,8 +97,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Height = 720,
                         Width = 900,
                         Title = "Invite people to share how they feel",
-                        Url = this._configuration["BaseUri"]
-                        //Url = "https://bc5066ec.ngrok.io"
+                        Url = this._configuration["BaseUri"]                        
                     },
                 },
             };
