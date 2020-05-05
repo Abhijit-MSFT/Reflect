@@ -13,7 +13,7 @@ namespace Reflection.Repositories.QuestionsData
         /// <summary>
         /// Gets or sets QuestionID.
         /// </summary>
-        public Guid QuestionID { get; set; }
+        public Guid? QuestionID { get; set; }
 
         /// <summary>
         /// Gets or sets Question.

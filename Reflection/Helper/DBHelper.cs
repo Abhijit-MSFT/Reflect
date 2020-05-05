@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using Reflection.Model;
 using Reflection.Repositories;
+using Reflection.Repositories.FeedbackData;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
@@ -27,89 +28,110 @@ namespace Reflection.Helper
         /// <param name="reflectionDataRepository">The reflection data repository.</param>
         /// <param name="turnContext">Bot conversation update activity instance.</param>
         /// <returns>A task that represents the work queued to execute.</returns>
-       
+
         public static async Task SaveReflectionDataAsync(TaskInfo taskInfo, IConfiguration configuration, ITurnContext<IInvokeActivity> turnContext)
         {
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
-
-            //below two lines will bring default questions
-            QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
-            var questions = await questionsDataRepository.GetAllDefaultQuestions();
-
-
-            //var connector = new ConnectorClient(new Uri(turnContext.Activity.ServiceUrl));
-            //var teamId = turnContext.Activity.GetChannelData<TeamsChannelData>().Team.Id;
-            //var members = await connector.Conversations.GetConversationMembersAsync(teamId);
-
+            
             if (taskInfo != null)
             {
-                var refID = Guid.NewGuid();
-                var qid = Guid.NewGuid();
-                var recurID = Guid.NewGuid();
+                taskInfo.reflectionID = Guid.NewGuid();
+                taskInfo.questionID = Guid.NewGuid();
+                taskInfo.recurssionID = Guid.NewGuid();
                 var rowKey = Guid.NewGuid();
                 
                 ReflectionDataEntity reflectEntity = new ReflectionDataEntity
                 {
-                    ReflectionID = refID,
+                    ReflectionID = taskInfo.reflectionID,
                     PartitionKey = PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition, // read it from json
                     RowKey = rowKey.ToString(),
                     CreatedBy = taskInfo.postCreateBy,
                     RefCreatedDate = DateTime.Now,
-                    QuestionID = qid,
-                    Privacy = "personal",
-                    RecurrsionID = recurID,
-                    MessageID = new Guid(),
-                    ChannelID = new Guid(),
-                    IsActive = false
+                    QuestionID = taskInfo.questionID,
+                    Privacy = taskInfo.privacy,
+                    RecurrsionID = taskInfo.recurssionID,
+                    MessageID = taskInfo.messageID,
+                    ChannelID = taskInfo.channelID,
+                    SendNowFlag = taskInfo.postSendNowFlag,
+                    IsActive = taskInfo.IsActive
                 };
                 await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
-                await DBHelper.SaveQuestionsDataAsync(configuration, qid, taskInfo);
-                await DBHelper.SaveRecurssionDataAsync(configuration, recurID, refID, taskInfo);
-            }           
+                await SaveQuestionsDataAsync(configuration, taskInfo);
+                await SaveRecurssionDataAsync(configuration, taskInfo);                
+            }            
         }
 
-        public static async Task SaveQuestionsDataAsync(IConfiguration configuration, Guid qID, TaskInfo taskInfo)
+        public static async Task SaveQuestionsDataAsync(IConfiguration configuration, TaskInfo taskInfo)
         {
             QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
             var rowKey = Guid.NewGuid();
 
             QuestionsDataEntity questionEntity = new QuestionsDataEntity
             {
-                QuestionID = qID,
-                PartitionKey = PartitionKeyNames.QuestionsDataTable.QuestionsDataPartition, // read it from json
+                QuestionID = taskInfo.questionID,
+                PartitionKey = PartitionKeyNames.QuestionsDataTable.QuestionsDataPartition,
                 RowKey = rowKey.ToString(),
                 Question = taskInfo.question,
                 QuestionCreatedDate = DateTime.Now,
                 IsDefaultFlag = false, //handle default flag logic
-                CreatedBy = ""
+                CreatedBy = taskInfo.postCreateBy
             };
 
             await questionsDataRepository.CreateOrUpdateAsync(questionEntity);
         }
 
-        public static async Task SaveRecurssionDataAsync(IConfiguration configuration, Guid recurID, Guid refID, TaskInfo taskInfo)
+        public static async Task SaveRecurssionDataAsync(IConfiguration configuration, TaskInfo taskInfo)
         {
             RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
             var rowKey = Guid.NewGuid();
 
             RecurssionDataEntity recurssionEntity = new RecurssionDataEntity
             {
-                RecurssionID = recurID,
+                RecurssionID = taskInfo.recurssionID,
                 PartitionKey = PartitionKeyNames.RecurssionDataTable.RecurssionDataPartition, // read it from json
                 RowKey = rowKey.ToString(),
-                ReflectionID = refID,
+                ReflectionID = taskInfo.reflectionID,
                 RecursstionType = taskInfo.recurssionType,
-                CreatedDate= DateTime.Now,
+                CreatedDate = DateTime.Now,
                 ExecutionDate = taskInfo.executionDate,
-                ExecutionTime = taskInfo.executionTime            
+                ExecutionTime = taskInfo.executionTime
             };
             await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
+        }
+
+        public static async Task<Dictionary<int, int>> SaveReflectionFeedbackDataAsync(UserfeedbackInfo taskInfo, IConfiguration configuration, ITurnContext<IInvokeActivity> turnContext)
+        {
+            FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(configuration);
+
+            if (taskInfo != null)
+            {
+                var feedbackID = Guid.NewGuid();
+                var refID = Guid.NewGuid();
+                var rowKey = Guid.NewGuid();
+                string email = await GetUserEmailId(turnContext);
+
+                FeedbackDataEntity feedbackDataEntity = new FeedbackDataEntity
+                {
+                    PartitionKey = PartitionKeyNames.FeedbackDataTable.FeedbackDataPartition, // read it from json
+                    RowKey = rowKey.ToString(),
+                    FeedbackID = feedbackID,
+                    FullName ="",
+                    ReflectionID = taskInfo.reflectionID,
+                    FeedbackGivenBy = email,
+                    Feedback = 1
+
+                };
+                await feedbackDataRepository.InsertOrMergeAsync(feedbackDataEntity);
+            }
+            
+            Dictionary<int, int> feedbacks = await feedbackDataRepository.GetReflectionFeedback(taskInfo.reflectionID);
+            return feedbacks ?? null;
         }
 
         private static async Task<ReflectionDataEntity> ParseReflectionData(ITurnContext<IInvokeActivity> turnContext)
         {
             var row = turnContext.Activity?.From?.AadObjectId;
-            if(row != null)
+            if (row != null)
             {
                 var reflectionDataEntity = new ReflectionDataEntity
                 {
@@ -125,13 +147,13 @@ namespace Reflection.Helper
             return null;
         }
 
-        private static async Task<string> GetUserEmailId(ITurnContext<IInvokeActivity> turnContext)
+        public static async Task<string> GetUserEmailId(ITurnContext<IInvokeActivity> turnContext)
         {
             // Fetch the members in the current conversation
             try
             {
                 IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
-                
+
                 var members = await connector.Conversations.GetConversationMembersAsync(turnContext.Activity.Conversation.Id);
                 return AsTeamsChannelAccounts(members).FirstOrDefault(m => m.Id == turnContext.Activity.From.Id).UserPrincipalName;
             }
@@ -149,16 +171,15 @@ namespace Reflection.Helper
             }
         }
 
-        public static async Task GetAllReflections()
-        {
 
-        }
+        //public static async Task<List<string>> GetTeamMember(ITurnContext<IInvokeActivity> turnContext)
+        //{
+        //    IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
+        //    var members = await connector.Conversations.GetConversationMembersAsync(turnContext.Activity.Conversation.Id);
 
-        public static async Task GetTeamMember(ITurnContext<IInvokeActivity> turnContext)
-        {
-            var connector = new ConnectorClient(new Uri(turnContext.Activity.ServiceUrl));
-            var teamId = turnContext.Activity.GetChannelData<TeamsChannelData>().Team.Id;
-            var members = await connector.Conversations.GetConversationMembersAsync(teamId);
-        }
+        //    return members.ToList();
+        //}
     }
 }
+
+

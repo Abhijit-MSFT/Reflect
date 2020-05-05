@@ -12,7 +12,7 @@ namespace Reflection.Repositories.ReflectionData
         /// <summary>
         /// Gets or sets reflection Id.
         /// </summary>
-        public Guid ReflectionID { get; set; }
+        public Guid? ReflectionID { get; set; }
 
         /// <summary>
         /// Gets or sets email Id as created by.
@@ -27,7 +27,7 @@ namespace Reflection.Repositories.ReflectionData
         /// <summary>
         /// Gets or sets question.
         /// </summary>
-        public Guid QuestionID { get; set; }
+        public Guid? QuestionID { get; set; }
 
         /// <summary>
         /// Gets or sets privacy.
@@ -37,17 +37,22 @@ namespace Reflection.Repositories.ReflectionData
         /// <summary>
         /// Gets or sets recurring ID.
         /// </summary>
-        public Guid RecurrsionID { get; set; }
+        public Guid? RecurrsionID { get; set; }
 
         /// <summary>
         /// Gets or sets Message ID.
         /// </summary>
-        public Guid MessageID { get; set; }
+        public string MessageID { get; set; }
+
+        /// <summary>
+        /// Gets or sets Send now flag.
+        /// </summary>
+        public bool? SendNowFlag { get; set; }
 
         /// <summary>
         /// Gets or sets Channel ID.
         /// </summary>
-        public Guid ChannelID { get; set; }
+        public string ChannelID { get; set; }
 
         /// <summary>
         /// Gets or sets active flag.

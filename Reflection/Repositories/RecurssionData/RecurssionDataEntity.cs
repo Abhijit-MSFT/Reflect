@@ -11,12 +11,12 @@ namespace Reflection.Repositories.RecurssionData
         /// <summary>
         /// Gets or sets RecurssionID.
         /// </summary>
-        public Guid RecurssionID { get; set; }
+        public Guid? RecurssionID { get; set; }
 
         /// <summary>
         /// Gets or sets ReflectionID.
         /// </summary>
-        public Guid ReflectionID { get; set; }
+        public Guid? ReflectionID { get; set; }
 
         /// <summary>
         /// Gets or sets RecursstionType.

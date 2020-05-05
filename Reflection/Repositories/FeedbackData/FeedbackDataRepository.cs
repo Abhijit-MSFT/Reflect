@@ -17,10 +17,31 @@ namespace Reflection.Repositories.FeedbackData
         public FeedbackDataRepository(IConfiguration configuration, bool isFromAzureFunction = false)
             : base(
                 configuration,
-                PartitionKeyNames.UserDataTable.TableName,
-                PartitionKeyNames.UserDataTable.UserDataPartition,
+                PartitionKeyNames.FeedbackDataTable.TableName,
+                PartitionKeyNames.FeedbackDataTable.FeedbackDataPartition,
                 isFromAzureFunction)
         {
+        }
+
+
+        /// <summary>
+        /// Get the default questions.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>Questions which have default flag true</returns>
+        /// 
+        public async Task<Dictionary<int, int>> GetReflectionFeedback(Guid? reflectionid)
+        {
+            var allFeedbacks = await this.GetAllAsync(PartitionKeyNames.FeedbackDataTable.TableName);
+            //var result = allFeedbacks.Where(d => d.ReflectionID == reflectionid).Select(c => c.Feedback);
+            Random x = new Random();
+            Dictionary<int, int> feeds = new Dictionary<int, int>();
+            for (int i = 0; i < 5; i++)
+            {
+                feeds.Add(i+1, x.Next(1, 6));
+            }
+
+            return feeds;
         }
     }
 }
