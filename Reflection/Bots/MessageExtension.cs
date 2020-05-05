@@ -13,8 +13,7 @@ using Newtonsoft.Json;
 using Reflection.Helper;
 using Reflection.Model;
 using Microsoft.Extensions.Configuration;
-
-
+using AdaptiveCards;
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
     public class MessageExtension : TeamsActivityHandler
@@ -22,29 +21,44 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         private readonly IConfiguration _configuration;
         public MessageExtension(IConfiguration configuration)
         {
-            _configuration = configuration;                
+            _configuration = configuration;
+        }        
+        protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
+        {
+            if (turnContext.Activity.Value != null)
+            {
+                var reply = Activity.CreateMessageActivity();
+                var adaptiveCard = CardHelper.FeedBackCard();
+                Attachment attachment = new Attachment()
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = adaptiveCard
+                };
+                reply.Attachments.Add(attachment);
+                await turnContext.SendActivityAsync(reply, cancellationToken);
+            }
+            else
+            {
+                // This is a regular text message.
+                await turnContext.SendActivityAsync(MessageFactory.Text($"Hello from the TeamsMessagingExtensionsActionPreviewBot."), cancellationToken);
+            }
         }
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
             TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
-            //var cardData = JsonConvert.DeserializeObject            
-
             switch (taskInfo.action)
             {
                 case "reflection":
                     return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
-                case "sendAdaptiveCard":
-                    try
-                    {
+                case "sendAdaptiveCard":                    
+                        taskInfo.postCreateBy = turnContext.Activity.From.Name;
                         await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration, turnContext);
-                        return await CardHelper.SendNewPost(turnContext, action, cancellationToken, action.Data.ToString()); //create model for action data
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                    }                    
-                    
-                case "ManageRecurringPosts":
+                        var adaptiveCard = CardHelper.CreateNewPostCard(taskInfo);
+                        var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
+                        var channelId = turnContext.Activity.TeamsGetChannelId();
+                        await turnContext.SendActivityAsync(message, cancellationToken);  
+                        return null;
+                 case "ManageRecurringPosts":
                     var response = new MessagingExtensionActionResponse()
                     {
                         Task = new TaskModuleContinueResponse()
@@ -63,7 +77,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 default:
                     return null;
             };
-            
+
         }
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
@@ -83,8 +97,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Height = 720,
                         Width = 900,
                         Title = "Invite people to share how they feel",
-                        Url = this._configuration["BaseUri"]
-                        //Url = "https://bc5066ec.ngrok.io"
+                        Url = this._configuration["BaseUri"]                       
                     },
                 },
             };

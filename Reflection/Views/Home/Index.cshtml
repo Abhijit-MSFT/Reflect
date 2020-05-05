@@ -32,8 +32,7 @@
 
         function SendAdaptiveCard() {
             let taskInfo = {
-                postCreateBy: "v-abjodh@microsoft.com",
-                question: "How was the new project session?",
+                question: divEle.textContent,
                 privacy:"Personal",
                 ExecutionDate:"",
                 ExecutionTime:"",
@@ -92,7 +91,7 @@
                 <div class="modal-body modal-mb">
                     <div class="question">Question</div>
                     <div class="input-group custom-in">
-                        <select class="cs" onChange="getSelectedOption(this)">
+                        <select class="cs" onChange="getSelectedOption(this)" id="">
                             <option selected disabled class="default-opt">Select a question</option>
                             <option class="default-opt" value="1" selected>How are you feeling?</option>
                             <option class="default-opt" value="2">How did the week go?</option>
