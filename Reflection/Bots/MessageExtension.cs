@@ -13,8 +13,7 @@ using Newtonsoft.Json;
 using Reflection.Helper;
 using Reflection.Model;
 using Microsoft.Extensions.Configuration;
-
-
+using AdaptiveCards;
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
     public class MessageExtension : TeamsActivityHandler
@@ -22,43 +21,44 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         private readonly IConfiguration _configuration;
         public MessageExtension(IConfiguration configuration)
         {
-            _configuration = configuration;                
+            _configuration = configuration;
+        }        
+        protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
+        {
+            if (turnContext.Activity.Value != null)
+            {
+                var reply = Activity.CreateMessageActivity();
+                var adaptiveCard = CardHelper.FeedBackCard();
+                Attachment attachment = new Attachment()
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = adaptiveCard
+                };
+                reply.Attachments.Add(attachment);
+                await turnContext.SendActivityAsync(reply, cancellationToken);
+            }
+            else
+            {
+                // This is a regular text message.
+                await turnContext.SendActivityAsync(MessageFactory.Text($"Hello from the TeamsMessagingExtensionsActionPreviewBot."), cancellationToken);
+            }
         }
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            
             TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
-            
             switch (taskInfo.action)
             {
-                case "reflection":  
+                case "reflection":
                     return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
-                case "sendAdaptiveCard":
-                    try
-                    {
-                        taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
-                        taskInfo.messageID = turnContext.Activity.Id; //this is not correct id - check and change it
-                        taskInfo.postCreateBy = await DBHelper.GetUserEmailId(turnContext);
-
+                case "sendAdaptiveCard":                    
+                        taskInfo.postCreateBy = turnContext.Activity.From.Name;
                         await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration, turnContext);
-                        if (taskInfo.postSendNowFlag == true)
-                        {
-                            return await CardHelper.SendNewPost(action, cancellationToken, action.Data.ToString(), taskInfo.reflectionID);
-                        }
-                        else
-                        {
-                            return null;
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
-                    }
-                case "userFeedback":
-                     //Dictionary<int, int> feedback = await DBHelper.SaveReflectionFeedbackDataAsync(taskInfo, _configuration, turnContext);
-                    return null;
-                case "ManageRecurringPosts":
+                        var adaptiveCard = CardHelper.CreateNewPostCard(taskInfo);
+                        var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
+                        var channelId = turnContext.Activity.TeamsGetChannelId();
+                        await turnContext.SendActivityAsync(message, cancellationToken);  
+                        return null;
+                 case "ManageRecurringPosts":
                     var response = new MessagingExtensionActionResponse()
                     {
                         Task = new TaskModuleContinueResponse()
@@ -77,7 +77,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 default:
                     return null;
             };
-            
+
         }
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
@@ -97,7 +97,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Height = 720,
                         Width = 900,
                         Title = "Invite people to share how they feel",
-                        Url = this._configuration["BaseUri"]                        
+                        Url = this._configuration["BaseUri"]                       
                     },
                 },
             };

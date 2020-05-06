@@ -31,9 +31,13 @@
         });
 
         function SendAdaptiveCard() {
+            var list = document.querySelectorAll(".htmlEle");
+            var htmObj = {};
+            list.forEach((obj, i) => {
+            htmObj[obj.getAttribute("data-attr")] = obj.value;
+            });
             let taskInfo = {
-                postCreateBy: "v-abjodh@microsoft.com",
-                question: "How was the new project session?",
+                question: divEle.textContent,
                 privacy:"Personal",
                 ExecutionDate:"",
                 ExecutionTime:"",
@@ -102,7 +106,7 @@
                 <div class="modal-body modal-mb">
                     <div class="question">Question</div>
                     <div class="input-group custom-in">
-                        <select class="cs" onChange="getSelectedOption(this)">
+                        <select class="cs htmlEle" onChange="getSelectedOption(this)">
                             <option selected disabled class="default-opt">Select a question</option>
                             <option class="default-opt" value="1" selected>How are you feeling?</option>
                             <option class="default-opt" value="2">How did the week go?</option>
@@ -113,7 +117,7 @@
                     </div>
                     <div class="privacy">Privacy</div>
                     <div class="input-group custom-in">
-                        <select class="cs">
+                        <select class="cs htmlEle">
                             <!-- <option selected>Choose...</option> -->
                             <option value="1" selected>Public - Anyone in this chat will see responses</option>
                             <option value="2">Two</option>
@@ -126,13 +130,13 @@
                             <div class="col-6 custom-col">
                                 <div class="date">
                                     <div class="blk-head">Date</div>
-                                    <input type="date" alt="date" class="date-ip" />
+                                    <input type="date" alt="date" class="date-ip htmlEle" />
                                     <span class="date-icon"></span>
                                 </div>
                             </div>
                             <div class="col-6 custom-col">
                                 <div class="blk-head">Time</div>
-                                <div class="time-ip">
+                                <div class="time-ip htmlEle">
                                     Send now
                                     <span class="time-icon"></span>
                                 </div>
@@ -140,7 +144,7 @@
                             <div class="col-6 custom-col">
                                 <div class="blk-head rec">Recurrence</div>
                                 <div class="selc">
-                                    <select class="cs">
+                                    <select class="cs htmlEle">
                                         <option value="1" selected>Does not repeat </option>
                                         <option value="2">Every weekday (Mon-Fri)</option>
                                         <option value="3">Weekly</option>
