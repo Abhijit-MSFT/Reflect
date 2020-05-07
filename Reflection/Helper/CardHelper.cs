@@ -1,4 +1,5 @@
 ﻿using AdaptiveCards;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using Reflection.Model;
 using System;
@@ -8,13 +9,18 @@ namespace Reflection.Helper
 {
     public class CardHelper
     {
-        public static AdaptiveCard FeedBackCard()
+        private readonly IConfiguration _configuration;
+        public CardHelper(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+        public AdaptiveCard FeedBackCard()
         {
             return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
             {
                 Body = new List<AdaptiveElement>
                 {
-                   new AdaptiveImage(){Url=new Uri("https://79a924dc.ngrok.io/images/Firstresponsecolor.png")},
+                   new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Firstresponsecolor.png")},
                    new AdaptiveColumnSet
                    {
                         Columns = new List<AdaptiveColumn>()
@@ -25,7 +31,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/ref1.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/ref1.png"),
                                         Style =AdaptiveImageStyle.Default, Id="1"}
                                 }
 
@@ -45,7 +51,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/ref2.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/ref2.png"),
                                         Style =AdaptiveImageStyle.Default, Id="2"}
                                 }
 
@@ -65,7 +71,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/ref3.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/ref3.png"),
                                         Style =AdaptiveImageStyle.Default, Id="3"}
                                 }
 
@@ -85,7 +91,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/ref4.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/ref4.png"),
                                         Style =AdaptiveImageStyle.Default, Id="4"}
                                 }
 
@@ -105,7 +111,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/ref5.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/ref5.png"),
                                         Style =AdaptiveImageStyle.Default, Id="5"}
                                 }
 
@@ -135,7 +141,7 @@ namespace Reflection.Helper
             };
         }
 
-        public static AdaptiveCard CreateNewPostCard(TaskInfo data)
+        public  AdaptiveCard CreateNewPostCard(TaskInfo data)
         {
             return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
             {
@@ -177,7 +183,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/1.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/1.png"),
                                         Style =AdaptiveImageStyle.Person, Id="1", SelectAction = new AdaptiveSubmitAction()}
                                 }
 
@@ -188,7 +194,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/2.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/2.png"),
                                         Style =AdaptiveImageStyle.Person, Id="2", SelectAction = new AdaptiveSubmitAction() }
                                 }
 
@@ -199,7 +205,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/3.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/3.png"),
                                         Style =AdaptiveImageStyle.Person, Id="3", SelectAction = new AdaptiveSubmitAction()}
                                 }
 
@@ -210,7 +216,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/4.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/4.png"),
                                         Style =AdaptiveImageStyle.Person, Id="4", SelectAction = new AdaptiveSubmitAction()}
                                 }
 
@@ -221,7 +227,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/5.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/5.png"),
                                         Style =AdaptiveImageStyle.Person, Id="5", SelectAction = new AdaptiveSubmitAction()}
                                 }
 
