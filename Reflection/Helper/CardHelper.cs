@@ -14,7 +14,7 @@ namespace Reflection.Helper
             {
                 Body = new List<AdaptiveElement>
                 {
-                   new AdaptiveImage(){Url=new Uri("https://79a924dc.ngrok.io/images/Firstresponsecolor.png")},
+                   new AdaptiveImage(){Url=new Uri("https://bd3d7c5c.ngrok.io/images/Firstresponsecolor.png")},
                    new AdaptiveColumnSet
                    {
                         Columns = new List<AdaptiveColumn>()
@@ -25,7 +25,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/ref1.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://bd3d7c5c.ngrok.io/images/ref1.png"),
                                         Style =AdaptiveImageStyle.Default, Id="1"}
                                 }
 
@@ -45,7 +45,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/ref2.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://bd3d7c5c.ngrok.io/images/ref2.png"),
                                         Style =AdaptiveImageStyle.Default, Id="2"}
                                 }
 
@@ -65,7 +65,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/ref3.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://bd3d7c5c.ngrok.io/images/ref3.png"),
                                         Style =AdaptiveImageStyle.Default, Id="3"}
                                 }
 
@@ -85,7 +85,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/ref4.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://bd3d7c5c.ngrok.io/images/ref4.png"),
                                         Style =AdaptiveImageStyle.Default, Id="4"}
                                 }
 
@@ -105,7 +105,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/ref5.png"),
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://bd3d7c5c.ngrok.io/images/ref5.png"),
                                         Style =AdaptiveImageStyle.Default, Id="5"}
                                 }
 
@@ -177,8 +177,8 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/1.png"),
-                                        Style =AdaptiveImageStyle.Person, Id="1", SelectAction = new AdaptiveSubmitAction()}
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://bd3d7c5c.ngrok.io/images/1.png"),
+                                        Style =AdaptiveImageStyle.Person, Id="1", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'1', 'reflectionId':'" + data.reflectionID +"'}" } }
                                 }
 
                             },
@@ -188,8 +188,8 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/2.png"),
-                                        Style =AdaptiveImageStyle.Person, Id="2", SelectAction = new AdaptiveSubmitAction() }
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://bd3d7c5c.ngrok.io/images/2.png"),
+                                        Style =AdaptiveImageStyle.Person, Id="2", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'2', 'reflectionId':'" + data.reflectionID +"'}" } }
                                 }
 
                             },
@@ -199,8 +199,8 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/3.png"),
-                                        Style =AdaptiveImageStyle.Person, Id="3", SelectAction = new AdaptiveSubmitAction()}
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://bd3d7c5c.ngrok.io/images/3.png"),
+                                        Style =AdaptiveImageStyle.Person, Id="3", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'3', 'reflectionId':'" + data.reflectionID +"'}" } }
                                 }
 
                             },
@@ -210,8 +210,8 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/4.png"),
-                                        Style =AdaptiveImageStyle.Person, Id="4", SelectAction = new AdaptiveSubmitAction()}
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://bd3d7c5c.ngrok.io/images/4.png"),
+                                        Style =AdaptiveImageStyle.Person, Id="4", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'4', 'reflectionId':'" + data.reflectionID +"'}" } }
                                 }
 
                             },
@@ -221,8 +221,8 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://79a924dc.ngrok.io/images/5.png"),
-                                        Style =AdaptiveImageStyle.Person, Id="5", SelectAction = new AdaptiveSubmitAction()}
+                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri("https://bd3d7c5c.ngrok.io/images/5.png"),
+                                        Style =AdaptiveImageStyle.Person, Id="5", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'5', 'reflectionId':'" + data.reflectionID +"'}" } }
                                 }
 
                             },
