@@ -27,15 +27,26 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         {
             if (turnContext.Activity.Value != null)
             {
-                var reply = Activity.CreateMessageActivity();
-                var adaptiveCard = CardHelper.FeedBackCard();
-                Attachment attachment = new Attachment()
+                try
                 {
-                    ContentType = AdaptiveCard.ContentType,
-                    Content = adaptiveCard
-                };
-                reply.Attachments.Add(attachment);
-                await turnContext.SendActivityAsync(reply, cancellationToken);
+                    var reply = Activity.CreateMessageActivity();
+                    //Dictionary<int, int> feedback = await DBHelper.SaveReflectionFeedbackDataAsync(taskInfo, _configuration, turnContext);
+                    var adaptiveCard = CardHelper.FeedBackCard();
+                    Attachment attachment = new Attachment()
+                    {
+                        ContentType = AdaptiveCard.ContentType,
+                        Content = adaptiveCard
+                    };
+                    //reply.Attachments.Add(attachment);
+                    //await turnContext.SendActivityAsync(reply, cancellationToken);
+                    reply.Attachments.Add(attachment);
+                    reply.Id = turnContext.Activity.ReplyToId;
+                    await turnContext.UpdateActivityAsync(reply, cancellationToken);
+                }
+                catch (System.Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
             else
             {
@@ -50,15 +61,24 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             {
                 case "reflection":
                     return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
-                case "sendAdaptiveCard":                    
-                        taskInfo.postCreateBy = turnContext.Activity.From.Name;
+                case "sendAdaptiveCard":
+                        taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
+                        taskInfo.messageID = turnContext.Activity.Id; //this is not correct id - check and change it
+                        taskInfo.postCreateBy = await DBHelper.GetUserEmailId(turnContext);
                         await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration, turnContext);
-                        var adaptiveCard = CardHelper.CreateNewPostCard(taskInfo);
-                        var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
-                        var channelId = turnContext.Activity.TeamsGetChannelId();
-                        await turnContext.SendActivityAsync(message, cancellationToken);  
-                        return null;
-                 case "ManageRecurringPosts":
+                        if (taskInfo.postSendNowFlag == true)
+                        {
+                            var adaptiveCard = CardHelper.CreateNewPostCard(taskInfo);
+                            var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
+                            await turnContext.SendActivityAsync(message, cancellationToken);
+                            return null;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    
+                case "ManageRecurringPosts":
                     var response = new MessagingExtensionActionResponse()
                     {
                         Task = new TaskModuleContinueResponse()
