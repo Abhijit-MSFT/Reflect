@@ -14,8 +14,16 @@ namespace Reflection.Helper
         {
             _configuration = configuration;
         }
-        public AdaptiveCard FeedBackCard()
+        public AdaptiveCard FeedBackCard(Dictionary<int,int> keyValues, Guid reflectionId)
         {
+            for(int i=1;i<=5;i++)
+            {
+                if(!keyValues.ContainsKey(i))
+                {
+                    keyValues.Add(i, 0);
+                }
+            }
+
             return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
             {
                 Body = new List<AdaptiveElement>
@@ -41,7 +49,7 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("1")
+                                    new AdaptiveTextBlock(keyValues[1].ToString())
                                 }
 
                             },
@@ -61,7 +69,7 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("1")
+                                    new AdaptiveTextBlock(keyValues[2].ToString())
                                 }
 
                             },
@@ -81,7 +89,7 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("1")
+                                    new AdaptiveTextBlock(keyValues[3].ToString())
                                 }
 
                             },
@@ -101,7 +109,7 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("1")
+                                    new AdaptiveTextBlock(keyValues[4].ToString())
                                 }
 
                             },
@@ -121,7 +129,7 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("1")
+                                    new AdaptiveTextBlock(keyValues[5].ToString())
                                 }
 
                            },
@@ -135,7 +143,7 @@ namespace Reflection.Helper
                     {
                         Type = AdaptiveSubmitAction.TypeName,
                         Title = "View Reflections",
-                        Data = new JObject { { "submitLocation", "messagingExtensionSubmit" } },
+                        DataJson=@"{'type':'viewReflections','reflectionId':'" + reflectionId +"' }",
                     },
                 },
             };
@@ -143,6 +151,7 @@ namespace Reflection.Helper
 
         public  AdaptiveCard CreateNewPostCard(TaskInfo data)
         {
+            
             return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
             {
                 Body = new List<AdaptiveElement>
@@ -184,7 +193,7 @@ namespace Reflection.Helper
                                 {
 
                                     new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/1.png"),
-                                        Style =AdaptiveImageStyle.Person, Id="1", SelectAction = new AdaptiveSubmitAction()}
+                                        Style =AdaptiveImageStyle.Person, Id="1", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'1', 'type':'saveFeedback','reflectionId':'" + data.reflectionID +"'}" } }
                                 }
 
                             },
@@ -195,7 +204,7 @@ namespace Reflection.Helper
                                 {
 
                                     new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/2.png"),
-                                        Style =AdaptiveImageStyle.Person, Id="2", SelectAction = new AdaptiveSubmitAction() }
+                                        Style =AdaptiveImageStyle.Person, Id="2", SelectAction = new AdaptiveSubmitAction() { DataJson = @"{'feedbackId':'2', 'type':'saveFeedback', 'reflectionId':'" + data.reflectionID +"'}" } }
                                 }
 
                             },
@@ -206,7 +215,7 @@ namespace Reflection.Helper
                                 {
 
                                     new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/3.png"),
-                                        Style =AdaptiveImageStyle.Person, Id="3", SelectAction = new AdaptiveSubmitAction()}
+                                        Style =AdaptiveImageStyle.Person, Id="3", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'3', 'type':'saveFeedback', 'reflectionId':'" + data.reflectionID +"'}" } }
                                 }
 
                             },
@@ -217,7 +226,7 @@ namespace Reflection.Helper
                                 {
 
                                     new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/4.png"),
-                                        Style =AdaptiveImageStyle.Person, Id="4", SelectAction = new AdaptiveSubmitAction()}
+                                        Style =AdaptiveImageStyle.Person, Id="4", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'4', 'type':'saveFeedback', 'reflectionId':'" + data.reflectionID +"'}" } }
                                 }
 
                             },
@@ -228,8 +237,8 @@ namespace Reflection.Helper
                                 {
 
                                     new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/5.png"),
-                                        Style =AdaptiveImageStyle.Person, Id="5", SelectAction = new AdaptiveSubmitAction()}
-                                }
+                                        Style =AdaptiveImageStyle.Person, Id="5", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'5', 'type':'saveFeedback', 'reflectionId':'" + data.reflectionID +"'}" } }
+                               }
 
                             },
                         }

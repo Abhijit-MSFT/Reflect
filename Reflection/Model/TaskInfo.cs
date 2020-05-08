@@ -28,14 +28,18 @@ namespace Reflection.Model
         public Guid? questionID { get; set; }
         public Guid? recurssionID { get; set; }
 
-    }
+        public string type { get; set; }
 
+    }
 
     public class UserfeedbackInfo
     {        
-        public int userResponse { get; set; }
+        public int feedbackId { get; set; }
         public Guid reflectionID { get; set; }
         public string action { get; set; }
+        public string type { get; set; }
+
+        public string userName { get; set; }
     }
     public class TaskModuleSubmitData<T>
     {

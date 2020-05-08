@@ -33,14 +33,9 @@ namespace Reflection.Repositories.FeedbackData
         public async Task<Dictionary<int, int>> GetReflectionFeedback(Guid? reflectionid)
         {
             var allFeedbacks = await this.GetAllAsync(PartitionKeyNames.FeedbackDataTable.TableName);
-            //var result = allFeedbacks.Where(d => d.ReflectionID == reflectionid).Select(c => c.Feedback);
-            Random x = new Random();
+            var feedbackResult = allFeedbacks.Where(d => d.ReflectionID == reflectionid);
             Dictionary<int, int> feeds = new Dictionary<int, int>();
-            for (int i = 0; i < 5; i++)
-            {
-                feeds.Add(i+1, x.Next(1, 6));
-            }
-
+            feeds = feedbackResult.GroupBy(x => x.Feedback).ToDictionary(x=>x.Key,x=>x.Count());
             return feeds;
         }
 

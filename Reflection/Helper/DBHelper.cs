@@ -56,7 +56,7 @@ namespace Reflection.Helper
                     IsActive = taskInfo.IsActive
                 };
                 await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
-                await SaveQuestionsDataAsync(configuration, taskInfo);
+                //await SaveQuestionsDataAsync(configuration, taskInfo);
                 await SaveRecurssionDataAsync(configuration, taskInfo);                
             }            
         }
@@ -99,33 +99,29 @@ namespace Reflection.Helper
             await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
         }
 
-        public static async Task<Dictionary<int, int>> SaveReflectionFeedbackDataAsync(UserfeedbackInfo taskInfo, IConfiguration configuration, ITurnContext<IInvokeActivity> turnContext)
+        public static async Task SaveReflectionFeedbackDataAsync(UserfeedbackInfo taskInfo, IConfiguration configuration)
         {
             FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(configuration);
 
             if (taskInfo != null)
             {
                 var feedbackID = Guid.NewGuid();
-                var refID = Guid.NewGuid();
                 var rowKey = Guid.NewGuid();
-                string email = await GetUserEmailId(turnContext);
+                //string email = await GetUserEmailId(turnContext);
 
                 FeedbackDataEntity feedbackDataEntity = new FeedbackDataEntity
                 {
                     PartitionKey = PartitionKeyNames.FeedbackDataTable.FeedbackDataPartition, // read it from json
                     RowKey = rowKey.ToString(),
                     FeedbackID = feedbackID,
-                    FullName ="",
+                    FullName =taskInfo.userName,
                     ReflectionID = taskInfo.reflectionID,
-                    FeedbackGivenBy = email,
-                    Feedback = 1
+                    FeedbackGivenBy = "v-aruana@microsoft.com",
+                    Feedback = Convert.ToInt32(taskInfo.feedbackId)
 
                 };
                 await feedbackDataRepository.InsertOrMergeAsync(feedbackDataEntity);
             }
-            
-            Dictionary<int, int> feedbacks = await feedbackDataRepository.GetReflectionFeedback(taskInfo.reflectionID);
-            return feedbacks ?? null;
         }
 
         private static async Task<ReflectionDataEntity> ParseReflectionData(ITurnContext<IInvokeActivity> turnContext)
