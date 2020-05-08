@@ -29,9 +29,16 @@ namespace Reflection.Repositories.QuestionsData
         /// 
         public async Task<List<string>> GetAllDefaultQuestions()
         {
-            var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-            var result = allRows.Where(d => d.IsDefaultFlag == true).Select(c => c.Question);
-            return result.ToList();
+            try
+            {
+                var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
+                var result = allRows.Where(d => d.IsDefaultFlag == true).Select(c => c.Question);
+                return result.ToList();
+            }
+            catch(System.Exception e)
+            {
+                return null;
+            }
         }
     }
 
