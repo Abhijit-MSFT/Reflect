@@ -41,13 +41,36 @@ namespace Reflection.Model
 
         public string userName { get; set; }
     }
-    public class TaskModuleSubmitData<T>
-    {
-        [JsonProperty("commandId")]
-        public T commandId { get; set; }
 
-        [JsonProperty("data")]
-        public T Data { get; set; }
+    public class MessageDetails
+    {       
+        public string messageid { get; set; }
     }
+
+
+    public class TaskModuleActionHelper
+    {
+        public class AdaptiveCardValue<T>
+        {
+            [JsonProperty("msteams")]
+            public object Type { get; set; } = JsonConvert.DeserializeObject("{\"type\": \"task/fetch\" }");
+            [JsonProperty("data")]
+            public T Data { get; set; }
+        }
+    }
+
+    public class ActionDetails
+    {
+        public string type { get; set; }
+        public string ActionType { get; set; }
+    }
+    public class TaskModuleActionDetails : ActionDetails
+    {
+        public string URL { get; set; }
+        public string Title { get; set; }
+        public string Width { get; set; }
+        public string Height { get; set; }
+    }
+
 
 }

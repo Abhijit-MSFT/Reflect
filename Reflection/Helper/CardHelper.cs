@@ -1,4 +1,5 @@
 ﻿using AdaptiveCards;
+using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using Reflection.Model;
@@ -28,122 +29,133 @@ namespace Reflection.Helper
             {
                 Body = new List<AdaptiveElement>
                 {
-                   new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Firstresponsecolor.png")},
-                   new AdaptiveColumnSet
-                   {
+                    new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + "/images/Firstresponsecolor.png") },
+                    new AdaptiveColumnSet
+                    {
                         Columns = new List<AdaptiveColumn>()
                         {
-                             new AdaptiveColumn()
+                            new AdaptiveColumn()
                             {
-                                Width=AdaptiveColumnWidth.Auto,
-                                Items=new List<AdaptiveElement>()
+                                Width = AdaptiveColumnWidth.Auto,
+                                Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/ref1.png"),
-                                        Style =AdaptiveImageStyle.Default, Id="1"}
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),
+                                        Style = AdaptiveImageStyle.Default, Id = "1" }
                                 }
 
                             },
-                             new AdaptiveColumn()
+                            new AdaptiveColumn()
                             {
-                                Width=AdaptiveColumnWidth.Stretch,
+                                Width = AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[1].ToString())
                                 }
 
                             },
-                             new AdaptiveColumn()
+                            new AdaptiveColumn()
                             {
-                                Width=AdaptiveColumnWidth.Auto,
-                                Items=new List<AdaptiveElement>()
+                                Width = AdaptiveColumnWidth.Auto,
+                                Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/ref2.png"),
-                                        Style =AdaptiveImageStyle.Default, Id="2"}
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref2.png"),
+                                        Style = AdaptiveImageStyle.Default, Id = "2" }
                                 }
 
                             },
-                             new AdaptiveColumn()
+                            new AdaptiveColumn()
                             {
-                                Width=AdaptiveColumnWidth.Stretch,
+                                Width = AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[2].ToString())
                                 }
 
                             },
-                             new AdaptiveColumn()
+                            new AdaptiveColumn()
                             {
-                                Width=AdaptiveColumnWidth.Auto,
-                                Items=new List<AdaptiveElement>()
+                                Width = AdaptiveColumnWidth.Auto,
+                                Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/ref3.png"),
-                                        Style =AdaptiveImageStyle.Default, Id="3"}
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref3.png"),
+                                        Style = AdaptiveImageStyle.Default, Id = "3" }
                                 }
 
                             },
-                              new AdaptiveColumn()
+                            new AdaptiveColumn()
                             {
-                                Width=AdaptiveColumnWidth.Stretch,
+                                Width = AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[3].ToString())
                                 }
 
                             },
-                             new AdaptiveColumn()
+                            new AdaptiveColumn()
                             {
-                                Width=AdaptiveColumnWidth.Auto,
-                                Items=new List<AdaptiveElement>()
+                                Width = AdaptiveColumnWidth.Auto,
+                                Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/ref4.png"),
-                                        Style =AdaptiveImageStyle.Default, Id="4"}
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref4.png"),
+                                        Style = AdaptiveImageStyle.Default, Id = "4" }
                                 }
 
                             },
-                              new AdaptiveColumn()
+                            new AdaptiveColumn()
                             {
-                                Width=AdaptiveColumnWidth.Stretch,
+                                Width = AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[4].ToString())
                                 }
 
                             },
-                             new AdaptiveColumn()
+                            new AdaptiveColumn()
                             {
-                                Width=AdaptiveColumnWidth.Auto,
-                                Items=new List<AdaptiveElement>()
+                                Width = AdaptiveColumnWidth.Auto,
+                                Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Size=AdaptiveImageSize.Small,Url=new Uri(_configuration["BaseUri"] + "/images/ref5.png"),
-                                        Style =AdaptiveImageStyle.Default, Id="5"}
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref5.png"),
+                                        Style = AdaptiveImageStyle.Default, Id = "5" }
                                 }
 
                             },
                             new AdaptiveColumn()
                             {
-                                Width=AdaptiveColumnWidth.Stretch,
+                                Width = AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[5].ToString())
                                 }
 
-                           },
+                            },
                         }
                     }
 
                 },
                 Actions = new List<AdaptiveAction>
                 {
-                    new AdaptiveSubmitAction
+                    new AdaptiveSubmitAction()
                     {
-                        Type = AdaptiveSubmitAction.TypeName,
+                        Type = "Action.Submit",
                         Title = "View Reflections",
-                        DataJson=@"{'type':'viewReflections','reflectionId':'" + reflectionId +"' }",
+                        DataJson=@"{'type':'task/fetch','reflectionId':'" + reflectionId +"' }",
+                        Data =
+                        new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                        {
+                            Data = new TaskModuleActionDetails()
+                            {
+                                type ="task/fetch",
+                                URL ="https://bc5066ec.ngrok.io/OpenReflections",
+                                Title="View Reflections"
+                                
+                            }
+                        }
                     },
                 },
             };

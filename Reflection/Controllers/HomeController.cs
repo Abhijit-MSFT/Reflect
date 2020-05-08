@@ -25,8 +25,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
-        [Route("second")]
-        public ActionResult Second()
+        [Route("openReflections")]
+        public ActionResult OpenReflections()
         {
             return View();
         }
