@@ -39,8 +39,24 @@
       "commands": [
         {
           "id": "recurringreflections",
-          "description": "Manage recurring reflections",
-          "title": "Manage recurring reflections",
+          "description": "Manage recurring posts",
+          "title": "Manage recurring posts",
+          "type": "action",
+          "initialRun": false,
+          "context": [ "message", "compose" ],
+          "fetchTask": true,
+          "parameters": [
+            {
+              "name": "Name",
+              "title": "Title",
+              "description": "To Do Title"
+            }
+          ]
+        },
+        {
+          "id": "removeposts",
+          "description": "Remove posts",
+          "title": "Remove posts",
           "type": "action",
           "initialRun": false,
           "context": [ "message", "compose" ],
