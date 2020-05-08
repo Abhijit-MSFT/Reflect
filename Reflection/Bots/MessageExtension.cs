@@ -22,31 +22,21 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         public MessageExtension(IConfiguration configuration)
         {
             _configuration = configuration;
-        }        
+        }
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
+            CardHelper cardhelper = new CardHelper(_configuration);
             if (turnContext.Activity.Value != null)
             {
-                try
+                var reply = Activity.CreateMessageActivity();
+                var adaptiveCard = cardhelper.FeedBackCard();
+                Attachment attachment = new Attachment()
                 {
-                    var reply = Activity.CreateMessageActivity();
-                    //Dictionary<int, int> feedback = await DBHelper.SaveReflectionFeedbackDataAsync(taskInfo, _configuration, turnContext);
-                    var adaptiveCard = CardHelper.FeedBackCard();
-                    Attachment attachment = new Attachment()
-                    {
-                        ContentType = AdaptiveCard.ContentType,
-                        Content = adaptiveCard
-                    };
-                    //reply.Attachments.Add(attachment);
-                    //await turnContext.SendActivityAsync(reply, cancellationToken);
-                    reply.Attachments.Add(attachment);
-                    reply.Id = turnContext.Activity.ReplyToId;
-                    await turnContext.UpdateActivityAsync(reply, cancellationToken);
-                }
-                catch (System.Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = adaptiveCard
+                };
+                reply.Attachments.Add(attachment);
+                await turnContext.SendActivityAsync(reply, cancellationToken);
             }
             else
             {
@@ -62,22 +52,16 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 case "reflection":
                     return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
                 case "sendAdaptiveCard":
-                        taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
-                        taskInfo.messageID = turnContext.Activity.Id; //this is not correct id - check and change it
-                        taskInfo.postCreateBy = await DBHelper.GetUserEmailId(turnContext);
-                        await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration, turnContext);
-                        if (taskInfo.postSendNowFlag == true)
-                        {
-                            var adaptiveCard = CardHelper.CreateNewPostCard(taskInfo);
-                            var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
-                            await turnContext.SendActivityAsync(message, cancellationToken);
-                            return null;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    
+                    CardHelper cardhelper = new CardHelper(_configuration);
+                    taskInfo.postCreateBy = turnContext.Activity.From.Name;
+                    taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
+                    await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration, turnContext);
+
+                    var adaptiveCard = cardhelper.CreateNewPostCard(taskInfo);
+                    var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
+                    await turnContext.SendActivityAsync(message, cancellationToken);
+                    return null;
+
                 case "ManageRecurringPosts":
                     var response = new MessagingExtensionActionResponse()
                     {
@@ -85,7 +69,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         {
                             Value = new TaskModuleTaskInfo()
                             {
-                                Height = 550,
+                                Height = 600,
                                 Width = 780,
                                 Title = "Check the pulse on emotinal well-being",
                                 Url = this._configuration["BaseUri"] + "/ManageRecurringPosts"
@@ -102,11 +86,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            if (action.MessagePayload != null)
-            {
-                var messageText = action.MessagePayload.Body.Content;
-                var fromId = action.MessagePayload.From.User.Id;
-            }
+            string url = this._configuration["BaseUri"];
+            if(action.MessagePayload != null)
+                url = this._configuration["BaseUri"] + "/ManageRecurringPosts";
 
             var response = new MessagingExtensionActionResponse()
             {
@@ -114,15 +96,56 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 {
                     Value = new TaskModuleTaskInfo()
                     {
-                        Height = 720,
-                        Width = 900,
+                        Height = 600,
+                        Width = 780,
                         Title = "Invite people to share how they feel",
-                        Url = this._configuration["BaseUri"]                       
+                        Url = url
                     },
                 },
             };
 
             return response;
+
+            //if (action.MessagePayload == null)
+            //{
+            //    //    var messageText = action.MessagePayload.Body.Content;
+            //    //    var fromId = action.MessagePayload.From.User.Id;
+
+
+            //    var response = new MessagingExtensionActionResponse()
+            //    {
+            //        Task = new TaskModuleContinueResponse()
+            //        {
+            //            Value = new TaskModuleTaskInfo()
+            //            {
+            //                Height = 720,
+            //                Width = 900,
+            //                Title = "Invite people to share how they feel",
+            //                Url = this._configuration["BaseUri"]
+            //            },
+            //        },
+            //    };
+
+            //    return response;
+            //}
+            //else
+            //{
+            //    var response = new MessagingExtensionActionResponse()
+            //    {
+            //        Task = new TaskModuleContinueResponse()
+            //        {
+            //            Value = new TaskModuleTaskInfo()
+            //            {
+            //                Height = 720,
+            //                Width = 900,
+            //                Title = "Invite people to share how they feel",
+            //                Url = this._configuration["BaseUri"] + "/ManageRecurringPosts"
+            //            },
+            //        },
+            //    };
+
+            //    return response;
+            //}
         }
 
         protected override Task<MessagingExtensionResponse> OnTeamsMessagingExtensionQueryAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionQuery query, CancellationToken cancellationToken)
@@ -194,8 +217,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         protected async override Task OnTeamsMessagingExtensionCardButtonClickedAsync(ITurnContext<IInvokeActivity> turnContext, JObject cardData, CancellationToken cancellationToken)
         {
-        var reply = MessageFactory.Text("OnTeamsMessagingExtensionCardButtonClickedAsync Value: " + JsonConvert.SerializeObject(turnContext.Activity.Value));
-        await turnContext.SendActivityAsync(reply, cancellationToken);
+            var reply = MessageFactory.Text("OnTeamsMessagingExtensionCardButtonClickedAsync Value: " + JsonConvert.SerializeObject(turnContext.Activity.Value));
+            await turnContext.SendActivityAsync(reply, cancellationToken);
 
             //return base.OnTeamsMessagingExtensionCardButtonClickedAsync(turnContext, cardData, cancellationToken);
         }

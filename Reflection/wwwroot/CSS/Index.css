@@ -44,8 +44,12 @@
 }
 
 .modal-mb {
-    margin: 32px;
+    /*margin: 32px;*/
     padding: 0;
+}
+
+.mc{
+    border:none !important;
 }
 
 .question,
@@ -57,10 +61,11 @@
     color: #252424;
     font-weight: 500;
     margin-bottom: 12px;
+    margin-top:16px;
 }
 
 .privacy {
-    margin-top: 25px;
+    /*margin-top: 25px;*/
 }
 
 .custom-in {
@@ -129,7 +134,7 @@
     }
 
 .post {
-    margin-top: 27px;
+    margin-top: 16px;
 }
 
 .blk-head {
@@ -141,7 +146,12 @@
 }
 
 .rec {
-    margin-top: 25px;
+    margin-top: 16px;
+}
+
+.container {
+    padding-right: 10px;
+    padding-left: 10px;    
 }
 
 .custom-rw {
@@ -214,7 +224,7 @@ input[type="date"] {
     font-size: 14px;
     color: #252424;
     font-weight: 500;
-    margin-top: 25px;
+    margin-top: 16px;
 }
 
 .br-blk {

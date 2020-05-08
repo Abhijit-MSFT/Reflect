@@ -179,6 +179,13 @@ namespace Reflection.Helper
 
         //    return members.ToList();
         //}
+
+        //public static async Task<List<ReflectionDataEntity>> GetAllReflection(IConfiguration configuration)
+        //{
+        //    RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
+        //    var allReflections = recurssionDataRepository.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
+        //}
+
     }
 }
 
