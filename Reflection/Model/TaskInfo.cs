@@ -38,8 +38,8 @@ namespace Reflection.Model
         public Guid reflectionID { get; set; }
         public string action { get; set; }
         public string type { get; set; }
-
         public string userName { get; set; }
+        public string emailId { get; set; }
     }
 
     public class MessageDetails

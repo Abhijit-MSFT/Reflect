@@ -34,49 +34,55 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
     protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             CardHelper cardhelper = new CardHelper(_configuration);
+            
             FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration);
             if (turnContext.Activity.Value != null)
             {
                 var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
+                //string messageId = GetmessageIdfromReflection(reftectiid)
+                string MessageId = null;
                 var reply = Activity.CreateMessageActivity();
                 if (response.type == "saveFeedback")
                 {
                     response.userName = turnContext.Activity.From.Name;
+                    //response.emailId = DBHelper.GetUserEmailId(turnContext);
+                    MessageId = "1589089040744";
                     await DBHelper.SaveReflectionFeedbackDataAsync(response, _configuration);
                     try
                     {
                         
                         Dictionary<int, int> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionID);
                         string messDetails = turnContext.Activity.Conversation.Id;
-                        string messageid = (messDetails.Substring(messDetails.IndexOf("messageid="))).Split("=")[1];
                         var adaptiveCard = cardhelper.FeedBackCard(feedbacks, response.reflectionID);
-                        if (messageid != null)
-                        {
-                            //var activity = MessageFactory.Attachment();
-                            //adaptiveCard.Id = turnContext.Activity.ReplyToId;
-                            //IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
-                            //await connector.Conversations.UpdateActivityAsync(turnContext.Activity.Conversation.Id, cancellationToken);
-                            //await turnContext.UpdateActivityAsync(turnContext);
-                            //await turnContext.UpdateActivityAsync(activity, cancellationToken);
-                            //await connectorClient.Conversations.UpdateActivityAsync(conversationResource.Id, updateMessageId, (Activity)replyMessage);
-                        }
-                        
-                        //string a = JsonConvert.DeserializeObject<MessageDetails>(turnContext.Activity.Conversation.Id).ToString();
-                        //string messID = messDetails.Substring(meesPosition, messLength);
-
-                        
+                                          
                         Attachment attachment = new Attachment()
                         {
                             ContentType = AdaptiveCard.ContentType,
                             Content = adaptiveCard
                         };
                         reply.Attachments.Add(attachment);
+                        
+                        if(MessageId==null)
+                        {
+                            var result = turnContext.SendActivityAsync(reply, cancellationToken);
+                            MessageId = result.Result.Id;
+                            //update messageid with reflcationid
+                            //await turnContext.SendActivityAsync(reply, cancellationToken);
+                        }
+                        else
+                        {
+                            reply.Id = MessageId;
+                            await turnContext.UpdateActivityAsync(reply);
+                        }
                     }
                     catch (System.Exception e)
                     {
+                        //messageid = null;
                         Console.WriteLine(e.Message.ToString());
                     }
-                    await turnContext.SendActivityAsync(reply, cancellationToken);
+                   
+               
+
                 }
                 //else if (response.type == "viewReflections")
                 //{
@@ -121,6 +127,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             case "sendAdaptiveCard":
                 CardHelper cardhelper = new CardHelper(_configuration);
                 taskInfo.postCreateBy = turnContext.Activity.From.Name;
+                    //taskInfo.messageID = turnContext.Activity.Id;
                 taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
                 if (taskInfo.postSendNowFlag == true)
                 {
