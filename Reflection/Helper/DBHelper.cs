@@ -4,6 +4,7 @@ using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Reflection.Model;
 using Reflection.Repositories;
@@ -15,6 +16,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reflection.Helper
@@ -124,26 +126,26 @@ namespace Reflection.Helper
             }
         }
 
-        private static async Task<ReflectionDataEntity> ParseReflectionData(ITurnContext<IInvokeActivity> turnContext)
-        {
-            var row = turnContext.Activity?.From?.AadObjectId;
-            if (row != null)
-            {
-                var reflectionDataEntity = new ReflectionDataEntity
-                {
-                    PartitionKey = PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition,
-                    RowKey = turnContext.Activity?.From?.AadObjectId,
-                    //CreatedBy = await GetUserName(turnContext),
-                    CreatedBy = await GetUserEmailId(turnContext),
-                };
+        //private static async Task<ReflectionDataEntity> ParseReflectionData(ITurnContext<IInvokeActivity> turnContext)
+        //{
+        //    var row = turnContext.Activity?.From?.AadObjectId;
+        //    if (row != null)
+        //    {
+        //        var reflectionDataEntity = new ReflectionDataEntity
+        //        {
+        //            PartitionKey = PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition,
+        //            RowKey = turnContext.Activity?.From?.AadObjectId,
+        //            //CreatedBy = await GetUserName(turnContext),
+        //            CreatedBy = await GetUserEmailId(turnContext),
+        //        };
 
-                return reflectionDataEntity;
-            }
+        //        return reflectionDataEntity;
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
-        public static async Task<string> GetUserEmailId(ITurnContext<IInvokeActivity> turnContext)
+        public static async Task<string> GetUserEmailId(ITurnContext<IMessageActivity> turnContext)
         {
             // Fetch the members in the current conversation
             try
@@ -182,6 +184,30 @@ namespace Reflection.Helper
         //    var allReflections = recurssionDataRepository.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
         //}
 
+        public static async Task<ViewReflectionsEntity> GetViewReflectionsData(ITurnContext<IMessageActivity> turnContext, IConfiguration configuration)
+        {
+            if(turnContext.Activity.Value != null)
+            {               
+                var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
+                var refID = response.reflectionID;
+
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
+                FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(configuration);
+                ViewReflectionsEntity viewReflectionsEntity = new ViewReflectionsEntity();
+
+
+                //Get reflection data
+                ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(refID) ?? null;
+                Dictionary<int, int> feedbackData = await feedbackDataRepository.GetReflectionFeedback(refID) ?? null;
+
+                viewReflectionsEntity.ReflectionData = refData;
+                viewReflectionsEntity.FeedbackData = feedbackData;
+
+                return viewReflectionsEntity;
+
+            }
+            return null;
+        }
     }
 }
 
