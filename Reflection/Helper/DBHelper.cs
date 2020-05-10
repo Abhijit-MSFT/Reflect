@@ -30,11 +30,11 @@ namespace Reflection.Helper
         /// <param name="reflectionDataRepository">The reflection data repository.</param>
         /// <param name="turnContext">Bot conversation update activity instance.</param>
         /// <returns>A task that represents the work queued to execute.</returns>
-
-        public static async Task SaveReflectionDataAsync(TaskInfo taskInfo, IConfiguration configuration, ITurnContext<IInvokeActivity> turnContext)
+        public static async Task SaveReflectionDataAsync(TaskInfo taskInfo, IConfiguration configuration)
         {
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
-            
+            QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
+
             if (taskInfo != null)
             {
                 taskInfo.reflectionID = Guid.NewGuid();
@@ -48,6 +48,7 @@ namespace Reflection.Helper
                     PartitionKey = PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition, // read it from json
                     RowKey = rowKey.ToString(),
                     CreatedBy = taskInfo.postCreateBy,
+                    CreatedByEmail = taskInfo.postCreatedByEmail,
                     RefCreatedDate = DateTime.Now,
                     QuestionID = taskInfo.questionID,
                     Privacy = taskInfo.privacy,
@@ -58,11 +59,18 @@ namespace Reflection.Helper
                     IsActive = taskInfo.IsActive
                 };
                 await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
-                //await SaveQuestionsDataAsync(configuration, taskInfo);
-                await SaveRecurssionDataAsync(configuration, taskInfo);                
+                if(!await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question))
+                    await SaveQuestionsDataAsync(configuration, taskInfo);
+                await SaveRecurssionDataAsync(configuration, taskInfo);   // add logic to check if reflection is recurrent             
             }            
         }
 
+        /// <summary>
+        /// Add Reflection data in Table Storage.
+        /// </summary>
+        /// <param name="reflectionDataRepository">The reflection data repository.</param>
+        /// <param name="turnContext">Bot conversation update activity instance.</param>
+        /// <returns>A task that represents the work queued to execute.</returns>
         public static async Task SaveQuestionsDataAsync(IConfiguration configuration, TaskInfo taskInfo)
         {
             QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
@@ -82,6 +90,12 @@ namespace Reflection.Helper
             await questionsDataRepository.CreateOrUpdateAsync(questionEntity);
         }
 
+        /// <summary>
+        /// Add Reflection data in Table Storage.
+        /// </summary>
+        /// <param name="reflectionDataRepository">The reflection data repository.</param>
+        /// <param name="turnContext">Bot conversation update activity instance.</param>
+        /// <returns>A task that represents the work queued to execute.</returns>
         public static async Task SaveRecurssionDataAsync(IConfiguration configuration, TaskInfo taskInfo)
         {
             RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
@@ -101,6 +115,12 @@ namespace Reflection.Helper
             await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
         }
 
+        /// <summary>
+        /// Add Reflection data in Table Storage.
+        /// </summary>
+        /// <param name="reflectionDataRepository">The reflection data repository.</param>
+        /// <param name="turnContext">Bot conversation update activity instance.</param>
+        /// <returns>A task that represents the work queued to execute.</returns>
         public static async Task SaveReflectionFeedbackDataAsync(UserfeedbackInfo taskInfo, IConfiguration configuration)
         {
             FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(configuration);
@@ -113,39 +133,21 @@ namespace Reflection.Helper
 
                 FeedbackDataEntity feedbackDataEntity = new FeedbackDataEntity
                 {
-                    PartitionKey = PartitionKeyNames.FeedbackDataTable.FeedbackDataPartition, // read it from json
+                    PartitionKey = PartitionKeyNames.FeedbackDataTable.FeedbackDataPartition, 
                     RowKey = rowKey.ToString(),
                     FeedbackID = feedbackID,
-                    FullName =taskInfo.userName,
-                    ReflectionID = taskInfo.reflectionID,
-                    FeedbackGivenBy = "v-aruana@microsoft.com",
+                    FullName =  taskInfo.userName,
+                    ReflectionID = taskInfo.reflectionId,
+                    FeedbackGivenBy = taskInfo.emailId, //need changes - send it in card response and capture it
                     Feedback = Convert.ToInt32(taskInfo.feedbackId)
 
                 };
                 await feedbackDataRepository.InsertOrMergeAsync(feedbackDataEntity);
             }
-        }
+        }      
 
-        //private static async Task<ReflectionDataEntity> ParseReflectionData(ITurnContext<IInvokeActivity> turnContext)
-        //{
-        //    var row = turnContext.Activity?.From?.AadObjectId;
-        //    if (row != null)
-        //    {
-        //        var reflectionDataEntity = new ReflectionDataEntity
-        //        {
-        //            PartitionKey = PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition,
-        //            RowKey = turnContext.Activity?.From?.AadObjectId,
-        //            //CreatedBy = await GetUserName(turnContext),
-        //            CreatedBy = await GetUserEmailId(turnContext),
-        //        };
-
-        //        return reflectionDataEntity;
-        //    }
-
-        //    return null;
-        //}
-
-        public static async Task<string> GetUserEmailId(ITurnContext<IMessageActivity> turnContext)
+        //make above method and below method generic - need this change
+        public static async Task<string> GetUserEmailId<T>(ITurnContext<T> turnContext) where T : Microsoft.Bot.Schema.IActivity
         {
             // Fetch the members in the current conversation
             try
@@ -161,6 +163,12 @@ namespace Reflection.Helper
             }
         }
 
+        /// <summary>
+        /// Add Reflection data in Table Storage.
+        /// </summary>
+        /// <param name="reflectionDataRepository">The reflection data repository.</param>
+        /// <param name="turnContext">Bot conversation update activity instance.</param>
+        /// <returns>A task that represents the work queued to execute.</returns>
         private static IEnumerable<TeamsChannelAccount> AsTeamsChannelAccounts(IEnumerable<ChannelAccount> channelAccountList)
         {
             foreach (ChannelAccount channelAccount in channelAccountList)
@@ -168,7 +176,6 @@ namespace Reflection.Helper
                 yield return JObject.FromObject(channelAccount).ToObject<TeamsChannelAccount>();
             }
         }
-
 
         //public static async Task<List<string>> GetTeamMember(ITurnContext<IInvokeActivity> turnContext)
         //{
@@ -184,17 +191,23 @@ namespace Reflection.Helper
         //    var allReflections = recurssionDataRepository.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
         //}
 
+        /// <summary>
+        /// Add Reflection data in Table Storage.
+        /// </summary>
+        /// <param name="reflectionDataRepository">The reflection data repository.</param>
+        /// <param name="turnContext">Bot conversation update activity instance.</param>
+        /// <returns>A task that represents the work queued to execute.</returns>
         public static async Task<ViewReflectionsEntity> GetViewReflectionsData(ITurnContext<IMessageActivity> turnContext, IConfiguration configuration)
         {
             if(turnContext.Activity.Value != null)
             {               
                 var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
-                var refID = response.reflectionID;
+                var refID = response.reflectionId;
 
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(configuration);
                 ViewReflectionsEntity viewReflectionsEntity = new ViewReflectionsEntity();
-
+                //Guid gID = Guid.Parse("933a3991-29e9-4391-bdce-a81096b23c20"); for testing purpose
 
                 //Get reflection data
                 ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(refID) ?? null;
