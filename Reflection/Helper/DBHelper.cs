@@ -181,7 +181,6 @@ namespace Reflection.Helper
         //    RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
         //    var allReflections = recurssionDataRepository.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
         //}
-
     }
 }
 

@@ -28,10 +28,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         {
             _configuration = configuration;
         }
-
-        
-        
-    protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
+      
+        protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             CardHelper cardhelper = new CardHelper(_configuration);
             
@@ -80,15 +78,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         //messageid = null;
                         Console.WriteLine(e.Message.ToString());
                     }
-                   
-               
-
                 }
-                //else if (response.type == "viewReflections")
-                //{
-                    
-
-                //}
+             
             }
             else
             {

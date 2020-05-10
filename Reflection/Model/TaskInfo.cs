@@ -72,5 +72,21 @@ namespace Reflection.Model
         public string Height { get; set; }
     }
 
+    public class Responses
+    {
+        public string Createdby { get; set; }
+        public string QuestionTitle { get; set; }
+
+        public List<OptionResponse> OptionResponses { get; set; }
+
+    }
+    public class OptionResponse
+    {
+        public int Width { get; set; }
+        public string Color { get; set; }
+
+        public string Description { get; set; }
+    }
+
 
 }

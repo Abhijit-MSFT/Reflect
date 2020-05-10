@@ -151,9 +151,8 @@ namespace Reflection.Helper
                             Data = new TaskModuleActionDetails()
                             {
                                 type ="task/fetch",
-                                URL ="https://e866cb06.ngrok.io/OpenReflections",
-                                Title="View Reflections"
-                                
+                                URL ="https://46fed9e5.ngrok.io/OpenReflections",
+                                Title="View Reflections",
                             }
                         }
                     },
