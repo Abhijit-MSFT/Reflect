@@ -1,9 +1,11 @@
-﻿
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace Reflection.Repositories.ReflectionData
 {
-    using Microsoft.Extensions.Configuration;
     public class ReflectionDataRepository : BaseRepository<ReflectionDataEntity>
     {
 
@@ -19,6 +21,20 @@ namespace Reflection.Repositories.ReflectionData
                 PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition,
                 isFromAzureFunction)
         {
+        }
+
+        public async Task<ReflectionDataEntity> GetReflectionData(Guid refID)
+        {
+            var allReflections = await this.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
+            ReflectionDataEntity refData = allReflections.Where(c => c.ReflectionID == refID).FirstOrDefault();
+            return refData;
+        }
+
+        public async Task<string> GetmessageIdfromReflection(Guid refId)
+        {
+            var allRefs = await this.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
+            var dataEntity = allRefs.Where(c => c.ReflectionID == refId).FirstOrDefault();
+            return dataEntity.MessageID;
         }
     }
 }

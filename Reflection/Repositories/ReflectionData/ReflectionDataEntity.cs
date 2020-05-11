@@ -1,13 +1,9 @@
-﻿using Bogus.DataSets;
-using Microsoft.Azure.Cosmos.Table;
+﻿using Microsoft.Azure.Cosmos.Table;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Reflection.Repositories.ReflectionData
 {
-    public class ReflectionDataEntity :TableEntity
+    public class ReflectionDataEntity : TableEntity
     {
         /// <summary>
         /// Gets or sets reflection Id.
@@ -15,9 +11,14 @@ namespace Reflection.Repositories.ReflectionData
         public Guid? ReflectionID { get; set; }
 
         /// <summary>
-        /// Gets or sets email Id as created by.
+        /// Gets or sets name Id as created by.
         /// </summary>
         public string CreatedBy { get; set; }
+
+        /// <summary>
+        /// Gets or sets email Id as created by.
+        /// </summary>
+        public string CreatedByEmail { get; set; }
 
         /// <summary>
         /// Gets or sets Reflection creation date.

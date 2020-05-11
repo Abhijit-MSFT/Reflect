@@ -12,6 +12,8 @@ namespace Reflection.Model
         public string question { get; set; }
         public string privacy { get; set; }
         public string postCreateBy { get; set; }
+
+        public string postCreatedByEmail { get; set; }
         public DateTime? executionDate { get; set; }
         public DateTime? executionTime { get; set; }
         public DateTime? postDate { get; set; }
@@ -35,11 +37,12 @@ namespace Reflection.Model
     public class UserfeedbackInfo
     {        
         public int feedbackId { get; set; }
-        public Guid reflectionID { get; set; }
+        public Guid reflectionId { get; set; }
         public string action { get; set; }
         public string type { get; set; }
         public string userName { get; set; }
         public string emailId { get; set; }
+        public string messageId { get; set; }
     }
 
     public class MessageDetails

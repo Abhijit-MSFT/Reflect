@@ -35,10 +35,17 @@ namespace Reflection.Repositories.QuestionsData
                 var result = allRows.Where(d => d.IsDefaultFlag == true).Select(c => c.Question);
                 return result.ToList();
             }
-            catch(System.Exception e)
+            catch (System.Exception e)
             {
                 return null;
             }
+        }
+
+        public async Task<bool> IsQuestionAlreadtPresent(string question)
+        {
+            var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
+            bool result = allRows.Any(c => c.Question == question);
+            return result;
         }
     }
 

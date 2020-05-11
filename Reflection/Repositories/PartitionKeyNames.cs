@@ -39,7 +39,7 @@ namespace Reflection.Repositories
             /// <summary>
             /// Reflection data partition key name.
             /// </summary>
-            public static readonly string ReflectionDataPartition = "ReflectionDataEntity";
+            public static readonly string ReflectionDataPartition = "ReflectionData";
         }
 
         public static class QuestionsDataTable

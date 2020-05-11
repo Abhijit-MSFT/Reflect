@@ -35,9 +35,15 @@ namespace Reflection.Repositories.FeedbackData
             var allFeedbacks = await this.GetAllAsync(PartitionKeyNames.FeedbackDataTable.TableName);
             var feedbackResult = allFeedbacks.Where(d => d.ReflectionID == reflectionid);
             Dictionary<int, int> feeds = new Dictionary<int, int>();
-            feeds = feedbackResult.GroupBy(x => x.Feedback).ToDictionary(x=>x.Key,x=>x.Count());
+            feeds = feedbackResult.GroupBy(x => x.Feedback).ToDictionary(x => x.Key, x => x.Count());
             return feeds;
         }
 
+        public async Task<FeedbackDataEntity> GetReflectionFeedback(Guid reflid, string email)
+        {
+            var allFeedbacks = await this.GetAllAsync(PartitionKeyNames.FeedbackDataTable.TableName);
+            FeedbackDataEntity feedbackResult = allFeedbacks.Where(c => c.ReflectionID == reflid && c.FeedbackGivenBy == email).FirstOrDefault();
+            return feedbackResult ?? null;
+        }
     }
 }
