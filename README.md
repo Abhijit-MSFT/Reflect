@@ -4,8 +4,8 @@ products:
 - office-365
 languages:
 - csharp
-title: Microsoft Teams C# Helloworld Sample
-description: Microsoft Teams "Hello world" application for .NET/C#
+title: Reflect 
+description: Microsoft Teams Reflect app - .NET Core/C#/React
 extensions:
   contentType: samples
   platforms:
