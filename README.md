@@ -7,9 +7,9 @@ languages:
 title: Reflect 
 description: Microsoft Teams Reflect app - .NET Core/C#/React
 extensions:
-  contentType: samples
+  contentType: Reflect app
   platforms:
-  - CSS
+  
   createdDate: 10/16/2017 10:02:21 PM
 ---
 
