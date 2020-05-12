@@ -48,8 +48,8 @@
     padding: 0;
 }
 
-.mc{
-    border:none !important;
+.mc {
+    border: none !important;
 }
 
 .question,
@@ -61,16 +61,26 @@
     color: #252424;
     font-weight: 500;
     margin-bottom: 12px;
-    margin-top:16px;
+    margin-top: 16px;
 }
 
 .privacy {
     /*margin-top: 25px;*/
 }
 
-.custom-in {
-    outline-color: white !important;
+.input-select {
+    width: 100%;
+    border: none;
+    background-color: #f3f2f1;
+    height: 32px;
+    font-size: 14px;
+    color: #252424;
+    padding: 4px 12px;
 }
+
+    .input-select::-webkit-calendar-picker-indicator {
+        display: none;
+    }
 
 .cs {
     height: 32px;
@@ -151,7 +161,7 @@
 
 .container {
     padding-right: 10px;
-    padding-left: 10px;    
+    padding-left: 10px;
 }
 
 .custom-rw {
@@ -213,6 +223,7 @@ input[type="date"] {
         font-size: 14px;
         color: #6266a5;
         position: absolute;
+        pointer-events: none;
     }
 
 .date-ip {
@@ -275,7 +286,7 @@ input[type="date"] {
     height: 24px;
     width: 24px;
     border-radius: 50%;
-    margin-right: 1%;    
+    margin-right: 1%;
 }
 
 .mf {

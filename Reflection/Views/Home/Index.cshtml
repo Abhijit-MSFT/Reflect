@@ -96,16 +96,24 @@
             <div class="modal-content mc">
                 <div class="modal-body modal-mb">
                     <div class="question">Question</div>
-                    <div class="input-group custom-in">
-                        <select class="cs htmlEle" onChange="getSelectedOption(this)">
-                            <option selected disabled class="default-opt">Select a question</option>
-                            <option class="default-opt" value="1" selected>How are you feeling?</option>
-                            <option class="default-opt" value="2">How did the week go?</option>
-                            <option class="default-opt" value="3">How do you feel about today's project?</option>
-                            <option class="default-opt sel-add-q">Add custom question</option>
-                        </select>
+                    <div class="custom-in">
+                        @*<select class="cs htmlEle" onChange="getSelectedOption(this)">
+            <option selected disabled class="default-opt">Select a question</option>
+            <option class="default-opt" value="1" selected>How are you feeling?</option>
+            <option class="default-opt" value="2">How did the week go?</option>
+            <option class="default-opt" value="3">How do you feel about today's project?</option>
+            <option class="default-opt sel-add-q">Add custom question</option>
+        </select>*@
+                        <input list="questions" name="questions" id="questions-list" class="input-select" onblur="getSelectedOption(this)"/>
+                        <datalist id="questions" class="htmlEle" >
+                            <option class="default-opt" value="How are you feeling?">
+                            <option class="default-opt" value="How did the week go?">
+                            <option class="default-opt" value="How do you feel about today's project?">
+                            <option class="default-opt sel-add-q" value="Add custom question">
+                        </datalist>
                         <span class="sel-chev"></span>
                     </div>
+                   
                     <div class="privacy">Privacy</div>
                     <div class="input-group custom-in">
                         <select class="cs htmlEle">
