@@ -15,8 +15,9 @@
     <title>Reflect</title>
 
     <script>
-        microsoftTeams.initialize();
+        
         $(document).ready(function () {
+
             $("select").change(function () {
                 $(this).find("option:selected").each(function () {
                     var optionValue = $(this).attr("value");
@@ -28,6 +29,12 @@
                     }
                 });
             }).change();
+            microsoftTeams.initialize();
+            microsoftTeams.getContext(function (context) {
+                alert(context.userPrincipalName);
+                alert(context.userObjectId);
+            });
+
         });
 
         function SendAdaptiveCard() {
@@ -118,9 +125,8 @@
                     <div class="input-group custom-in">
                         <select class="cs htmlEle">
                             <!-- <option selected>Choose...</option> -->
-                            <option value="1" selected>Public - Anyone in this chat will see responses</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                            <option value="1" selected>Public - Names will be displayed with responses</option>
+                            <option value="2">Anonymous - Names will be omitted from responses</option>
                         </select>
                         <span class="sel-chev"></span>
                     </div>
