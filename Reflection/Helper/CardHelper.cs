@@ -5,6 +5,11 @@ using Newtonsoft.Json.Linq;
 using Reflection.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Reflection.Helper
 {
@@ -17,19 +22,71 @@ namespace Reflection.Helper
         }
         public AdaptiveCard FeedBackCard(Dictionary<int,int> keyValues, Guid reflectionId)
         {
-            for(int i=1;i<=5;i++)
+            DirectoryInfo folderInfo = new DirectoryInfo(@"wwwroot/images/reflectimages");
+
+            foreach (FileInfo file in folderInfo.GetFiles())
             {
-                if(!keyValues.ContainsKey(i))
+                file.Delete();
+            }
+            for (int i = 1; i <= 5; i++)
+            {
+                if (!keyValues.ContainsKey(i))
                 {
                     keyValues.Add(i, 0);
                 }
             }
+            
+            var totalcount = 0;
+            for (int i = 1; i <= 5; i++)
+            {
+                if (keyValues.ContainsKey(i))
+                    totalcount = totalcount + keyValues[i];
+            }
+            Bitmap thumbBMP = new Bitmap(1000, 20);
+            Graphics flagGraphics = Graphics.FromImage(thumbBMP);
+            var color = Brushes.White;
+            var width = 0;
+            var previouswidth = 0;
 
+           
+
+            for (int i = 1; i <= 5; i++)
+            {
+                if (keyValues.ContainsKey(i))
+                {
+                    if (i == 1)
+                    {
+                        color = Brushes.Green;
+                    }
+                    if (i == 2)
+                    {
+                        color = Brushes.LightGreen;
+                    }
+                    if (i == 3)
+                    {
+                        color = Brushes.Orange;
+                    }
+                    if (i == 4)
+                    {
+                        color = Brushes.OrangeRed;
+                    }
+                    if (i == 5)
+                    {
+                        color = Brushes.Red;
+                    }
+                    width = (keyValues[i] / totalcount) * 1000;
+                    flagGraphics.FillRectangle(color, 0, previouswidth, width, 20);
+                    previouswidth = width;
+                }
+            }
+            var datastring = "/Images/reflectimages/" + Guid.NewGuid()+ ".png";
+            string outputFileName = @"wwwroot"+ datastring;
+            saveImage(thumbBMP, outputFileName);
             return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
             {
                 Body = new List<AdaptiveElement>
                 {
-                    new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + "/images/Firstresponsecolor.png") },
+                    new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + datastring) },
                     new AdaptiveColumnSet
                     {
                         Columns = new List<AdaptiveColumn>()
@@ -153,14 +210,27 @@ namespace Reflection.Helper
                                 type ="task/fetch",
                                 URL ="https://d0024fd7.ngrok.io/OpenReflections",
                                 Title="View Reflections"
-                                
                             }
                         }
                     },
                 },
             };
+
         }
 
+        public  Task<string> saveImage(Bitmap data, string Filepath)
+        {
+            using (MemoryStream memory = new MemoryStream())
+            {
+                using (FileStream fs = new FileStream(Filepath, FileMode.Create, FileAccess.ReadWrite))
+                {
+                    data.Save(memory, ImageFormat.Png);
+                    byte[] bytes = memory.ToArray();
+                    fs.Write(bytes, 0, bytes.Length);
+                }
+            }
+            return  null;
+        }
         public  AdaptiveCard CreateNewPostCard(TaskInfo data)
         {
             
@@ -186,7 +256,7 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("| Responses are "+ $"{data.recurssionType}") { Color = AdaptiveTextColor.Good, Size=AdaptiveTextSize.Medium, Spacing=AdaptiveSpacing.Medium},
+                                    new AdaptiveTextBlock("| Responses are "+ $"{data.privacy}") { Color = AdaptiveTextColor.Good, Size=AdaptiveTextSize.Medium, Spacing=AdaptiveSpacing.Medium},
                                 }
 
                             },
