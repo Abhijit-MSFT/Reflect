@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Policy;
 using System.Threading.Tasks;
 
@@ -19,6 +22,13 @@ namespace Reflection.Repositories.RecurssionData
                 isFromAzureFunction)
         {
         }
-        
+
+        public async Task<List<RecurssionDataEntity>> GetAllRecurssionData(List<Guid?> RefIds)
+        {            
+            var allRows = await this.GetAllAsync(PartitionKeyNames.RecurssionDataTable.TableName); 
+            List<RecurssionDataEntity> result = allRows.Where(c => RefIds.Contains(c.ReflectionID)).ToList();
+            return result;
+        }
+
     }
 }

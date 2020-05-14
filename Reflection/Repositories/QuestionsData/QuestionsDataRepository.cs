@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,7 +42,14 @@ namespace Reflection.Repositories.QuestionsData
             }
         }
 
-        public async Task<bool> IsQuestionAlreadtPresent(string question)
+        public async Task<List<QuestionsDataEntity>> GetAllQuestionData(List<Guid?> quesID)
+        {
+            var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
+            List<QuestionsDataEntity> result = allRows.Where(c => quesID.Contains(c.QuestionID)).ToList();
+            return result ?? null;
+        }
+
+        public async Task<bool> IsQuestionAlreadyPresent(string question)
         {
             var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
             bool result = allRows.Any(c => c.Question == question);

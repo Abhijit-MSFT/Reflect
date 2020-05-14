@@ -32,23 +32,30 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             CardHelper cardhelper = new CardHelper(_configuration);
-
+            
             FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration);
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration);
             if (turnContext.Activity.Value != null)
-            {
+            {                
                 var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
                 var reply = Activity.CreateMessageActivity();
 
                 if (response.type == "saveFeedback")
                 {
-                    
-                    
                     response.userName = turnContext.Activity.From.Name;
                     response.emailId = await DBHelper.GetUserEmailId(turnContext);
-
+                    FeedbackDataEntity feebackData;
                     //Check if this is user's second feedback
-                    FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
+                    try
+                    {
+                        feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
+                    }
+                    catch (Exception x)
+                    {
+
+                        throw;
+                    }
+                    
                     if (feebackData != null)
                     {
                         feebackData.Feedback = response.feedbackId;
@@ -179,7 +186,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         {
             string url = this._configuration["BaseUri"];
             if (action.MessagePayload != null)
-                url = this._configuration["BaseUri"] + "/ManageRecurringPosts";            
+                url = this._configuration["BaseUri"] + "/ManageRecurringPosts";
             var response = new MessagingExtensionActionResponse()
             {
                 Task = new TaskModuleContinueResponse()
@@ -277,3 +284,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
 //QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(_configuration);
 //var defaultQuestions = await questionsDataRepository.GetAllDefaultQuestions();
+
+//call this method for RecurrencePostsScreen
+//var abc = await DBHelper.GetRecurrencePostsDataAsync(_configuration);
