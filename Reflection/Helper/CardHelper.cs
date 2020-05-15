@@ -42,7 +42,7 @@ namespace Reflection.Helper
                 if (keyValues.ContainsKey(i))
                     totalcount = totalcount + keyValues[i];
             }
-            Bitmap thumbBMP = new Bitmap(1000, 20);
+            Bitmap thumbBMP = new Bitmap(1000, 40);
             Graphics flagGraphics = Graphics.FromImage(thumbBMP);
             var color = Brushes.White;
             var width = 0;
@@ -56,27 +56,27 @@ namespace Reflection.Helper
                 {
                     if (i == 1)
                     {
-                        color = Brushes.Green;
+                        color = Brushes.MediumSpringGreen;
                     }
                     if (i == 2)
                     {
-                        color = Brushes.LightGreen;
+                        color = Brushes.PaleGreen;
                     }
                     if (i == 3)
                     {
-                        color = Brushes.Orange;
+                        color = Brushes.Gold;
                     }
                     if (i == 4)
                     {
-                        color = Brushes.OrangeRed;
+                        color = Brushes.SandyBrown;
                     }
                     if (i == 5)
                     {
-                        color = Brushes.Red;
+                        color = Brushes.Salmon;
                     }
-                    width = (keyValues[i] / totalcount) * 1000;
-                    flagGraphics.FillRectangle(color, 0, previouswidth, width, 20);
-                    previouswidth = width;
+                    width = (keyValues[i] *1000)/totalcount;
+                    flagGraphics.FillRectangle(color, previouswidth, 0, width, 40);
+                    previouswidth = previouswidth+width+1;
                 }
             }
             var datastring = "/Images/reflectimages/" + Guid.NewGuid()+ ".png";
@@ -208,7 +208,7 @@ namespace Reflection.Helper
                             Data = new TaskModuleActionDetails()
                             {
                                 type ="task/fetch",
-                                URL ="https://25879fb6.ngrok.io/OpenReflections",
+                                URL =_configuration["BaseUri"] +"/openReflections/"+reflectionId,
                                 Title="View Reflections"
                             }
                         }
