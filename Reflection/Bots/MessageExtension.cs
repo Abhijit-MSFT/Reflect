@@ -65,7 +65,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
                         Dictionary<int, int> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
                         var adaptiveCard = cardhelper.FeedBackCard(feedbacks, response.reflectionId);
-
+                        
                         Attachment attachment = new Attachment()
                         {
                             ContentType = AdaptiveCard.ContentType,

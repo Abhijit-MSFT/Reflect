@@ -38,7 +38,6 @@ namespace Reflection.Helper
             if (taskInfo != null)
             {
                 taskInfo.reflectionID = Guid.NewGuid();
-                taskInfo.questionID = Guid.NewGuid();
                 taskInfo.recurssionID = Guid.NewGuid();
                 var rowKey = Guid.NewGuid();
                 
@@ -59,8 +58,12 @@ namespace Reflection.Helper
                     IsActive = taskInfo.IsActive
                 };
                 await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
-                if(!await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question))
+                //if(!await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question))
+                if (taskInfo.questionID == null)
+                {
+                    taskInfo.questionID = Guid.NewGuid();
                     await SaveQuestionsDataAsync(configuration, taskInfo);
+                }
                 await SaveRecurssionDataAsync(configuration, taskInfo);   // add logic to check if reflection is recurrent             
             }            
         }
