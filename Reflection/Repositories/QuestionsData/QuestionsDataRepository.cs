@@ -27,12 +27,12 @@ namespace Reflection.Repositories.QuestionsData
         /// <param name=""></param>
         /// <returns>Questions which have default flag true</returns>
         /// 
-        public async Task<List<string>> GetAllDefaultQuestions()
+        public async Task<List<QuestionsDataEntity>> GetAllDefaultQuestions()
         {
             try
             {
                 var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-                var result = allRows.Where(d => d.IsDefaultFlag == true).Select(c => c.Question);
+                var result = allRows.Where(d => d.IsDefaultFlag == true);
                 return result.ToList();
             }
             catch (System.Exception e)
