@@ -2,8 +2,11 @@
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Reflection.Helper;
 using Reflection.Model;
 using Reflection.Repositories.QuestionsData;
+using Reflection.Repositories.ReflectionData;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -17,11 +20,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
     {
         private readonly QuestionsDataRepository _repository;
         private readonly IConfiguration _configuration;
-
-        public HomeController(QuestionsDataRepository dataRepository, IConfiguration configuration)
+        private readonly ReflectionDataRepository _refrepository;
+        public HomeController(QuestionsDataRepository dataRepository,  IConfiguration configuration,ReflectionDataRepository refrepository)
         {
             _repository = dataRepository;
             _configuration = configuration;
+            _refrepository = refrepository;
         }
 
         [Route("")]
@@ -44,45 +48,22 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
-        [Route("openReflections")]
-        public ActionResult OpenReflections()
+        [Route("openReflections/{reflectionId}")]
+        public ActionResult OpenReflections(Guid reflectionId)
         {
+            ViewBag.reflectionId = reflectionId;
             return View();
         }
 
-        [Route("api/GetReflections")]
-        public JsonResult GetReflections()
+        [Route("api/GetReflections/{reflectionid}")]
+        public async Task<string> GetReflections(Guid reflectionid)
         {
-            Responses responsedata = new Responses();
-            responsedata.Createdby = " Cara Coleman";
-            responsedata.QuestionTitle = "How are you feeling about the test today?";
-            responsedata.OptionResponses = new List<OptionResponse>();
-            var data = new OptionResponse();
-            data.Color = "green";
-            data.Width = 100;
-            data.Description = "(8) Grace Taylor, Andre Lawson, Mikaela Lee, Aaron Gonzales, Elizabeth Moore, Maya Robinson, Abigail Jackson, Oscar Ward";
-            responsedata.OptionResponses.Add(data);
-            var data2 = new OptionResponse();
-            data2.Color = "light-green";
-            data2.Width = 25;
-            data2.Description = "(10) Sara Perez, Ashley Schroeder, Brandon Stuart, Michael Peltier, Cora Thomas, Monica Thompson, Mateo Gomez, Michelle Harris, Hannah Jarvis, Olivia Wilson";
-            responsedata.OptionResponses.Add(data2);
-            var data3 = new OptionResponse();
-            data3.Color = "orng";
-            data3.Width = 15;
-            data3.Description = "(4) Wesley Brooks, Kayla Lewis, Briana Hernandez, Gabriel Diaz";
-            responsedata.OptionResponses.Add(data3);
-            var data4 = new OptionResponse();
-            data4.Color = "red";
-            data4.Width = 10;
-            data4.Description = "(3) Corey Gray, Nathan Rigby, Isabel Garcia";
-            responsedata.OptionResponses.Add(data4);
-            var data5 = new OptionResponse();
-            data5.Color = "dark-red";
-            data5.Width = 5;
-            data5.Description = "(2) Sydney Mattos, Natasha Jones";
-            responsedata.OptionResponses.Add(data5);
-            return Json(responsedata);
+            var data= await DBHelper.GetViewReflectionsData(reflectionid, _configuration);
+            var jsondata = new JObject();
+            jsondata["feedback"] = JsonConvert.SerializeObject(data.FeedbackData);
+            jsondata["reflection"]= JsonConvert.SerializeObject(data.ReflectionData);
+            jsondata["question"] = JsonConvert.SerializeObject(data.Question);
+            return jsondata.ToString();
         }
 
         [Route("configure")]

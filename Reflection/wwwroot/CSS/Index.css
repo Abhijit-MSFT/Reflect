@@ -123,10 +123,11 @@
     content: "\E447";
     font-family: "Teams Assets";
     pointer-events: none;
-    position: absolute;
-    right: 1%;
-    margin-top: 4px;
+    position: relative;
+    right: 10px;
+    float: right;
     color: #6264a7;
+    bottom: 28px;
 }
 
 .sel-chev2 {
@@ -138,10 +139,23 @@
         content: "\E447";
         font-family: "Teams Assets";
         pointer-events: none;
-        position: absolute;
-        margin-top: 4px;
+        position: relative;
         color: #6264a7;
+        float: right;
+        right: 10px;
+        bottom: 28px;
     }
+
+.sel-chev3::before {
+    content: "\E447";
+    font-family: "Teams Assets";
+    pointer-events: none;
+    position: absolute;
+    right: 10px;
+    float: right;
+    color: #6264a7;
+    top: 4px;
+}
 
 .post {
     margin-top: 16px;
@@ -155,10 +169,10 @@
     margin-bottom: 12px;
 }
 
-.rec {
+/*.rec {
     margin-top: 16px;
 }
-
+*/
 .container {
     padding-right: 10px;
     padding-left: 10px;
@@ -222,7 +236,10 @@ input[type="date"] {
         font-family: "Teams Assets";
         font-size: 14px;
         color: #6266a5;
-        position: absolute;
+        position: relative;
+        float: right;
+        right: 12px;
+        bottom: 28px;
         pointer-events: none;
     }
 
@@ -235,7 +252,6 @@ input[type="date"] {
     font-size: 14px;
     color: #252424;
     font-weight: 500;
-    margin-top: 16px;
 }
 
 .br-blk {
@@ -290,7 +306,6 @@ input[type="date"] {
 }
 
 .mf {
-    margin: 0 32px;
     border-top: 2px solid #edebe9;
     padding: 3% 0;
 }

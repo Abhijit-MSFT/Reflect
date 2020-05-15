@@ -200,29 +200,28 @@ namespace Reflection.Helper
         /// <param name="reflectionDataRepository">The reflection data repository.</param>
         /// <param name="turnContext">Bot conversation update activity instance.</param>
         /// <returns>A task that represents the work queued to execute.</returns>
-        public static async Task<ViewReflectionsEntity> GetViewReflectionsData(ITurnContext<IMessageActivity> turnContext, IConfiguration configuration)
+        public static async Task<ViewReflectionsEntity> GetViewReflectionsData(Guid reflectionId, IConfiguration configuration)
         {
-            if(turnContext.Activity.Value != null)
-            {               
-                var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
-                var refID = response.reflectionId;
+                         
+                //var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
+                //var refID = response.reflectionId;
 
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(configuration);
                 ViewReflectionsEntity viewReflectionsEntity = new ViewReflectionsEntity();
-                //Guid gID = Guid.Parse("933a3991-29e9-4391-bdce-a81096b23c20"); for testing purpose
+            QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
+            //Guid gID = Guid.Parse("933a3991-29e9-4391-bdce-a81096b23c20"); for testing purpose
 
-                //Get reflection data
-                ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(refID) ?? null;
-                Dictionary<int, int> feedbackData = await feedbackDataRepository.GetReflectionFeedback(refID) ?? null;
+            //Get reflection data
+            ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(reflectionId) ?? null;
+                Dictionary<int, int> feedbackData = await feedbackDataRepository.GetReflectionFeedback(reflectionId) ?? null;
+            List<QuestionsDataEntity> questions = await questionsDataRepository.GetAllDefaultQuestions()?? null;
 
                 viewReflectionsEntity.ReflectionData = refData;
                 viewReflectionsEntity.FeedbackData = feedbackData;
-
+                viewReflectionsEntity.Question = questions.Find(x => x.QuestionID == refData.QuestionID);
                 return viewReflectionsEntity;
 
-            }
-            return null;
         }
     }
 }

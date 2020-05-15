@@ -49,7 +49,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                     //Check if this is user's second feedback
                     FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
-                    if (feebackData != null)
+                    if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
                     {
                         feebackData.Feedback = response.feedbackId;
                         await feedbackDataRepository.CreateOrUpdateAsync(feebackData);
