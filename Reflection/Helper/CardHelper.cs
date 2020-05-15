@@ -74,9 +74,9 @@ namespace Reflection.Helper
                     {
                         color = Brushes.Red;
                     }
-                    width = (keyValues[i] / totalcount) * 1000;
-                    flagGraphics.FillRectangle(color, 0, previouswidth, width, 20);
-                    previouswidth = width;
+                    width = (keyValues[i] *1000)/totalcount;
+                    flagGraphics.FillRectangle(color, previouswidth, 0, width, 20);
+                    previouswidth = previouswidth+width;
                 }
             }
             var datastring = "/Images/reflectimages/" + Guid.NewGuid()+ ".png";
