@@ -63,7 +63,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     {
                         //Get reflect data to check if mseeage id is present - if not update it
                         ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
-                        Dictionary<int, int> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
+                        Dictionary<int, List<string>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
                         var adaptiveCard = cardhelper.FeedBackCard(feedbacks, response.reflectionId);
                         
                         Attachment attachment = new Attachment()

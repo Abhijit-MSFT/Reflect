@@ -6,6 +6,7 @@ using Newtonsoft.Json.Linq;
 using Reflection.Helper;
 using Reflection.Model;
 using Reflection.Repositories.QuestionsData;
+using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
 using System;
 using System.Collections.Generic;
@@ -21,11 +22,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         private readonly QuestionsDataRepository _repository;
         private readonly IConfiguration _configuration;
         private readonly ReflectionDataRepository _refrepository;
-        public HomeController(QuestionsDataRepository dataRepository,  IConfiguration configuration,ReflectionDataRepository refrepository)
+        private readonly RecurssionDataRepository _recurssiondatarepository;
+        public HomeController(QuestionsDataRepository dataRepository,  IConfiguration configuration,ReflectionDataRepository refrepository,RecurssionDataRepository recurssion)
         {
             _repository = dataRepository;
             _configuration = configuration;
             _refrepository = refrepository;
+            _recurssiondatarepository = recurssion;
         }
 
         [Route("")]
@@ -49,8 +52,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         }
 
         [Route("openReflections")]
-        public ActionResult OpenReflections()
-        {
+        public ActionResult OpenReflections(Guid reflectionid)
+        {   
+           
             ViewBag.reflectionId = "12e88266-c9f5-49da-ac8a-7bc5c90eb821";
             return View();
         }
@@ -63,6 +67,14 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             jsondata["feedback"] = JsonConvert.SerializeObject(data.FeedbackData);
             jsondata["reflection"]= JsonConvert.SerializeObject(data.ReflectionData);
             jsondata["question"] = JsonConvert.SerializeObject(data.Question);
+            return jsondata.ToString();
+        }
+        [Route("api/GetRecurssions")]
+        public async Task<string> GetRecurssions()
+        {
+            var data = await _recurssiondatarepository.GetRecurrionData();
+            var jsondata = new JObject();
+            jsondata["recurssions"] = JsonConvert.SerializeObject(data); ;
             return jsondata.ToString();
         }
 

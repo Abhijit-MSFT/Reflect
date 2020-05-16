@@ -214,7 +214,7 @@ namespace Reflection.Helper
 
             //Get reflection data
             ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(reflectionId) ?? null;
-                Dictionary<int, int> feedbackData = await feedbackDataRepository.GetReflectionFeedback(reflectionId) ?? null;
+                Dictionary<int, List<string>> feedbackData = await feedbackDataRepository.GetReflectionFeedback(reflectionId) ?? null;
             List<QuestionsDataEntity> questions = await questionsDataRepository.GetAllDefaultQuestions()?? null;
 
                 viewReflectionsEntity.ReflectionData = refData;
