@@ -16,6 +16,9 @@
     outline-color: white !important;
 }
 
+.modal2 {
+    margin: 0 16px;
+}
 .modal-mb-sc2 {
     padding: 0;
 }
@@ -88,7 +91,7 @@
 }
 
 .review-blk {
-    height: 384px;
+    height: auto;
     background: #f9f8f7;
 }
 
@@ -122,11 +125,11 @@
     height: 24px;
     width: 24px;
     border-radius: 50%;
-    margin: 0 0 0 16px;
+    margin: 1rem 0 0 1rem;
 }
 
 .cb-smile2 {
-    margin: 0px 16px 7px 10px;
+    margin: 1rem 1rem 7px 10px;
 }
 
 .bg-light-green {
@@ -150,13 +153,13 @@
 }
 
 .cnt-box {
-    width: 24px;
+    width: 90px;
     height: 24px;
     border-radius: 3px;
-    margin-right: 16px;
+    margin: 1rem 1rem 0 0;
     font-family: Segoe UI;
     font-size: 16px;
-    color: #ffffff;
+    color: #000000;
     text-align: center;
 }
 
