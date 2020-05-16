@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,6 +36,12 @@ namespace Reflection.Repositories.ReflectionData
             var allRefs = await this.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
             var dataEntity = allRefs.Where(c => c.ReflectionID == refId).FirstOrDefault();
             return dataEntity.MessageID;
+        }
+        public async Task<List<ReflectionDataEntity>> GetAllActiveReflection()
+        {
+            var allRefs = await this.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
+            List<ReflectionDataEntity> RefDataEntity = allRefs.Where(c => c.IsActive == true).ToList();
+            return RefDataEntity;
         }
     }
 }

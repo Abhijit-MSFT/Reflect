@@ -20,7 +20,7 @@ namespace Reflection.Helper
         {
             _configuration = configuration;
         }
-        public AdaptiveCard FeedBackCard(Dictionary<int,int> keyValues, Guid reflectionId)
+        public AdaptiveCard FeedBackCard(Dictionary<int, List<string>> keyValues, Guid reflectionId)
         {
             DirectoryInfo folderInfo = new DirectoryInfo(@"wwwroot/images/reflectimages");
 
@@ -32,7 +32,7 @@ namespace Reflection.Helper
             {
                 if (!keyValues.ContainsKey(i))
                 {
-                    keyValues.Add(i, 0);
+                    keyValues.Add(i, new List<string>());
                 }
             }
             
@@ -40,7 +40,7 @@ namespace Reflection.Helper
             for (int i = 1; i <= 5; i++)
             {
                 if (keyValues.ContainsKey(i))
-                    totalcount = totalcount + keyValues[i];
+                    totalcount = totalcount + keyValues[i].Count;
             }
             Bitmap thumbBMP = new Bitmap(1000, 40);
             Graphics flagGraphics = Graphics.FromImage(thumbBMP);
@@ -74,7 +74,7 @@ namespace Reflection.Helper
                     {
                         color = Brushes.DarkSalmon;
                     }
-                    width = (keyValues[i] *1000)/totalcount;
+                    width = (keyValues[i].Count *1000)/totalcount;
                     flagGraphics.FillRectangle(color, previouswidth, 0, width, 40);
                     previouswidth = previouswidth+width+1;
                 }
@@ -106,7 +106,7 @@ namespace Reflection.Helper
                                 Width = AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock(keyValues[1].ToString())
+                                    new AdaptiveTextBlock(keyValues[1].Count.ToString())
                                 }
 
                             },
@@ -125,7 +125,7 @@ namespace Reflection.Helper
                                 Width = AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock(keyValues[2].ToString())
+                                    new AdaptiveTextBlock(keyValues[2].Count.ToString())
                                 }
 
                             },
@@ -145,7 +145,7 @@ namespace Reflection.Helper
                                 Width = AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock(keyValues[3].ToString())
+                                    new AdaptiveTextBlock(keyValues[3].Count.ToString())
                                 }
 
                             },
@@ -165,7 +165,7 @@ namespace Reflection.Helper
                                 Width = AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock(keyValues[4].ToString())
+                                    new AdaptiveTextBlock(keyValues[4].Count.ToString())
                                 }
 
                             },
@@ -185,7 +185,7 @@ namespace Reflection.Helper
                                 Width = AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock(keyValues[5].ToString())
+                                    new AdaptiveTextBlock(keyValues[5].Count.ToString())
                                 }
 
                             },
@@ -206,7 +206,7 @@ namespace Reflection.Helper
                             Data = new TaskModuleActionDetails()
                             {
                                 type ="task/fetch",
-                                URL =_configuration["BaseUri"],
+                                URL =_configuration["BaseUri"] +"/openReflections?reflectionid="+reflectionId,
                                 Title="View Reflections"
                             }
                         }
