@@ -48,10 +48,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
-        [Route("openReflections/{reflectionId}")]
-        public ActionResult OpenReflections(Guid reflectionId)
+        [Route("openReflections")]
+        public ActionResult OpenReflections()
         {
-            ViewBag.reflectionId = reflectionId;
+            ViewBag.reflectionId = "12e88266-c9f5-49da-ac8a-7bc5c90eb821";
             return View();
         }
 
