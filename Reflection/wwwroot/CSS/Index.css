@@ -326,6 +326,7 @@ input[type="date"] {
     font-weight: 500;
     font-size: 14px;
     margin-right: 16px;
+    cursor: pointer;
 }
 
     .btn-cancle:focus,
@@ -343,6 +344,7 @@ input[type="date"] {
     box-sizing: border-box;
     border: 1px solid #6266a5;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .clk::before {
@@ -351,6 +353,7 @@ input[type="date"] {
     font-size: 16px;
     float: left;
     color: #6266a5;
+    cursor: pointer;
 }
 
 .manage {
@@ -360,4 +363,5 @@ input[type="date"] {
     float: left;
     padding-top: 2px;
     margin-left: 12px;
+    cursor:pointer;
 }

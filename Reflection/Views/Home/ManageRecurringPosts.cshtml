@@ -17,19 +17,19 @@
     <div class="container">
         <!-- Modal -->
         <div class="" role="document">
-            <div class="modal-content custom-mc">              
-                <div class="modal-body modal-mb-sc2">
-                    <div class="recurring">Recurring posts</div>
-                    <div class="recu-desc">
-                        View and manage recurring posts below. Previous posts will not be affected
-                        and any changes will automatically apply only
-                        to future posts.
-                    </div>                    
+            <div>
+                <div class="modal-mb-sc2">
+                    @*<div class="recurring">Recurring posts</div>
+                        <div class="recu-desc">
+                            View and manage recurring posts below. Previous posts will not be affected
+                            and any changes will automatically apply only
+                            to future posts.
+                        </div>*@
                     <table class="table custom-tb">
                         <thead>
                             <tr>
-                                <th scope="col" class="qutin">Question</th>
-                                <th scope="col" class="anonymous">Anonymous</th>
+                                <th scope="col" class="qutin">Question <span>(3)</span></th>
+                                <th scope="col" class="privacy">Privacy</th>
                                 <th scope="col" class="snd-post">Send post at</th>
                             </tr>
                         </thead>
@@ -40,12 +40,14 @@
                                     <div class="hru-desc">Created by: Cara Coleman on 4/7/2020</div>
                                 </td>
                                 <td class="cus-box">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" Checked class="custom-control-input" id="1">
-                                        <label class="custom-control-label" for="1"></label>
-                                    </div>
+                                    @*<div class="custom-control custom-checkbox">
+                                            <input type="checkbox" Checked class="custom-control-input" id="1">
+                                            <label class="custom-control-label" for="1"></label>
+                                        </div>*@
+                                    Public
                                 </td>
-                                <td class="date-day">Every month on first Wednesday at 10:13 AM</td>
+                                <td class="date-day">Every week day at 10:00 AM</td>
+                                <td class="delete-icon"></td>
                             </tr>
                             <tr>
                                 <td class="hw-r-u">
@@ -53,12 +55,14 @@
                                     <div class="hru-desc">Created by: Cara Coleman on 4/7/2020</div>
                                 </td>
                                 <td class="cus-box">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="2">
-                                        <label class="custom-control-label" for="2"></label>
-                                    </div>
+                                    @*<div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="2">
+                                            <label class="custom-control-label" for="2"></label>
+                                        </div>*@
+                                    Public
                                 </td>
-                                <td class="date-day">Every weekday (Mon - Fri) at 10:13 AM</td>
+                                <td class="date-day">Every Monday at 10:00 AM</td>
+                                <td class="delete-icon"></td>
                             </tr>
                             <tr>
                                 <td class="hw-r-u">
@@ -66,33 +70,22 @@
                                     <div class="hru-desc">Created by: Cara Coleman on 4/7/2020</div>
                                 </td>
                                 <td class="cus-box">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" Checked class="custom-control-input" id="3">
-                                        <label class="custom-control-label" for="3"></label>
-                                    </div>
+                                    @*<div class="custom-control custom-checkbox">
+                                            <input type="checkbox" Checked class="custom-control-input" id="3">
+                                            <label class="custom-control-label" for="3"></label>
+                                        </div>*@
+                                    Anonymous
                                 </td>
-                                <td class="date-day">Every month on first Wednesday at 10:13 AM</td>
+                                <td class="date-day">Every Friday at 10:50 AM</td>
+                                <td class="delete-icon"></td>
                             </tr>
-                            <tr>
-                                <td class="hw-r-u">
-                                    How are you feeling about the test today?
-                                    <div class="hru-desc">Created by: Cara Coleman on 4/7/2020</div>
-                                </td>
-                                <td class="cus-box">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" Checked class="custom-control-input" id="4">
-                                        <label class="custom-control-label" for="4"></label>
-                                    </div>
-                                </td>
-                                <td class="date-day">Every month on first Wednesday at 10:13 AM</td>
-                            </tr>
-
                         </tbody>
                     </table>
                 </div>
                 <div class="mf">
-                    <div class="float-right">
-                        <button type="button" class="btn-dn">Done</button>
+                    <div class="float-left">
+                        <span class="left-chev"></span>
+                       Back
                     </div>
                 </div>
             </div>
