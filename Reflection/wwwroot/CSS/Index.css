@@ -285,6 +285,10 @@ input[type="date"] {
     display: inline-flex;
 }
 
+#privacytext {
+    margin-left: 4px;
+}
+
 .feeling {
     font-family: Segoe UI;
     font-size: 14px;
