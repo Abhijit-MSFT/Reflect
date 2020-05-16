@@ -119,6 +119,7 @@
     font-family: Segoe UI;
     font-size: 12px;
     color: #000000;
+    width: 376px;
 }
 
 .smils {
@@ -148,9 +149,9 @@
     background: #ff6670;
 }
 
-.custom-md {
+/*.custom-md {
     margin-top: 10px;
-}
+}*/
 
 .cnt-box {
     width: 90px;
