@@ -28,65 +28,12 @@
                     <table class="table custom-tb">
                         <thead>
                             <tr>
-                                <th scope="col" class="qutin">Question</th>
-                                <th scope="col" class="anonymous">Anonymous</th>
+                                <th scope="col" class="qutin">Question<span id="questioncount"></span></th>
+                                <th scope="col" class="anonymous">Privacy</th>
                                 <th scope="col" class="snd-post">Send post at</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td class="hw-r-u">
-                                    How are you feeling about the test today?
-                                    <div class="hru-desc">Created by: Cara Coleman on 4/7/2020</div>
-                                </td>
-                                <td class="cus-box">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" Checked class="custom-control-input" id="1">
-                                        <label class="custom-control-label" for="1"></label>
-                                    </div>
-                                </td>
-                                <td class="date-day">Every month on first Wednesday at 10:13 AM</td>
-                            </tr>
-                            <tr>
-                                <td class="hw-r-u">
-                                    How are you feeling about the test today?
-                                    <div class="hru-desc">Created by: Cara Coleman on 4/7/2020</div>
-                                </td>
-                                <td class="cus-box">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="2">
-                                        <label class="custom-control-label" for="2"></label>
-                                    </div>
-                                </td>
-                                <td class="date-day">Every weekday (Mon - Fri) at 10:13 AM</td>
-                            </tr>
-                            <tr>
-                                <td class="hw-r-u">
-                                    How are you feeling about the test today?
-                                    <div class="hru-desc">Created by: Cara Coleman on 4/7/2020</div>
-                                </td>
-                                <td class="cus-box">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" Checked class="custom-control-input" id="3">
-                                        <label class="custom-control-label" for="3"></label>
-                                    </div>
-                                </td>
-                                <td class="date-day">Every month on first Wednesday at 10:13 AM</td>
-                            </tr>
-                            <tr>
-                                <td class="hw-r-u">
-                                    How are you feeling about the test today?
-                                    <div class="hru-desc">Created by: Cara Coleman on 4/7/2020</div>
-                                </td>
-                                <td class="cus-box">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" Checked class="custom-control-input" id="4">
-                                        <label class="custom-control-label" for="4"></label>
-                                    </div>
-                                </td>
-                                <td class="date-day">Every month on first Wednesday at 10:13 AM</td>
-                            </tr>
-
+                        <tbody id="tablebody">
                         </tbody>
                     </table>
                 </div>
@@ -98,10 +45,40 @@
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
+    <script>
+        $(document).ready(function () {
+            var blockdata = ""
+            $.ajax({
+                type: 'GET',
+                url: 'api/GetRecurssions',
+                success: function (data) {
+                    recurssions = JSON.parse(JSON.parse(data).recurssions);
+                    $("#questioncount").html("("+recurssions.length+")");
+                    daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                    var sendpostat = "";
+                    recurssions.forEach(x => {
+                        if (x.RecurssionType == "Monthly") {
+                            sendpostat = "Every Month " + new Date(x.RefCreatedDate).getDate()+" at "+new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
+                        }
+                        else if (x.RecurssionType == "Weekly") {
+                            sendpostat = "Every Week " + daysInWeek[new Date(x.RefCreatedDate).getDay()] + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
+                        }
+                        else {
+                            sendpostat="Every Week Day"
+                        }
+                        blockdata = blockdata + '<tr><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td>' + x.Privacy + '</td> <td class="date-day">'+sendpostat+'</td></tr>';
+                    })
+                    $("#tablebody").html(blockdata);
 
+
+                }
+            });
+        });
+    </script>
 </body>
 
 

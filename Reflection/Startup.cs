@@ -35,7 +35,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
             services.AddSingleton<QuestionsDataRepository>();
             services.AddSingleton<ReflectionDataRepository>();
-            services.AddSingleton<RecurssionDataRepository>();
             // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
             services.AddTransient<IBot, MessageExtension>();
         }

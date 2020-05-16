@@ -40,7 +40,7 @@ namespace Reflection.Helper
                 taskInfo.reflectionID = Guid.NewGuid();
                 taskInfo.recurssionID = Guid.NewGuid();
                 var rowKey = Guid.NewGuid();
-                
+
                 ReflectionDataEntity reflectEntity = new ReflectionDataEntity
                 {
                     ReflectionID = taskInfo.reflectionID,
@@ -65,7 +65,7 @@ namespace Reflection.Helper
                     await SaveQuestionsDataAsync(configuration, taskInfo);
                 }
                 await SaveRecurssionDataAsync(configuration, taskInfo);   // add logic to check if reflection is recurrent             
-            }            
+            }
         }
 
         /// <summary>
@@ -136,10 +136,10 @@ namespace Reflection.Helper
 
                 FeedbackDataEntity feedbackDataEntity = new FeedbackDataEntity
                 {
-                    PartitionKey = PartitionKeyNames.FeedbackDataTable.FeedbackDataPartition, 
+                    PartitionKey = PartitionKeyNames.FeedbackDataTable.FeedbackDataPartition,
                     RowKey = rowKey.ToString(),
                     FeedbackID = feedbackID,
-                    FullName =  taskInfo.userName,
+                    FullName = taskInfo.userName,
                     ReflectionID = taskInfo.reflectionId,
                     FeedbackGivenBy = taskInfo.emailId, //need changes - send it in card response and capture it
                     Feedback = Convert.ToInt32(taskInfo.feedbackId)
@@ -147,7 +147,7 @@ namespace Reflection.Helper
                 };
                 await feedbackDataRepository.InsertOrMergeAsync(feedbackDataEntity);
             }
-        }      
+        }
 
         //make above method and below method generic - need this change
         public static async Task<string> GetUserEmailId<T>(ITurnContext<T> turnContext) where T : Microsoft.Bot.Schema.IActivity
@@ -202,27 +202,70 @@ namespace Reflection.Helper
         /// <returns>A task that represents the work queued to execute.</returns>
         public static async Task<ViewReflectionsEntity> GetViewReflectionsData(Guid reflectionId, IConfiguration configuration)
         {
-                         
-                //var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
-                //var refID = response.reflectionId;
 
-                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
-                FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(configuration);
-                ViewReflectionsEntity viewReflectionsEntity = new ViewReflectionsEntity();
+            //var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
+            //var refID = response.reflectionId;
+
+            ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
+            FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(configuration);
+            ViewReflectionsEntity viewReflectionsEntity = new ViewReflectionsEntity();
             QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
             //Guid gID = Guid.Parse("933a3991-29e9-4391-bdce-a81096b23c20"); for testing purpose
 
             //Get reflection data
             ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(reflectionId) ?? null;
-                Dictionary<int, List<string>> feedbackData = await feedbackDataRepository.GetReflectionFeedback(reflectionId) ?? null;
-            List<QuestionsDataEntity> questions = await questionsDataRepository.GetAllDefaultQuestions()?? null;
+            Dictionary<int, List<string>> feedbackData = await feedbackDataRepository.GetReflectionFeedback(reflectionId) ?? null;
+            List<QuestionsDataEntity> questions = await questionsDataRepository.GetAllDefaultQuestions() ?? null;
 
-                viewReflectionsEntity.ReflectionData = refData;
-                viewReflectionsEntity.FeedbackData = feedbackData;
-                viewReflectionsEntity.Question = questions.Find(x => x.QuestionID == refData.QuestionID);
-                return viewReflectionsEntity;
+            viewReflectionsEntity.ReflectionData = refData;
+            viewReflectionsEntity.FeedbackData = feedbackData;
+            viewReflectionsEntity.Question = questions.Find(x => x.QuestionID == refData.QuestionID);
+            return viewReflectionsEntity;
 
         }
+
+        public static async Task<List<RecurssionScreenData>> GetRecurrencePostsDataAsync(IConfiguration configuration)
+        {
+            ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
+            QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
+            RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
+            //RecurssionScreenData recurssionScreenData = new RecurssionScreenData();
+
+
+            List<ReflectionDataEntity> allActiveRefs = await reflectionDataRepository.GetAllActiveReflection();
+            List<Guid?> allActiveRefIDs = allActiveRefs.Select(c => c.ReflectionID).ToList();
+            List<Guid?> allActiveQuestionIDs = allActiveRefs.Select(c => c.QuestionID).ToList();
+
+
+            List<QuestionsDataEntity> allQuestionsData = await questionsDataRepository.GetAllQuestionData(allActiveQuestionIDs);
+            List<RecurssionDataEntity> allRecurssionData = await recurssionDataRepository.GetAllRecurssionData(allActiveRefIDs);
+
+            List<RecurssionScreenData> screenData = new List<RecurssionScreenData>();
+            //recurssionScreenData.Add
+            foreach (var x in allActiveRefs)
+            {
+                RecurssionScreenData recurssionScreenData = new RecurssionScreenData();
+                recurssionScreenData.RefID = x.ReflectionID;
+                recurssionScreenData.CreatedBy = x.CreatedBy;
+                recurssionScreenData.RefCreatedDate = x.RefCreatedDate;
+                recurssionScreenData.Privacy = x.Privacy;
+                recurssionScreenData.Question = allQuestionsData.Where(c => c.QuestionID.ToString() == x.QuestionID.ToString()).Select(d => d.Question).FirstOrDefault().ToString();
+                recurssionScreenData.ExecutionDate = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.ExecutionDate).FirstOrDefault();
+                recurssionScreenData.ExecutionTime = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.ExecutionTime).FirstOrDefault();
+                recurssionScreenData.RecurssionType = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.RecursstionType).FirstOrDefault();
+                if (recurssionScreenData.RecurssionType != null)
+                    screenData.Add(recurssionScreenData);
+            }
+
+
+            return screenData;
+        }
+
+
+
+
+
+
     }
 }
 
