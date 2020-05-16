@@ -1,197 +1,189 @@
 @font-face {
-  font-family: "Teams Assets";
-  src: url("../fonts/TeamsAssets-Light.woff") format("woff"),
-    url("../fonts/TeamsAssets-Light.woff2") format("woff2");
-  font-style: normal;
+    font-family: "Teams Assets";
+    src: url("../fonts/TeamsAssets-Light.woff") format("woff"), url("../fonts/TeamsAssets-Light.woff2") format("woff2");
+    font-style: normal;
 }
 
-
-
-.modal-md {
-  max-width: 600px;
-}
 .custom-mc {
-  height: 648px;
-}
-.custom-mh {
-  margin: 32px 32px 0 32px;
-  padding: 0;
-  border-bottom: none;
+    height: 648px;
 }
 
-.mc {
-    border: none !important;
-}
 .close {
-  font-family: Teams Assets;
-  font-weight: 300;
-  color: #000000;
-  opacity: 0.5;
-  outline-color: white !important;
+    font-family: Teams Assets;
+    font-weight: 300;
+    color: #000000;
+    opacity: 0.5;
+    outline-color: white !important;
 }
-.head-logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 3px;
-}
-.media-mb {
-  line-height: 1;
-  margin-top: 3px;
-}
-.heading {
-  font-family: Segoe UI;
-  font-size: 14px;
-  letter-spacing: 0.1px;
-  color: #252424;
-  font-weight: 600;
-}
-.head-desc {
-  font-family: Segoe UI;
-  font-size: 12px;
-  color: #252424;
-}
+
 .modal-mb-sc2 {
-  margin: 28px 32px;
-  padding: 0;
+    padding: 0;
 }
+
 .sc2br-blk {
-  background: #ffffff;
-  box-sizing: border-box;
+    background: #ffffff;
+    box-sizing: border-box;
 }
+
 .created-sc2 {
-  font-family: Segoe UI;
-  font-size: 14px;
-  color: #666666;
-  display: inline-block;
+    font-family: Segoe UI;
+    font-size: 14px;
+    color: #666666;
+    display: inline-block;
 }
+
 .divider {
-  color: #666666;
+    color: #666666;
 }
+
 .reflections-sc2 {
-  font-family: Segoe UI;
-  font-size: 14px;
-  color: #666666;
-  display: inline;
+    font-family: Segoe UI;
+    font-size: 14px;
+    color: #666666;
+    display: inline;
 }
-.reflections-sc2::before {
-  content: "\E329";
-  font-family: "Teams Assets";
-  font-size: 14px;
-  color: #6266a5;
-  margin-right: 1%;
-  top: 2px;
-  position: relative;
-}
-.mf {
+
+    .reflections-sc2::before {
+        content: "\E329";
+        font-family: "Teams Assets";
+        font-size: 14px;
+        color: #6266a5;
+        margin-right: 1%;
+        top: 2px;
+        position: relative;
+    }
+/*.mf {
   margin: 0 32px 32px 32px;
+}*/
+.float-right {
+    float: right !important;
+    position: relative;
+    margin-top: 21px;
 }
 
 .btn-send:focus {
-  outline-color: #dddddd;
+    outline-color: #dddddd;
 }
+
 .btn-send {
-  background-color: #6266a5;
-  color: #ffffff;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
-  width: 75px;
-  height: 32px;
-  border-radius: 3px;
-  box-sizing: border-box;
-  border: 1px solid #6266a5;
-  font-size: 14px;
-  line-height: 2;
+    background-color: #6266a5;
+    color: #ffffff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    width: 75px;
+    height: 32px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    border: 1px solid #6266a5;
+    font-size: 14px;
+    line-height: 2;
 }
+
 .feeling-abt {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  font-family: Segoe UI;
-  font-size: 18px;
-  color: #000000;
-  font-weight: 500;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-family: Segoe UI;
+    font-size: 18px;
+    color: #000000;
+    font-weight: 500;
 }
+
 .review-blk {
-  height: 384px;
-  background: #f9f8f7;
+    height: 384px;
+    background: #f9f8f7;
 }
+
 .smil {
-  height: 24px;
-  width: 24px;
-  border-radius: 50%;
-  margin: 16px 0 0 16px;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    margin: 16px 0 0 16px;
 }
+
 .cb-smile {
-  margin: 16px 16px 7px 10px;
+    margin: 16px 16px 7px 10px;
 }
+
 .custom-pr {
-  height: 24px;
+    height: 24px;
 }
+
 .bg-green {
-  background-color: #7bce95;
+    background-color: #7bce95;
 }
+
 .smile-desc {
-  margin: 7px 0 0 0;
-  font-family: Segoe UI;
-  font-size: 12px;
-  color: #000000;
+    margin: 7px 0 0 0;
+    font-family: Segoe UI;
+    font-size: 12px;
+    color: #000000;
 }
+
 .smils {
-  height: 24px;
-  width: 24px;
-  border-radius: 50%;
-  margin: 0 0 0 16px;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    margin: 0 0 0 16px;
 }
+
 .cb-smile2 {
-  margin: 0px 16px 7px 10px;
+    margin: 0px 16px 7px 10px;
 }
+
 .bg-light-green {
-  background-color: #b5ef8e;
+    background-color: #b5ef8e;
 }
+
 .bg-orng {
-  background-color: #fec745;
+    background-color: #fec745;
 }
+
 .bg-red {
-  background: #fd966b;
+    background: #fd966b;
 }
+
 .bg-dark-red {
-  background: #ff6670;
+    background: #ff6670;
 }
+
 .custom-md {
-  margin-top: 10px;
+    margin-top: 10px;
 }
+
 .cnt-box {
-  width: 24px;
-  height: 24px;
-  border-radius: 3px;
-  margin-right: 16px;
-  font-family: Segoe UI;
-  font-size: 16px;
-  color: #ffffff;
-  text-align: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    margin-right: 16px;
+    font-family: Segoe UI;
+    font-size: 16px;
+    color: #ffffff;
+    text-align: center;
 }
+
 .box1 {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)),
-    #7bce95;
-  margin-top: 16px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05)), #7bce95;
+    margin-top: 16px;
 }
+
 .box2 {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
-    #b5ef8e;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), #b5ef8e;
 }
+
 .box3 {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
-    #fec745;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), #fec745;
 }
+
 .box4 {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
-    #fd966b;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), #fd966b;
 }
+
 .box5 {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
-    #ff6670;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), #ff6670;
 }
+
 @media screen and (max-width: 425px) {
-  .custom-mc,
-  .review-blk {
-    height: auto;
-  }
+    .custom-mc,
+    .review-blk {
+        height: auto;
+    }
 }
