@@ -56,11 +56,11 @@ namespace Reflection.Helper
                 {
                     if (i == 1)
                     {
-                        color = Brushes.MediumSpringGreen;
+                        color = Brushes.MediumSeaGreen;
                     }
                     if (i == 2)
                     {
-                        color = Brushes.PaleGreen;
+                        color = Brushes.LightGreen;
                     }
                     if (i == 3)
                     {
@@ -68,11 +68,11 @@ namespace Reflection.Helper
                     }
                     if (i == 4)
                     {
-                        color = Brushes.SandyBrown;
+                        color = Brushes.LightSalmon;
                     }
                     if (i == 5)
                     {
-                        color = Brushes.Salmon;
+                        color = Brushes.DarkSalmon;
                     }
                     width = (keyValues[i] *1000)/totalcount;
                     flagGraphics.FillRectangle(color, previouswidth, 0, width, 40);
@@ -97,8 +97,7 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),
-                                        Style = AdaptiveImageStyle.Default, Id = "1" }
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1" }
                                 }
 
                             },
@@ -117,8 +116,7 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref2.png"),
-                                        Style = AdaptiveImageStyle.Default, Id = "2" }
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref2.png"),Id = "2" }
                                 }
 
                             },
