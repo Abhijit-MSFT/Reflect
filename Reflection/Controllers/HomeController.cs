@@ -51,7 +51,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         [Route("openReflections")]
         public ActionResult OpenReflections()
         {
-            ViewBag.reflectionId = "12e88266-c9f5-49da-ac8a-7bc5c90eb821";
+            ViewBag.reflectionId = "119fa4ef-2314-443c-9e29-18fad4609b1f";
+
             return View();
         }
 
