@@ -29,7 +29,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="qutin">Question<span id="questioncount"></span></th>
-                                <th scope="col" class="anonymous">Privacy</th>
+                                <th scope="col" class="privacy">Privacy</th>
                                 <th scope="col" class="snd-post">Send post at</th>
                             </tr>
                         </thead>
@@ -71,7 +71,7 @@
                         else {
                             sendpostat="Every Week Day"
                         }
-                        blockdata = blockdata + '<tr><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td>' + x.Privacy + '</td> <td class="date-day">'+sendpostat+'</td></tr>';
+                        blockdata = blockdata + '<tr><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td>' + x.Privacy + '</td> <td class="date-day">'+sendpostat+'</td><td class="delete-icon"></td></tr>';
                     })
                     $("#tablebody").html(blockdata);
 
