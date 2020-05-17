@@ -162,7 +162,7 @@ tr:last-child {
         color: #6266a5;
         float: right;
         cursor: pointer;
-        margin-right: 28%;
+        margin-right: 4%;
     }
 .delete-icon:before {
     content: "\E42B";
