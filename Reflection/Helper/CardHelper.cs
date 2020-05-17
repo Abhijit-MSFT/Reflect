@@ -206,8 +206,7 @@ namespace Reflection.Helper
                             Data = new TaskModuleActionDetails()
                             {
                                 type ="task/fetch",
-                                URL =_configuration["BaseUri"] +"/openReflections?reflectionid="+reflectionId,
-                                Title="View Reflections"
+                                URL =_configuration["BaseUri"] + "/openReflections/" + reflectionId,
                             }
                         }
                     },

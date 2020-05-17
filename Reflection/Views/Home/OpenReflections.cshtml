@@ -45,6 +45,7 @@
             </div>
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -76,8 +77,9 @@
                         for (i = 1; i <= 5; i++) {
                             if (Object.keys(feedback).indexOf(i.toString()) !== -1) {
                                 datacount = feedback[i].length;
-                                description = reflection.Privacy == "Public" ? "" : "(" + feedback[i].length+") "+feedback[i].join(',');
-                                width = (datacount * 100) / totalcount
+                                description = reflection.Privacy == "Public" ? "" : feedback[i].join(',');
+                                width = ((datacount * 100) / totalcount).toFixed(0);
+                                
                             }
                             else {
                                 datacount = 0;
@@ -104,7 +106,7 @@
                                 color = "dark-red";
                                 img = "5.png";
                             }
-                            blockdata = blockdata + '<div class="media custom-md"><img src="../Images/' + img + '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' + color + '" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:' + width.toString() + '%"></div></div><div class="smile-desc">' + description + '</div></div></div>';
+                            blockdata = blockdata + '<div class="media"><img src="../Images/' + img + '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' + color + '" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:' + width.toString() + '%"></div></div><div class="smile-desc">' + description + '</div></div><div class="cnt-box">' + width +'%(' + datacount + ')</div ></div > ';
   
                         }
                         $("#reviewblock").html(blockdata);

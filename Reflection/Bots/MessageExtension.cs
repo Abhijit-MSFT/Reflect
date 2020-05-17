@@ -43,7 +43,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 if (response.type == "saveFeedback")
                 {
                     
-                    
                     response.userName = turnContext.Activity.From.Name;
                     response.emailId = await DBHelper.GetUserEmailId(turnContext);
 
@@ -96,7 +95,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
 
 
-                }
+                }               
             }
             else
             {
@@ -106,10 +105,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         }
 
         protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
+        
         {
             //var reply = MessageFactory.Text("OnTeamsTaskModuleFetchAsync TaskModuleRequest: " + JsonConvert.SerializeObject(taskModuleRequest));
             //await turnContext.SendActivityAsync(reply);
-
+            ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
             return new TaskModuleResponse
             {
                 Task = new TaskModuleContinueResponse
@@ -119,7 +119,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Height = 700,
                         Width = 600,
                         Title = "Check the pulse on emotinal well-being",
-                        Url = this._configuration["BaseUri"] + "/OpenReflections"
+                        Url = "https://23d4d12b.ngrok.io/openReflections/720e2409-d24e-44f9-a4c8-69bec79f1f36"
                     },
                 },
             };

@@ -31,7 +31,6 @@ namespace Reflection.Model
         public Guid? recurssionID { get; set; }
 
         public string type { get; set; }
-
     }
 
     public class UserfeedbackInfo
@@ -48,6 +47,12 @@ namespace Reflection.Model
     public class MessageDetails
     {       
         public string messageid { get; set; }
+    }
+
+    public class ReflctionData
+    {
+        [JsonProperty("data")]
+        public string data { get; set; }
     }
 
 
