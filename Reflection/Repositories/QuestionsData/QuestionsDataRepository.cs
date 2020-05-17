@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Reflection.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace Reflection.Repositories.QuestionsData
             try
             {
                 var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-                var result = allRows.Where(d => d.IsDefaultFlag == true);
+                var result = allRows.Where(d => d.IsDefaultFlag == true || d.CreatedBy == "Arun Kumar Anaparthi (Zen3 Infosolutions America Inc)");
                 return result.ToList();
             }
             catch (System.Exception e)

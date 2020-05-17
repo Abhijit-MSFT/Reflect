@@ -34,7 +34,7 @@ namespace Reflection.Model
     }
 
     public class UserfeedbackInfo
-    {        
+    {
         public int feedbackId { get; set; }
         public Guid reflectionId { get; set; }
         public string action { get; set; }
@@ -45,15 +45,21 @@ namespace Reflection.Model
     }
 
     public class MessageDetails
-    {       
+    {
         public string messageid { get; set; }
     }
 
     public class ReflctionData
     {
-        [JsonProperty("data")]
-        public string data { get; set; }
+        public Data data { get; set; }
     }
+
+    public class Data
+    {
+        public string URL { get; set; }
+        public string type { get; set; }
+    }
+
 
 
     public class TaskModuleActionHelper

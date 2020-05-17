@@ -110,6 +110,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             //var reply = MessageFactory.Text("OnTeamsTaskModuleFetchAsync TaskModuleRequest: " + JsonConvert.SerializeObject(taskModuleRequest));
             //await turnContext.SendActivityAsync(reply);
             ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
+
             return new TaskModuleResponse
             {
                 Task = new TaskModuleContinueResponse
@@ -119,7 +120,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Height = 700,
                         Width = 600,
                         Title = "Check the pulse on emotinal well-being",
-                        Url = "https://23d4d12b.ngrok.io/openReflections/720e2409-d24e-44f9-a4c8-69bec79f1f36"
+                        Url = reldata.data.URL
                     },
                 },
             };
