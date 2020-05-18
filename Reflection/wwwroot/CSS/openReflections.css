@@ -4,9 +4,9 @@
     font-style: normal;
 }
 
-.custom-mc {
+/*.custom-mc {
     height: 648px;
-}
+}*/
 
 .close {
     font-family: Teams Assets;
@@ -19,6 +19,7 @@
 .modal2 {
     margin: 0 16px;
 }
+
 .modal-mb-sc2 {
     padding: 0;
 }
@@ -120,6 +121,7 @@
     font-size: 12px;
     color: #000000;
     width: 376px;
+    cursor: pointer;
 }
 
 .smils {
@@ -184,6 +186,93 @@
 .box5 {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), #ff6670;
 }
+
+
+/*Profile card*/
+
+.smile-des:hover + .custom-profle-card {
+    display: block;
+}
+
+.smile-des:active + .custom-profle-card {
+    display: block;
+}
+
+.smile-des:focus + .custom-profle-card {
+    display: block;
+}
+
+.custom-profle-card {
+    position: relative;
+    width: 320px;
+    height: 191px;
+    background: #ffffff;
+    box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
+    display: none;
+}
+
+.profile-pic {
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+}
+
+.profile-name {
+    position: absolute;
+    width: 82px;
+    height: 14px;
+    left: 112px;
+    top: 47px;
+    font-family: Segoe UI;
+    font-weight: bold;
+    font-size: 14px;
+    color: #000000;
+}
+
+.start-chat,
+.mail {
+    position: absolute;
+    width: auto;
+    height: 16px;
+    top: 110px;
+    font-family: Segoe UI;
+    font-size: 12px;
+    color: #484644;
+}
+
+.chat-icon::before,
+.mail-icon::before {
+    content: "\E340";
+    font-family: "Teams Assets";
+    font-size: 16px;
+    color: #484644;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.st-chat-txt,
+.mail-txt {
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.mail {
+    margin-top: 28px;
+}
+
+.mail-icon::before {
+    content: "\E411";
+}
+
+.st-chat-txt {
+    color: #484644;
+}
+
+.mail-txt {
+    color: #6264a7;
+}
+
 
 @media screen and (max-width: 425px) {
     .custom-mc,
