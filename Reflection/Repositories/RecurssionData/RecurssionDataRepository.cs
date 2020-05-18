@@ -22,13 +22,13 @@ namespace Reflection.Repositories.RecurssionData
                 isFromAzureFunction)
         {
         }
-
         public async Task<List<RecurssionDataEntity>> GetAllRecurssionData(List<Guid?> RefIds)
-        {            
-            var allRows = await this.GetAllAsync(PartitionKeyNames.RecurssionDataTable.TableName); 
-            List<RecurssionDataEntity> result = allRows.Where(c => RefIds.Contains(c.ReflectionID)).ToList();
+        {
+            var allRows = await this.GetAllAsync(PartitionKeyNames.RecurssionDataTable.TableName);
+            List<RecurssionDataEntity> result = allRows.Where(c => RefIds.Contains(c.ReflectionID) && c.RecursstionType!= "Does not repeat").ToList();
             return result;
         }
+
 
     }
 }

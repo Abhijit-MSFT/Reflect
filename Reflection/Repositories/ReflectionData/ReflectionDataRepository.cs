@@ -37,5 +37,11 @@ namespace Reflection.Repositories.ReflectionData
             List<ReflectionDataEntity> RefDataEntity = allRefs.Where(c => c.IsActive == true).ToList();
             return RefDataEntity;
         }
+        //public async Task<List<ReflectionDataEntity>> GetAllActiveReflection()
+        //{
+        //    var allRefs = await this.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
+        //    List<ReflectionDataEntity> RefDataEntity = allRefs.Where(c => c.IsActive == true).ToList();
+        //    return RefDataEntity;
+        //}
     }
 }

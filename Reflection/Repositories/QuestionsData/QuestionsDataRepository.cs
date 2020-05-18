@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Reflection.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,12 +29,12 @@ namespace Reflection.Repositories.QuestionsData
         /// <param name=""></param>
         /// <returns>Questions which have default flag true</returns>
         /// 
-        public async Task<List<string>> GetAllDefaultQuestions()
+        public async Task<List<QuestionsDataEntity>> GetAllDefaultQuestions()
         {
             try
             {
                 var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-                var result = allRows.Where(d => d.IsDefaultFlag == true).Select(c => c.Question);
+                var result = allRows.Where(d => d.IsDefaultFlag == true || d.CreatedBy == "Arun Kumar Anaparthi (Zen3 Infosolutions America Inc)");
                 return result.ToList();
             }
             catch (System.Exception e)
@@ -49,12 +50,13 @@ namespace Reflection.Repositories.QuestionsData
             return result ?? null;
         }
 
-        public async Task<bool> IsQuestionAlreadyPresent(string question)
+        public async Task<bool> IsQuestionAlreadtPresent(string question)
         {
             var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
             bool result = allRows.Any(c => c.Question == question);
             return result;
         }
+
     }
 
 

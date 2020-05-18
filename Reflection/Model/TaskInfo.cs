@@ -31,11 +31,10 @@ namespace Reflection.Model
         public Guid? recurssionID { get; set; }
 
         public string type { get; set; }
-
     }
 
     public class UserfeedbackInfo
-    {        
+    {
         public int feedbackId { get; set; }
         public Guid reflectionId { get; set; }
         public string action { get; set; }
@@ -46,9 +45,21 @@ namespace Reflection.Model
     }
 
     public class MessageDetails
-    {       
+    {
         public string messageid { get; set; }
     }
+
+    public class ReflctionData
+    {
+        public Data data { get; set; }
+    }
+
+    public class Data
+    {
+        public string URL { get; set; }
+        public string type { get; set; }
+    }
+
 
 
     public class TaskModuleActionHelper
@@ -73,6 +84,22 @@ namespace Reflection.Model
         public string Title { get; set; }
         public string Width { get; set; }
         public string Height { get; set; }
+    }
+
+    public class Responses
+    {
+        public string Createdby { get; set; }
+        public string QuestionTitle { get; set; }
+
+        public List<OptionResponse> OptionResponses { get; set; }
+
+    }
+    public class OptionResponse
+    {
+        public int Width { get; set; }
+        public string Color { get; set; }
+
+        public string Description { get; set; }
     }
 
 

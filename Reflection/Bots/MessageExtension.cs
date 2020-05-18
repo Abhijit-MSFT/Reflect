@@ -32,31 +32,23 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             CardHelper cardhelper = new CardHelper(_configuration);
-            
+
             FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration);
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration);
             if (turnContext.Activity.Value != null)
-            {                
+            {
                 var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
                 var reply = Activity.CreateMessageActivity();
 
                 if (response.type == "saveFeedback")
                 {
+                    
                     response.userName = turnContext.Activity.From.Name;
                     response.emailId = await DBHelper.GetUserEmailId(turnContext);
-                    FeedbackDataEntity feebackData;
-                    //Check if this is user's second feedback
-                    try
-                    {
-                        feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
-                    }
-                    catch (Exception x)
-                    {
 
-                        throw;
-                    }
-                    
-                    if (feebackData != null)
+                    //Check if this is user's second feedback
+                    FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
+                    if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
                     {
                         feebackData.Feedback = response.feedbackId;
                         await feedbackDataRepository.CreateOrUpdateAsync(feebackData);
@@ -70,9 +62,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     {
                         //Get reflect data to check if mseeage id is present - if not update it
                         ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
-                        Dictionary<int, int> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
+                        Dictionary<int, List<string>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
                         var adaptiveCard = cardhelper.FeedBackCard(feedbacks, response.reflectionId);
-
+                        
                         Attachment attachment = new Attachment()
                         {
                             ContentType = AdaptiveCard.ContentType,
@@ -103,7 +95,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
 
 
-                }
+                }               
             }
             else
             {
@@ -112,10 +104,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             }
         }
 
-        protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
+        protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)        
         {
-            //var reply = MessageFactory.Text("OnTeamsTaskModuleFetchAsync TaskModuleRequest: " + JsonConvert.SerializeObject(taskModuleRequest));
-            //await turnContext.SendActivityAsync(reply);
+            ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
 
             return new TaskModuleResponse
             {
@@ -126,7 +117,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Height = 700,
                         Width = 600,
                         Title = "Check the pulse on emotinal well-being",
-                        Url = this._configuration["BaseUri"] + "/OpenReflections"
+                        Url = reldata.data.URL
                     },
                 },
             };
@@ -184,9 +175,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
+            //there are 3 types of user roles available Admin - User - Guest
+            //var role = await DBHelper.GetUserEmailId(turnContext);
             string url = this._configuration["BaseUri"];
             if (action.MessagePayload != null)
-                url = this._configuration["BaseUri"] + "/ManageRecurringPosts";
+                url = this._configuration["BaseUri"] + "/ManageRecurringPosts";            
             var response = new MessagingExtensionActionResponse()
             {
                 Task = new TaskModuleContinueResponse()
@@ -284,6 +277,3 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
 //QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(_configuration);
 //var defaultQuestions = await questionsDataRepository.GetAllDefaultQuestions();
-
-//call this method for RecurrencePostsScreen
-//var abc = await DBHelper.GetRecurrencePostsDataAsync(_configuration);

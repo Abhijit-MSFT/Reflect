@@ -48,8 +48,8 @@
     padding: 0;
 }
 
-.mc{
-    border:none !important;
+.mc {
+    border: none !important;
 }
 
 .question,
@@ -61,16 +61,26 @@
     color: #252424;
     font-weight: 500;
     margin-bottom: 12px;
-    margin-top:16px;
+    margin-top: 16px;
 }
 
 .privacy {
     /*margin-top: 25px;*/
 }
 
-.custom-in {
-    outline-color: white !important;
+.input-select {
+    width: 100%;
+    border: none;
+    background-color: #f3f2f1;
+    height: 32px;
+    font-size: 14px;
+    color: #252424;
+    padding: 4px 12px;
 }
+
+    .input-select::-webkit-calendar-picker-indicator {
+        display: none;
+    }
 
 .cs {
     height: 32px;
@@ -113,10 +123,11 @@
     content: "\E447";
     font-family: "Teams Assets";
     pointer-events: none;
-    position: absolute;
-    right: 1%;
-    margin-top: 4px;
+    position: relative;
+    right: 10px;
+    float: right;
     color: #6264a7;
+    bottom: 28px;
 }
 
 .sel-chev2 {
@@ -128,10 +139,23 @@
         content: "\E447";
         font-family: "Teams Assets";
         pointer-events: none;
-        position: absolute;
-        margin-top: 4px;
+        position: relative;
         color: #6264a7;
+        float: right;
+        right: 10px;
+        bottom: 28px;
     }
+
+.sel-chev3::before {
+    content: "\E447";
+    font-family: "Teams Assets";
+    pointer-events: none;
+    position: absolute;
+    right: 10px;
+    float: right;
+    color: #6264a7;
+    top: 4px;
+}
 
 .post {
     margin-top: 16px;
@@ -145,13 +169,13 @@
     margin-bottom: 12px;
 }
 
-.rec {
+/*.rec {
     margin-top: 16px;
 }
-
+*/
 .container {
     padding-right: 10px;
-    padding-left: 10px;    
+    padding-left: 10px;
 }
 
 .custom-rw {
@@ -212,7 +236,11 @@ input[type="date"] {
         font-family: "Teams Assets";
         font-size: 14px;
         color: #6266a5;
-        position: absolute;
+        position: relative;
+        float: right;
+        right: 12px;
+        bottom: 28px;
+        pointer-events: none;
     }
 
 .date-ip {
@@ -224,7 +252,6 @@ input[type="date"] {
     font-size: 14px;
     color: #252424;
     font-weight: 500;
-    margin-top: 16px;
 }
 
 .br-blk {
@@ -258,6 +285,10 @@ input[type="date"] {
     display: inline-flex;
 }
 
+#privacytext {
+    margin-left: 4px;
+}
+
 .feeling {
     font-family: Segoe UI;
     font-size: 14px;
@@ -275,11 +306,10 @@ input[type="date"] {
     height: 24px;
     width: 24px;
     border-radius: 50%;
-    margin-right: 1%;    
+    margin-right: 1%;
 }
 
 .mf {
-    margin: 0 32px;
     border-top: 2px solid #edebe9;
     padding: 3% 0;
 }
@@ -296,6 +326,7 @@ input[type="date"] {
     font-weight: 500;
     font-size: 14px;
     margin-right: 16px;
+    cursor: pointer;
 }
 
     .btn-cancle:focus,
@@ -313,6 +344,7 @@ input[type="date"] {
     box-sizing: border-box;
     border: 1px solid #6266a5;
     font-size: 14px;
+    cursor: pointer;
 }
 
 .clk::before {
@@ -321,6 +353,7 @@ input[type="date"] {
     font-size: 16px;
     float: left;
     color: #6266a5;
+    cursor: pointer;
 }
 
 .manage {
@@ -330,4 +363,5 @@ input[type="date"] {
     float: left;
     padding-top: 2px;
     margin-left: 12px;
+    cursor:pointer;
 }

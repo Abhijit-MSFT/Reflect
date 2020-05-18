@@ -14,9 +14,154 @@
     <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
     <title>Reflect</title>
 
+</head>
+
+<body>
+    <div class="container">
+        <div class="" role="document">
+            <div class="modal-content mc">
+                <div class="modal-body modal-mb">
+                    <div class="question">Question</div>
+                    <div class="custom-in">
+                        <input list="questions" name="questions" id="questions-list" class="input-select" onchange="getSelectedOption(this)" />
+                        <datalist id="questions" class="htmlEle">
+                        </datalist>
+                        <span class="sel-chev"></span>
+                    </div>
+
+                    <div class="privacy">Privacy</div>
+                    <div class="input-group custom-in">
+                        <select class="cs htmlEle" id="privacy" onchange="setPrivacy()">
+                            <!-- <option selected>Choose...</option> -->
+                            <option value="Public" selected>Public - Names will be displayed with responses</option>
+                            <option value="Anonymous">Anonymous - Names will be omitted from responses</option>
+                        </select>
+                        <span class="sel-chev3"></span>
+                    </div>
+                    <div class="post">
+                        <div class="row custom-rw">
+                            <div class="col-6 custom-col">
+                                <div class="date" id="execdate">
+                                    <div class="blk-head">Date</div>
+                                    <input type="date" alt="date" class="date-ip htmlEle" />
+                                    <span class="date-icon"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 custom-col">
+                                <div class="blk-head">Time</div>
+                                <div class="time-ip htmlEle">
+                                    Send now
+                                    <span class="time-icon"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 custom-col">
+                                <div class="blk-head rec">Recurrence</div>
+                                <div class="selc">
+                                    <select class="cs htmlEle" id="recurrance">
+                                        <option value="Does not repeat" selected>Does not repeat </option>
+                                        <option value="Every weekday">Every weekday (Mon-Fri)</option>
+                                        <option value="Weekly">Weekly</option>
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="Custom">Custom</option>
+                                    </select>
+                                    <span class="sel-chev2"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="prev">Preview</div>
+                    <div class="br-blk">
+                        <div class="created">Created by: <span id="usertext"></span></div>
+                        <span class="divider">|</span>
+                        <div class="reflections">Reflections are<span id="privacytext">  </span></div>
+                        <div class="feeling" id="selectedTxt"></div>
+                        <div class="smiles">
+                            <span class="ava">
+                                <img src="~/Images/1.png" alt="smile1" class="avatars">
+                            </span>
+                            <span class="ava">
+                                <img src="~/Images/2.png" alt="smile2" class="avatars">
+                            </span>
+                            <span class="ava">
+                                <img src="~/Images/3.png" alt="smile3" class="avatars">
+                            </span>
+                            <span class="ava">
+                                <img src="~/Images/4.png" alt="smile4" class="avatars">
+                            </span>
+                            <span class="ava">
+                                <img src="~/Images/5.png" alt="smile5" class="avatars">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mf">
+                    <span class="clk"></span>
+                    <span class="manage" onclick="openTaskModule()">Manage recurring reflections <span>(3)</span> </span>
+                    <div class="float-right">
+                        <button type="button" class="btn-cancle" data-dismiss="modal" onclick="closeTaskModule()">Close</button>
+                        <button type="button" class="btn-send" onclick="SendAdaptiveCard()">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
+
     <script>
-        microsoftTeams.initialize();
+        var questions = [];
+        var userobject = {};
         $(document).ready(function () {
+
+            microsoftTeams.initialize();
+            $.ajax({
+                url: "api/GetAccessTokenAsync",
+                type: "Get",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept':'application/json'
+                },
+                success: function (data) {
+                    var data1 = JSON.parse(data);
+                    console.log(data1);
+                    microsoftTeams.getContext(function (context) {
+                        GetUserDetails(context.userObjectId,data1.access_token)
+                    });
+                    
+                }
+            })
+
+
+            var blockdata = ""
+            $.ajax({
+                type: 'GET',
+                url: 'api/GetAllDefaultQuestions',
+                success: function (data) {
+                    questions = data;
+                    data.forEach(x => {
+                        blockdata = blockdata + ' <option class="default-opt" id="'+x.questionID+'" value="'+x.question+'">';
+
+                    })
+                    $("#questions").html(blockdata);
+                    
+
+                }
+            });
+
+           
+
+            $("body").click
+                (
+                    function (e) {
+                        if (e.target.className !== "form-control questioninput") {
+                            $('#questionsblock').addClass('hidequestions');
+                            $('#questionsblock').removeClass('showquestions');
+                        }
+                    }
+                );
+
             $("select").change(function () {
                 $(this).find("option:selected").each(function () {
                     var optionValue = $(this).attr("value");
@@ -28,22 +173,31 @@
                     }
                 });
             }).change();
-        });
+ });
 
         function SendAdaptiveCard() {
             var list = document.querySelectorAll(".htmlEle");
             var htmObj = {};
             list.forEach((obj, i) => {
-            htmObj[obj.getAttribute("data-attr")] = obj.value;
+                htmObj[obj.getAttribute("data-attr")] = obj.value;
             });
+            let index = questions.findIndex(x => x.question == $('#questions-list').val())
+            var questionid = null
+            if (index != -1) {
+                questionid = questions[index].questionID
+                console.log(questionid);
+            }
+
             let taskInfo = {
-                question: divEle.textContent,
-                privacy:"Personal",
-                ExecutionDate:"",
-                ExecutionTime:"",
+                question: $('#questions-list').val(),
+                questionID: questionid,
+                privacy: $('#privacy').val(),
+                ExecutionDate: $('#execdate').val(),
+                ExecutionTime: $('#exectime').val(),
                 postDate: "",
                 postSendNowFlag: true,
-                recurssionType: "Monthly",
+                recurssionType: $('#recurrance').val(),
+                isActive: true,
                 action: "sendAdaptiveCard"
             };
             taskInfo.card = "";
@@ -53,6 +207,45 @@
             return true;
         };
 
+        function  getSelectedOption(event){
+                $('#selectedTxt').html($('#questions-list').val())
+        }
+
+        function setPrivacy() {
+            $('#privacytext').html($('#privacy').val())
+        }
+        //function CaptureUserResponse() {
+        //    let userfeedbackInfo = {
+        //        userResponse: 1,
+        //        reflectionID:"d221cb4d-615c-47f4-aca1-1f361bb16a47",
+        //        action: "userFeedback"
+        //    }
+        //    microsoftTeams.tasks.submitTask(userfeedbackInfo);
+        //    return true;
+        //}
+
+        function GetUserDetails(userid,accesstoken) {
+             $.ajax({
+                        url: "https://graph.microsoft.com/beta/users/"+userid,
+                        type: "GET",
+                        async: false,
+                        beforeSend: function (request) {
+                            request.setRequestHeader("Authorization", "Bearer " + accesstoken);
+                        },
+                        success: function (response) {
+                            if (response != null) {
+                                userobject = response;
+                                $("#username").html(userobject.displayName)
+                                Console.log(userobject);
+                            } else {
+                                alert("Something went wrong");
+                            }
+                        },
+                        error: function () {
+                            console.log("Failed");
+                        }
+                    });
+        }
 
         submitHandler = (err, result) => {
             //if (result.action == "Chaining") {
@@ -87,107 +280,20 @@
             return true;
         };
 
-    </script>
-</head>
+        function addShowHideButton() {
+            if ($('#questionsblock').hasClass('hidequestions')) {
+                $('#questionsblock').removeClass('hidequestions');
+                $('#questionsblock').addClass('showquestions');
+            }
+            else {
+                $('#questionsblock').addClass('hidequestions');
+                $('#questionsblock').removeClass('showquestions');
+            }
+        }
 
-<body>
-    <div class="container">
-        <div class="" role="document">
-            <div class="modal-content mc">
-                <div class="modal-body modal-mb">
-                    <div class="question">Question</div>
-                    <div class="input-group custom-in">
-                        <select class="cs htmlEle" onChange="getSelectedOption(this)">
-                            <option selected disabled class="default-opt">Select a question</option>
-                            <option class="default-opt" value="1" selected>How are you feeling?</option>
-                            <option class="default-opt" value="2">How did the week go?</option>
-                            <option class="default-opt" value="3">How do you feel about today's project?</option>
-                            <option class="default-opt sel-add-q">Add custom question</option>
-                        </select>
-                        <span class="sel-chev"></span>
-                    </div>
-                    <div class="privacy">Privacy</div>
-                    <div class="input-group custom-in">
-                        <select class="cs htmlEle">
-                            <!-- <option selected>Choose...</option> -->
-                            <option value="1" selected>Public - Anyone in this chat will see responses</option>
-                            <option value="2">Anonymous</option>                            
-                        </select>
-                        <span class="sel-chev"></span>
-                    </div>
-                    <div class="post">
-                        <div class="row custom-rw">
-                            <div class="col-6 custom-col">
-                                <div class="date">
-                                    <div class="blk-head">Date</div>
-                                    <input type="date" alt="date" class="date-ip htmlEle" />
-                                    <span class="date-icon"></span>
-                                </div>
-                            </div>
-                            <div class="col-6 custom-col">
-                                <div class="blk-head">Time</div>
-                                <div class="time-ip htmlEle">
-                                    Send now
-                                    <span class="time-icon"></span>
-                                </div>
-                            </div>
-                            <div class="col-6 custom-col">
-                                <div class="blk-head rec">Recurrence</div>
-                                <div class="selc">
-                                    <select class="cs htmlEle">
-                                        <option value="1" selected>Does not repeat</option>
-                                        <option value="2">Every weekday (Mon-Fri)</option>
-                                        <option value="3">Weekly</option>
-                                        <option value="3">Monthly</option>
-                                        <option value="3">Custom</option>
-                                    </select>
-                                    <span class="sel-chev2"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="prev">Preview</div>
-                    <div class="br-blk">
-                        <div class="created">Created by: Cara Coleman</div>
-                        <span class="divider">|</span>
-                        <div class="reflections">Reflections are public</div>
-                        <div class="feeling" id="selectedTxt">How are you feeling?</div>
-                        <div class="smiles">
-                            <span class="ava">
-                                <img src="~/Images/1.png" alt="smile1" class="avatars">
-                            </span>
-                            <span class="ava">
-                                <img src="~/Images/2.png" alt="smile2" class="avatars">
-                            </span>
-                            <span class="ava">
-                                <img src="~/Images/3.png" alt="smile3" class="avatars">
-                            </span>
-                            <span class="ava">
-                                <img src="~/Images/4.png" alt="smile4" class="avatars">
-                            </span>
-                            <span class="ava">
-                                <img src="~/Images/5.png" alt="smile5" class="avatars">
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="mf">
-                    <span class="clk"></span>
-                    <span class="manage" onclick="openTaskModule()">Manage recurring reflections</span>
-                    <div class="float-right">
-                        <button type="button" class="btn-cancle" data-dismiss="modal" onclick="closeTaskModule()">Close</button>
-                        <button type="button" class="btn-send" onclick="SendAdaptiveCard()">Send</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </script>
 </body>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="~/Scripts/screen1.1.js"></script>
 
 
 </html>

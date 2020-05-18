@@ -13,127 +13,112 @@
         function closeTaskModule() {
             let closeTaskInfo = {
                 action: "closeFirstTaskModule"
+            };
+            microsoftTeams.tasks.submitTask(closeTaskInfo);
+            return true;
         };
-        microsoftTeams.tasks.submitTask(closeTaskInfo);
-        return true;
-    };
     </script>
 </head>
 
 <body>
-    <div class="container">
+    <div class="modal2">
         <!-- Modal -->
-        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-            <div class="modal-content custom-mc mc">
-                @*<div class="modal-header custom-mh">
-                    <div class="media">
-                        <img class="align-self-center mr-3 head-logo" src="~/Images/logo.png"
-                             alt="Generic placeholder image">
-                        <div class="media-body media-mb">
-                            <div class="heading">Reflect</div>
-                            <span class="head-desc"> Check the pulse on emotional well-being </span>
-                        </div>
-                    </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>*@
-                <div class="modal-body modal-mb-sc2">
+        <div role="document">
+            <div class="custom-mc">
+                <input type="text" id="reflectionid" value="@ViewBag.reflectionId" style="display:none" />
+                <div class="modal-mb-sc2">
                     <div class="sc2br-blk">
-                        <div class="created-sc2">Created by: Cara Coleman</div>
+                        <div class="created-sc2">Created by: <span id="createdby"></span></div>
                         <span class="divider">|</span>
-                        <div class="reflections-sc2">Reflections are public</div>
+                        <div class="reflections-sc2">Reflections are <span id="privacy"></span></div>
                     </div>
-                    <div class="feeling-abt">How are you feeling about the test today?</div>
-                    <div class="review-blk">
-                        <div class="media">
-                            <img src="~/Images/1.png" class="align-self-start smil" alt="smile1">
-                            <div class="media-body cb-smile">
-                                <div class="progress custom-pr">
-                                    <div class="progress-bar bg-green" role="progressbar" aria-valuenow="70"
-                                         aria-valuemin="0" aria-valuemax="100" style="width:25%">
-                                    </div>
-                                </div>
-                                <div class="smile-desc">
-                                    Grace Taylor, Andre Lawson, Mikaela Lee, Aaron Gonzales, Elizabeth Moore, Maya
-                                    Robinson, Abigail Jackson, Oscar Ward,
-                                    Sara Perez
-                                </div>
-                            </div>
-                            <div class="cnt-box box1">9</div>
-                        </div>
-                        <div class="media custom-md">
-                            <img src="~/Images/2.png" class="align-self-start smils" alt="smile2">
-                            <div class="media-body cb-smile2">
-                                <div class="progress custom-pr">
-                                    <div class="progress-bar bg-light-green" role="progressbar" aria-valuenow="70"
-                                         aria-valuemin="0" aria-valuemax="100" style="width:25%">
-                                    </div>
-                                </div>
-                                <div class="smile-desc">
-                                    Ashley Schroeder, Brandon Stuart, Michael Peltier, Cora Thomas, Monica Thompson,
-                                    Mateo Gomez, Michelle Harris, Hannah
-                                    Jarvis, Olivia Wilson
-                                </div>
-                            </div>
-                            <div class="cnt-box box2">9</div>
-                        </div>
-                        <div class="media custom-md">
-                            <img src="~/Images/3.png" class="align-self-start smils" alt="smile2">
-                            <div class="media-body cb-smile2">
-                                <div class="progress custom-pr">
-                                    <div class="progress-bar bg-orng" role="progressbar" aria-valuenow="70"
-                                         aria-valuemin="0" aria-valuemax="100" style="width:15%">
-                                    </div>
-                                </div>
-                                <div class="smile-desc">
-                                    Wesley Brooks, Kayla Lewis, Briana Hernandez, Gabriel Diaz
-                                </div>
-                            </div>
-                            <div class="cnt-box box3">2</div>
-                        </div>
-                        <div class="media custom-md">
-                            <img src="~/Images/4.png" class="align-self-start smils" alt="smile2">
-                            <div class="media-body cb-smile2">
-                                <div class="progress custom-pr">
-                                    <div class="progress-bar bg-red" role="progressbar" aria-valuenow="70"
-                                         aria-valuemin="0" aria-valuemax="100" style="width:10%">
-                                    </div>
-                                </div>
-                                <div class="smile-desc">
-                                    Corey Gray, Nathan Rigby, Isabel Garcia
-                                </div>
-                            </div>
-                            <div class="cnt-box box4">2</div>
-                        </div>
-                        <div class="media custom-md">
-                            <img src="~/Images/5.png" class="align-self-start smils" alt="smile2">
-                            <div class="media-body cb-smile2">
-                                <div class="progress custom-pr">
-                                    <div class="progress-bar bg-dark-red" role="progressbar" aria-valuenow="70"
-                                         aria-valuemin="0" aria-valuemax="100" style="width:5%">
-                                    </div>
-                                </div>
-                                <div class="smile-desc">
-                                    Sydney Mattos, Natasha Jones
-                                </div>
-                            </div>
-                            <div class="cnt-box box5">2</div>
-                        </div>
+                    <div class="feeling-abt" id="questiontitle">How are you feeling about the test today?</div>
+                    <div class="review-blk" id="reviewblock">
+
                     </div>
                 </div>
                 <div class="mf">
                     <div class="float-right">
-                        <button type="button" class="btn-cancle" data-dismiss="modal" onclick="closeTaskModule()">Done</button>
+                        <button type="button" class="btn-send">Done</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/api/GetReflections/'+$("#reflectionid").val(),
+                success: function (data) {
+                    if (data) {
+                        data = JSON.parse(data);
+                    }
+                    if (data && data.feedback && data.reflection && data.question) {
+                        var feedback = JSON.parse(data.feedback);
+                        var reflection = JSON.parse(data.reflection);
+                        var question = JSON.parse(data.question)
+                        $("#createdby").text(reflection.CreatedBy);
+                        $("#questiontitle").text(question.Question);
+                        $("#privacy").text(reflection.Privacy);
+                        var blockdata = ''
+                        var color = "white";
+                        var totalcount = 0;
+                        var datacount = 0;
+                        var width = 0;
+                        var descriptio = "";
+                        Object.keys(JSON.parse(data.feedback)).forEach(x => {
+                            totalcount = totalcount + feedback[x].length;
+                        })
+                        for (i = 1; i <= 5; i++) {
+                            if (Object.keys(feedback).indexOf(i.toString()) !== -1) {
+                                datacount = feedback[i].length;
+                                description = reflection.Privacy == "Public" ? "" : feedback[i].join(',');
+                                width = ((datacount * 100) / totalcount).toFixed(0);
+                                
+                            }
+                            else {
+                                datacount = 0;
+                                width = 0;
+                                description = "";
+                            }
+                            if (i == 1) {
+                                color = "green";
+                                img = "1.png";
+                            }
+                            else if (i == 2) {
+                                color = "light-green";
+                                img = "2.png";
+                            }
+                            else if (i == 3) {
+                                color = "orng";
+                                img = "3.png";
+                            }
+                            else if (i == 4) {
+                                color = "red";
+                                img = "4.png";
+                            }
+                            else if (i == 5) {
+                                color = "dark-red";
+                                img = "5.png";
+                            }
+                            blockdata = blockdata + '<div class="media"><img src="../Images/' + img + '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' + color + '" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:' + width.toString() + '%"></div></div><div class="smile-desc">' + description + '</div></div><div class="cnt-box">' + width +'%(' + datacount + ')</div ></div > ';
+  
+                        }
+                        $("#reviewblock").html(blockdata);
+                    }
+                    else {
+                        alert ("no data");
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
 </html>

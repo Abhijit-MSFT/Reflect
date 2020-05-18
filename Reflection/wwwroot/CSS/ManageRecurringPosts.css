@@ -1,178 +1,225 @@
 @font-face {
-  font-family: "Teams Assets";
-  src: url("../fonts/TeamsAssets-Light.woff") format("woff"),
-    url("../fonts/TeamsAssets-Light.woff2") format("woff2");
-  font-style: normal;
+    font-family: "Teams Assets";
+    src: url("../fonts/TeamsAssets-Light.woff") format("woff"), url("../fonts/TeamsAssets-Light.woff2") format("woff2");
+    font-style: normal;
 }
 
-.modal-md {
-  /*max-width: 800px;*/
-}
-.custom-mc {
-    /*height: 600px;*/
-    border: none !important;
-}
+
 .custom-mh {
-  margin: 32px 32px 0 32px;
-  padding: 0;
-  border-bottom: none;
+    margin: 32px 32px 0 32px;
+    padding: 0;
+    border-bottom: none;
 }
+
 .close {
-  font-family: Teams Assets;
-  font-weight: 300;
-  color: #000000;
-  opacity: 0.5;
-  outline-color: white !important;
+    font-family: Teams Assets;
+    font-weight: 300;
+    color: #000000;
+    opacity: 0.5;
+    outline-color: white !important;
 }
+
 .head-logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 3px;
+    width: 36px;
+    height: 36px;
+    border-radius: 3px;
 }
+
 .media-mb {
-  line-height: 1;
-  margin-top: 3px;
+    line-height: 1;
+    margin-top: 3px;
 }
+
 .heading {
-  font-family: Segoe UI;
-  font-size: 14px;
-  letter-spacing: 0.1px;
-  color: #252424;
-  font-weight: 600;
+    font-family: Segoe UI;
+    font-size: 14px;
+    letter-spacing: 0.1px;
+    color: #252424;
+    font-weight: 600;
 }
+
 .head-desc {
-  font-family: Segoe UI;
-  font-size: 12px;
-  color: #252424;
+    font-family: Segoe UI;
+    font-size: 12px;
+    color: #252424;
 }
+
 .modal-mb-sc2 {
-  margin-top: 16px;
-  padding: 0;
+    margin-top: 16px;
+    padding: 0;
+    height: 400px;
 }
+
 .recurring {
-  font-family: Segoe UI;
-  font-size: 18px;
-  color: #252424;
-  font-weight: 500;
+    font-family: Segoe UI;
+    font-size: 18px;
+    color: #252424;
+    font-weight: 500;
 }
+
 .recu-desc {
-  font-family: Segoe UI;
-  font-size: 12px;
-  color: #737373;
-  width: 534px;
-  height: 36px;
+    font-family: Segoe UI;
+    font-size: 12px;
+    color: #737373;
+    width: 534px;
+    height: 36px;
 }
+
 .custom-tb {
-  margin-top: 19px;
+    margin-top: 19px;
 }
+
 .qutin,
-.anonymous,
+.privacy,
 .snd-post {
-  font-family: Segoe UI;
-  font-size: 14px;
-  color: #000000;
-  font-weight: 500;
-  padding-top: 0px !important;
+    font-family: Segoe UI;
+    font-size: 14px;
+    color: #000000;
+    font-weight: 500;
+    padding-top: 0px !important;
 }
+
 .qutin {
-  width: 42%;
-  padding-left: 0px !important;
+/*    width: 42%;*/
+    padding-left: 0px !important;
 }
-.anonymous {
-  width: 16%;
+
+.privacy {
+    /*    width: 16%;*/
+    font-size: 14px;
+    padding-left: 0px !important;
+    text-align: center;
 }
-.snd-post {
-  width: 42%;
+
+/*.snd-post {
+    width: 42%;
 }
+*/
 .hw-r-u {
-  font-family: Segoe UI;
-  font-size: 14px;
-  color: #252423;
-  margin: 19px 0 0 15px;
-  border-top: 1px solid #ececec;
+    font-family: Segoe UI;
+    font-size: 14px;
+    color: #252423;
+    margin: 19px 0 0 15px;
+    border-top: 1px solid #ececec;
+    font-weight: bold;
 }
+
 .hw-r-u,
 .cus-box,
 .date-day {
-  padding: 0 0.75rem !important;
-}
-.date-day {
-  padding: 0 0 0 0.75rem !important;
-}
-.table thead th {
-  border-bottom: none;
-}
-.table th {
-  border-top: none;
-  border-bottom: 1px solid #ececec;
-}
-tr:last-child {
-  border-bottom: 1px solid #ececec;
-}
-.hru-desc {
-  font-family: Segoe UI;
-  font-size: 12px;
-  color: #605e5c;
-  padding-bottom: 10px;
-}
-.cus-box {
-  text-align: center;
-  padding-left: 0 !important;
-  vertical-align: middle !important;
-}
-.custom-control-input:checked ~ .custom-control-label::before {
-  background-color: #6264a7;
-  border-color: #6264a7;
-}
-.custom-control-input:focus ~ .custom-control-label::before {
-  box-shadow: none;
-}
-.date-day {
-  font-family: Segoe UI;
-  font-size: 14px;
-  color: #484644;
-  vertical-align: middle !important;
-}
-.date-day::before {
-  content: "\E447";
-  font-family: "Teams Assets";
-  font-size: 14px;
-  color: #6266a5;
-  float: right;
-  cursor: pointer;
-}
-.mf {
-  margin: 32px 0;
-  border-top: 2px solid #edebe9;
-  padding-top: 3%;
-}
-.btn-dn:focus {
-  outline-color: #dddddd;
-}
-.btn-dn {
-  background-color: #6266a5;
-  color: #ffffff;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
-  width: 118px;
-  height: 32px;
-  border-radius: 3px;
-  box-sizing: border-box;
-  border: 1px solid #6266a5;
-  font-size: 14px;
-  line-height: 2;
+    padding: 0 0.75rem !important;
 }
 
-@media screen and (max-width: 425px) {
-  .custom-mc,
-  .review-blk {
-    height: auto;
-  }
-  .recu-desc {
-    width: auto;
-  }
+.date-day {
+    padding: 0 0 0 0.75rem !important;
 }
+
+.table thead th {
+    border-bottom: none;
+}
+
+.table th {
+    border-top: none;
+    border-bottom: 1px solid #ececec;
+}
+
+tr:last-child {
+    border-bottom: 1px solid #ececec;
+}
+
+.hru-desc {
+    font-family: Segoe UI;
+    font-size: 12px;
+    color: #605e5c;
+    padding-bottom: 10px;
+}
+
+.cus-box {
+    text-align: center;
+    padding-left: 0 !important;
+    vertical-align: middle !important;
+}
+
+/*.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: #6264a7;
+    border-color: #6264a7;
+}
+
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: none;
+}*/
+
+.date-day {
+    font-family: Segoe UI;
+    font-size: 14px;
+    color: #484644;
+    vertical-align: middle !important;
+}
+
+    .date-day::before {
+        content: "\E447";
+        font-family: "Teams Assets";
+        font-size: 14px;
+        color: #6266a5;
+        float: right;
+        cursor: pointer;
+        margin-right: 28%;
+    }
+.delete-icon:before {
+    content: "\E42B";
+    font-family: "Teams Assets";
+    font-size: 16px;
+    color: #6266a5;
+    float: right;
+    cursor: pointer;
+    margin-right: 8%;
+}
+.mf {
+    margin: 32px 0;
+    border-top: 2px solid #edebe9;
+    padding-top: 3%;
+}
+
+.float-left {
+    color: #6266a5;
+    cursor: pointer;
+    font-size: 14px;
+}
+.left-chev:before {
+    content: "\E425";
+    font-family: "Teams Assets";
+    font-size: 12px;
+    color: #6266a5;
+    cursor: pointer;
+}
+/*.btn-dn:focus {
+    outline-color: #dddddd;
+}
+
+.btn-dn {
+    background-color: #6266a5;
+    color: #ffffff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    width: 118px;
+    height: 32px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    border: 1px solid #6266a5;
+    font-size: 14px;
+    line-height: 2;
+}*/
+@media screen and (max-width: 425px) {
+    .custom-mc, .review-blk {
+        height: auto;
+    }
+
+    .recu-desc {
+        width: auto;
+    }
+}
+
 @media screen and (max-width: 320px) {
-  .modal-mb-sc2 {
-    margin: 32px 10px;
-  }
+    .modal-mb-sc2 {
+        margin: 32px 10px;
+    }
 }

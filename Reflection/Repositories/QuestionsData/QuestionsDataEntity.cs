@@ -34,6 +34,8 @@ namespace Reflection.Repositories.QuestionsData
         /// Gets or sets user email id.
         /// </summary>
         public string CreatedBy { get; set; }
-        
+
+        public string CreatedByEmail { get; set; }
+
     }
 }
