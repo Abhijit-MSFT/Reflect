@@ -37,31 +37,31 @@
 
                     </div>
                 </div>
-                <div class="mf">
-                    <div class="float-right">
-                        <button type="button" class="btn-send">Done</button>
-                    </div>
-                </div>
+                @*<div class="mf">
+                        <div class="float-right">
+                            <button type="button" class="btn-send">Done</button>
+                        </div>
+                    </div>*@
             </div>
 
-            <div class="smile-des">click</div>
-            <div class="card custom-profle-card">
-                <div class="card-body">
-                    <img src="~/Images/Avatar.png" alt="avatar" class="profile-pic" />
-                    <div class="profile-name">Grace Taylor</div>
-                    <div class="start-chat">
-                        <span class="chat-icon"></span>
-                        <span class="st-chat-txt">Start a chat</span>
+            @*<div class="smile-des">click</div>
+                <div class="card custom-profle-card">
+                    <div class="card-body">
+                        <img src="~/Images/Avatar.png" alt="avatar" class="profile-pic" />
+                        <div class="profile-name">Grace Taylor</div>
+                        <div class="start-chat">
+                            <span class="chat-icon"></span>
+                            <span class="st-chat-txt">Start a chat</span>
+                        </div>
+                        <div class="mail">
+                            <span class="mail-icon"></span>
+                            <span class="mail-txt">grace.taylor@contososd.edu</span>
+                        </div>
                     </div>
-                    <div class="mail">
-                        <span class="mail-icon"></span>
-                        <span class="mail-txt">grace.taylor@contososd.edu</span>
-                    </div>
-                </div>
-            </div>
+                </div>*@
         </div>
     </div>
-  
+
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
@@ -123,10 +123,24 @@
                                 color = "dark-red";
                                 img = "5.png";
                             }
-                            blockdata = blockdata + '<div class="media"><img src="../Images/' + img + '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' + color + '" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:' + width.toString() + '%"></div></div><div class="smile-desc">' + description + '</div></div><div class="cnt-box">' + width + '%(' + datacount + ')</div ></div > ';
+                            blockdata = blockdata + '<div class="media"><img src="../Images/' + img + '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' + color + '" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:' + width.toString() + '%"></div></div><div class="smile-desc' + i + '">' + description + '</div>';
 
+                            if (description) {
+                                blockdata = blockdata + '<div class="card custom-profle-card' + i + '"> <div class="card-body"> <img src="../Images/Avatar.png" alt="avatar" class="profile-pic" /> <div class="profile-name">Grace Taylor</div> <div class="start-chat"> <span class="chat-icon"></span> <span class="st-chat-txt">Start a chat</span> </div> <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt">grace.taylor@contososd.edu</span> </div> </div> </div>'
+                            }
+                            blockdata = blockdata + '</div><div class="cnt-box">' + width + '%<span class="cnt">(' + datacount + ')</span></div ></div >';
                         }
                         $("#reviewblock").html(blockdata);
+                        for (i = 1; i <= 5; i++) {
+                            $(".custom-profle-card" + i).css("display", "none");
+                            $(".smile-desc" + i).on('click mouseover',function (event) {
+                                $(".custom-profle-card" + event.currentTarget.className[10]).toggle();
+                            })
+
+                            $(".smile-desc" + i).mouseleave(function () {
+                                $(".custom-profle-card" + event.currentTarget.className[10]).toggle();
+                            })
+                        }
                     }
                     else {
                         alert("no data");

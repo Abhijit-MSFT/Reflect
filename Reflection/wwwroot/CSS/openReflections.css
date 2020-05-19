@@ -115,7 +115,8 @@
     background-color: #7bce95;
 }
 
-.smile-desc {
+div[class^="smile-desc"]
+ {
     margin: 7px 0 0 0;
     font-family: Segoe UI;
     font-size: 12px;
@@ -187,23 +188,15 @@
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), #ff6670;
 }
 
+.cnt {
+    margin-left: 6px;
+}
 
 /*Profile card*/
 
-.smile-des:hover + .custom-profle-card {
-    display: block;
-}
-
-.smile-des:active + .custom-profle-card {
-    display: block;
-}
-
-.smile-des:focus + .custom-profle-card {
-    display: block;
-}
-
-.custom-profle-card {
-    position: relative;
+div[class^="card custom-profle-card"]
+ {
+    position: absolute;
     width: 320px;
     height: 191px;
     background: #ffffff;
