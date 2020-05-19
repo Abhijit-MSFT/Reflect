@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",
   "manifestVersion": "1.5",
   "version": "1.0.0",
-  "id": "ee733610-f70c-44f7-92c5-ed5af9d776b5",
+  "id": "388a3952-5ace-44b5-bc1b-082372ad709b",
   "packageName": "com.contoso.helloworld",
   "developer": {
     "name": "Contoso",
@@ -25,7 +25,7 @@
   "accentColor": "#60A18E",
   "bots": [
     {
-      "botId": "ee733610-f70c-44f7-92c5-ed5af9d776b5",
+      "botId": "388a3952-5ace-44b5-bc1b-082372ad709b",
       "scopes": [
         "team",
         "groupchat"
@@ -34,7 +34,7 @@
   ],
   "composeExtensions": [
     {
-      "botId": "ee733610-f70c-44f7-92c5-ed5af9d776b5",
+      "botId": "388a3952-5ace-44b5-bc1b-082372ad709b",
       "canUpdateConfiguration": false,
       "commands": [
         {
@@ -43,7 +43,7 @@
           "title": "Manage recurring posts",
           "type": "action",
           "initialRun": false,
-          "context": [ "message", "compose" ],
+          "context": [ "message" ],
           "fetchTask": true,
           "parameters": [
             {
@@ -59,7 +59,23 @@
           "title": "Remove posts",
           "type": "action",
           "initialRun": false,
-          "context": [ "message", "compose" ],
+          "context": [ "message" ],
+          "fetchTask": true,
+          "parameters": [
+            {
+              "name": "Name",
+              "title": "Title",
+              "description": "To Do Title"
+            }
+          ]
+        },
+        {
+          "id": "createreflect",
+          "description": "Create Reflect",
+          "title": "Create Reflect",
+          "type": "action",
+          "initialRun": false,
+          "context": [ "compose" ],
           "fetchTask": true,
           "parameters": [
             {

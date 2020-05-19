@@ -125,7 +125,7 @@
 .smils {
     height: 24px;
     width: 24px;
-    border-radius: 50%;
+    border-radius: 4px;
     margin: 1rem 0 0 1rem;
 }
 

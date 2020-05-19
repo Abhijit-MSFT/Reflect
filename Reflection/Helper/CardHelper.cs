@@ -56,7 +56,7 @@ namespace Reflection.Helper
                 {
                     if (i == 1)
                     {
-                        color = Brushes.MediumSeaGreen;
+                        color = Brushes.MediumSeaGreen; 
                     }
                     if (i == 2)
                     {
@@ -72,7 +72,7 @@ namespace Reflection.Helper
                     }
                     if (i == 5)
                     {
-                        color = Brushes.DarkSalmon;
+                        color = Brushes.Salmon;
                     }
                     width = (keyValues[i].Count *1000)/totalcount;
                     flagGraphics.FillRectangle(color, previouswidth, 0, width, 40);
@@ -97,13 +97,13 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1" }
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Auto, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1" }
                                 }
 
                             },
                             new AdaptiveColumn()
                             {
-                                Width = AdaptiveColumnWidth.Stretch,
+                                Width = AdaptiveColumnWidth.Auto,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[1].Count.ToString())
@@ -116,13 +116,13 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref2.png"),Id = "2" }
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Auto, Url = new Uri(_configuration["BaseUri"] + "/images/ref2.png"),Id = "2" }
                                 }
 
                             },
                             new AdaptiveColumn()
                             {
-                                Width = AdaptiveColumnWidth.Stretch,
+                                Width = AdaptiveColumnWidth.Auto,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[2].Count.ToString())
@@ -135,14 +135,14 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref3.png"),
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Auto, Url = new Uri(_configuration["BaseUri"] + "/images/ref3.png"),
                                         Style = AdaptiveImageStyle.Default, Id = "3" }
                                 }
 
                             },
                             new AdaptiveColumn()
                             {
-                                Width = AdaptiveColumnWidth.Stretch,
+                                Width = AdaptiveColumnWidth.Auto,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[3].Count.ToString())
@@ -155,14 +155,14 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref4.png"),
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Auto, Url = new Uri(_configuration["BaseUri"] + "/images/ref4.png"),
                                         Style = AdaptiveImageStyle.Default, Id = "4" }
                                 }
 
                             },
                             new AdaptiveColumn()
                             {
-                                Width = AdaptiveColumnWidth.Stretch,
+                                Width = AdaptiveColumnWidth.Auto,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[4].Count.ToString())
@@ -175,14 +175,14 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { Size = AdaptiveImageSize.Small, Url = new Uri(_configuration["BaseUri"] + "/images/ref5.png"),
+                                    new AdaptiveImage() { Size = AdaptiveImageSize.Auto, Url = new Uri(_configuration["BaseUri"] + "/images/ref5.png"),
                                         Style = AdaptiveImageStyle.Default, Id = "5" }
                                 }
 
                             },
                             new AdaptiveColumn()
                             {
-                                Width = AdaptiveColumnWidth.Stretch,
+                                Width = AdaptiveColumnWidth.Auto,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[5].Count.ToString())
@@ -244,7 +244,7 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("Posted by "+ $"{data.postCreateBy}") { Color = AdaptiveTextColor.Good, Size=AdaptiveTextSize.Medium, Spacing=AdaptiveSpacing.Medium},
+                                    new AdaptiveTextBlock("Posted by "+ $"{data.postCreateBy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Spacing=AdaptiveSpacing.Medium },
                                 }
 
                             },
@@ -253,14 +253,14 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Stretch,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("| Responses are "+ $"{data.privacy}") { Color = AdaptiveTextColor.Good, Size=AdaptiveTextSize.Medium, Spacing=AdaptiveSpacing.Medium},
+                                    new AdaptiveTextBlock("| Responses are "+ $"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Spacing=AdaptiveSpacing.Medium},
                                 }
 
                             },
 
                         }
                     },
-                    new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Medium },
+                    new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large },
                     new AdaptiveColumnSet
                     {
                         Columns = new List<AdaptiveColumn>()
