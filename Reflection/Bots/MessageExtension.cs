@@ -17,20 +17,31 @@ using AdaptiveCards;
 using Reflection.Repositories.FeedbackData;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.ReflectionData;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Extensions.Logging;
+using Reflection.Bots;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
-    public class MessageExtension : TeamsActivityHandler
+    //public class MessageExtension<T> : TeamsActivityHandler where T : Dialog
+    public class MessageExtension : TeamsActivityHandler 
     {
         private readonly IConfiguration _configuration;
-        //private readonly FeedbackDataRepository feedbackDataRepository;
+
         public MessageExtension(IConfiguration configuration)
         {
             _configuration = configuration;
+
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
+
+            //Logger.LogInformation("Running dialog with Message Activity.");
+
+            //// Run the Dialog with the new message Activity.
+            //await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
+
             CardHelper cardhelper = new CardHelper(_configuration);
 
             FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration);
