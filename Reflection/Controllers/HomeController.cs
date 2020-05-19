@@ -100,7 +100,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         {
             var accessToken = "";
 
-            var body = $"grant_type=client_credentials&client_id='clientid@tenantid'&client_secret=clientsecret&scope=https://graph.microsoft.com/.default";
+            var body = $"grant_type=client_credentials&client_id=" + _configuration["MicrosoftAppId"] + "@" + _configuration["MicrosoftTenantId"] + "&client_secret=" + _configuration["MicrosoftAppPassword"] + "&scope=https://graph.microsoft.com/.default";
             try
             {
 

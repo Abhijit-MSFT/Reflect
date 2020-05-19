@@ -112,26 +112,28 @@
     <script>
         var questions = [];
         var userobject = {};
+        var accesstoken = "";
+        var userid = "";
         $(document).ready(function () {
 
             microsoftTeams.initialize();
-            var accesstoken="";
-            GetUserDetails(context.userObjectId, accesstoken);
-                   
+
+
             $.ajax({
                 url: "api/GetAccessTokenAsync",
                 type: "Get",
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept':'application/json'
+                    'Accept': 'application/json'
                 },
                 success: function (data) {
                     var data1 = JSON.parse(data);
-                    console.log(data1);
                     microsoftTeams.getContext(function (context) {
-                        GetUserDetails(context.userObjectId,data1.access_token)
+                        accesstoken = data1.access_token;
+                        userid = context.userObjectId;
+                        GetUserDetails(context.userObjectId, data1.access_token)
                     });
-                    
+
                 }
             })
             var blockdata = ""
@@ -141,11 +143,11 @@
                 success: function (data) {
                     questions = data;
                     data.forEach(x => {
-                        blockdata = blockdata + ' <option class="default-opt" id="'+x.questionID+'" value="'+x.question+'">';
+                        blockdata = blockdata + ' <option class="default-opt" id="' + x.questionID + '" value="' + x.question + '">';
 
                     })
                     $("#questions").html(blockdata);
-                    
+
 
                 }
             });
@@ -169,7 +171,7 @@
                     }
                 });
             }).change();
- });
+        });
 
         function SendAdaptiveCard() {
             var list = document.querySelectorAll(".htmlEle");
@@ -202,36 +204,37 @@
             return true;
         };
 
-        function  getSelectedOption(event){
-                $('#selectedTxt').html($('#questions-list').val())
+        function getSelectedOption(event) {
+            $('#selectedTxt').html($('#questions-list').val())
         }
 
         function setPrivacy() {
+            GetUserDetails(userid, accesstoken)
             $('#privacytext').html($('#privacy').val())
         }
 
         function GetUserDetails(userid, accesstoken) {
-            alert(accesstoken);
-             $.ajax({
-                        url: "https://graph.microsoft.com/beta/users/"+userid,
-                        type: "GET",
-                        async: false,
-                        beforeSend: function (request) {
-                            request.setRequestHeader("Authorization", "Bearer " + "eyJ0eXAiOiJKV1QiLCJub25jZSI6ImRXSjhiQjV2Ql9Kc3M5MDN0dmV3WGJCRndyNm9RcmwyRTBOVUY2aG5mUUUiLCJhbGciOiJSUzI1NiIsIng1dCI6IkN0VHVoTUptRDVNN0RMZHpEMnYyeDNRS1NSWSIsImtpZCI6IkN0VHVoTUptRDVNN0RMZHpEMnYyeDNRS1NSWSJ9.eyJhdWQiOiJodHRwczovL2dyYXBoLm1pY3Jvc29mdC5jb20vIiwiaXNzIjoiaHR0cHM6Ly9zdHMud2luZG93cy5uZXQvNzJmOTg4YmYtODZmMS00MWFmLTkxYWItMmQ3Y2QwMTFkYjQ3LyIsImlhdCI6MTU4OTc4MzY2MSwibmJmIjoxNTg5NzgzNjYxLCJleHAiOjE1ODk3ODc1NjEsImFjY3QiOjAsImFjciI6IjEiLCJhaW8iOiJBVVFBdS84UEFBQUFCWWkyM3YwQitHL2VsbWdsN29MclNySVF4ZE9ORlc0RERLcWw2NDhmUFpGOS9YTHdqUHc1dU92aWxNWW5ockVrY01JQzhrU0pHa0NkSisrMjVyZG9Ddz09IiwiYW1yIjpbInJzYSIsIm1mYSJdLCJhcHBfZGlzcGxheW5hbWUiOiJSZWZsZWN0IiwiYXBwaWQiOiIzODhhMzk1Mi01YWNlLTQ0YjUtYmMxYi0wODIzNzJhZDcwOWIiLCJhcHBpZGFjciI6IjEiLCJkZXZpY2VpZCI6ImEyN2FlNmI1LWQyODUtNDI0Ny1hZGIwLTdhMzYwM2NjNTc1NyIsImZhbWlseV9uYW1lIjoiQW5hcGFydGhpIiwiZ2l2ZW5fbmFtZSI6IkFydW4gS3VtYXIiLCJpcGFkZHIiOiI3My4xNTcuNDQuMTU3IiwibmFtZSI6IkFydW4gS3VtYXIgQW5hcGFydGhpIChaZW4zIEluZm9zb2x1dGlvbnMgQW1lcmljYSBJbmMpIiwib2lkIjoiOGY3OTQyNjgtZWNiNS00Y2QzLWI1NTctMzQ1YjY3MDE5MTU1Iiwib25wcmVtX3NpZCI6IlMtMS01LTIxLTIxNDY3NzMwODUtOTAzMzYzMjg1LTcxOTM0NDcwNy0yMzQyNzI1IiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDNCRkZEQTlCQUM3MEEiLCJyaCI6IjAuQVJvQXY0ajVjdkdHcjBHUnF5MTgwQkhiUjFJNWlqak9XclZFdkJzSUkzS3RjSnNhQUdNLiIsInNjcCI6IlVzZXIuUmVhZCIsInNpZ25pbl9zdGF0ZSI6WyJkdmNfbW5nZCIsImR2Y19jbXAiLCJkdmNfZG1qZCIsImttc2kiXSwic3ViIjoiQ0tMSlRZdU9KaWdvRmpkaFctckVQdVRHYUxEcHJ3a2NvWXVyZGpyNUZ4dyIsInRpZCI6IjcyZjk4OGJmLTg2ZjEtNDFhZi05MWFiLTJkN2NkMDExZGI0NyIsInVuaXF1ZV9uYW1lIjoidi1hcnVhbmFAbWljcm9zb2Z0LmNvbSIsInVwbiI6InYtYXJ1YW5hQG1pY3Jvc29mdC5jb20iLCJ1dGkiOiJfb1VTTmFycWswZWRtSWIyZG53LUFBIiwidmVyIjoiMS4wIiwieG1zX3RjZHQiOjEyODkyNDE1NDd9.PGLWcZcz-s1lZXCxvVLxz_sQtGmWpTGIo0kpc_smCL0kkffm_NvomEf20X0ND3EqlOTm1j4CNA-BKyJqPRQQ37UES9Hcm9Nk8gG2DCAz6oPo4Orl0eWOgjc-j-S0amYpQO5_T5UeuhPAMio9w5CtZg9JO77trrA_kjFoG15ICp4ocupNtEo9Mn4GnGDj1Dw4-G2k-UstQeCp7nII9E3ZGi-N_COdVSAX7WClW8nId_VWIfaNHfQid7GuVWuurRzEpCxVwcZkUnTMMTKZSPd67y0AVFU6U22Z_LGMz-_REMpCysxx_uv-vXHDSyU9yCm9Ddk0vK70CEeLVsCNHePIXg");
-                        },
-                        success: function (response) {
-                            if (response != null) {
-                                userobject = response;
-                                $("#username").html(userobject.displayName)
-                                Console.log(userobject);
-                            } else {
-                                alert("Something went wrong");
-                            }
-                        },
-                        error: function () {
-                            console.log("Failed");
-                        }
-                    });
+            accesstoken = 'eyJ0eXAiOiJKV1QiLCJub25jZSI6IlhuM1JUT1QyU21ucHZYTmFrbk1oMmZmaWdPTl9SU2sxSUdMVTVHekRTNFUiLCJhbGciOiJSUzI1NiIsIng1dCI6IkN0VHVoTUptRDVNN0RMZHpEMnYyeDNRS1NSWSIsImtpZCI6IkN0VHVoTUptRDVNN0RMZHpEMnYyeDNRS1NSWSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC83MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDcvIiwiaWF0IjoxNTg5OTAzNjk0LCJuYmYiOjE1ODk5MDM2OTQsImV4cCI6MTU4OTkwNzU5NCwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFVUUF1LzhQQUFBQUh1d01taFpnQ2NiMVZ6cVNjYXNVeDVOQ3BRRllENlFGMjBGYUpIa3VyeXQ1T05ONjZmYUFqaHpCNWNaTkd4NXJBY05Gdk5nV256MVE0TlgzOEF4ejFRPT0iLCJhbXIiOlsicnNhIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkdyYXBoIGV4cGxvcmVyIiwiYXBwaWQiOiJkZThiYzhiNS1kOWY5LTQ4YjEtYThhZC1iNzQ4ZGE3MjUwNjQiLCJhcHBpZGFjciI6IjAiLCJkZXZpY2VpZCI6ImEyN2FlNmI1LWQyODUtNDI0Ny1hZGIwLTdhMzYwM2NjNTc1NyIsImZhbWlseV9uYW1lIjoiQW5hcGFydGhpIiwiZ2l2ZW5fbmFtZSI6IkFydW4gS3VtYXIiLCJpcGFkZHIiOiI3My4xNTcuNDQuMTU3IiwibmFtZSI6IkFydW4gS3VtYXIgQW5hcGFydGhpIChaZW4zIEluZm9zb2x1dGlvbnMgQW1lcmljYSBJbmMpIiwib2lkIjoiOGY3OTQyNjgtZWNiNS00Y2QzLWI1NTctMzQ1YjY3MDE5MTU1Iiwib25wcmVtX3NpZCI6IlMtMS01LTIxLTIxNDY3NzMwODUtOTAzMzYzMjg1LTcxOTM0NDcwNy0yMzQyNzI1IiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDNCRkZEQTlCQUM3MEEiLCJyaCI6IjAuQVJvQXY0ajVjdkdHcjBHUnF5MTgwQkhiUjdYSWk5NzUyYkZJcUsyM1NOcHlVR1FhQUdNLiIsInNjcCI6IkNhbGVuZGFycy5SZWFkV3JpdGUgQ29udGFjdHMuUmVhZFdyaXRlIERldmljZU1hbmFnZW1lbnRBcHBzLlJlYWRXcml0ZS5BbGwgRGV2aWNlTWFuYWdlbWVudENvbmZpZ3VyYXRpb24uUmVhZC5BbGwgRGV2aWNlTWFuYWdlbWVudENvbmZpZ3VyYXRpb24uUmVhZFdyaXRlLkFsbCBEZXZpY2VNYW5hZ2VtZW50TWFuYWdlZERldmljZXMuUHJpdmlsZWdlZE9wZXJhdGlvbnMuQWxsIERldmljZU1hbmFnZW1lbnRNYW5hZ2VkRGV2aWNlcy5SZWFkLkFsbCBEZXZpY2VNYW5hZ2VtZW50TWFuYWdlZERldmljZXMuUmVhZFdyaXRlLkFsbCBEZXZpY2VNYW5hZ2VtZW50UkJBQy5SZWFkLkFsbCBEZXZpY2VNYW5hZ2VtZW50UkJBQy5SZWFkV3JpdGUuQWxsIERldmljZU1hbmFnZW1lbnRTZXJ2aWNlQ29uZmlnLlJlYWQuQWxsIERldmljZU1hbmFnZW1lbnRTZXJ2aWNlQ29uZmlnLlJlYWRXcml0ZS5BbGwgRGlyZWN0b3J5LkFjY2Vzc0FzVXNlci5BbGwgRGlyZWN0b3J5LlJlYWRXcml0ZS5BbGwgRmlsZXMuUmVhZFdyaXRlLkFsbCBHcm91cC5SZWFkV3JpdGUuQWxsIElkZW50aXR5Umlza0V2ZW50LlJlYWQuQWxsIE1haWwuUmVhZFdyaXRlIE1haWxib3hTZXR0aW5ncy5SZWFkV3JpdGUgTm90ZXMuUmVhZFdyaXRlLkFsbCBvcGVuaWQgUGVvcGxlLlJlYWQgcHJvZmlsZSBSZXBvcnRzLlJlYWQuQWxsIFNpdGVzLlJlYWRXcml0ZS5BbGwgVGFza3MuUmVhZFdyaXRlIFVzZXIuUmVhZEJhc2ljLkFsbCBVc2VyLlJlYWRXcml0ZSBVc2VyLlJlYWRXcml0ZS5BbGwgZW1haWwiLCJzaWduaW5fc3RhdGUiOlsiZHZjX21uZ2QiLCJkdmNfY21wIiwiZHZjX2RtamQiLCJrbXNpIl0sInN1YiI6IkNLTEpUWXVPSmlnb0ZqZGhXLXJFUHVUR2FMRHByd2tjb1l1cmRqcjVGeHciLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1bmlxdWVfbmFtZSI6InYtYXJ1YW5hQG1pY3Jvc29mdC5jb20iLCJ1cG4iOiJ2LWFydWFuYUBtaWNyb3NvZnQuY29tIiwidXRpIjoiMTl0U0lpLS1Ka2E4XzFLOWdTOE1BQSIsInZlciI6IjEuMCIsInhtc19zdCI6eyJzdWIiOiJ0T19XTjRTTk13amJTb2FOa1JBc1l2bnUwMEhWd0ZYOFdhQTFudnJuVTM0In0sInhtc190Y2R0IjoxMjg5MjQxNTQ3fQ.whRatrST2i6hgvu5RdqtJW9DgGoWViV52YDCjdpXMQ42guD52559rHz45-c7efjXTqxQFVKC-p3l1Lv3lGrdVe3BwcD9Jdp5F3j4CCxY69zFBszi-xebrtcrXr6cCFu_xtCTZf-QPrLrgyh4_OsVLJXqWWZhIu6brb2pAVMGK8i5R2Aj4aR83jJrw-fehlbsdm0u5IJK2G4mqgIQYNZI0Gp8L5tyuySupSnBE21BHGlenTvtaujAmWvEKe0B-4hTc2ElTnrW94nmr5gaxf8HrdQ1_sSXAFs8ozBoMH-6jbarjymyBcRjMXIiRakrFy8TmmRipC8fh6msW8BoeUToPA';
+            $.ajax({
+                url: "https://graph.microsoft.com/beta/users/" + userid,
+                type: "GET",
+                beforeSend: function (request) {
+                    request.setRequestHeader("Authorization", "Bearer " + accesstoken);
+                },
+                success: function (response) {
+                    if (response != null) {
+                        userobject = response;
+                        alert(userobject.displayName);
+                        $("#username").html(userobject.displayName)
+                        console.log(userobject);
+                    } else {
+                        alert("Something went wrong");
+                    }
+                },
+                error: function () {
+                    console.log("Failed");
+                }
+            });
         }
 
         submitHandler = (err, result) => {
