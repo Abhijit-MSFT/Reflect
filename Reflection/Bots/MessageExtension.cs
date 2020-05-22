@@ -145,7 +145,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     try
                     {
                         CardHelper cardhelper = new CardHelper(_configuration);
-                        taskInfo.postCreateBy = turnContext.Activity.From.Name;
+                        taskInfo.postCreateBy = turnContext.Activity.From.Name.Split(' ').FirstOrDefault();
                         taskInfo.postCreatedByEmail = await DBHelper.GetUserEmailId(turnContext);
                         taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
                         await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration);
