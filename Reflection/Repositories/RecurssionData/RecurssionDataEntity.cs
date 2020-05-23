@@ -36,7 +36,9 @@ namespace Reflection.Repositories.RecurssionData
         /// <summary>
         /// Gets or sets ExecutionTime.
         /// </summary>
-        public DateTime? ExecutionTime { get; set; }
+        public string ExecutionTime { get; set; }
+
+        public DateTime? RecurssionEndDate { get; set; }
 
     }
 

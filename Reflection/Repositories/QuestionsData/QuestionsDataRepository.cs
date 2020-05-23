@@ -29,12 +29,26 @@ namespace Reflection.Repositories.QuestionsData
         /// <param name=""></param>
         /// <returns>Questions which have default flag true</returns>
         /// 
-        public async Task<List<QuestionsDataEntity>> GetAllDefaultQuestions()
+        public async Task<List<QuestionsDataEntity>> GetAllDefaultQuestionsForUser(string userEmail)
         {
             try
             {
                 var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-                var result = allRows.Where(d => d.IsDefaultFlag == true || d.CreatedBy == "Arun Kumar Anaparthi (Zen3 Infosolutions America Inc)");
+                var result = allRows.Where(d => d.IsDefaultFlag == true || d.CreatedByEmail == userEmail);
+                return result.ToList();
+            }
+            catch (System.Exception e)
+            {
+                return null;
+            }
+        }
+
+        public async Task<List<QuestionsDataEntity>> GetQuestionsByQID(Guid? qID)
+        {
+            try
+            {
+                var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
+                var result = allRows.Where(d => d.IsDefaultFlag == true || d.QuestionID == qID);
                 return result.ToList();
             }
             catch (System.Exception e)
@@ -50,11 +64,16 @@ namespace Reflection.Repositories.QuestionsData
             return result ?? null;
         }
 
-        public async Task<bool> IsQuestionAlreadtPresent(string question)
+        public async Task<bool> IsQuestionAlreadtPresent(string question, string email)
         {
             var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-            bool result = allRows.Any(c => c.Question == question);
-            return result;
+            //var result = allRows.Any(c => c.Question == question && c.IsDefaultFlag == true ? true : c.CreatedByEmail == email);
+            var result = allRows.Where(c => c.Question == question);
+
+            if (result.Any(c => c.IsDefaultFlag == true || c.CreatedByEmail == email))
+                return true;
+
+            return false;
         }
 
     }

@@ -82,10 +82,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
-        [Route("api/GetAllDefaultQuestions")]
-        public async Task<List<QuestionsDataEntity>> GetAllDefaultQuestions()
+        [Route("api/GetAllDefaultQuestions/{userName}")]
+        public async Task<List<QuestionsDataEntity>> GetAllDefaultQuestions(string userName)
         {
-            var questions = await _repository.GetAllDefaultQuestions();
+            var questions = await _repository.GetAllDefaultQuestionsForUser(userName);
             return questions;
         }
 

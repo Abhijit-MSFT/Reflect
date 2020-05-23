@@ -117,6 +117,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)        
         {
+
+
             ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
 
             return new TaskModuleResponse
@@ -136,7 +138,17 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
+            TaskInfo taskInfo = new TaskInfo();
+            try
+            {
+                taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+            
             switch (taskInfo.action)
             {
                 case "reflection":
@@ -144,20 +156,31 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 case "sendAdaptiveCard":
                     try
                     {
+                        var name = (turnContext.Activity.From.Name).Split();
                         CardHelper cardhelper = new CardHelper(_configuration);
-                        taskInfo.postCreateBy = turnContext.Activity.From.Name.Split(' ').FirstOrDefault();
+                        taskInfo.postCreateBy = name[0] + ' ' + name[1];
                         taskInfo.postCreatedByEmail = await DBHelper.GetUserEmailId(turnContext);
                         taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
+                        taskInfo.postSendNowFlag  = (taskInfo.executionTime == "Send now") ? true :  false;
                         await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration);
                         if (taskInfo.postSendNowFlag == true)
                         {
+                            var typingActivity = MessageFactory.Text(string.Empty);
+                            typingActivity.Type = ActivityTypes.Typing;
+                            await turnContext.SendActivityAsync(typingActivity);
                             var adaptiveCard = cardhelper.CreateNewPostCard(taskInfo);
                             var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
                             await turnContext.SendActivityAsync(message, cancellationToken);                         
                         }
+                        else
+                        {
+                            var reply = MessageFactory.Text(string.Empty);
+                            reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals";
+                            await turnContext.SendActivityAsync(reply);
+                        }
                         return null;
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
 
                         throw;

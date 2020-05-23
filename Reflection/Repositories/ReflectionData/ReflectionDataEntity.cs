@@ -40,6 +40,7 @@ namespace Reflection.Repositories.ReflectionData
         /// </summary>
         public Guid? RecurrsionID { get; set; }
 
+
         /// <summary>
         /// Gets or sets Message ID.
         /// </summary>

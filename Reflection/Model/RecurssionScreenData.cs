@@ -14,6 +14,7 @@ namespace Reflection.Model
         public string Privacy { get; set; }
         public string Question { get; set; }
         public DateTime? ExecutionDate { get; set; }
-        public DateTime? ExecutionTime { get; set; }
+        public string ExecutionTime { get; set; }
+        public string RecurssionType { get; set; }
     }
 }

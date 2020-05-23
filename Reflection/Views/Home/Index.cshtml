@@ -15,7 +15,6 @@
     <title>Reflect</title>
 
 </head>
-
 <body>
     <div class="container">
         <div class="" role="document">
@@ -40,17 +39,27 @@
                     <div class="post">
                         <div class="row custom-rw">
                             <div class="col-6 custom-col">
-                                <div class="date" id="execdate">
-                                    <div class="blk-head">Date</div>
-                                    <input type="date" alt="date" class="date-ip htmlEle" />
+                                <div class="date">
+                                    <div class="blk-head" >Date</div>
+                                    <input type="date" alt="date" class="date-ip htmlEle" id="execdate"/>
                                     <span class="date-icon"></span>
                                 </div>
                             </div>
+                            @*<div class="col-6 custom-col">
+            <div class="blk-head">Time</div>
+            <div class="time-ip htmlEle">
+                Send now
+                <span class="time-icon"></span>
+            </div>
+        </div>*@
                             <div class="col-6 custom-col">
-                                <div class="blk-head">Time</div>
-                                <div class="time-ip htmlEle">
-                                    Send now
-                                    <span class="time-icon"></span>
+                                <div class="blk-head rec">Time</div>
+                                <div class="selc">
+                                    <select class="cs htmlEle" id="exectime">
+                                        <option value="Send now" selected>Send now</option>
+                                        <option value="Send later" >Send later</option>
+                                    </select>
+                                    <span class="sel-chev2"></span>
                                 </div>
                             </div>
                             <div class="col-6 custom-col">
@@ -138,8 +147,8 @@
             })
             var blockdata = ""
             $.ajax({
-                type: 'GET',
-                url: 'api/GetAllDefaultQuestions',
+                type: 'GET',                
+                url: 'api/GetAllDefaultQuestions/' + "surbhi@adftclab.in", //send user name as parameter - remove this hard coded
                 success: function (data) {
                     questions = data;
                     data.forEach(x => {
@@ -190,10 +199,11 @@
                 question: $('#questions-list').val(),
                 questionID: questionid,
                 privacy: $('#privacy').val(),
-                ExecutionDate: $('#execdate').val(),
-                ExecutionTime: $('#exectime').val(),
+                executionDate: $('#execdate').val(),
+                executionTime: $('#exectime').val(),
                 postDate: "",
-                postSendNowFlag: true,
+                isDefaultQuestion: false,
+                //postSendNowFlag: true,
                 recurssionType: $('#recurrance').val(),
                 action: "sendAdaptiveCard"
             };

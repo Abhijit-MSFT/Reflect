@@ -1,4 +1,5 @@
 ﻿using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Teams;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
@@ -62,8 +63,14 @@ namespace Reflection.Helper
                     IsActive = taskInfo.IsActive
                 };
                 await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
+
                 await SaveQuestionsDataAsync(configuration, taskInfo);
-                await SaveRecurssionDataAsync(configuration, taskInfo);   // add logic to check if reflection is recurrent             
+
+                if(!(taskInfo.recurssionType == "Does not repeat" && taskInfo.postSendNowFlag == true))
+                {
+                    await SaveRecurssionDataAsync(configuration, taskInfo);
+                }
+                    
             }
         }
 
@@ -77,20 +84,23 @@ namespace Reflection.Helper
         {
             QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
             var rowKey = Guid.NewGuid();
-
-            QuestionsDataEntity questionEntity = new QuestionsDataEntity
+            
+            if (await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question, taskInfo.postCreatedByEmail) == false)
             {
-                QuestionID = taskInfo.questionID,
-                PartitionKey = PartitionKeyNames.QuestionsDataTable.QuestionsDataPartition,
-                RowKey = rowKey.ToString(),
-                Question = taskInfo.question,
-                QuestionCreatedDate = DateTime.Now,
-                IsDefaultFlag = false, //handle default flag logic
-                CreatedBy = taskInfo.postCreateBy,
-                CreatedByEmail = taskInfo.postCreatedByEmail
-            };
+                QuestionsDataEntity questionEntity = new QuestionsDataEntity
+                {
+                    QuestionID = taskInfo.questionID,
+                    PartitionKey = PartitionKeyNames.QuestionsDataTable.QuestionsDataPartition,
+                    RowKey = rowKey.ToString(),
+                    Question = taskInfo.question,
+                    QuestionCreatedDate = DateTime.Now,
+                    IsDefaultFlag = false, //handle default flag logic
+                    CreatedBy = taskInfo.postCreateBy,
+                    CreatedByEmail = taskInfo.postCreatedByEmail
+                };
 
-            await questionsDataRepository.CreateOrUpdateAsync(questionEntity);
+                await questionsDataRepository.CreateOrUpdateAsync(questionEntity);
+            }            
         }
 
         /// <summary>
@@ -102,20 +112,25 @@ namespace Reflection.Helper
         public static async Task SaveRecurssionDataAsync(IConfiguration configuration, TaskInfo taskInfo)
         {
             RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
-            var rowKey = Guid.NewGuid();
+            var rowKey = Guid.NewGuid();           
 
             RecurssionDataEntity recurssionEntity = new RecurssionDataEntity
             {
                 RecurssionID = taskInfo.recurssionID,
-                PartitionKey = PartitionKeyNames.RecurssionDataTable.RecurssionDataPartition, // read it from json
+                PartitionKey = PartitionKeyNames.RecurssionDataTable.RecurssionDataPartition,
                 RowKey = rowKey.ToString(),
                 ReflectionID = taskInfo.reflectionID,
                 RecursstionType = taskInfo.recurssionType,
                 CreatedDate = DateTime.Now,
                 ExecutionDate = taskInfo.executionDate,
-                ExecutionTime = taskInfo.executionTime
+                ExecutionTime = taskInfo.executionTime,
+                RecurssionEndDate = taskInfo.executionDate.AddDays(30)
+                
             };
+            
             await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
+          
+         
         }
 
         /// <summary>
@@ -165,20 +180,6 @@ namespace Reflection.Helper
             }
         }
 
-        //public static async Task<string> GetUserRole(ITurnContext<IInvokeActivity> turnContext)
-        //{
-        //    try
-        //    {
-        //        IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
-        //        var members = await connector.Conversations.GetConversationMembersAsync(turnContext.Activity.Conversation.Id);
-
-        //        //return AsTeamsChannelAccounts(members).FirstOrDefault(m => m.Id == turnContext.Activity.From.Id).UserPrincipalName;
-        //    }
-        //    catch(Exception ex)
-        //    {
-        //        return "";
-        //    }
-        //}
 
         /// <summary>
         /// Add Reflection data in Table Storage.
@@ -194,19 +195,6 @@ namespace Reflection.Helper
             }
         }
 
-        //public static async Task<List<string>> GetTeamMember(ITurnContext<IInvokeActivity> turnContext)
-        //{
-        //    IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
-        //    var members = await connector.Conversations.GetConversationMembersAsync(turnContext.Activity.Conversation.Id);
-
-        //    return members.ToList();
-        //}
-
-        //public static async Task<List<ReflectionDataEntity>> GetAllReflection(IConfiguration configuration)
-        //{
-        //    RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
-        //    var allReflections = recurssionDataRepository.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
-        //}
 
         /// <summary>
         /// Add Reflection data in Table Storage.
@@ -224,12 +212,13 @@ namespace Reflection.Helper
             FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(configuration);
             ViewReflectionsEntity viewReflectionsEntity = new ViewReflectionsEntity();
             QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
-            //Guid gID = Guid.Parse("933a3991-29e9-4391-bdce-a81096b23c20"); for testing purpose
+            
 
             //Get reflection data
             ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(reflectionId) ?? null;
+            //Get all the feedback of the reflection by RefID
             Dictionary<int, List<string>> feedbackData = await feedbackDataRepository.GetReflectionFeedback(reflectionId) ?? null;
-            List<QuestionsDataEntity> questions = await questionsDataRepository.GetAllDefaultQuestions() ?? null;
+            List<QuestionsDataEntity> questions = await questionsDataRepository.GetQuestionsByQID(refData.QuestionID) ?? null;
 
             viewReflectionsEntity.ReflectionData = refData;
             viewReflectionsEntity.FeedbackData = feedbackData;
