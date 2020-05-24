@@ -21,6 +21,7 @@
 </head>
 
 <body>
+    <div class="loader"></div>
     <div class="modal2">
         <!-- Modal -->
         <div role="document">
@@ -34,7 +35,6 @@
                     </div>
                     <div class="feeling-abt" id="questiontitle">How are you feeling about the test today?</div>
                     <div class="review-blk" id="reviewblock">
-
                     </div>
                 </div>
                 @*<div class="mf">
@@ -59,6 +59,8 @@
                         </div>
                     </div>
                 </div>*@
+
+
         </div>
     </div>
 
@@ -68,10 +70,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
+            $(".loader").show();
             $.ajax({
                 type: 'GET',
                 url: '/api/GetReflections/' + $("#reflectionid").val(),
                 success: function (data) {
+                    $(".loader").hide();
                     if (data) {
                         data = JSON.parse(data);
                     }
@@ -133,7 +137,7 @@
                         $("#reviewblock").html(blockdata);
                         for (i = 1; i <= 5; i++) {
                             $(".custom-profle-card" + i).css("display", "none");
-                            $(".smile-desc" + i).on('click mouseover',function (event) {
+                            $(".smile-desc" + i).on('click mouseover', function (event) {
                                 $(".custom-profle-card" + event.currentTarget.className[10]).toggle();
                             })
 

@@ -21,77 +21,77 @@
         <div class="" role="document">
             <div class="modal-content mc">
                 <div class="modal-body modal-mb">
-                    <div class="question">Question</div>
-                    <div class="custom-in">
-                        <input list="questions" name="questions" id="questions-list" class="input-select" placeholder="Please select or enter question" onchange="getSelectedOption(this)" />
-                        <datalist id="questions" class="htmlEle">
-                        </datalist>
-                        <span class="sel-chev"></span>
-                    </div>
+                        <div class="question">Question</div>
+                        <div class="custom-in">
+                            <input list="questions" name="questions" id="questions-list" class="input-select" placeholder="Please select or enter question" onchange="getSelectedOption(this)" />
+                            <datalist id="questions" class="htmlEle" requried>
+                            </datalist>
+                            <span class="sel-chev"></span>
+                        </div>
 
-                    <div class="privacy">Privacy</div>
-                    <div class="input-group custom-in">
-                        <select class="cs htmlEle" id="privacy" onchange="setPrivacy()">
-                            <option value="public" selected>Public - Names will be displayed with responses</option>
-                            <option value="anonymous">Anonymous - Names will be omitted from responses</option>
-                        </select>
-                        <span class="sel-chev3"></span>
-                    </div>
-                    <div class="post">
-                        <div class="row custom-rw">
-                            <div class="col-6 custom-col">
-                                <div class="date" id="execdate">
-                                    <div class="blk-head">Date</div>
-                                    <input type="date" alt="date" class="date-ip htmlEle" />
-                                    <span class="date-icon"></span>
+                        <div class="privacy">Privacy</div>
+                        <div class="input-group custom-in">
+                            <select class="cs htmlEle" id="privacy" onchange="setPrivacy()">
+                                <option value="public" selected>Public - Names will be displayed with responses</option>
+                                <option value="anonymous">Anonymous - Names will be omitted from responses</option>
+                            </select>
+                            <span class="sel-chev3"></span>
+                        </div>
+                        <div class="post">
+                            <div class="row custom-rw">
+                                <div class="col-6 custom-col">
+                                    <div class="date" id="execdate">
+                                        <div class="blk-head" id="date">Date</div>
+                                        <input type="date" alt="date" class="date-ip htmlEle" />
+                                        <span class="date-icon"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-6 custom-col">
-                                <div class="blk-head">Time</div>
-                                <div class="time-ip htmlEle">
-                                    Send now
-                                    <span class="time-icon"></span>
+                                <div class="col-6 custom-col">
+                                    <div class="blk-head">Time</div>
+                                    <div class="time-ip htmlEle">
+                                        Send now
+                                        <span class="time-icon"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-6 custom-col">
-                                <div class="blk-head rec">Recurrence</div>
-                                <div class="selc">
-                                    <select class="cs htmlEle" id="recurrance">
-                                        <option value="Does not repeat" selected>Does not repeat </option>
-                                        <option value="Every weekday">Every weekday (Mon-Fri)</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Monthly">Monthly</option>
-                                        <option value="Custom">Custom</option>
-                                    </select>
-                                    <span class="sel-chev2"></span>
+                                <div class="col-6 custom-col">
+                                    <div class="blk-head rec">Recurrence</div>
+                                    <div class="selc">
+                                        <select class="cs htmlEle" id="recurrance">
+                                            <option value="Does not repeat" selected>Does not repeat </option>
+                                            <option value="Every weekday">Every weekday (Mon-Fri)</option>
+                                            <option value="Weekly">Weekly</option>
+                                            <option value="Monthly">Monthly</option>
+                                            <option value="Custom">Custom</option>
+                                        </select>
+                                        <span class="sel-chev2"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="prev">Preview</div>
-                    <div class="br-blk">
-                        <div class="created">Posted by <span id="usertext"></span></div>
-                        <span class="divider">|</span>
-                        <div class="reflections">Reflections are<span id="privacytext">  </span></div>
-                        <div class="feeling" id="selectedTxt"></div>
-                        <div class="smiles">
-                            <span class="ava">
-                                <img src="~/Images/1.png" alt="smile1" class="avatars">
-                            </span>
-                            <span class="ava">
-                                <img src="~/Images/2.png" alt="smile2" class="avatars">
-                            </span>
-                            <span class="ava">
-                                <img src="~/Images/3.png" alt="smile3" class="avatars">
-                            </span>
-                            <span class="ava">
-                                <img src="~/Images/4.png" alt="smile4" class="avatars">
-                            </span>
-                            <span class="ava">
-                                <img src="~/Images/5.png" alt="smile5" class="avatars">
-                            </span>
+                        <div class="prev">Preview</div>
+                        <div class="br-blk">
+                            <div class="created">Posted by <span id="usertext"></span></div>
+                            <span class="divider">|</span>
+                            <div class="reflections">Reflections are<span id="privacytext">  </span></div>
+                            <div class="feeling" id="selectedTxt"></div>
+                            <div class="smiles">
+                                <span class="ava">
+                                    <img src="~/Images/1.png" alt="smile1" class="avatars">
+                                </span>
+                                <span class="ava">
+                                    <img src="~/Images/2.png" alt="smile2" class="avatars">
+                                </span>
+                                <span class="ava">
+                                    <img src="~/Images/3.png" alt="smile3" class="avatars">
+                                </span>
+                                <span class="ava">
+                                    <img src="~/Images/4.png" alt="smile4" class="avatars">
+                                </span>
+                                <span class="ava">
+                                    <img src="~/Images/5.png" alt="smile5" class="avatars">
+                                </span>
+                            </div>
                         </div>
-                    </div>
                 </div>
                 <div class="mf">
                     <span class="clk"></span>
@@ -200,9 +200,18 @@
             taskInfo.card = "";
             taskInfo.height = "medium";
             taskInfo.width = "medium";
-            microsoftTeams.tasks.submitTask(taskInfo);
+
+            if (!$('#questions-list').val()) {
+                alert('Please select '+ $('.question').text());
+            }
+            else if (!$('.date-ip').val()) {
+                alert('Please select ' + $('#date').text());
+            }
+            else {
+                microsoftTeams.tasks.submitTask(taskInfo);
+            }
             return true;
-        };
+        }; 
 
         function getSelectedOption(event) {
             $('#selectedTxt').html($('#questions-list').val())

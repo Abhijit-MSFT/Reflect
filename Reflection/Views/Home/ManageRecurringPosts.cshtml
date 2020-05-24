@@ -21,10 +21,10 @@
                 <div class="modal-mb-sc2">
                     @*<div class="recurring">Recurring posts</div>*@
                     @*<div class="recu-desc">
-                        View and manage recurring posts below. Previous posts will not be affected
-                        and any changes will automatically apply only
-                        to future posts.
-                    </div>*@
+                            View and manage recurring posts below. Previous posts will not be affected
+                            and any changes will automatically apply only
+                            to future posts.
+                        </div>*@
                     <table class="table custom-tb">
                         <thead>
                             <tr>
@@ -40,7 +40,7 @@
                 <div class="mf">
                     <div class="float-left">
                         <span class="left-chev"></span>
-                       Back
+                        Back
                     </div>
                 </div>
             </div>
@@ -58,28 +58,33 @@
                 url: 'api/GetRecurssions',
                 success: function (data) {
                     recurssions = JSON.parse(JSON.parse(data).recurssions);
-                    $("#questioncount").html("("+recurssions.length+")");
+                    $("#questioncount").html("(" + recurssions.length + ")");
                     daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                     var sendpostat = "";
                     recurssions.forEach(x => {
                         if (x.RecurssionType == "Monthly") {
-                            sendpostat = "Every Month " + new Date(x.RefCreatedDate).getDate()+" at "+new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
+                            sendpostat = "Every Month " + new Date(x.RefCreatedDate).getDate() + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
                         }
                         else if (x.RecurssionType == "Weekly") {
                             sendpostat = "Every Week " + daysInWeek[new Date(x.RefCreatedDate).getDay()] + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
                         }
                         else {
-                            sendpostat="Every Week Day"
+                            sendpostat = "Every Week Day"
                         }
-                        blockdata = blockdata + '<tr><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td>' + x.Privacy + '</td> <td class="date-day">'+sendpostat+'</td><td class="delete-icon"></td></tr>';
+                        blockdata = blockdata + '<tr><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td>' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="delete-icon" onclick="Deletef()"></td></tr>';
                     })
                     $("#tablebody").html(blockdata);
-
 
                 }
             });
         });
+
+       function Deletef(){
+            alert("Delete");
+        };
+
     </script>
+   
 </body>
 
 
