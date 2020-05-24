@@ -37,6 +37,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             services.AddSingleton<ReflectionDataRepository>();
             // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
             services.AddTransient<IBot, MessageExtension>();
+            services.AddApplicationInsightsTelemetry();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

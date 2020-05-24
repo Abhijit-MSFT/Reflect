@@ -32,7 +32,7 @@
                         <span class="divider">|</span>
                         <div class="reflections-sc2">Reflections are <span id="privacy"></span></div>
                     </div>
-                    @*<div class="feeling-abt" id="questiontitle">How are you feeling about the test today?</div>*@
+                    <div class="feeling-abt" id="questiontitle">How are you feeling about the test today?</div>
                     <div class="review-blk" id="reviewblock">
 
                     </div>
@@ -67,7 +67,27 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
+        let accesstoken;
         $(document).ready(function () {
+            $.ajax({
+                url: "/api/GetAccessTokenAsync",
+                type: "Get",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json'
+                },
+                success: function (token) {
+                    accesstoken = token;
+                },
+                complete: function () {
+                    if (accesstoken !== undefined && accesstoken !== null && accesstoken !== '') {
+                        GetReflections();
+                    }
+                }
+            });
+        });
+
+        function GetReflections() {
             $.ajax({
                 type: 'GET',
                 url: '/api/GetReflections/' + $("#reflectionid").val(),
@@ -76,6 +96,7 @@
                         data = JSON.parse(data);
                     }
                     if (data && data.feedback && data.reflection && data.question) {
+                        debugger;
                         var feedback = JSON.parse(data.feedback);
                         var reflection = JSON.parse(data.reflection);
                         var question = JSON.parse(data.question)
@@ -94,7 +115,7 @@
                         for (i = 1; i <= 5; i++) {
                             if (Object.keys(feedback).indexOf(i.toString()) !== -1) {
                                 datacount = feedback[i].length;
-                                description = reflection.Privacy == "anonymous" ? "" : feedback[i].join(',');
+                                description = reflection.Privacy == "anonymous" ? "" : feedback[i].map(x => x.FullName).join(',');
                                 width = ((datacount * 100) / totalcount).toFixed(0);
 
                             }
@@ -123,23 +144,36 @@
                                 color = "dark-red";
                                 img = "5.png";
                             }
-                            blockdata = blockdata + '<div class="media"><img src="../Images/' + img + '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' + color + '" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:' + width.toString() + '%"></div></div><div class="smile-desc' + i + '">' + description + '</div>';
+                            blockdata = blockdata + '<div class="media"><img src="../Images/' + img + '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' + color + '" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:' + width.toString() + '%"></div></div>';
 
                             if (description) {
-                                blockdata = blockdata + '<div class="card custom-profle-card' + i + '"> <div class="card-body"> <img src="../Images/Avatar.png" alt="avatar" class="profile-pic" /> <div class="profile-name">Grace Taylor</div> <div class="start-chat"> <span class="chat-icon"></span> <span class="st-chat-txt">Start a chat</span> </div> <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt">grace.taylor@contososd.edu</span> </div> </div> </div>'
+                                feedback[i].forEach(data => {
+                                    blockdata = blockdata + '<div class="smile-desc' + data.FeedbackID + '">' + data.FullName + '</div><div class="card custom-profle-card' + data.FeedbackID + '"> <div class="card-body"> <img src="' + GetPhoto(data.FeedbackGivenBy, accesstoken) + '" alt="avatar" class="profile-pic" /> <div class="profile-name">"' + data.FullName + '"</div > <div class="start-chat" onclick="microsoftTeams.executeDeepLink(https://teams.microsoft.com/l/chat/0/0?users=AllanD@M365x520260.OnMicrosoft.com)"> <span class="chat-icon"></span> <span class="st-chat-txt">Start a chat</span> </div> <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt">' + data.FeedbackGivenBy + '</span> </div> </div > </div > '
+                                })
                             }
                             blockdata = blockdata + '</div><div class="cnt-box">' + width + '%<span class="cnt">(' + datacount + ')</span></div ></div >';
                         }
                         $("#reviewblock").html(blockdata);
-                        for (i = 1; i <= 5; i++) {
-                            $(".custom-profle-card" + i).css("display", "none");
-                            $(".smile-desc" + i).on('click mouseover',function (event) {
-                                $(".custom-profle-card" + event.currentTarget.className[10]).toggle();
-                            })
+                        for (m = 1; m <= 5; m++) {
+                            if (feedback[m] && feedback[m].length) {
+                                feedback[m].forEach(data1 => {
+                                    $(".custom-profle-card" + data1.FeedbackID).css("display", "none");
+                                    $(".smile-desc" + data1.FeedbackID).on('click mouseover', function (event) {
+                                        var number = event.currentTarget.className.replace("smile-desc", "");
+                                        var userimg = GetPhoto(number, accesstoken);
+                                        $(".custom-profle-card" + number + ".profile-pic").attr("src", userimg)
+                                        $(".custom-profle-card" + number).toggle();
 
-                            $(".smile-desc" + i).mouseleave(function () {
-                                $(".custom-profle-card" + event.currentTarget.className[10]).toggle();
-                            })
+                                    })
+
+                                    $(".smile-desc" + data1.FeedbackID).mouseleave(function () {
+                                        var number = event.currentTarget.className.replace("smile-desc", "");
+                                        $(".custom-profle-card" + number).toggle();
+                                    })
+
+                                })
+                            }
+
                         }
                     }
                     else {
@@ -147,7 +181,29 @@
                     }
                 }
             });
-        });
+        }
+
+        function GetPhoto(userid, accesstoken) {
+            var profilepath = "";
+            $.ajax({
+                url: "/ProfilePhoto",
+                data: { 'token': accesstoken, 'userid': userid },
+                type: "GET",
+                async: false,
+                success: function (response) {
+                    if (response !== null) {
+                        profilepath = response;
+                    } else {
+                        alert("Something went wrong");
+                    }
+                },
+                error: function () {
+                    console.log("Failed");
+                }
+            });
+            return profilepath;
+        }
+
     </script>
 </body>
 

@@ -17,31 +17,20 @@ using AdaptiveCards;
 using Reflection.Repositories.FeedbackData;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.ReflectionData;
-using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Extensions.Logging;
-using Reflection.Bots;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
-    //public class MessageExtension<T> : TeamsActivityHandler where T : Dialog
-    public class MessageExtension : TeamsActivityHandler 
+    public class MessageExtension : TeamsActivityHandler
     {
         private readonly IConfiguration _configuration;
-
+        //private readonly FeedbackDataRepository feedbackDataRepository;
         public MessageExtension(IConfiguration configuration)
         {
             _configuration = configuration;
-
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-
-            //Logger.LogInformation("Running dialog with Message Activity.");
-
-            //// Run the Dialog with the new message Activity.
-            //await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
-
             CardHelper cardhelper = new CardHelper(_configuration);
 
             FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration);
@@ -53,8 +42,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                 if (response.type == "saveFeedback")
                 {
-                    
-                    response.userName = turnContext.Activity.From.Name;
+                    var name = (turnContext.Activity.From.Name).Split();
+                    response.userName  = name[0] + ' ' + name[1];
                     response.emailId = await DBHelper.GetUserEmailId(turnContext);
 
                     //Check if this is user's second feedback
@@ -73,7 +62,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     {
                         //Get reflect data to check if mseeage id is present - if not update it
                         ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
-                        Dictionary<int, List<string>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
+                        Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
                         var adaptiveCard = cardhelper.FeedBackCard(feedbacks, response.reflectionId);
                         
                         Attachment attachment = new Attachment()
@@ -103,9 +92,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         //messageid = null;
                         Console.WriteLine(e.Message.ToString());
                     }
-
-
-
                 }               
             }
             else
@@ -115,10 +101,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             }
         }
 
-        protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)        
+        protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
+        
         {
-
-
             ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
 
             return new TaskModuleResponse
@@ -138,17 +123,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            TaskInfo taskInfo = new TaskInfo();
-            try
-            {
-                taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
-            }
-            catch (Exception e)
-            {
+            TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
 
-                throw;
-            }
-            
             switch (taskInfo.action)
             {
                 case "reflection":
@@ -161,7 +137,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         taskInfo.postCreateBy = name[0] + ' ' + name[1];
                         taskInfo.postCreatedByEmail = await DBHelper.GetUserEmailId(turnContext);
                         taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
-                        taskInfo.postSendNowFlag  = (taskInfo.executionTime == "Send now") ? true :  false;
+                        taskInfo.postSendNowFlag = (taskInfo.executionTime == "Send now") ? true : false;
                         await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration);
                         if (taskInfo.postSendNowFlag == true)
                         {
@@ -170,7 +146,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             await turnContext.SendActivityAsync(typingActivity);
                             var adaptiveCard = cardhelper.CreateNewPostCard(taskInfo);
                             var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
-                            await turnContext.SendActivityAsync(message, cancellationToken);                         
+                            await turnContext.SendActivityAsync(message, cancellationToken);
                         }
                         else
                         {
@@ -209,8 +185,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            //there are 3 types of user roles available Admin - User - Guest
-            //var role = await DBHelper.GetUserEmailId(turnContext);
             string url = this._configuration["BaseUri"];
             if (action.MessagePayload != null)
                 url = this._configuration["BaseUri"] + "/ManageRecurringPosts";            
