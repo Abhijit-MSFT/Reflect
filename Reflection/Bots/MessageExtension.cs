@@ -42,8 +42,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                 if (response.type == "saveFeedback")
                 {
-                    
-                    response.userName = turnContext.Activity.From.Name;
+                    var name = (turnContext.Activity.From.Name).Split();
+                    response.userName  = name[0] + ' ' + name[1];
                     response.emailId = await DBHelper.GetUserEmailId(turnContext);
 
                     //Check if this is user's second feedback
@@ -62,7 +62,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     {
                         //Get reflect data to check if mseeage id is present - if not update it
                         ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
-                        Dictionary<int, List<string>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
+                        Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
                         var adaptiveCard = cardhelper.FeedBackCard(feedbacks, response.reflectionId);
                         
                         Attachment attachment = new Attachment()
@@ -92,9 +92,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         //messageid = null;
                         Console.WriteLine(e.Message.ToString());
                     }
-
-
-
                 }               
             }
             else
@@ -127,6 +124,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
             TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
+
             switch (taskInfo.action)
             {
                 case "reflection":
@@ -134,20 +132,31 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 case "sendAdaptiveCard":
                     try
                     {
+                        var name = (turnContext.Activity.From.Name).Split();
                         CardHelper cardhelper = new CardHelper(_configuration);
-                        taskInfo.postCreateBy = turnContext.Activity.From.Name.Split(' ').FirstOrDefault();
+                        taskInfo.postCreateBy = name[0] + ' ' + name[1];
                         taskInfo.postCreatedByEmail = await DBHelper.GetUserEmailId(turnContext);
                         taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
+                        taskInfo.postSendNowFlag = (taskInfo.executionTime == "Send now") ? true : false;
                         await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration);
                         if (taskInfo.postSendNowFlag == true)
                         {
+                            var typingActivity = MessageFactory.Text(string.Empty);
+                            typingActivity.Type = ActivityTypes.Typing;
+                            await turnContext.SendActivityAsync(typingActivity);
                             var adaptiveCard = cardhelper.CreateNewPostCard(taskInfo);
                             var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
-                            await turnContext.SendActivityAsync(message, cancellationToken);                         
+                            await turnContext.SendActivityAsync(message, cancellationToken);
+                        }
+                        else
+                        {
+                            var reply = MessageFactory.Text(string.Empty);
+                            reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals";
+                            await turnContext.SendActivityAsync(reply);
                         }
                         return null;
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
 
                         throw;

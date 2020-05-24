@@ -1,4 +1,5 @@
 ﻿using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Teams;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
@@ -39,6 +40,10 @@ namespace Reflection.Helper
             {
                 taskInfo.reflectionID = Guid.NewGuid();
                 taskInfo.recurssionID = Guid.NewGuid();
+                if (taskInfo.questionID == null)
+                {
+                    taskInfo.questionID = Guid.NewGuid();
+                }
                 var rowKey = Guid.NewGuid();
 
                 ReflectionDataEntity reflectEntity = new ReflectionDataEntity
@@ -58,13 +63,13 @@ namespace Reflection.Helper
                     IsActive = taskInfo.IsActive
                 };
                 await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
-                //if(!await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question))
-                if (taskInfo.questionID == null)
+
+                await SaveQuestionsDataAsync(configuration, taskInfo);
+
+                if (!(taskInfo.recurssionType == "Does not repeat" && taskInfo.postSendNowFlag == true))
                 {
-                    taskInfo.questionID = Guid.NewGuid();
-                    await SaveQuestionsDataAsync(configuration, taskInfo);
+                    await SaveRecurssionDataAsync(configuration, taskInfo);
                 }
-                await SaveRecurssionDataAsync(configuration, taskInfo);   // add logic to check if reflection is recurrent             
             }
         }
 
@@ -79,18 +84,22 @@ namespace Reflection.Helper
             QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
             var rowKey = Guid.NewGuid();
 
-            QuestionsDataEntity questionEntity = new QuestionsDataEntity
+            if (await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question, taskInfo.postCreatedByEmail) == false)
             {
-                QuestionID = taskInfo.questionID,
-                PartitionKey = PartitionKeyNames.QuestionsDataTable.QuestionsDataPartition,
-                RowKey = rowKey.ToString(),
-                Question = taskInfo.question,
-                QuestionCreatedDate = DateTime.Now,
-                IsDefaultFlag = false, //handle default flag logic
-                CreatedBy = taskInfo.postCreateBy
-            };
+                QuestionsDataEntity questionEntity = new QuestionsDataEntity
+                {
+                    QuestionID = taskInfo.questionID,
+                    PartitionKey = PartitionKeyNames.QuestionsDataTable.QuestionsDataPartition,
+                    RowKey = rowKey.ToString(),
+                    Question = taskInfo.question,
+                    QuestionCreatedDate = DateTime.Now,
+                    IsDefaultFlag = false, //handle default flag logic
+                    CreatedBy = taskInfo.postCreateBy,
+                    CreatedByEmail = taskInfo.postCreatedByEmail
+                };
 
-            await questionsDataRepository.CreateOrUpdateAsync(questionEntity);
+                await questionsDataRepository.CreateOrUpdateAsync(questionEntity);
+            }
         }
 
         /// <summary>
@@ -107,15 +116,20 @@ namespace Reflection.Helper
             RecurssionDataEntity recurssionEntity = new RecurssionDataEntity
             {
                 RecurssionID = taskInfo.recurssionID,
-                PartitionKey = PartitionKeyNames.RecurssionDataTable.RecurssionDataPartition, // read it from json
+                PartitionKey = PartitionKeyNames.RecurssionDataTable.RecurssionDataPartition,
                 RowKey = rowKey.ToString(),
                 ReflectionID = taskInfo.reflectionID,
                 RecursstionType = taskInfo.recurssionType,
                 CreatedDate = DateTime.Now,
-                ExecutionDate = taskInfo.executionDate,
-                ExecutionTime = taskInfo.executionTime
+                //ExecutionDate = taskInfo.executionDate,
+                ExecutionTime = taskInfo.executionTime,
+                //RecurssionEndDate = taskInfo.executionDate.AddDays(30)
+
             };
+
             await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
+
+
         }
 
         /// <summary>
@@ -214,8 +228,8 @@ namespace Reflection.Helper
 
             //Get reflection data
             ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(reflectionId) ?? null;
-            Dictionary<int, List<string>> feedbackData = await feedbackDataRepository.GetReflectionFeedback(reflectionId) ?? null;
-            List<QuestionsDataEntity> questions = await questionsDataRepository.GetAllDefaultQuestions() ?? null;
+            Dictionary<int, List<FeedbackDataEntity>> feedbackData = await feedbackDataRepository.GetReflectionFeedback(reflectionId) ?? null;
+            List<QuestionsDataEntity> questions = await questionsDataRepository.GetQuestionsByQID(refData.QuestionID) ?? null;
 
             viewReflectionsEntity.ReflectionData = refData;
             viewReflectionsEntity.FeedbackData = feedbackData;
@@ -242,17 +256,32 @@ namespace Reflection.Helper
 
             List<RecurssionScreenData> screenData = new List<RecurssionScreenData>();
             //recurssionScreenData.Add
-            foreach (var x in allActiveRefs)
+            //foreach (var x in allActiveRefs)
+            //{
+            //    RecurssionScreenData recurssionScreenData = new RecurssionScreenData();
+            //    recurssionScreenData.RefID = x.ReflectionID;
+            //    recurssionScreenData.CreatedBy = x.CreatedBy;
+            //    recurssionScreenData.RefCreatedDate = x.RefCreatedDate;
+            //    recurssionScreenData.Privacy = x.Privacy;
+            //    recurssionScreenData.Question = allQuestionsData.Where(c => c.QuestionID.ToString() == x.QuestionID.ToString()).Select(d => d.Question).FirstOrDefault().ToString();
+            //    recurssionScreenData.ExecutionDate = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.ExecutionDate).FirstOrDefault();
+            //    recurssionScreenData.ExecutionTime = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.ExecutionTime).FirstOrDefault();
+            //    recurssionScreenData.RecurssionType = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.RecursstionType).FirstOrDefault();
+            //    if (recurssionScreenData.RecurssionType != null)
+            //        screenData.Add(recurssionScreenData);
+            //}
+            foreach(var rec in allRecurssionData)
             {
                 RecurssionScreenData recurssionScreenData = new RecurssionScreenData();
-                recurssionScreenData.RefID = x.ReflectionID;
-                recurssionScreenData.CreatedBy = x.CreatedBy;
-                recurssionScreenData.RefCreatedDate = x.RefCreatedDate;
-                recurssionScreenData.Privacy = x.Privacy;
-                recurssionScreenData.Question = allQuestionsData.Where(c => c.QuestionID.ToString() == x.QuestionID.ToString()).Select(d => d.Question).FirstOrDefault().ToString();
-                recurssionScreenData.ExecutionDate = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.ExecutionDate).FirstOrDefault();
-                recurssionScreenData.ExecutionTime = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.ExecutionTime).FirstOrDefault();
-                recurssionScreenData.RecurssionType = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.RecursstionType).FirstOrDefault();
+                recurssionScreenData.RefID = rec.ReflectionID;
+                var reflection= await reflectionDataRepository.GetReflectionData(rec.ReflectionID); 
+                recurssionScreenData.CreatedBy = reflection.CreatedBy;
+                recurssionScreenData.RefCreatedDate = reflection.RefCreatedDate;
+                recurssionScreenData.Privacy =reflection.Privacy;
+                recurssionScreenData.Question = allQuestionsData.Where(c => c.QuestionID.ToString() == reflection.QuestionID.ToString()).Select(d => d.Question).FirstOrDefault().ToString();
+                recurssionScreenData.ExecutionDate = rec.ExecutionDate;
+                recurssionScreenData.ExecutionTime = rec.ExecutionTime;
+                recurssionScreenData.RecurssionType = rec.RecursstionType;
                 if (recurssionScreenData.RecurssionType != null)
                     screenData.Add(recurssionScreenData);
             }

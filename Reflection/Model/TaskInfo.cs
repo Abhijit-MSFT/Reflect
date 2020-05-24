@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
@@ -14,10 +15,11 @@ namespace Reflection.Model
         public string postCreateBy { get; set; }
 
         public string postCreatedByEmail { get; set; }
-        public DateTime? executionDate { get; set; }
-        public DateTime? executionTime { get; set; }
+        //public DateTime executionDate { get; set; }
+        public string executionTime { get; set; }
         public DateTime? postDate { get; set; }
-        public bool? postSendNowFlag { get; set; }
+        [DefaultValue(false)]
+        public bool postSendNowFlag { get; set; }
         public string repeatFrequency { get; set; }
         public string recurssionType { get; set; }
         public bool IsActive { get; set; }
@@ -29,6 +31,7 @@ namespace Reflection.Model
         public Guid? reflectionID { get; set; }
         public Guid? questionID { get; set; }
         public Guid? recurssionID { get; set; }
+        public bool isDefaultQuestion { get; set; }
 
         public string type { get; set; }
     }

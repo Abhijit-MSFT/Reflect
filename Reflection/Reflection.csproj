@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <LangVersion>latest</LangVersion>
+    <ApplicationInsightsResourceId>/subscriptions/38e56b67-a283-4be5-9222-1ba6b5222f6e/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/Reflection</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,7 @@
   <ItemGroup>
     <PackageReference Include="AdaptiveCards" Version="1.2.4" />
     <PackageReference Include="Bogus" Version="29.0.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.12.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
     <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.7" />
     <PackageReference Include="Microsoft.Bot.Builder.Integration.AspNet.Core" Version="4.7.0" />
@@ -27,6 +29,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+    <ItemGroup>
+      <WCFMetadata Include="Connected Services" />
+    </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
       <Exec Command="powershell.exe Compress-Archive -Path \&quot;$(ProjectDir)Manifest\*\&quot; -DestinationPath \&quot;$(TargetDir)helloworldapp.zip\&quot; -Force" />

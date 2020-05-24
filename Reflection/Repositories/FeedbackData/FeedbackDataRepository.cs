@@ -30,12 +30,12 @@ namespace Reflection.Repositories.FeedbackData
         /// <param name=""></param>
         /// <returns>Questions which have default flag true</returns>
         /// 
-        public async Task<Dictionary<int, List<string>>> GetReflectionFeedback(Guid? reflectionId)
+        public async Task<Dictionary<int, List<FeedbackDataEntity>>> GetReflectionFeedback(Guid? reflectionId)
         {
             var allFeedbacks = await this.GetAllAsync(PartitionKeyNames.FeedbackDataTable.TableName);
             var feedbackResult = allFeedbacks.Where(d => d.ReflectionID == reflectionId);
-            Dictionary<int, List<string>> feeds = new Dictionary<int, List<string>>();
-            feeds = feedbackResult.GroupBy(x => x.Feedback).ToDictionary(x => x.Key, x=>x.Select(y=>y.FullName).ToList());
+            Dictionary<int, List<FeedbackDataEntity>> feeds = new Dictionary<int, List<FeedbackDataEntity>>();
+            feeds = feedbackResult.GroupBy(x => x.Feedback).ToDictionary(x => x.Key, x=>x.ToList());
             return feeds;
         }
 
