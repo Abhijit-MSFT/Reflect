@@ -74,11 +74,11 @@
                 url: '/api/GetReflections/' + $("#reflectionid").val(),
                 success: function (data) {
                     $(".loader").hide();
+                    $(".modal-mb-sc2").show();
                     if (data) {
                         data = JSON.parse(data);
                     }
                     if (data && data.feedback && data.reflection && data.question) {
-                        debugger;
                         var feedback = JSON.parse(data.feedback);
                         var reflection = JSON.parse(data.reflection);
                         var question = JSON.parse(data.question)
@@ -130,22 +130,28 @@
 
                             if (description) {
                                 feedback[i].forEach(data => {
-                                    blockdata = blockdata + '<div class="smile-desc' + data.FeedbackID + '">' + data.FullName + '</div><div class="card custom-profle-card' + data.FeedbackID + '"> <div class="card-body"> <img src="' + GetPhoto(data.FeedbackGivenBy, accesstoken) + '" alt="avatar" class="profile-pic" /> <div class="profile-name">"' + data.FullName + '"</div > <div class="start-chat" onclick="microsoftTeams.executeDeepLink(https://teams.microsoft.com/l/chat/0/0?users=v-sivsat@microsoft.com)"> <span class="chat-icon"></span> <span class="st-chat-txt">Start a chat</span> </div> <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt">' + data.FeedbackGivenBy + '</span> </div> </div > </div > '
+                                    blockdata = blockdata + '<div class="smile-desc" id="' + data.FeedbackID + '">' + data.FullName + '</div><div class="card custom-profle-card ' + data.FeedbackID + '"> <div class="card-body"> <img src="' + GetPhoto(data.FeedbackGivenBy, accesstoken) + '" alt="avatar" class="profile-pic" /> <div class="profile-name">"' + data.FullName + '"</div > <div class="start-chat" onclick="microsoftTeams.executeDeepLink(https://teams.microsoft.com/l/chat/0/0?users=v-sivsat@microsoft.com)"> <span class="chat-icon"></span> <span class="st-chat-txt">Start a chat</span> </div> <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt">' + data.FeedbackGivenBy + '</span> </div> </div > </div > '
                                 })
                             }
                             blockdata = blockdata + '</div><div class="cnt-box">' + width + '%<span class="cnt">(' + datacount + ')</span></div ></div >';
                         }
                         $("#reviewblock").html(blockdata);
-                        for (i = 1; i <= 5; i++) {
-                            $(".custom-profle-card" + i).css("display", "none");
-                            $(".smile-desc" + i).on('click mouseover', function (event) {
-                                $(".custom-profle-card" + event.currentTarget.className[10]).toggle();
-                            })
+                        $(".custom-profle-card ").css("display", "none");
+                        $('.smile-desc').hover(function (event) {
+                            $(".custom-profle-card").css("display", "none");
+                            $("." + $(event.target)[0].id).show();
+                        });
 
-                            $(".smile-desc" + i).mouseleave(function () {
-                                $(".custom-profle-card" + event.currentTarget.className[10]).toggle();
-                            })
-                        }
+                        $('body').on('click blur', function (event) {
+                            if (!$(event.target).hasClass('custom-profle-card')) {
+                                $(".custom-profle-card").css("display", "none");
+                            }
+                        });
+
+                        $('.custom-profle-card > *').on('click', function (e) {
+                            e.stopPropagation();
+                        });
+
                     }
                     else {
                         alert("no data");
