@@ -29,26 +29,12 @@ namespace Reflection.Repositories.QuestionsData
         /// <param name=""></param>
         /// <returns>Questions which have default flag true</returns>
         /// 
-        public async Task<List<QuestionsDataEntity>> GetAllDefaultQuestionsForUser(string userEmail)
+        public async Task<List<QuestionsDataEntity>> GetAllDefaultQuestions()
         {
             try
             {
                 var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-                var result = allRows.Where(d => d.IsDefaultFlag == true || d.CreatedByEmail == userEmail);
-                return result.ToList();
-            }
-            catch (System.Exception e)
-            {
-                return null;
-            }
-        }
-
-        public async Task<List<QuestionsDataEntity>> GetQuestionsByQID(Guid? qID)
-        {
-            try
-            {
-                var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-                var result = allRows.Where(d => d.IsDefaultFlag == true || d.QuestionID == qID);
+                var result = allRows.Where(d => d.IsDefaultFlag == true || d.CreatedBy == "Arun Kumar Anaparthi (Zen3 Infosolutions America Inc)");
                 return result.ToList();
             }
             catch (System.Exception e)
@@ -64,31 +50,12 @@ namespace Reflection.Repositories.QuestionsData
             return result ?? null;
         }
 
-        public async Task<bool> IsQuestionAlreadtPresent(string question, string email)
+        public async Task<bool> IsQuestionAlreadtPresent(string question)
         {
             var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-            //var result = allRows.Any(c => c.Question == question && c.IsDefaultFlag == true ? true : c.CreatedByEmail == email);
-            var result = allRows.Where(c => c.Question == question);
-
-            if (result.Any(c => c.IsDefaultFlag == true || c.CreatedByEmail == email))
-                return true;
-
-            return false;
+            bool result = allRows.Any(c => c.Question == question);
+            return result;
         }
-
-        //public async Task<List<QuestionsDataEntity>> GetAllQuestionData(List<Guid?> quesID)
-        //{
-        //    var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-        //    List<QuestionsDataEntity> result = allRows.Where(c => quesID.Contains(c.QuestionID)).ToList();
-        //    return result ?? null;
-        //}
-
-        //public async Task<bool> IsQuestionAlreadtPresent(string question)
-        //{
-        //    var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-        //    bool result = allRows.Any(c => c.Question == question);
-        //    return result;
-        //}
 
     }
 

@@ -24,7 +24,7 @@ namespace Reflection.Repositories.ReflectionData
         {
         }
 
-        public async Task<ReflectionDataEntity> GetReflectionData(Guid? refID)
+        public async Task<ReflectionDataEntity> GetReflectionData(Guid refID)
         {
             var allReflections = await this.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
             ReflectionDataEntity refData = allReflections.Where(c => c.ReflectionID == refID).FirstOrDefault();
