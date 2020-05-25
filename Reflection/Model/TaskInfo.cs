@@ -15,7 +15,8 @@ namespace Reflection.Model
         public string postCreateBy { get; set; }
 
         public string postCreatedByEmail { get; set; }
-        //public DateTime executionDate { get; set; }
+        
+        public DateTime executionDate { get; set; }
         public string executionTime { get; set; }
         public DateTime? postDate { get; set; }
         [DefaultValue(false)]
