@@ -21,6 +21,7 @@
 </head>
 
 <body>
+    <div class="loader"></div>
     <div class="modal2">
         <!-- Modal -->
         <div role="document">
@@ -34,7 +35,6 @@
                     </div>
                     <div class="feeling-abt" id="questiontitle">How are you feeling about the test today?</div>
                     <div class="review-blk" id="reviewblock">
-
                     </div>
                 </div>
                 @*<div class="mf">
@@ -59,6 +59,8 @@
                         </div>
                     </div>
                 </div>*@
+
+
         </div>
     </div>
 
@@ -69,6 +71,7 @@
     <script type="text/javascript">
         let accesstoken;
         $(document).ready(function () {
+            $(".loader").show();
             $.ajax({
                 url: "/api/GetAccessTokenAsync",
                 type: "Get",
@@ -92,6 +95,7 @@
                 type: 'GET',
                 url: '/api/GetReflections/' + $("#reflectionid").val(),
                 success: function (data) {
+                    $(".loader").hide();
                     if (data) {
                         data = JSON.parse(data);
                     }
@@ -154,26 +158,15 @@
                             blockdata = blockdata + '</div><div class="cnt-box">' + width + '%<span class="cnt">(' + datacount + ')</span></div ></div >';
                         }
                         $("#reviewblock").html(blockdata);
-                        for (m = 1; m <= 5; m++) {
-                            if (feedback[m] && feedback[m].length) {
-                                feedback[m].forEach(data1 => {
-                                    $(".custom-profle-card" + data1.FeedbackID).css("display", "none");
-                                    $(".smile-desc" + data1.FeedbackID).on('click mouseover', function (event) {
-                                        var number = event.currentTarget.className.replace("smile-desc", "");
-                                        var userimg = GetPhoto(number, accesstoken);
-                                        $(".custom-profle-card" + number + ".profile-pic").attr("src", userimg)
-                                        $(".custom-profle-card" + number).toggle();
+                        for (i = 1; i <= 5; i++) {
+                            $(".custom-profle-card" + i).css("display", "none");
+                            $(".smile-desc" + i).on('click mouseover', function (event) {
+                                $(".custom-profle-card" + event.currentTarget.className[10]).toggle();
+                            })
 
-                                    })
-
-                                    $(".smile-desc" + data1.FeedbackID).mouseleave(function () {
-                                        var number = event.currentTarget.className.replace("smile-desc", "");
-                                        $(".custom-profle-card" + number).toggle();
-                                    })
-
-                                })
-                            }
-
+                            $(".smile-desc" + i).mouseleave(function () {
+                                $(".custom-profle-card" + event.currentTarget.className[10]).toggle();
+                            })
                         }
                     }
                     else {

@@ -132,7 +132,7 @@
 
 .sel-chev2 {
     position: relative;
-    right: 23px;
+/*    right: 23px;*/
 }
 
     .sel-chev2::before {
@@ -216,7 +216,7 @@ input[type="date"] {
 }
 
 .time-icon::before {
-    content: "\E115";
+    content: "\E115";s
     font-family: "Teams Assets";
     font-size: 14px;
     color: #6266a5;
@@ -226,8 +226,6 @@ input[type="date"] {
 
 .date-icon {
     position: relative;
-    right: 6%;
-    top: 4px;
     cursor: pointer;
 }
 
