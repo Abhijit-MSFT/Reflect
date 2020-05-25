@@ -216,7 +216,7 @@ input[type="date"] {
 }
 
 .time-icon::before {
-    content: "\E115";s
+    content: "\E115";
     font-family: "Teams Assets";
     font-size: 14px;
     color: #6266a5;
