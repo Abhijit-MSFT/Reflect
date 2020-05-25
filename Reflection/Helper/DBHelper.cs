@@ -102,7 +102,7 @@ namespace Reflection.Helper
         public static async Task SaveRecurssionDataAsync(IConfiguration configuration, TaskInfo taskInfo)
         {
             RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
-            var rowKey = Guid.NewGuid();
+            var rowKey = Guid.NewGuid();           
 
             RecurssionDataEntity recurssionEntity = new RecurssionDataEntity
             {
@@ -156,15 +156,15 @@ namespace Reflection.Helper
             try
             {
                 IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
-
                 var members = await connector.Conversations.GetConversationMembersAsync(turnContext.Activity.Conversation.Id);
                 return AsTeamsChannelAccounts(members).FirstOrDefault(m => m.Id == turnContext.Activity.From.Id).UserPrincipalName;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return "";
             }
         }
+
 
         /// <summary>
         /// Add Reflection data in Table Storage.
@@ -180,19 +180,6 @@ namespace Reflection.Helper
             }
         }
 
-        //public static async Task<List<string>> GetTeamMember(ITurnContext<IInvokeActivity> turnContext)
-        //{
-        //    IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
-        //    var members = await connector.Conversations.GetConversationMembersAsync(turnContext.Activity.Conversation.Id);
-
-        //    return members.ToList();
-        //}
-
-        //public static async Task<List<ReflectionDataEntity>> GetAllReflection(IConfiguration configuration)
-        //{
-        //    RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
-        //    var allReflections = recurssionDataRepository.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
-        //}
 
         /// <summary>
         /// Add Reflection data in Table Storage.
@@ -210,7 +197,7 @@ namespace Reflection.Helper
             FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(configuration);
             ViewReflectionsEntity viewReflectionsEntity = new ViewReflectionsEntity();
             QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
-            //Guid gID = Guid.Parse("933a3991-29e9-4391-bdce-a81096b23c20"); for testing purpose
+            
 
             //Get reflection data
             ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(reflectionId) ?? null;
@@ -262,9 +249,22 @@ namespace Reflection.Helper
         }
 
 
+        //call this methd when user clicks on delete button on manage recurrence screen
+        public static async Task<bool> RemoveReflectionFromManageReflectionScreens(Guid refID, IConfiguration configuration)
+        {
+            ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
+            bool removed = false;
 
+            ReflectionDataEntity reflectionDataEntity = await reflectionDataRepository.GetReflectionData(refID);
+            if(reflectionDataEntity != null)
+            {
+                reflectionDataEntity.IsActive = false;
+                await reflectionDataRepository.CreateOrUpdateAsync(reflectionDataEntity);
+                removed = true;
+            }
 
-
+            return removed;
+        }
 
     }
 }

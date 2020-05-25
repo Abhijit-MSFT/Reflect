@@ -17,20 +17,31 @@ using AdaptiveCards;
 using Reflection.Repositories.FeedbackData;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.ReflectionData;
+using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Extensions.Logging;
+using Reflection.Bots;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
-    public class MessageExtension : TeamsActivityHandler
+    //public class MessageExtension<T> : TeamsActivityHandler where T : Dialog
+    public class MessageExtension : TeamsActivityHandler 
     {
         private readonly IConfiguration _configuration;
-        //private readonly FeedbackDataRepository feedbackDataRepository;
+
         public MessageExtension(IConfiguration configuration)
         {
             _configuration = configuration;
+
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
+
+            //Logger.LogInformation("Running dialog with Message Activity.");
+
+            //// Run the Dialog with the new message Activity.
+            //await Dialog.RunAsync(turnContext, ConversationState.CreateProperty<DialogState>(nameof(DialogState)), cancellationToken);
+
             CardHelper cardhelper = new CardHelper(_configuration);
 
             FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration);
@@ -104,9 +115,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             }
         }
 
-        protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
-        
+        protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)        
         {
+
+
             ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
 
             return new TaskModuleResponse
@@ -176,6 +188,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
+            //there are 3 types of user roles available Admin - User - Guest
+            //var role = await DBHelper.GetUserEmailId(turnContext);
             string url = this._configuration["BaseUri"];
             if (action.MessagePayload != null)
                 url = this._configuration["BaseUri"] + "/ManageRecurringPosts";            
