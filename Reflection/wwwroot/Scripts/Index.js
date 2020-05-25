@@ -3,7 +3,6 @@ var userobject = {};
 var accesstoken = "";
 $(document).ready(function () {
     microsoftTeams.initialize();
-    let userPrincipleName;
     $.ajax({
         url: "/api/GetAccessTokenAsync",
         type: "Get",
@@ -15,25 +14,10 @@ $(document).ready(function () {
             accesstoken = token;
             microsoftTeams.getContext(function (context) {
                 if (token !== undefined && token !== null && token !== '') {
-                    userPrincipleName = context.userPrincipalName;
                     GetUserDetails(context.userPrincipalName, token);
+                    GetDefaultQuestions(context.userPrincipalName);
                 }
             });
-
-        }
-    });
-    var blockdata = "";
-    $.ajax({
-        type: 'GET',
-        url: 'api/GetAllDefaultQuestions/' + userPrincipleName,
-        success: function (data) {
-            questions = data;
-            data.forEach(x => {
-                blockdata = blockdata + ' <option class="default-opt" id="' + x.questionID + '" value="' + x.question + '">';
-
-            })
-            $("#questions").html(blockdata);
-
 
         }
     });
@@ -67,7 +51,7 @@ function SendAdaptiveCard() {
     });
     let index = questions.findIndex(x => x.question === $('#questions-list').val());
     var questionid = null;
-    if (index != -1) {
+    if (index !== -1) {
         questionid = questions[index].questionID;
         console.log(questionid);
     }
@@ -89,7 +73,7 @@ function SendAdaptiveCard() {
     taskInfo.width = "medium";
     microsoftTeams.tasks.submitTask(taskInfo);
     return true;
-};
+}
 
 function getSelectedOption(event) {
     $('#selectedTxt').html($('#questions-list').val());
@@ -104,6 +88,25 @@ function setPrivacy() {
     $('#privacytext').html($('#privacy').val());
 }
 
+function GetDefaultQuestions(userPrincipleName) {
+    var blockdata = "";
+    $.ajax({
+        type: 'GET',
+        url: 'api/GetAllDefaultQuestions/' + userPrincipleName,
+        success: function (data) {
+            questions = data;
+            data.forEach(x => {
+                blockdata = blockdata + ' <option class="default-opt" id="' + x.questionID + '" value="' + x.question + '">';
+
+            });
+            $("#questions").html(blockdata);
+
+
+        }
+    });
+
+}
+
 function GetUserDetails(principalName, appAccessToken) {
     $.ajax({
         url: "https://graph.microsoft.com/beta/users/" + principalName,
@@ -113,11 +116,13 @@ function GetUserDetails(principalName, appAccessToken) {
         },
         success: function (response) {
             console.log('Success');
-            if (response != null) {
+            if (response !== null) {
                 var name = response.displayName;
+                alert(userNameArray[0]);
                 var userNameArray = name.split(' ');
                 console.log(userNameArray[0]);
-                $('#usertext').html(" " + userNameArray[0] + '!');
+                alert(userNameArray[0]);
+                $('#usertext').html(" " + userNameArray[0] + " " + userNameArray[1]);
             } else {
                 alert("Something went wrong");
             }
@@ -141,7 +146,7 @@ submitHandler = (err, result) => {
     //    taskInfo.width = 780;
     //    microsoftTeams.tasks.startTask(taskInfo, submitHandler)
     //}
-    console.log("Reached submithandler!")
+    console.log("Reached submithandler!");
 
 };
 

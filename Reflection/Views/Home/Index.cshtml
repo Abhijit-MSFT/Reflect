@@ -21,77 +21,84 @@
         <div class="" role="document">
             <div class="modal-content mc">
                 <div class="modal-body modal-mb">
-                        <div class="question">Question</div>
-                        <div class="custom-in">
-                            <input list="questions" name="questions" id="questions-list" class="input-select" placeholder="Please select or enter question" onchange="getSelectedOption(this)" />
-                            <datalist id="questions" class="htmlEle">
-                            </datalist>
-                            <span class="sel-chev"></span>
-                        </div>
+                    <div class="question">Question</div>
+                    <div class="custom-in">
+                        <input list="questions" name="questions" id="questions-list" class="input-select" placeholder="Please select or enter question" onchange="getSelectedOption(this)" />
+                        <datalist id="questions" class="htmlEle">
+                        </datalist>
+                        <span class="sel-chev"></span>
+                    </div>
 
-                        <div class="privacy">Privacy</div>
-                        <div class="input-group custom-in">
-                            <select class="cs htmlEle" id="privacy" onchange="setPrivacy()">
-                                <option value="public" selected>Public - Names will be displayed with responses</option>
-                                <option value="anonymous">Anonymous - Names will be omitted from responses</option>
-                            </select>
-                            <span class="sel-chev3"></span>
-                        </div>
-                        <div class="post">
-                            <div class="row custom-rw">
-                                <div class="col-6 custom-col">
-                                    <div class="date" id="execdate">
-                                        <div class="blk-head" id="date">Date</div>
-                                        <input type="date" alt="date" class="date-ip htmlEle" />
-                                        <span class="date-icon"></span>
-                                    </div>
+                    <div class="privacy">Privacy</div>
+                    <div class="input-group custom-in">
+                        <select class="cs htmlEle" id="privacy" onchange="setPrivacy()">
+                            <option value="public" selected>Public - Names will be displayed with responses</option>
+                            <option value="anonymous">Anonymous - Names will be omitted from responses</option>
+                        </select>
+                        <span class="sel-chev3"></span>
+                    </div>
+                    <div class="post">
+                        <div class="row custom-rw">
+                            <div class="col-6 custom-col">
+                                <div class="date" id="execdate">
+                                    <div class="blk-head">Date</div>
+                                    <input type="date" alt="date" class="date-ip htmlEle" />
+                                    <span class="date-icon"></span>
                                 </div>
-                                <div class="col-6 custom-col">
-                                    <div class="blk-head">Time</div>
-                                    <div class="time-ip htmlEle">
+                            </div>
+                            <div class="col-6 custom-col">
+                                <div class="blk-head">Time</div>
+                                <div class="selc">
+                                    <select class="cs htmlEle" id="exectime">
+                                        <option value="Send now" selected>Send now</option>
+                                        <option value="Send later">Send later</option>
+                                    </select>
+                                    <span class="sel-chev2"></span>
+                                </div>
+                                @*<div class="time-ip htmlEle">
                                         Send now
                                         <span class="time-icon"></span>
-                                    </div>
-                                </div>
-                                <div class="col-6 custom-col">
-                                    <div class="blk-head rec">Recurrence</div>
-                                    <div class="selc">
-                                        <select class="cs htmlEle" id="recurrance">
-                                            <option value="Does not repeat" selected>Does not repeat </option>
-                                            <option value="Every weekday">Every weekday (Mon-Fri)</option>
-                                            <option value="Weekly">Weekly</option>
-                                            <option value="Monthly">Monthly</option>
-                                            <option value="Custom">Custom</option>
-                                        </select>
-                                        <span class="sel-chev2"></span>
-                                    </div>
+                                    </div>*@
+                            </div>
+                            <div class="col-6 custom-col">
+                                <div class="blk-head rec">Recurrence</div>
+                                <div class="selc">
+                                    <select class="cs htmlEle" id="recurrance">
+                                        <option value="Does not repeat" selected>Does not repeat </option>
+                                        <option value="Every weekday">Every weekday (Mon-Fri)</option>
+                                        <option value="Weekly">Weekly</option>
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="Custom">Custom</option>
+                                    </select>
+                                    <span class="sel-chev2"></span>
                                 </div>
                             </div>
                         </div>
-                        <div class="prev">Preview</div>
-                        <div class="br-blk">
-                            <div class="created">Posted by <span id="usertext"></span></div>
-                            <span class="divider">|</span>
-                            <div class="reflections">Reflections are<span id="privacytext">  </span></div>
-                            <div class="feeling" id="selectedTxt"></div>
-                            <div class="smiles">
-                                <span class="ava">
-                                    <img src="~/Images/1.png" alt="smile1" class="avatars">
-                                </span>
-                                <span class="ava">
-                                    <img src="~/Images/2.png" alt="smile2" class="avatars">
-                                </span>
-                                <span class="ava">
-                                    <img src="~/Images/3.png" alt="smile3" class="avatars">
-                                </span>
-                                <span class="ava">
-                                    <img src="~/Images/4.png" alt="smile4" class="avatars">
-                                </span>
-                                <span class="ava">
-                                    <img src="~/Images/5.png" alt="smile5" class="avatars">
-                                </span>
-                            </div>
+                    </div>
+                    <div class="prev">Preview</div>
+                    <div class="br-blk">
+                        <div class="created">Posted by<span id="usertext"></span></div>
+                        <span class="divider">|</span>
+                        <div class="reflections">Reflections are<span id="privacytext">  </span></div>
+                        <div class="feeling" id="selectedTxt"></div>
+                        <div class="smiles">
+                            <span class="ava">
+                                <img src="~/Images/1.png" alt="smile1" class="avatars">
+                            </span>
+                            <span class="ava">
+                                <img src="~/Images/2.png" alt="smile2" class="avatars">
+                            </span>
+                            <span class="ava">
+                                <img src="~/Images/3.png" alt="smile3" class="avatars">
+                            </span>
+                            <span class="ava">
+                                <img src="~/Images/4.png" alt="smile4" class="avatars">
+                            </span>
+                            <span class="ava">
+                                <img src="~/Images/5.png" alt="smile5" class="avatars">
+                            </span>
                         </div>
+                    </div>
                 </div>
                 <div class="mf">
                     <span class="clk"></span>
@@ -106,189 +113,5 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
-
-    <script>
-        var questions = [];
-        var userobject = {};
-        var accesstoken = "";
-        var userid = "";
-        $(document).ready(function () {
-
-            microsoftTeams.initialize();
-
-
-            $.ajax({
-                url: "api/GetAccessTokenAsync",
-                type: "Get",
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json'
-                },
-                success: function (data) {
-                    var data1 = JSON.parse(data);
-                    microsoftTeams.getContext(function (context) {
-                        accesstoken = data1.access_token;
-                        userid = context.userObjectId;
-                        GetUserDetails(context.userObjectId, data1.access_token)
-                    });
-
-                }
-            })
-            var blockdata = ""
-            $.ajax({
-                type: 'GET',
-                url: 'api/GetAllDefaultQuestions',
-                success: function (data) {
-                    questions = data;
-                    data.forEach(x => {
-                        blockdata = blockdata + ' <option class="default-opt" id="' + x.questionID + '" value="' + x.question + '">';
-
-                    })
-                    $("#questions").html(blockdata);
-
-
-                }
-            });
-            $("body").click
-                (
-                    function (e) {
-                        if (e.target.className !== "form-control questioninput") {
-                            $('#questionsblock').addClass('hidequestions');
-                            $('#questionsblock').removeClass('showquestions');
-                        }
-                    }
-                );
-            $("select").change(function () {
-                $(this).find("option:selected").each(function () {
-                    var optionValue = $(this).attr("value");
-                    if (optionValue) {
-                        $(".box").not("." + optionValue).hide();
-                        $("." + optionValue).show();
-                    } else {
-                        $(".box").hide();
-                    }
-                });
-            }).change();
-        });
-
-        function SendAdaptiveCard() {
-            var list = document.querySelectorAll(".htmlEle");
-            var htmObj = {};
-            list.forEach((obj, i) => {
-                htmObj[obj.getAttribute("data-attr")] = obj.value;
-            });
-            let index = questions.findIndex(x => x.question == $('#questions-list').val())
-            var questionid = null
-            if (index != -1) {
-                questionid = questions[index].questionID
-                console.log(questionid);
-            }
-
-            let taskInfo = {
-                question: $('#questions-list').val(),
-                questionID: questionid,
-                privacy: $('#privacy').val(),
-                ExecutionDate: $('#execdate').val(),
-                ExecutionTime: $('#exectime').val(),
-                postDate: "",
-                postSendNowFlag: true,
-                recurssionType: $('#recurrance').val(),
-                action: "sendAdaptiveCard"
-            };
-            taskInfo.card = "";
-            taskInfo.height = "medium";
-            taskInfo.width = "medium";
-
-            if (!$('#questions-list').val()) {
-                alert('Please select '+ $('.question').text());
-            }
-            else if (!$('.date-ip').val()) {
-                alert('Please select ' + $('#date').text());
-            }
-            else {
-                microsoftTeams.tasks.submitTask(taskInfo);
-            }
-            return true;
-        }; 
-
-        function getSelectedOption(event) {
-            $('#selectedTxt').html($('#questions-list').val())
-        }
-
-        function setPrivacy() {
-            GetUserDetails(userid, accesstoken)
-            $('#privacytext').html($('#privacy').val())
-        }
-
-        function GetUserDetails(userid, accesstoken) {
-            accesstoken = 'eyJ0eXAiOiJKV1QiLCJub25jZSI6IlhuM1JUT1QyU21ucHZYTmFrbk1oMmZmaWdPTl9SU2sxSUdMVTVHekRTNFUiLCJhbGciOiJSUzI1NiIsIng1dCI6IkN0VHVoTUptRDVNN0RMZHpEMnYyeDNRS1NSWSIsImtpZCI6IkN0VHVoTUptRDVNN0RMZHpEMnYyeDNRS1NSWSJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC83MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDcvIiwiaWF0IjoxNTg5OTAzNjk0LCJuYmYiOjE1ODk5MDM2OTQsImV4cCI6MTU4OTkwNzU5NCwiYWNjdCI6MCwiYWNyIjoiMSIsImFpbyI6IkFVUUF1LzhQQUFBQUh1d01taFpnQ2NiMVZ6cVNjYXNVeDVOQ3BRRllENlFGMjBGYUpIa3VyeXQ1T05ONjZmYUFqaHpCNWNaTkd4NXJBY05Gdk5nV256MVE0TlgzOEF4ejFRPT0iLCJhbXIiOlsicnNhIiwibWZhIl0sImFwcF9kaXNwbGF5bmFtZSI6IkdyYXBoIGV4cGxvcmVyIiwiYXBwaWQiOiJkZThiYzhiNS1kOWY5LTQ4YjEtYThhZC1iNzQ4ZGE3MjUwNjQiLCJhcHBpZGFjciI6IjAiLCJkZXZpY2VpZCI6ImEyN2FlNmI1LWQyODUtNDI0Ny1hZGIwLTdhMzYwM2NjNTc1NyIsImZhbWlseV9uYW1lIjoiQW5hcGFydGhpIiwiZ2l2ZW5fbmFtZSI6IkFydW4gS3VtYXIiLCJpcGFkZHIiOiI3My4xNTcuNDQuMTU3IiwibmFtZSI6IkFydW4gS3VtYXIgQW5hcGFydGhpIChaZW4zIEluZm9zb2x1dGlvbnMgQW1lcmljYSBJbmMpIiwib2lkIjoiOGY3OTQyNjgtZWNiNS00Y2QzLWI1NTctMzQ1YjY3MDE5MTU1Iiwib25wcmVtX3NpZCI6IlMtMS01LTIxLTIxNDY3NzMwODUtOTAzMzYzMjg1LTcxOTM0NDcwNy0yMzQyNzI1IiwicGxhdGYiOiIzIiwicHVpZCI6IjEwMDNCRkZEQTlCQUM3MEEiLCJyaCI6IjAuQVJvQXY0ajVjdkdHcjBHUnF5MTgwQkhiUjdYSWk5NzUyYkZJcUsyM1NOcHlVR1FhQUdNLiIsInNjcCI6IkNhbGVuZGFycy5SZWFkV3JpdGUgQ29udGFjdHMuUmVhZFdyaXRlIERldmljZU1hbmFnZW1lbnRBcHBzLlJlYWRXcml0ZS5BbGwgRGV2aWNlTWFuYWdlbWVudENvbmZpZ3VyYXRpb24uUmVhZC5BbGwgRGV2aWNlTWFuYWdlbWVudENvbmZpZ3VyYXRpb24uUmVhZFdyaXRlLkFsbCBEZXZpY2VNYW5hZ2VtZW50TWFuYWdlZERldmljZXMuUHJpdmlsZWdlZE9wZXJhdGlvbnMuQWxsIERldmljZU1hbmFnZW1lbnRNYW5hZ2VkRGV2aWNlcy5SZWFkLkFsbCBEZXZpY2VNYW5hZ2VtZW50TWFuYWdlZERldmljZXMuUmVhZFdyaXRlLkFsbCBEZXZpY2VNYW5hZ2VtZW50UkJBQy5SZWFkLkFsbCBEZXZpY2VNYW5hZ2VtZW50UkJBQy5SZWFkV3JpdGUuQWxsIERldmljZU1hbmFnZW1lbnRTZXJ2aWNlQ29uZmlnLlJlYWQuQWxsIERldmljZU1hbmFnZW1lbnRTZXJ2aWNlQ29uZmlnLlJlYWRXcml0ZS5BbGwgRGlyZWN0b3J5LkFjY2Vzc0FzVXNlci5BbGwgRGlyZWN0b3J5LlJlYWRXcml0ZS5BbGwgRmlsZXMuUmVhZFdyaXRlLkFsbCBHcm91cC5SZWFkV3JpdGUuQWxsIElkZW50aXR5Umlza0V2ZW50LlJlYWQuQWxsIE1haWwuUmVhZFdyaXRlIE1haWxib3hTZXR0aW5ncy5SZWFkV3JpdGUgTm90ZXMuUmVhZFdyaXRlLkFsbCBvcGVuaWQgUGVvcGxlLlJlYWQgcHJvZmlsZSBSZXBvcnRzLlJlYWQuQWxsIFNpdGVzLlJlYWRXcml0ZS5BbGwgVGFza3MuUmVhZFdyaXRlIFVzZXIuUmVhZEJhc2ljLkFsbCBVc2VyLlJlYWRXcml0ZSBVc2VyLlJlYWRXcml0ZS5BbGwgZW1haWwiLCJzaWduaW5fc3RhdGUiOlsiZHZjX21uZ2QiLCJkdmNfY21wIiwiZHZjX2RtamQiLCJrbXNpIl0sInN1YiI6IkNLTEpUWXVPSmlnb0ZqZGhXLXJFUHVUR2FMRHByd2tjb1l1cmRqcjVGeHciLCJ0aWQiOiI3MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMWRiNDciLCJ1bmlxdWVfbmFtZSI6InYtYXJ1YW5hQG1pY3Jvc29mdC5jb20iLCJ1cG4iOiJ2LWFydWFuYUBtaWNyb3NvZnQuY29tIiwidXRpIjoiMTl0U0lpLS1Ka2E4XzFLOWdTOE1BQSIsInZlciI6IjEuMCIsInhtc19zdCI6eyJzdWIiOiJ0T19XTjRTTk13amJTb2FOa1JBc1l2bnUwMEhWd0ZYOFdhQTFudnJuVTM0In0sInhtc190Y2R0IjoxMjg5MjQxNTQ3fQ.whRatrST2i6hgvu5RdqtJW9DgGoWViV52YDCjdpXMQ42guD52559rHz45-c7efjXTqxQFVKC-p3l1Lv3lGrdVe3BwcD9Jdp5F3j4CCxY69zFBszi-xebrtcrXr6cCFu_xtCTZf-QPrLrgyh4_OsVLJXqWWZhIu6brb2pAVMGK8i5R2Aj4aR83jJrw-fehlbsdm0u5IJK2G4mqgIQYNZI0Gp8L5tyuySupSnBE21BHGlenTvtaujAmWvEKe0B-4hTc2ElTnrW94nmr5gaxf8HrdQ1_sSXAFs8ozBoMH-6jbarjymyBcRjMXIiRakrFy8TmmRipC8fh6msW8BoeUToPA';
-            $.ajax({
-                url: "https://graph.microsoft.com/beta/users/" + userid,
-                type: "GET",
-                beforeSend: function (request) {
-                    request.setRequestHeader("Authorization", "Bearer " + accesstoken);
-                },
-                success: function (response) {
-                    if (response != null) {
-                        userobject = response;
-                        alert(userobject.displayName);
-                        $("#username").html(userobject.displayName)
-                        console.log(userobject);
-                    } else {
-                        alert("Something went wrong");
-                    }
-                },
-                error: function () {
-                    console.log("Failed");
-                }
-            });
-        }
-
-        submitHandler = (err, result) => {
-            //if (result.action == "Chaining") {
-            //        let taskInfo = {
-            //        title: "",
-            //        height: "",
-            //        width: "",
-            //        Url: ""
-            //    };
-            //    taskInfo.Url = "https://1a48ca6e.ngrok.io/First";
-            //    taskInfo.height = 550;
-            //    taskInfo.width = 780;
-            //    microsoftTeams.tasks.startTask(taskInfo, submitHandler)
-            //}
-            console.log("Reached submithandler!")
-
-        };
-
-        function openTaskModule() {
-            let linkInfo = {
-                action: "ManageRecurringPosts",
-            };
-            microsoftTeams.tasks.submitTask(linkInfo);
-            return true;
-        };
-
-        function closeTaskModule() {
-            let closeTaskInfo = {
-                action: "closeFirstTaskModule"
-            };
-            microsoftTeams.tasks.submitTask(closeTaskInfo);
-            return true;
-        };
-
-        function addShowHideButton() {
-            if ($('#questionsblock').hasClass('hidequestions')) {
-                $('#questionsblock').removeClass('hidequestions');
-                $('#questionsblock').addClass('showquestions');
-            }
-            else {
-                $('#questionsblock').addClass('hidequestions');
-                $('#questionsblock').removeClass('showquestions');
-            }
-        }
-
-    </script>
 </body>
 </html>
