@@ -34,6 +34,10 @@
       <WCFMetadata Include="Connected Services" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Dialogs\" />
+    </ItemGroup>
+
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
       <Exec Command="powershell.exe Compress-Archive -Path \&quot;$(ProjectDir)Manifest\*\&quot; -DestinationPath \&quot;$(TargetDir)helloworldapp.zip\&quot; -Force" />
     </Target>

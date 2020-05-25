@@ -71,8 +71,17 @@ function SendAdaptiveCard() {
     taskInfo.card = "";
     taskInfo.height = "medium";
     taskInfo.width = "medium";
-    microsoftTeams.tasks.submitTask(taskInfo);
+    if (!$('#questions-list').val()) {
+        alert('Please select ' + $('.question').text());
+    }
+    else if (!$('.date-ip').val()) {
+        alert('Please select ' + $('#date').text());
+    }
+    else {
+        microsoftTeams.tasks.submitTask(taskInfo);
+    }
     return true;
+    
 }
 
 function getSelectedOption(event) {
