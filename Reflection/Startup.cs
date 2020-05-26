@@ -10,6 +10,8 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Reflection.Helper;
+using Reflection.Interfaces;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
@@ -35,6 +37,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();
             services.AddSingleton<QuestionsDataRepository>();
             services.AddSingleton<ReflectionDataRepository>();
+            services.AddSingleton<ICard, CardHelper>();
             // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
             services.AddTransient<IBot, MessageExtension>();
             services.AddApplicationInsightsTelemetry();

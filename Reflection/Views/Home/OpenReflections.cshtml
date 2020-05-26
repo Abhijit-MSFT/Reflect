@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+    <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
     <link href="~/CSS/openReflections.css" rel="stylesheet" type="text/css" />
     <title>Screen2</title>
 
@@ -37,9 +38,9 @@
                     <div class="review-blk" id="reviewblock">
                     </div>
                 </div>
-             </div>
+            </div>
 
-       </div>
+        </div>
     </div>
 
 
@@ -48,8 +49,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         let accesstoken;
+        let contextPrincipalName;
         $(document).ready(function () {
             $(".loader").show();
+            microsoftTeams.initialize();
+            microsoftTeams.getContext(function (context) {
+                contextPrincipalName = context.userPrincipalName;
+            });
             $.ajax({
                 url: "/api/GetAccessTokenAsync",
                 type: "Get",
@@ -91,6 +97,7 @@
                         var datacount = 0;
                         var width = 0;
                         var descriptio = "";
+                        var chatUrl = "https://teams.microsoft.com/l/chat/0/0?users=";
                         Object.keys(JSON.parse(data.feedback)).forEach(x => {
                             totalcount = totalcount + feedback[x].length;
                         })
@@ -130,7 +137,7 @@
 
                             if (description) {
                                 feedback[i].forEach(data => {
-                                    blockdata = blockdata + '<div class="smile-desc" id="' + data.FeedbackID + '">' + data.FullName + '</div><div class="card custom-profle-card ' + data.FeedbackID + '"> <div class="card-body"> <img src="' + GetPhoto(data.FeedbackGivenBy, accesstoken) + '" alt="avatar" class="profile-pic" /> <div class="profile-name">' + data.FullName + '</div > <div class="start-chat"> <span class="chat-icon" ></span > <span class="st-chat-txt">Start a chat</span> </div > <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt"> ' + data.FeedbackGivenBy + ' </span> </div> </div > </div > '
+                                    blockdata = blockdata + '<div class="smile-desc" id="' + data.FeedbackID + '">' + data.FullName + '</div><div class="card custom-profle-card ' + data.FeedbackID + '"> <div class="card-body"> <img src="' + GetPhoto(data.FeedbackGivenBy, accesstoken) + '" alt="avatar" class="profile-pic" /> <div class="profile-name">' + data.FullName + '</div > <div class="start-chat" style = "pointer-events: ' + GetChatConfig(data.FeedbackGivenBy) + ';"  > <span class="chat-icon" onclick = "microsoftTeams.executeDeepLink(' + "'" + chatUrl + data.FeedbackGivenBy + "'" + ');" ></span > <span class="st-chat-txt">Start a chat</span> </div > <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt"> ' + data.FeedbackGivenBy + ' </span> </div> </div > </div > '
                                 })
                             }
                             blockdata = blockdata + '</div><div class="cnt-box">' + width + '%<span class="cnt">(' + datacount + ')</span></div ></div >';
@@ -160,6 +167,9 @@
             });
         }
 
+        function GetChatConfig(userId) {
+            return (userId == contextPrincipalName) ? "none" : "all";
+        };
         function GetPhoto(userid, accesstoken) {
             var profilepath = "";
             $.ajax({
@@ -181,7 +191,7 @@
             return profilepath;
         }
 
-        
+
 
     </script>
 </body>
