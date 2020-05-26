@@ -121,9 +121,9 @@ namespace Reflection.Helper
                 ReflectionID = taskInfo.reflectionID,
                 RecursstionType = taskInfo.recurssionType,
                 CreatedDate = DateTime.Now,
-                //ExecutionDate = taskInfo.executionDate,
+                ExecutionDate = taskInfo.executionDate,
                 ExecutionTime = taskInfo.executionTime,
-                //RecurssionEndDate = taskInfo.executionDate.AddDays(30)
+                RecurssionEndDate = taskInfo.executionDate.AddDays(30)
 
             };
             await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);

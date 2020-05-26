@@ -138,6 +138,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         taskInfo.postCreatedByEmail = await DBHelper.GetUserEmailId(turnContext);
                         taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
                         taskInfo.postSendNowFlag = (taskInfo.executionTime == "Send now") ? true : false;
+                        taskInfo.IsActive = (taskInfo.executionTime == "Send now") ? false : true;
                         await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration);
                         if (taskInfo.postSendNowFlag == true)
                         {
@@ -151,6 +152,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         else
                         {
                             var reply = MessageFactory.Text(string.Empty);
+
                             reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals";
                             await turnContext.SendActivityAsync(reply);
                         }
@@ -185,9 +187,22 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            string url = this._configuration["BaseUri"];
-            if (action.MessagePayload != null)
-                url = this._configuration["BaseUri"] + "/ManageRecurringPosts";            
+            var url = this._configuration["BaseUri"];
+            if (action.CommandId == "recurringreflections")
+            {
+                url = this._configuration["BaseUri"] + "/ManageRecurringPosts";
+            }
+            else if (action.CommandId == "removeposts")
+            {
+                var activity = Activity.CreateMessageActivity();
+                await turnContext.DeleteActivityAsync(activity.Id);
+
+            }
+            else if (action.CommandId == "createreflect")
+            {
+                url = this._configuration["BaseUri"];
+            }
+
             var response = new MessagingExtensionActionResponse()
             {
                 Task = new TaskModuleContinueResponse()

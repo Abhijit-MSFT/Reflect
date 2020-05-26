@@ -130,7 +130,7 @@
 
                             if (description) {
                                 feedback[i].forEach(data => {
-                                    blockdata = blockdata + '<div class="smile-desc" id="' + data.FeedbackID + '">' + data.FullName + '</div><div class="card custom-profle-card ' + data.FeedbackID + '"> <div class="card-body"> <img src="' + GetPhoto(data.FeedbackGivenBy, accesstoken) + '" alt="avatar" class="profile-pic" /> <div class="profile-name">"' + data.FullName + '"</div > <div class="start-chat" onclick="microsoftTeams.executeDeepLink(https://teams.microsoft.com/l/chat/0/0?users=v-sivsat@microsoft.com)"> <span class="chat-icon"></span> <span class="st-chat-txt">Start a chat</span> </div> <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt">' + data.FeedbackGivenBy + '</span> </div> </div > </div > '
+                                    blockdata = blockdata + '<div class="smile-desc" id="' + data.FeedbackID + '">' + data.FullName + '</div><div class="card custom-profle-card ' + data.FeedbackID + '"> <div class="card-body"> <img src="' + GetPhoto(data.FeedbackGivenBy, accesstoken) + '" alt="avatar" class="profile-pic" /> <div class="profile-name">' + data.FullName + '</div > <div class="start-chat"> <span class="chat-icon" ></span > <span class="st-chat-txt">Start a chat</span> </div > <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt"> ' + data.FeedbackGivenBy + ' </span> </div> </div > </div > '
                                 })
                             }
                             blockdata = blockdata + '</div><div class="cnt-box">' + width + '%<span class="cnt">(' + datacount + ')</span></div ></div >';
@@ -180,6 +180,8 @@
             });
             return profilepath;
         }
+
+        
 
     </script>
 </body>
