@@ -1,7 +1,9 @@
 ﻿using AdaptiveCards;
+using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
+using Reflection.Interfaces;
 using Reflection.Model;
 using Reflection.Repositories.FeedbackData;
 using System;
@@ -14,76 +16,83 @@ using System.Threading.Tasks;
 
 namespace Reflection.Helper
 {
-    public class CardHelper
+    public class CardHelper : ICard
     {
         private readonly IConfiguration _configuration;
-        public CardHelper(IConfiguration configuration)
+        private readonly TelemetryClient _telemetry;
+
+        public CardHelper(IConfiguration configuration, TelemetryClient telemetry)
         {
             _configuration = configuration;
+            _telemetry = telemetry;
+
         }
         public AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid reflectionId)
         {
-            DirectoryInfo folderInfo = new DirectoryInfo(@"wwwroot/images/reflectimages");
+            _telemetry.TrackEvent("FeedBackCard");
+            try
+            {
+                DirectoryInfo folderInfo = new DirectoryInfo(@"wwwroot/images/reflectimages");
 
-            foreach (FileInfo file in folderInfo.GetFiles())
-            {
-                file.Delete();
-            }
-            for (int i = 1; i <= 5; i++)
-            {
-                if (!keyValues.ContainsKey(i))
+                foreach (FileInfo file in folderInfo.GetFiles())
                 {
-                    keyValues.Add(i, new List<FeedbackDataEntity>());
+                    file.Delete();
                 }
-            }
-            
-            var totalcount = 0;
-            for (int i = 1; i <= 5; i++)
-            {
-                if (keyValues.ContainsKey(i))
-                    totalcount = totalcount + keyValues[i].Count;
-            }
-            using Bitmap thumbBMP = new Bitmap(1000, 40);
-            Graphics flagGraphics = Graphics.FromImage(thumbBMP);
-            var color = Brushes.White;
-            var width = 0;
-            var previouswidth = 0;   
+                for (int i = 1; i <= 5; i++)
+                {
+                    if (!keyValues.ContainsKey(i))
+                    {
+                        keyValues.Add(i, new List<FeedbackDataEntity>());
+                    }
+                }
 
-            for (int i = 1; i <= 5; i++)
-            {
-                if (keyValues.ContainsKey(i))
+                var totalcount = 0;
+                for (int i = 1; i <= 5; i++)
                 {
-                    if (i == 1)
-                    {
-                        color = Brushes.MediumSeaGreen; 
-                    }
-                    if (i == 2)
-                    {
-                        color = Brushes.LightGreen;
-                    }
-                    if (i == 3)
-                    {
-                        color = Brushes.Gold;
-                    }
-                    if (i == 4)
-                    {
-                        color = Brushes.LightSalmon;
-                    }
-                    if (i == 5)
-                    {
-                        color = Brushes.Salmon;
-                    }
-                    width = (keyValues[i].Count *1000)/totalcount;
-                    flagGraphics.FillRectangle(color, previouswidth, 0, width, 40);
-                    previouswidth = previouswidth+width+1;
+                    if (keyValues.ContainsKey(i))
+                        totalcount = totalcount + keyValues[i].Count;
                 }
-            }
-            var datastring = "/Images/reflectimages/" + Guid.NewGuid()+ ".png";
-            string outputFileName = @"wwwroot"+ datastring;
-            saveImage(thumbBMP, outputFileName);
-            return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
-            {
-                Body = new List<AdaptiveElement>
+                using Bitmap thumbBMP = new Bitmap(1000, 40);
+                Graphics flagGraphics = Graphics.FromImage(thumbBMP);
+                var color = Brushes.White;
+                var width = 0;
+                var previouswidth = 0;
+
+                for (int i = 1; i <= 5; i++)
+                {
+                    if (keyValues.ContainsKey(i))
+                    {
+                        if (i == 1)
+                        {
+                            color = Brushes.MediumSeaGreen;
+                        }
+                        if (i == 2)
+                        {
+                            color = Brushes.LightGreen;
+                        }
+                        if (i == 3)
+                        {
+                            color = Brushes.Gold;
+                        }
+                        if (i == 4)
+                        {
+                            color = Brushes.LightSalmon;
+                        }
+                        if (i == 5)
+                        {
+                            color = Brushes.Salmon;
+                        }
+                        width = (keyValues[i].Count * 1000) / totalcount;
+                        flagGraphics.FillRectangle(color, previouswidth, 0, width, 40);
+                        previouswidth = previouswidth + width + 1;
+                    }
+                }
+                var datastring = "/Images/reflectimages/" + Guid.NewGuid() + ".png";
+                string outputFileName = @"wwwroot" + datastring;
+                saveImage(thumbBMP, outputFileName);
+                return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
+                {
+                    Body = new List<AdaptiveElement>
                 {
                     new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + datastring) },
                     new AdaptiveColumnSet
@@ -201,7 +210,7 @@ namespace Reflection.Helper
                     }
 
                 },
-                Actions = new List<AdaptiveAction>
+                    Actions = new List<AdaptiveAction>
                 {
                     new AdaptiveSubmitAction()
                     {
@@ -219,29 +228,53 @@ namespace Reflection.Helper
                         }
                     },
                 },
-            };
+                };
 
-        }
-
-        public  Task<string> saveImage(Bitmap data, string Filepath)
-        {
-            using (MemoryStream memory = new MemoryStream())
-            {
-                using (FileStream fs = new FileStream(Filepath, FileMode.Create, FileAccess.ReadWrite))
-                {
-                    data.Save(memory, ImageFormat.Png);
-                    byte[] bytes = memory.ToArray();
-                    fs.Write(bytes, 0, bytes.Length);
-                }
             }
-            return  null;
-        }
-        public  AdaptiveCard CreateNewPostCard(TaskInfo data)
-        {
-            
-            return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
+            catch (Exception ex)
             {
-                Body = new List<AdaptiveElement>
+                _telemetry.TrackException(ex);
+                return null;
+            }
+
+
+
+        }
+
+        public Task<string> saveImage(Bitmap data, string Filepath)
+        {
+            _telemetry.TrackEvent("saveImage");
+
+            try
+            {
+                using (MemoryStream memory = new MemoryStream())
+                {
+                    using (FileStream fs = new FileStream(Filepath, FileMode.Create, FileAccess.ReadWrite))
+                    {
+                        data.Save(memory, ImageFormat.Png);
+                        byte[] bytes = memory.ToArray();
+                        fs.Write(bytes, 0, bytes.Length);
+                    }
+                }
+                return null;
+
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+            }
+
+        }
+        public AdaptiveCard CreateNewPostCard(TaskInfo data)
+        {
+            _telemetry.TrackEvent("CreateNewPostCard");
+
+            try
+            {
+                return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
+                {
+                    Body = new List<AdaptiveElement>
                 {
                     new AdaptiveColumnSet
                     {
@@ -331,8 +364,14 @@ namespace Reflection.Helper
                         }
                     }
                 }
-            };
+                };
 
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+            }
         }
 
     }

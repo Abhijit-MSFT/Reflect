@@ -3,7 +3,9 @@
 //
 // Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.6.2
 
+using System;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
@@ -19,19 +21,31 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
     {
         private readonly IBotFrameworkHttpAdapter Adapter;
         private readonly IBot Bot;
+        private readonly TelemetryClient _telemetry;
 
-        public BotController(IBotFrameworkHttpAdapter adapter, IBot bot)
+        public BotController(IBotFrameworkHttpAdapter adapter, IBot bot, TelemetryClient telemetry)
         {
             Adapter = adapter;
             Bot = bot;
+            _telemetry = telemetry;
         }
 
         [HttpPost]
         public async Task PostAsync()
         {
-            // Delegate the processing of the HTTP POST to the adapter.
-            // The adapter will invoke the bot.
-            await Adapter.ProcessAsync(Request, Response, Bot);
+            _telemetry.TrackEvent("PostAsync");
+            try
+            {
+                // Delegate the processing of the HTTP POST to the adapter.
+                // The adapter will invoke the bot.
+                await Adapter.ProcessAsync(Request, Response, Bot);
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+            }
+
+
         }
     }
 }
