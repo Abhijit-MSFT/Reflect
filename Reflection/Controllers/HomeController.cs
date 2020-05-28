@@ -52,11 +52,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View("Index");
         }
 
-        [Route("manageRecurringPosts/{emailid}")]
-        public ActionResult ManageRecurringPosts(string emailid)
+        [Route("manageRecurringPosts")]
+        public ActionResult ManageRecurringPosts()
         {
             _telemetry.TrackEvent("ManageRecurringPosts");
-            ViewBag.emailid = emailid;
             return View();
         }
 
@@ -86,32 +85,16 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                 _telemetry.TrackException(ex);
                 return null;
             }
+
+
         }
-
-        [Route("api/DeleteReflection/{reflectionid}")]
-        public async Task<string> DeleteReflection(string reflectionid)
-        {
-            _telemetry.TrackEvent("DeleteReflections");
-            try
-            {
-                await DBHelper.DeleteRecurrsionDataAsync(Guid.Parse(reflectionid), _configuration);
-                return "Deleted";
-            }
-            catch (Exception ex)
-            {
-                _telemetry.TrackException(ex);
-                return null;
-            }
-        }
-
-
-        [Route("api/GetRecurssions/{email}")]
-        public async Task<string> GetRecurssions(string email)
+        [Route("api/GetRecurssions")]
+        public async Task<string> GetRecurssions()
         {
             try
             {
                 _telemetry.TrackEvent("GetRecurssions");
-                var data = await DBHelper.GetRecurrencePostsDataAsync(_configuration, email);
+                var data = await DBHelper.GetRecurrencePostsDataAsync(_configuration);
                 var jsondata = new JObject();
                 jsondata["recurssions"] = JsonConvert.SerializeObject(data); ;
                 return jsondata.ToString();

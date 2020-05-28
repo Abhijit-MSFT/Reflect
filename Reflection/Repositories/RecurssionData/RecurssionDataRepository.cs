@@ -28,13 +28,6 @@ namespace Reflection.Repositories.RecurssionData
             List<RecurssionDataEntity> result = allRows.Where(c => RefIds.Contains(c.ReflectionID) && c.RecursstionType!= "Does not repeat").ToList();
             return result;
         }
-        public async Task<RecurssionDataEntity> GetRecurssionData(Guid? RecurssionId)
-        {
-            var allRows = await this.GetAllAsync(PartitionKeyNames.RecurssionDataTable.TableName);
-            RecurssionDataEntity result = allRows.Where(c => c.RecurssionID== RecurssionId).FirstOrDefault();
-            return result;
-        }
-
 
 
     }

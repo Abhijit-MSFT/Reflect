@@ -15,7 +15,6 @@
 
 <body>
     <div class="loader"></div>
-    <input type="text" value=@ViewBag.emailid id="contextemail" style="display:none"/>
     <div class="container">
         <!-- Modal -->
         <div class="" role="document">
@@ -60,7 +59,7 @@
                     <h5>Are you sure to delete ?</h5>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="deleteRecurssion()">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Yes</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
                 </div>
             </div>
@@ -71,25 +70,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
     <script>
-        var deleteid = ""
-        var blockdata = ""
         $(document).ready(function () {
             $(".loader").show();
-            
-            getRecurssions();
-        });
-
-       
-
-        $('.delete-icon').click(function () {
-            $('#myModal').modal('show');
-        });
-
-        function getRecurssions() {
-            var email = $("#contextemail").val();
+            var blockdata = ""
             $.ajax({
                 type: 'GET',
-                url: '/api/GetRecurssions/'+email,
+                url: 'api/GetRecurssions',
                 success: function (data) {
                     $(".loader").hide();
                     $(".custom-tb").show();
@@ -97,7 +83,6 @@
                     $("#questioncount").html("(" + recurssions.length + ")");
                     daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                     var sendpostat = "";
-                    blockdata = "";
                     recurssions.forEach(x => {
                         if (x.RecurssionType == "Monthly") {
                             sendpostat = "Every Month " + new Date(x.RefCreatedDate).getDate() + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
@@ -108,34 +93,23 @@
                         else {
                             sendpostat = "Every Week Day"
                         }
-                        blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td>' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="delete-icon" id="delete'+x.RefID+'" data-toggle="modal" data-target="#myalert"></td></tr>';
+                        blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td>' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="delete-icon" data-toggle="modal" data-target="#myalert"></td></tr>';
                     })
                     $("#tablebody").html(blockdata);
-                    setTimeout(() => {
-                        recurssions.forEach(x => {
-                            $(document).on("click", "#delete" + x.RefID, function (event) {
-                                deleteid = event.currentTarget.id.split('te')[1];
-                            });
-                        });
-                  }, 100);
-             
-                }
-            });
-        }
 
-        function deleteRecurssion() {
-             $.ajax({
-                type: 'GET',
-                url: '/api/DeleteReflection/'+deleteid,
-                success: function (data) {
-                    if (data == "Deleted") {
-                        $("#tablebody").html("");
-                        getRecurssions();
-                    }
-             
                 }
             });
-        }
+        });
+
+        //$(document).on("click", ".delete-icon", function () {
+        //    if (confirm('Are you sure to delete ?')) {
+        //        $(this).prev('#').remove();
+        //    }
+        //});
+
+        $('.delete-icon').click(function () {
+            $('#myModal').modal('show');
+        });
 
     </script>
 

@@ -37,10 +37,10 @@ namespace Reflection.Repositories.ReflectionData
             var dataEntity = allRefs.Where(c => c.ReflectionID == refId).FirstOrDefault();
             return dataEntity.MessageID;
         }
-        public async Task<List<ReflectionDataEntity>> GetAllActiveReflection(string email)
+        public async Task<List<ReflectionDataEntity>> GetAllActiveReflection()
         {
             var allRefs = await this.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
-            List<ReflectionDataEntity> RefDataEntity = allRefs.Where(c => c.IsActive == true && c.CreatedByEmail== email).ToList();
+            List<ReflectionDataEntity> RefDataEntity = allRefs.Where(c => c.IsActive == true).ToList();
             return RefDataEntity;
         }
     }
