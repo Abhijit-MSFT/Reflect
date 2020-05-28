@@ -55,6 +55,7 @@ function GetReflections() {
         success: function (data) {
             $(".loader").hide();
             $(".modal-mb-sc2").show();
+            $(".sc2br-blk").show();
             if (data) {
                 data = JSON.parse(data);
             }
@@ -117,11 +118,11 @@ function GetReflections() {
                         feedback[i].forEach((data) => {
                             blockdata =
                                 blockdata +
-                                '<div class="smile-desc" id="' +
+                                '<span class="smile-desc" id="' +
                                 data.FeedbackID +
                                 '">' +
-                                data.FullName +
-                                '</div><div class="card custom-profle-card ' +
+                                data.FullName + "," +
+                                '</span><div class="card custom-profle-card ' +
                                 data.FeedbackID +
                                 '"> <div class="card-body"> <img src="' +
                                 GetPhoto(data.FeedbackGivenBy, accesstoken) +
