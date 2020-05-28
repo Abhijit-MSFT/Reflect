@@ -127,11 +127,8 @@ function GetUserDetails(principalName, appAccessToken) {
             console.log('Success');
             if (response !== null) {
                 var name = response.displayName;
-                alert(userNameArray[0]);
                 var userNameArray = name.split(' ');
-                console.log(userNameArray[0]);
-                alert(userNameArray[0]);
-                $('#usertext').html(" " + userNameArray[0] + " " + userNameArray[1]);
+                $('#usertext').html(" " + userNameArray[0] + " " + (userNameArray[1] !== undefined ? userNameArray[1] : "" ));
             } else {
                 alert("Something went wrong");
             }

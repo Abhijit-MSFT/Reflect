@@ -17,280 +17,371 @@ using AdaptiveCards;
 using Reflection.Repositories.FeedbackData;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.ReflectionData;
+using Microsoft.ApplicationInsights;
+using Reflection.Interfaces;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
     public class MessageExtension : TeamsActivityHandler
     {
         private readonly IConfiguration _configuration;
+        private readonly TelemetryClient _telemetry;
+        private readonly ICard _cardHelper;
+
         //private readonly FeedbackDataRepository feedbackDataRepository;
-        public MessageExtension(IConfiguration configuration)
+        public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper)
         {
             _configuration = configuration;
+            _telemetry = telemetry;
+            _cardHelper = cardHelper;
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-            CardHelper cardhelper = new CardHelper(_configuration);
+            _telemetry.TrackEvent("OnMessageActivityAsync");
 
-            FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration);
-            ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration);
-            if (turnContext.Activity.Value != null)
+            try
             {
-                var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
-                var reply = Activity.CreateMessageActivity();
+                //CardHelper cardhelper = new CardHelper(_configuration);
 
-                if (response.type == "saveFeedback")
+                FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration);
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration);
+                if (turnContext.Activity.Value != null)
                 {
-                    var name = (turnContext.Activity.From.Name).Split();
-                    response.userName  = name[0] + ' ' + name[1];
-                    response.emailId = await DBHelper.GetUserEmailId(turnContext);
+                    var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
+                    var reply = Activity.CreateMessageActivity();
 
-                    //Check if this is user's second feedback
-                    FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
-                    if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
+                    if (response.type == "saveFeedback")
                     {
-                        feebackData.Feedback = response.feedbackId;
-                        await feedbackDataRepository.CreateOrUpdateAsync(feebackData);
-                    }
-                    else
-                    {
-                        await DBHelper.SaveReflectionFeedbackDataAsync(response, _configuration);
-                    }
+                        var name = (turnContext.Activity.From.Name).Split();
+                        response.userName = name[0] + ' ' + name[1];
+                        response.emailId = await DBHelper.GetUserEmailId(turnContext);
 
-                    try
-                    {
-                        //Get reflect data to check if mseeage id is present - if not update it
-                        ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
-                        Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
-                        var adaptiveCard = cardhelper.FeedBackCard(feedbacks, response.reflectionId);
-                        
-                        Attachment attachment = new Attachment()
+                        //Check if this is user's second feedback
+                        FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
+                        if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
                         {
-                            ContentType = AdaptiveCard.ContentType,
-                            Content = adaptiveCard
-                        };
-                        reply.Attachments.Add(attachment);
-
-                        if (reflectData.MessageID == null)
-                        {
-
-                            var result = turnContext.SendActivityAsync(reply, cancellationToken);
-                            reflectData.MessageID = result.Result.Id;
-                            //update messageid in reflectio table
-                            await reflectionDataRepository.InsertOrMergeAsync(reflectData);
-
+                            feebackData.Feedback = response.feedbackId;
+                            await feedbackDataRepository.CreateOrUpdateAsync(feebackData);
                         }
                         else
                         {
-                            reply.Id = reflectData.MessageID;
-                            await turnContext.UpdateActivityAsync(reply);
+                            await DBHelper.SaveReflectionFeedbackDataAsync(response, _configuration);
+                        }
+
+                        try
+                        {
+                            //Get reflect data to check if mseeage id is present - if not update it
+                            ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
+                            Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
+                            var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, response.reflectionId);
+
+                            Attachment attachment = new Attachment()
+                            {
+                                ContentType = AdaptiveCard.ContentType,
+                                Content = adaptiveCard
+                            };
+                            reply.Attachments.Add(attachment);
+
+                            if (reflectData.MessageID == null)
+                            {
+
+                                var result = turnContext.SendActivityAsync(reply, cancellationToken);
+                                reflectData.MessageID = result.Result.Id;
+                                //update messageid in reflectio table
+                                await reflectionDataRepository.InsertOrMergeAsync(reflectData);
+
+                            }
+                            else
+                            {
+                                reply.Id = reflectData.MessageID;
+                                await turnContext.UpdateActivityAsync(reply);
+                            }
+                        }
+                        catch (System.Exception e)
+                        {
+                            _telemetry.TrackException(e);
+                            //messageid = null;
+                            Console.WriteLine(e.Message.ToString());
                         }
                     }
-                    catch (System.Exception e)
-                    {
-                        //messageid = null;
-                        Console.WriteLine(e.Message.ToString());
-                    }
-                }               
+                }
+                else
+                {
+                    // This is a regular text message.
+                    await turnContext.SendActivityAsync(MessageFactory.Text($"Hello from the TeamsMessagingExtensionsActionPreviewBot."), cancellationToken);
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                // This is a regular text message.
-                await turnContext.SendActivityAsync(MessageFactory.Text($"Hello from the TeamsMessagingExtensionsActionPreviewBot."), cancellationToken);
+                _telemetry.TrackException(ex);
             }
         }
 
         protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
         
         {
-            ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
+            _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
 
-            return new TaskModuleResponse
+            try
             {
-                Task = new TaskModuleContinueResponse
+                ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
+
+                return new TaskModuleResponse
                 {
-                    Value = new TaskModuleTaskInfo()
+                    Task = new TaskModuleContinueResponse
                     {
-                        Height = 700,
-                        Width = 600,
-                        Title = "Check the pulse on emotinal well-being",
-                        Url = reldata.data.URL
+                        Value = new TaskModuleTaskInfo()
+                        {
+                            Height = 700,
+                            Width = 600,
+                            Title = "Check the pulse on emotinal well-being",
+                            Url = reldata.data.URL
+                        },
                     },
-                },
-            };
+                };
+
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+            }
+
+
         }
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
+            _telemetry.TrackEvent("OnTeamsMessagingExtensionSubmitActionAsync");
 
-            switch (taskInfo.action)
+            try
             {
-                case "reflection":
-                    return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
-                case "sendAdaptiveCard":
-                    try
-                    {
-                        var name = (turnContext.Activity.From.Name).Split();
-                        CardHelper cardhelper = new CardHelper(_configuration);
-                        taskInfo.postCreateBy = name[0] + ' ' + name[1];
-                        taskInfo.postCreatedByEmail = await DBHelper.GetUserEmailId(turnContext);
-                        taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
-                        taskInfo.postSendNowFlag = (taskInfo.executionTime == "Send now") ? true : false;
-                        taskInfo.IsActive = (taskInfo.executionTime == "Send now") ? false : true;
-                        await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration);
-                        if (taskInfo.postSendNowFlag == true)
-                        {
-                            var typingActivity = MessageFactory.Text(string.Empty);
-                            typingActivity.Type = ActivityTypes.Typing;
-                            await turnContext.SendActivityAsync(typingActivity);
-                            var adaptiveCard = cardhelper.CreateNewPostCard(taskInfo);
-                            var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
-                            await turnContext.SendActivityAsync(message, cancellationToken);
-                        }
-                        else
-                        {
-                            var reply = MessageFactory.Text(string.Empty);
+                TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
 
-                            reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals";
-                            await turnContext.SendActivityAsync(reply);
-                        }
-                        return null;
-                    }
-                    catch (Exception e)
-                    {
-
-                        throw;
-                    }
-                case "ManageRecurringPosts":
-                    var response = new MessagingExtensionActionResponse()
-                    {
-                        Task = new TaskModuleContinueResponse()
+                switch (taskInfo.action)
+                {
+                    case "reflection":
+                        return await OnTeamsMessagingExtensionFetchTaskAsync(turnContext, action, cancellationToken);
+                    case "sendAdaptiveCard":
+                        try
                         {
-                            Value = new TaskModuleTaskInfo()
+                            var name = (turnContext.Activity.From.Name).Split();
+                            //CardHelper cardhelper = new CardHelper(_configuration);
+                            taskInfo.postCreateBy = name[0] + ' ' + name[1];
+                            taskInfo.postCreatedByEmail = await DBHelper.GetUserEmailId(turnContext);
+                            taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
+                            taskInfo.postSendNowFlag = (taskInfo.executionTime == "Send now") ? true : false;
+                            taskInfo.IsActive = (taskInfo.executionTime == "Send now") ? false : true;
+                            await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration);
+                            if (taskInfo.postSendNowFlag == true)
                             {
-                                Height = 600,
-                                Width = 780,
-                                Title = "Check the pulse on emotinal well-being",
-                                Url = this._configuration["BaseUri"] + "/ManageRecurringPosts"
+                                var typingActivity = MessageFactory.Text(string.Empty);
+                                typingActivity.Type = ActivityTypes.Typing;
+                                await turnContext.SendActivityAsync(typingActivity);
+                                var adaptiveCard = _cardHelper.CreateNewPostCard(taskInfo);
+                                var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
+                                await turnContext.SendActivityAsync(message, cancellationToken);
+                            }
+                            else
+                            {
+                                var reply = MessageFactory.Text(string.Empty);
+
+                                reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals";
+                                await turnContext.SendActivityAsync(reply);
+                            }
+                            return null;
+                        }
+                        catch (Exception ex)
+                        {
+                            _telemetry.TrackException(ex);
+                            return null;
+                        }
+                    case "ManageRecurringPosts":
+                        var response = new MessagingExtensionActionResponse()
+                        {
+                            Task = new TaskModuleContinueResponse()
+                            {
+                                Value = new TaskModuleTaskInfo()
+                                {
+                                    Height = 600,
+                                    Width = 780,
+                                    Title = "Check the pulse on emotinal well-being",
+                                    Url = this._configuration["BaseUri"] + "/ManageRecurringPosts"
+                                },
                             },
-                        },
-                    };
+                        };
 
-                    return response;
-                default:
-                    return null;
-            };
+                        return response;
+                    default:
+                        return null;
+                };
 
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+            }
         }
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            var url = this._configuration["BaseUri"];
-            if (action.CommandId == "recurringreflections")
-            {
-                url = this._configuration["BaseUri"] + "/ManageRecurringPosts";
-            }
-            else if (action.CommandId == "removeposts")
-            {
-                var activity = Activity.CreateMessageActivity();
-                await turnContext.DeleteActivityAsync(activity.Id);
+            _telemetry.TrackEvent("OnTeamsMessagingExtensionFetchTaskAsync");
 
-            }
-            else if (action.CommandId == "createreflect")
+            try
             {
-                url = this._configuration["BaseUri"];
-            }
-
-            var response = new MessagingExtensionActionResponse()
-            {
-                Task = new TaskModuleContinueResponse()
+                var url = this._configuration["BaseUri"];
+                if (action.CommandId == "recurringreflections")
                 {
-                    Value = new TaskModuleTaskInfo()
-                    {
-                        Height = 620,
-                        Width = 800,
-                        Title = "Invite people to share how they feel",
-                        Url = url
-                    },
-                },
-            };
+                    url = this._configuration["BaseUri"] + "/ManageRecurringPosts";
+                }
+                else if (action.CommandId == "removeposts")
+                {
+                    var activity = Activity.CreateMessageActivity();
+                    await turnContext.DeleteActivityAsync(activity.Id);
 
-            return response;
+                }
+                else if (action.CommandId == "createreflect")
+                {
+                    url = this._configuration["BaseUri"];
+                }
+
+                var response = new MessagingExtensionActionResponse()
+                {
+                    Task = new TaskModuleContinueResponse()
+                    {
+                        Value = new TaskModuleTaskInfo()
+                        {
+                            Height = 620,
+                            Width = 800,
+                            Title = "Invite people to share how they feel",
+                            Url = url
+                        },
+                    },
+                };
+
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+            }
         }
 
         protected override Task<MessagingExtensionResponse> OnTeamsMessagingExtensionQueryAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionQuery query, CancellationToken cancellationToken)
         {
-            var title = "";
-            var titleParam = query.Parameters?.FirstOrDefault(p => p.Name == "cardTitle");
-            if (titleParam != null)
-            {
-                title = titleParam.Value.ToString();
-            }
+            _telemetry.TrackEvent("OnTeamsMessagingExtensionQueryAsync");
 
-            if (query == null || query.CommandId != "getRandomText")
+            try
             {
-                // We only process the 'getRandomText' queries with this message extension
-                throw new NotImplementedException($"Invalid CommandId: {query.CommandId}");
-            }
-
-            var attachments = new MessagingExtensionAttachment[5];
-
-            for (int i = 0; i < 5; i++)
-            {
-                attachments[i] = GetAttachment(title);
-            }
-
-            var result = new MessagingExtensionResponse
-            {
-                ComposeExtension = new MessagingExtensionResult
+                var title = "";
+                var titleParam = query.Parameters?.FirstOrDefault(p => p.Name == "cardTitle");
+                if (titleParam != null)
                 {
-                    AttachmentLayout = "list",
-                    Type = "result",
-                    Attachments = attachments.ToList()
-                },
-            };
-            return Task.FromResult(result);
+                    title = titleParam.Value.ToString();
+                }
 
+                if (query == null || query.CommandId != "getRandomText")
+                {
+                    // We only process the 'getRandomText' queries with this message extension
+                    throw new NotImplementedException($"Invalid CommandId: {query.CommandId}");
+                }
+
+                var attachments = new MessagingExtensionAttachment[5];
+
+                for (int i = 0; i < 5; i++)
+                {
+                    attachments[i] = GetAttachment(title);
+                }
+
+                var result = new MessagingExtensionResponse
+                {
+                    ComposeExtension = new MessagingExtensionResult
+                    {
+                        AttachmentLayout = "list",
+                        Type = "result",
+                        Attachments = attachments.ToList()
+                    },
+                };
+                return Task.FromResult(result);
+
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+            }
         }
 
-        private static MessagingExtensionAttachment GetAttachment(string title)
+        private MessagingExtensionAttachment GetAttachment(string title)
         {
-            var card = new ThumbnailCard
-            {
-                Title = !string.IsNullOrWhiteSpace(title) ? title : new Faker().Lorem.Sentence(),
-                Text = new Faker().Lorem.Paragraph(),
-                Images = new List<CardImage> { new CardImage("http://lorempixel.com/640/480?rand=" + DateTime.Now.Ticks.ToString()) }
-            };
+            _telemetry.TrackEvent("GetAttachment");
 
-            return card
-                .ToAttachment()
-                .ToMessagingExtensionAttachment();
+            try
+            {
+                var card = new ThumbnailCard
+                {
+                    Title = !string.IsNullOrWhiteSpace(title) ? title : new Faker().Lorem.Sentence(),
+                    Text = new Faker().Lorem.Paragraph(),
+                    Images = new List<CardImage> { new CardImage("http://lorempixel.com/640/480?rand=" + DateTime.Now.Ticks.ToString()) }
+                };
+
+                return card
+                    .ToAttachment()
+                    .ToMessagingExtensionAttachment();
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+            }
         }
 
         protected override Task<MessagingExtensionResponse> OnTeamsMessagingExtensionSelectItemAsync(ITurnContext<IInvokeActivity> turnContext, JObject query, CancellationToken cancellationToken)
         {
+            _telemetry.TrackEvent("OnTeamsMessagingExtensionSelectItemAsync");
 
-            return Task.FromResult(new MessagingExtensionResponse
+            try
             {
-                ComposeExtension = new MessagingExtensionResult
+                return Task.FromResult(new MessagingExtensionResponse
                 {
-                    AttachmentLayout = "list",
-                    Type = "result",
-                    Attachments = new MessagingExtensionAttachment[]{
+                    ComposeExtension = new MessagingExtensionResult
+                    {
+                        AttachmentLayout = "list",
+                        Type = "result",
+                        Attachments = new MessagingExtensionAttachment[]{
                         new ThumbnailCard()
                             .ToAttachment()
                             .ToMessagingExtensionAttachment()
                     }
-                },
-            });
+                    },
+                });
+
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+            }
+
         }
 
         protected async override Task OnTeamsMessagingExtensionCardButtonClickedAsync(ITurnContext<IInvokeActivity> turnContext, JObject cardData, CancellationToken cancellationToken)
         {
-            var reply = MessageFactory.Text("OnTeamsMessagingExtensionCardButtonClickedAsync Value: " + JsonConvert.SerializeObject(turnContext.Activity.Value));
-            await turnContext.SendActivityAsync(reply, cancellationToken);
+            _telemetry.TrackEvent("OnTeamsMessagingExtensionCardButtonClickedAsync");
+            try
+            {
+                var reply = MessageFactory.Text("OnTeamsMessagingExtensionCardButtonClickedAsync Value: " + JsonConvert.SerializeObject(turnContext.Activity.Value));
+                await turnContext.SendActivityAsync(reply, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+            }
 
             //return base.OnTeamsMessagingExtensionCardButtonClickedAsync(turnContext, cardData, cancellationToken);
         }
