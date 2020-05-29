@@ -9,7 +9,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
-    <link href="~/CSS/ManageRecurringPosts.css" rel="stylesheet" type="text/css" />
     <title>Screen3</title>
 </head>
 
@@ -69,51 +68,6 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
-    <script>
-        $(document).ready(function () {
-            $(".loader").show();
-            var blockdata = ""
-            $.ajax({
-                type: 'GET',
-                url: 'api/GetRecurssions',
-                success: function (data) {
-                    $(".loader").hide();
-                    $(".custom-tb").show();
-                    recurssions = JSON.parse(JSON.parse(data).recurssions);
-                    $("#questioncount").html("(" + recurssions.length + ")");
-                    daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                    var sendpostat = "";
-                    recurssions.forEach(x => {
-                        if (x.RecurssionType == "Monthly") {
-                            sendpostat = "Every Month " + new Date(x.RefCreatedDate).getDate() + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
-                        }
-                        else if (x.RecurssionType == "Weekly") {
-                            sendpostat = "Every Week " + daysInWeek[new Date(x.RefCreatedDate).getDay()] + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
-                        }
-                        else {
-                            sendpostat = "Every Week Day"
-                        }
-                        blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td>' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="delete-icon" data-toggle="modal" data-target="#myalert"></td></tr>';
-                    })
-                    $("#tablebody").html(blockdata);
-
-                }
-            });
-        });
-
-        //$(document).on("click", ".delete-icon", function () {
-        //    if (confirm('Are you sure to delete ?')) {
-        //        $(this).prev('#').remove();
-        //    }
-        //});
-
-        $('.delete-icon').click(function () {
-            $('#myModal').modal('show');
-        });
-
-    </script>
-
+    <script src="~/Scripts/ManageRecurringPosts.js"></script>
 </body>
-
-
 </html>
