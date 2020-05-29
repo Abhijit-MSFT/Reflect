@@ -285,7 +285,7 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Auto,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("Posted by "+ $"{data.postCreateBy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium },
+                                    new AdaptiveTextBlock("Posted by "+ $"{data.postCreateBy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
                                 }
 
                             },
@@ -294,14 +294,14 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Auto,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("| Responses are "+ $"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium},
+                                    new AdaptiveTextBlock("| Responses are "+ $"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
                                 }
 
                             },
 
                         }
                     },
-                    new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large },
+                    new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100},
                     new AdaptiveColumnSet
                     {
                         Columns = new List<AdaptiveColumn>()
