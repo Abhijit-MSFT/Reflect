@@ -37,7 +37,7 @@ namespace Reflection.Repositories.QuestionsData
                 var result = allRows.Where(d => d.IsDefaultFlag == true || d.CreatedByEmail == userEmail);
                 return result.ToList();
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return null;
             }
@@ -51,7 +51,7 @@ namespace Reflection.Repositories.QuestionsData
                 var result = allRows.Where(d => d.IsDefaultFlag == true || d.QuestionID == qID);
                 return result.ToList();
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
                 return null;
             }

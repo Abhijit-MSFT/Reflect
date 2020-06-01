@@ -16,6 +16,7 @@
     <div class="loader"></div>
     <div class="container">
         <!-- Modal -->
+        <input type="text" value=@ViewBag.emailid id="contextemail" style="display:none" />
         <div class="" role="document">
             <div class="">
                 <div class="modal-mb-sc2">
@@ -58,7 +59,7 @@
                     <h5>Are you sure to delete ?</h5>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="deleteRecurssion()">Yes</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
                 </div>
             </div>

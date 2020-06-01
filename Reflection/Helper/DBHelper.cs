@@ -235,7 +235,7 @@ namespace Reflection.Helper
 
         }
 
-        public static async Task<List<RecurssionScreenData>> GetRecurrencePostsDataAsync(IConfiguration configuration)
+        public static async Task<List<RecurssionScreenData>> GetRecurrencePostsDataAsync(IConfiguration configuration,string email)
         {
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
             QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
@@ -243,7 +243,7 @@ namespace Reflection.Helper
             //RecurssionScreenData recurssionScreenData = new RecurssionScreenData();
 
 
-            List<ReflectionDataEntity> allActiveRefs = await reflectionDataRepository.GetAllActiveReflection();
+            List<ReflectionDataEntity> allActiveRefs = await reflectionDataRepository.GetAllActiveReflection(email);
             List<Guid?> allActiveRefIDs = allActiveRefs.Select(c => c.ReflectionID).ToList();
             List<Guid?> allActiveQuestionIDs = allActiveRefs.Select(c => c.QuestionID).ToList();
 
@@ -288,6 +288,17 @@ namespace Reflection.Helper
         }
 
 
+        public static async Task DeleteRecurrsionDataAsync(Guid reflectionId, IConfiguration configuration)
+        {
+            ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(configuration);
+            RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
+            var reflection = await reflectionDataRepository.GetReflectionData(reflectionId);
+            var recurssion = await recurssionDataRepository.GetRecurssionData(reflection.RecurrsionID);
+            await recurssionDataRepository.DeleteAsync(recurssion);
+            await reflectionDataRepository.DeleteAsync(reflection);
+
+
+        }
 
 
 

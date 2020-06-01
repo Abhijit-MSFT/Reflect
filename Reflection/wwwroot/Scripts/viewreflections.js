@@ -165,14 +165,14 @@ function GetReflections() {
 }
 
 function GetPhoto(userid, accesstoken) {
-    var profilepath = "";
+    var profilepath = "../Images/Avatar.png";
     $.ajax({
         url: "/ProfilePhoto",
         data: { token: accesstoken, userid: userid },
         type: "GET",
         async: false,
         success: function (response) {
-            if (response !== null) {
+            if (response !== null && response != "") {
                 profilepath = response;
             } else {
                 alert("Something went wrong");

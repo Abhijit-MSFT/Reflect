@@ -1,250 +1,264 @@
 @font-face {
-  font-family: "Teams Assets";
-  src: url("../fonts/TeamsAssets-Light.woff") format("woff"),
-    url("../fonts/TeamsAssets-Light.woff2") format("woff2");
-  font-style: normal;
+    font-family: "Teams Assets";
+    src: url("../fonts/TeamsAssets-Light.woff") format("woff"), url("../fonts/TeamsAssets-Light.woff2") format("woff2");
+    font-style: normal;
 }
 
 .theme-dark .panel {
-  background-color: #2d2c2c;
+    background-color: #2d2c2c;
 }
 
 body {
-  background-color: #2d2c2c;
+    background-color: #2d2c2c;
 }
 
 .custom-mh {
-  margin: 32px 32px 0 32px;
-  padding: 0;
-  border-bottom: none;
+    margin: 32px 32px 0 32px;
+    padding: 0;
+    border-bottom: none;
 }
 
 .close {
-  font-family: Teams Assets;
-  font-weight: 300;
-  color: #000000;
-  opacity: 0.5;
-  outline-color: white !important;
+    font-family: Teams Assets;
+    font-weight: 300;
+    color: #000000;
+    opacity: 0.5;
+    outline-color: white !important;
 }
 
 .head-logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 3px;
+    width: 36px;
+    height: 36px;
+    border-radius: 3px;
 }
 
 .media-mb {
-  line-height: 1;
-  margin-top: 3px;
+    line-height: 1;
+    margin-top: 3px;
 }
 
 .heading {
-  font-family: Segoe UI;
-  font-size: 14px;
-  letter-spacing: 0.1px;
-  color: #252424;
-  font-weight: 600;
+    font-family: Segoe UI;
+    font-size: 14px;
+    letter-spacing: 0.1px;
+    color: #252424;
+    font-weight: 600;
 }
 
 .head-desc {
-  font-family: Segoe UI;
-  font-size: 12px;
-  color: #252424;
+    font-family: Segoe UI;
+    font-size: 12px;
+    color: #252424;
 }
 
 .modal-mb-sc2 {
-  margin-top: 16px;
-  padding: 0;
-  height: 400px;
+    margin-top: 16px;
+    padding: 0;
+    height: 400px;
 }
 
 .recurring {
-  font-family: Segoe UI;
-  font-size: 18px;
-  color: #252424;
-  font-weight: 500;
+    font-family: Segoe UI;
+    font-size: 18px;
+    color: #252424;
+    font-weight: 500;
 }
 
 .recu-desc {
-  font-family: Segoe UI;
-  font-size: 12px;
-  color: #737373;
-  width: 534px;
-  height: 36px;
+    font-family: Segoe UI;
+    font-size: 12px;
+    color: #737373;
+    width: 534px;
+    height: 36px;
 }
 
 .custom-tb {
-  margin-top: 19px;
-  display: none;
+    margin-top: 19px;
+    display: none;
 }
 
 .qutin,
 .privacy,
 .snd-post {
-  font-family: Segoe UI;
-  font-size: 14px;
-  color: #ffffff;
-  font-weight: 500;
-  padding-top: 0px !important;
+    font-family: Segoe UI;
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 500;
+    padding-top: 0px !important;
 }
 
 .qutin {
-  padding-left: 0px !important;
+    padding-left: 0px !important;
 }
 
 .privacy {
-  font-size: 14px;
-  padding-left: 0px !important;
-  text-align: center;
+    font-size: 14px;
+    padding-left: 0px !important;
+    text-align: center;
+}
+
+.table td {
+    border-top: 1px solid #3b3a39;
 }
 
 .hw-r-u {
-  font-family: Segoe UI;
-  font-size: 14px;
-  color: #ffffff;
-  margin: 19px 0 0 15px;
-  border-top: 1px solid #3b3a39;
-  font-weight: bold;
+    font-family: Segoe UI;
+    font-size: 14px;
+    color: #ffffff;
+    margin: 19px 0 0 15px;
+    border-top: 1px solid #3b3a39;
+    font-weight: bold;
 }
+
 .privacy-cl {
-  color: #ffffff;
+    color: #ffffff;
+    vertical-align: middle !important;
+    text-transform: capitalize;
 }
+
 .hw-r-u,
 .cus-box,
 .date-day {
-  padding: 0 0.75rem !important;
+    padding: 0.4rem 0.75rem !important;
 }
 
 .date-day {
-  padding: 0 0 0 0.75rem !important;
+    padding: 0 0 0 0.75rem !important;
 }
 
 .table thead th {
-  border-bottom: none;
+    border-bottom: none;
 }
 
 .table th {
-  border-top: none;
-  border-bottom: 1px solid #3b3a39;
+    border-top: none;
+    border-bottom: 1px solid #3b3a39;
 }
 
 tr:last-child {
-  border-bottom: 1px solid #3b3a39;
+    border-bottom: 1px solid #3b3a39;
 }
 
 .hru-desc {
-  font-family: Segoe UI;
-  font-size: 12px;
-  color: #ffffff;
-  opacity: 0.75;
-  padding-bottom: 10px;
+    font-family: Segoe UI;
+    font-size: 12px;
+    color: #ffffff;
+    opacity: 0.75;
+    font-weight: 400;
 }
 
 .cus-box {
-  text-align: center;
-  padding-left: 0 !important;
-  vertical-align: middle !important;
+    text-align: center;
+    padding-left: 0 !important;
+    vertical-align: middle !important;
 }
 
 .date-day {
-  font-family: Segoe UI;
-  font-size: 14px;
-  color: #ffffff;
-  vertical-align: middle !important;
+    font-family: Segoe UI;
+    font-size: 14px;
+    color: #ffffff;
+    vertical-align: middle !important;
 }
 
-.date-day::before {
-  content: "\E447";
-  font-family: "Teams Assets";
-  font-size: 14px;
-  color: #ffffff;
-  float: right;
-  cursor: pointer;
-  margin-right: 4%;
+    .date-day::before {
+        content: "\E447";
+        font-family: "Teams Assets";
+        font-size: 14px;
+        color: #ffffff;
+        float: right;
+        cursor: pointer;
+        margin-right: 4%;
+    }
+
+td.delete-icon {
+    vertical-align: middle;
 }
+
 .delete-icon:before {
-  content: "\E42B";
-  font-family: "Teams Assets";
-  font-size: 16px;
-  color: #a6a8da;
-  float: right;
-  cursor: pointer;
-  margin-right: 8%;
+    content: "\E42B";
+    font-family: "Teams Assets";
+    font-size: 16px;
+    color: #a6a8da;
+    float: right;
+    cursor: pointer;
+    margin-right: 8%;
 }
+
 .mf {
-  margin-top: 32px;
-  border-top: 2px solid #3b3a39;
-  padding-top: 3%;
+    margin-top: 32px;
+    border-top: 2px solid #3b3a39;
+    padding-top: 3%;
 }
 
 .float-left {
-  color: #6266a5;
-  cursor: pointer;
-  font-size: 14px;
+    color: #A6A7DC;
+    cursor: pointer;
+    font-size: 14px;
 }
+
 .left-chev:before {
-  content: "\E425";
-  font-family: "Teams Assets";
-  font-size: 12px;
-  color: #6266a5;
-  cursor: pointer;
+    content: "\E425";
+    font-family: "Teams Assets";
+    font-size: 12px;
+    color: #A6A7DC;
+    cursor: pointer;
 }
 
 /*loader*/
 .loader {
-  margin: 8rem auto;
-  font-size: 10px;
-  position: relative;
-  border-top: 1.1em solid white;
-  border-bottom: 1.1em solid white;
-  -webkit-animation: load8 1.1s infinite linear;
-  animation: load8 1.1s infinite linear;
+    margin: 8rem auto;
+    font-size: 10px;
+    position: relative;
+    border-top: 1.1em solid white;
+    border-bottom: 1.1em solid white;
+    -webkit-animation: load8 1.1s infinite linear;
+    animation: load8 1.1s infinite linear;
 }
 
-.loader,
-.loader:after {
-  border-radius: 50%;
-  width: 10em;
-  height: 10em;
-}
+    .loader,
+    .loader:after {
+        border-radius: 50%;
+        width: 10em;
+        height: 10em;
+    }
 
 @-webkit-keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
 
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
 
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
 
 @media screen and (max-width: 425px) {
-  .custom-mc,
-  .review-blk {
-    height: auto;
-  }
+    .custom-mc,
+    .review-blk {
+        height: auto;
+    }
 
-  .recu-desc {
-    width: auto;
-  }
+    .recu-desc {
+        width: auto;
+    }
 }
 
 @media screen and (max-width: 320px) {
-  .modal-mb-sc2 {
-    margin: 32px 10px;
-  }
+    .modal-mb-sc2 {
+        margin: 32px 10px;
+    }
 }

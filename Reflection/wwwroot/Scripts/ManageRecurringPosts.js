@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿var blockdata = ""
+var deleteid = ""
+$(document).ready(function () {
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
         if (context.theme == "default") {
@@ -25,10 +27,21 @@
         }
     });
     $(".loader").show();
-    var blockdata = ""
+    getRecurssions();
+});
+
+
+
+$('.delete-icon').click(function () {
+    $('#myModal').modal('show');
+});
+
+
+function getRecurssions() {
+    var email = $("#contextemail").val();
     $.ajax({
         type: 'GET',
-        url: 'api/GetRecurssions',
+        url: '/api/GetRecurssions/' + email,
         success: function (data) {
             $(".loader").hide();
             $(".custom-tb").show();
@@ -36,30 +49,40 @@
             $("#questioncount").html("(" + recurssions.length + ")");
             daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             var sendpostat = "";
+            blockdata = "";
             recurssions.forEach(x => {
                 if (x.RecurssionType == "Monthly") {
                     sendpostat = "Every Month " + new Date(x.RefCreatedDate).getDate() + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
                 }
-                else if (x.RecurssionType == "Weekly") {
-                    sendpostat = "Every Week " + daysInWeek[new Date(x.RefCreatedDate).getDay()] + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
-                }
                 else {
                     sendpostat = "Every Week Day"
                 }
-                blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="delete-icon" data-toggle="modal" data-target="#myalert"></td></tr>';
+                blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td>' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="delete-icon" id="delete' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
             })
             $("#tablebody").html(blockdata);
+            setTimeout(() => {
+                recurssions.forEach(x => {
+                    $(document).on("click", "#delete" + x.RefID, function (event) {
+                        deleteid = event.currentTarget.id.split('te')[1];
+                    });
+                });
+            }, 100);
 
         }
     });
-});
 
-//$(document).on("click", ".delete-icon", function () {
-//    if (confirm('Are you sure to delete ?')) {
-//        $(this).prev('#').remove();
-//    }
-//});
+}
 
-$('.delete-icon').click(function () {
-    $('#myModal').modal('show');
-});
+function deleteRecurssion() {
+    $.ajax({
+        type: 'GET',
+        url: '/api/DeleteReflection/' + deleteid,
+        success: function (data) {
+            if (data == "Deleted") {
+                $("#tablebody").html("");
+                getRecurssions();
+            }
+
+        }
+    });
+}

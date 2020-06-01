@@ -199,6 +199,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             return null;
                         }
                     case "ManageRecurringPosts":
+                        var postCreatedByEmail = await DBHelper.GetUserEmailId(turnContext);
                         var response = new MessagingExtensionActionResponse()
                         {
                             Task = new TaskModuleContinueResponse()
@@ -208,7 +209,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                     Height = 600,
                                     Width = 780,
                                     Title = "Check the pulse on emotinal well-being",
-                                    Url = this._configuration["BaseUri"] + "/ManageRecurringPosts"
+                                    Url = this._configuration["BaseUri"] + "/ManageRecurringPosts/" + postCreatedByEmail
                                 },
                             },
                         };

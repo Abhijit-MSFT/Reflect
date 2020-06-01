@@ -29,6 +29,13 @@ namespace Reflection.Repositories.RecurssionData
             return result;
         }
 
+        public async Task<RecurssionDataEntity> GetRecurssionData(Guid? RecurssionId)
+        {
+            var allRows = await this.GetAllAsync(PartitionKeyNames.RecurssionDataTable.TableName);
+            RecurssionDataEntity result = allRows.Where(c => c.RecurssionID == RecurssionId).FirstOrDefault();
+            return result;
+        }
+
 
     }
 }

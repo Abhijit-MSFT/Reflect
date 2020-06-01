@@ -67,7 +67,7 @@
 
 .custom-tb {
     margin-top: 19px;
-    display:none;
+    display: none;
 }
 
 .qutin,
@@ -81,21 +81,15 @@
 }
 
 .qutin {
-/*    width: 42%;*/
     padding-left: 0px !important;
 }
 
 .privacy {
-    /*    width: 16%;*/
     font-size: 14px;
     padding-left: 0px !important;
     text-align: center;
 }
 
-/*.snd-post {
-    width: 42%;
-}
-*/
 .hw-r-u {
     font-family: Segoe UI;
     font-size: 14px;
@@ -105,10 +99,15 @@
     font-weight: bold;
 }
 
+.privacy-cl {
+    vertical-align: middle !important;
+    text-transform: capitalize;
+}
+
 .hw-r-u,
 .cus-box,
 .date-day {
-    padding: 0 0.75rem !important;
+    padding: 0.4rem 0.75rem !important;
 }
 
 .date-day {
@@ -132,7 +131,7 @@ tr:last-child {
     font-family: Segoe UI;
     font-size: 12px;
     color: #605e5c;
-    padding-bottom: 10px;
+    font-weight: 400;
 }
 
 .cus-box {
@@ -140,15 +139,6 @@ tr:last-child {
     padding-left: 0 !important;
     vertical-align: middle !important;
 }
-
-/*.custom-control-input:checked ~ .custom-control-label::before {
-    background-color: #6264a7;
-    border-color: #6264a7;
-}
-
-.custom-control-input:focus ~ .custom-control-label::before {
-    box-shadow: none;
-}*/
 
 .date-day {
     font-family: Segoe UI;
@@ -166,6 +156,11 @@ tr:last-child {
         cursor: pointer;
         margin-right: 4%;
     }
+
+td.delete-icon {
+    vertical-align: middle;
+}
+
 .delete-icon:before {
     content: "\E42B";
     font-family: "Teams Assets";
@@ -175,6 +170,7 @@ tr:last-child {
     cursor: pointer;
     margin-right: 8%;
 }
+
 .mf {
     margin-top: 32px;
     border-top: 2px solid #edebe9;
@@ -186,6 +182,7 @@ tr:last-child {
     cursor: pointer;
     font-size: 14px;
 }
+
 .left-chev:before {
     content: "\E425";
     font-family: "Teams Assets";
@@ -193,22 +190,6 @@ tr:last-child {
     color: #6266a5;
     cursor: pointer;
 }
-/*.btn-dn:focus {
-    outline-color: #dddddd;
-}
-
-.btn-dn {
-    background-color: #6266a5;
-    color: #ffffff;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
-    width: 118px;
-    height: 32px;
-    border-radius: 3px;
-    box-sizing: border-box;
-    border: 1px solid #6266a5;
-    font-size: 14px;
-    line-height: 2;
-}*/
 
 /*loader*/
 .loader {

@@ -247,7 +247,7 @@ input[type="date"] {
         content: "\E503";
         font-family: "Teams Assets";
         font-size: 14px;
-        color: #a6a8da;
+        color: #a6a7dc;
         position: relative;
         float: right;
         right: 12px;
@@ -268,7 +268,7 @@ input[type="date"] {
 
 .br-blk {
     background: #2d2c2c;
-    border: 1px solid #e8e7e6;
+    border: 1px solid #3b3139;
     box-sizing: border-box;
     border-radius: 3px;
     height: 115px;
@@ -280,27 +280,32 @@ input[type="date"] {
 .created {
     font-family: Segoe UI;
     font-size: 14px;
-    color: #f3f2f1;
+    color: #FFFFFF;
+    opacity: 0.75;
     margin: 11px 0px 10px 16px;
     display: inline-flex;
     white-space: pre;
 }
 
 .divider {
-    color: #f3f2f1;
     margin-top: 1%;
+    color: #FFFFFF;
+    opacity: 0.75;
 }
 
 .reflections {
     font-family: Segoe UI;
     font-size: 14px;
-    color: #f3f2f1;
+    color: #FFFFFF;
+    opacity: 0.75;
     margin: 11px 8px 10px 0px;
     display: inline-flex;
 }
 
 #privacytext {
     margin-left: 4px;
+    color: #FFFFFF;
+    opacity: 0.75;
 }
 
 .feeling {
@@ -328,12 +333,12 @@ input[type="date"] {
 }
 
 .btn-cancle {
-    background-color: #ffffff;
-    border: 1px solid #dddddd;
+    background-color: #2d2c2c;
+    border: 1px solid #605e5c;
     box-sizing: border-box;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
     border-radius: 3px;
-    color: black;
+    color: white;
     width: 118px;
     height: 32px;
     font-weight: 500;
@@ -365,14 +370,14 @@ input[type="date"] {
     font-family: "Teams Assets";
     font-size: 16px;
     float: left;
-    color: #6266a5;
+    color: #a6a7dc;
     cursor: pointer;
 }
 
 .manage {
     font-family: Segoe UI;
     font-size: 14px;
-    color: #6266a5;
+    color: #a6a7dc;
     float: left;
     padding-top: 2px;
     margin-left: 12px;
