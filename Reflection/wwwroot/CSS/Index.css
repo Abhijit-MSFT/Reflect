@@ -196,8 +196,19 @@ input[type="date"]::-webkit-inner-spin-button {
     display: none;
 }
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-    -webkit-appearance: none;
+input::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
+    display: none;
+}
+
+input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 39px;
+    color: #6266a5;
+    right: 10px;
+}
+
+.date-ip:before {
+    content: attr(data-date);
 }
 
 input[type="date"] {
@@ -221,7 +232,7 @@ input[type="date"] {
     margin-right: 6px;
 }
 
-.date-icon {
+/*.date-icon {
     position: relative;
     cursor: pointer;
 }
@@ -236,7 +247,7 @@ input[type="date"] {
         right: 12px;
         bottom: 28px;
         pointer-events: none;
-    }
+    }*/
 
 .date-ip {
     width: 100%;

@@ -67,7 +67,24 @@ $(document).ready(function () {
                 });
         })
         .change();
+
+    $(".date-ip").on("change", function () {
+        this.setAttribute(
+            "data-date",
+            moment(this.value, "YYYY-MM-DD")
+                .format(this.getAttribute("data-date-format"))
+        )
+    }).trigger("change")
+
 });
+
+$('#questions-list').keyup(function () {
+    if ($(this).val().length == 0) {
+        $('.btn-send').hide();
+    } else {
+        $('.btn-send').show();
+    }
+}).keyup(); 
 
 function SendAdaptiveCard() {
     var list = document.querySelectorAll(".htmlEle");
@@ -214,3 +231,4 @@ function addShowHideButton() {
         $("#questionsblock").removeClass("showquestions");
     }
 }
+
