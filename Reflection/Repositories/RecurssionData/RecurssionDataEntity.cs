@@ -40,6 +40,10 @@ namespace Reflection.Repositories.RecurssionData
 
         public DateTime? RecurssionEndDate { get; set; }
 
+        public string ReflectionRowKey { get; set; }
+
+        public string QuestionRowKey { get; set; }
+
     }
 
     //public class RecurssionScreenData

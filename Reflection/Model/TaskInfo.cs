@@ -34,6 +34,11 @@ namespace Reflection.Model
         public Guid? recurssionID { get; set; }
         public bool isDefaultQuestion { get; set; }
 
+        public string reflectionRowKey { get; set; }
+
+        public string recurrsionRowKey { get; set; }
+
+        public string questionRowKey { get; set; }
         public string type { get; set; }
     }
 

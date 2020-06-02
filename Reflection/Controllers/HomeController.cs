@@ -1,4 +1,5 @@
-﻿using Microsoft.ApplicationInsights;
+﻿using AdaptiveCards;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Schema;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Reflection.Helper;
+using Reflection.Interfaces;
 using Reflection.Model;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.RecurssionData;
@@ -276,35 +278,14 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             }
         }
 
-
-        //[HttpGet("api/GetAccessTokenAsync")]
-        //public async Task<string> GetAccessTokenAsync()
-        //{
-        //    var accessToken = "";
-
-        //    var body = $"grant_type=client_credentials&client_id="+ _configuration["MicrosoftAppId"]+"@"+ _configuration["Tenant"] + "&client_secret="+ _configuration["MicrosoftAppPassword"] + "&scope=https://graph.microsoft.com/.default";
-        //    try
-        //    {
-
-        //        HttpClient httpClient = new HttpClient();
-        //        var request = new HttpRequestMessage(HttpMethod.Post, "https://login.microsoftonline.com/common/oauth2/v2.0/token");
-        //        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        //        request.Content = (new StringContent(body, Encoding.UTF8, "application/x-www-form-urlencoded"));
-        //        HttpResponseMessage response = await httpClient.SendAsync(request);
-        //        string responseBody = await response.Content.ReadAsStringAsync();
-
-        //        if (!response.IsSuccessStatusCode)
-        //            throw new Exception(responseBody);
-
-        //        accessToken = JsonConvert.DeserializeObject<Object>(responseBody).ToString();
-        //        return accessToken;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //TBD
-        //        throw;
-        //    }
-        //}
+        [HttpPost("api/GetReflectionAdaptiveCard")]
+        public string GetReflectionAdaptiveCard(TaskInfo taskInfo)
+        {
+            CardHelper card = new CardHelper(_configuration,_telemetry);
+            var data = card.CreateNewPostCard(taskInfo);
+            string output = JsonConvert.SerializeObject(data);
+            return output;
+        }
 
     }
 }

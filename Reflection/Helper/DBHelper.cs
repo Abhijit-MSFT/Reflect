@@ -44,13 +44,12 @@ namespace Reflection.Helper
                 {
                     taskInfo.questionID = Guid.NewGuid();
                 }
-                var rowKey = Guid.NewGuid();
 
                 ReflectionDataEntity reflectEntity = new ReflectionDataEntity
                 {
                     ReflectionID = taskInfo.reflectionID,
                     PartitionKey = PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition, // read it from json
-                    RowKey = rowKey.ToString(),
+                    RowKey = taskInfo.reflectionRowKey,
                     CreatedBy = taskInfo.postCreateBy,
                     CreatedByEmail = taskInfo.postCreatedByEmail,
                     RefCreatedDate = DateTime.Now,
@@ -63,8 +62,16 @@ namespace Reflection.Helper
                     IsActive = taskInfo.IsActive
                 };
                 await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
-
-                await SaveQuestionsDataAsync(configuration, taskInfo);
+                if (await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question, taskInfo.postCreatedByEmail) == false)
+                {
+                    await SaveQuestionsDataAsync(configuration, taskInfo);
+                }
+                else
+                {
+                    var ques = await questionsDataRepository.GetQuestionData(taskInfo.questionID);
+                    taskInfo.questionRowKey = ques.RowKey;
+                }
+                    
 
                 if (!(taskInfo.recurssionType == "Does not repeat" && taskInfo.postSendNowFlag == true))
                 {
@@ -82,15 +89,12 @@ namespace Reflection.Helper
         public static async Task SaveQuestionsDataAsync(IConfiguration configuration, TaskInfo taskInfo)
         {
             QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(configuration);
-            var rowKey = Guid.NewGuid();
-
-            if (await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question, taskInfo.postCreatedByEmail) == false)
-            {
+            
                 QuestionsDataEntity questionEntity = new QuestionsDataEntity
                 {
                     QuestionID = taskInfo.questionID,
                     PartitionKey = PartitionKeyNames.QuestionsDataTable.QuestionsDataPartition,
-                    RowKey = rowKey.ToString(),
+                    RowKey = taskInfo.questionRowKey,
                     Question = taskInfo.question,
                     QuestionCreatedDate = DateTime.Now,
                     IsDefaultFlag = false, //handle default flag logic
@@ -99,7 +103,6 @@ namespace Reflection.Helper
                 };
 
                 await questionsDataRepository.CreateOrUpdateAsync(questionEntity);
-            }
         }
 
         /// <summary>
@@ -111,13 +114,14 @@ namespace Reflection.Helper
         public static async Task SaveRecurssionDataAsync(IConfiguration configuration, TaskInfo taskInfo)
         {
             RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
-            var rowKey = Guid.NewGuid();
-
+            
             RecurssionDataEntity recurssionEntity = new RecurssionDataEntity
             {
                 RecurssionID = taskInfo.recurssionID,
                 PartitionKey = PartitionKeyNames.RecurssionDataTable.RecurssionDataPartition,
-                RowKey = rowKey.ToString(),
+                RowKey = taskInfo.recurrsionRowKey,
+                ReflectionRowKey=taskInfo.reflectionRowKey,
+                QuestionRowKey=taskInfo.questionRowKey,
                 ReflectionID = taskInfo.reflectionID,
                 RecursstionType = taskInfo.recurssionType,
                 CreatedDate = DateTime.Now,

@@ -174,6 +174,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
                             taskInfo.postSendNowFlag = (taskInfo.executionTime == "Send now") ? true : false;
                             taskInfo.IsActive = (taskInfo.executionTime == "Send now") ? false : true;
+                            taskInfo.questionRowKey = Guid.NewGuid().ToString();
+                            taskInfo.recurrsionRowKey = Guid.NewGuid().ToString();
+                            taskInfo.reflectionRowKey = Guid.NewGuid().ToString();
                             await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration);
                             if (taskInfo.postSendNowFlag == true)
                             {
