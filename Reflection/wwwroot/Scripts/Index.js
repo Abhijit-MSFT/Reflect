@@ -80,9 +80,9 @@ $(document).ready(function () {
 
 $('#questions-list').keyup(function () {
     if ($(this).val().length == 0) {
-        $('.btn-send').hide();
+        $('.btn-send').prop("disabled", true);
     } else {
-        $('.btn-send').show();
+        $('.btn-send').removeAttr('disabled');
     }
 }).keyup(); 
 
@@ -130,6 +130,10 @@ function getSelectedOption(event) {
     $("#selectedTxt").html($("#questions-list").val());
 }
 
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
+
 function setPrivacy() {
     microsoftTeams.getContext(function (context) {
         if (
@@ -153,16 +157,19 @@ function GetDefaultQuestions(userPrincipleName) {
             data.forEach((x) => {
                 blockdata =
                     blockdata +
-                    ' <option class="default-opt" id="' +
+                    ' <option class="default-opt" data-toggle="tooltip" data-placement="top" id="' +
                     x.questionID +
-                    '" value="' +
-                    x.question +
-                    '">';
+                '" value="' +
+                x.question + 
+                '" title="' +
+                x.question +
+                    '"/>';
             });
             $("#questions").html(blockdata);
         },
     });
 }
+
 
 function GetUserDetails(principalName, appAccessToken) {
     $.ajax({
