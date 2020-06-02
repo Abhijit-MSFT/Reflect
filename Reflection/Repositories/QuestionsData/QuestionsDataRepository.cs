@@ -57,6 +57,7 @@ namespace Reflection.Repositories.QuestionsData
             }
         }
 
+
         public async Task<List<QuestionsDataEntity>> GetAllQuestionData(List<Guid?> quesID)
         {
             var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
@@ -75,20 +76,12 @@ namespace Reflection.Repositories.QuestionsData
 
             return false;
         }
-
-        //public async Task<List<QuestionsDataEntity>> GetAllQuestionData(List<Guid?> quesID)
-        //{
-        //    var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-        //    List<QuestionsDataEntity> result = allRows.Where(c => quesID.Contains(c.QuestionID)).ToList();
-        //    return result ?? null;
-        //}
-
-        //public async Task<bool> IsQuestionAlreadtPresent(string question)
-        //{
-        //    var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-        //    bool result = allRows.Any(c => c.Question == question);
-        //    return result;
-        //}
+        public async Task<QuestionsDataEntity> GetQuestionData(Guid? quesID)
+        {
+            var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
+            QuestionsDataEntity result = allRows.Where(c => c.QuestionID==quesID).FirstOrDefault();
+            return result ?? null;
+        }
 
     }
 
