@@ -65,6 +65,12 @@ $(document).ready(function () {
                         $(".box").hide();
                     }
                 });
+            if ($('#questions-list').val().length == 0) {
+                $('#selectedTxt').text("No reflection question entered");
+                $('.feeling').addClass("feeling-noquestion");
+            } else {
+                $('.feeling').removeClass("feeling-noquestion");
+            }
         })
         .change();
 
@@ -126,9 +132,15 @@ function SendAdaptiveCard() {
     return true;
 }
 
-function getSelectedOption(event) {
-    $("#selectedTxt").html($("#questions-list").val());
-}
+    function getSelectedOption(event) {
+        $('#selectedTxt').html($("#questions-list").val());
+        if ($('#questions-list').val().length == 0) {
+            $('#selectedTxt').text("No reflection question entered");
+            $('.feeling').addClass("feeling-noquestion");
+        } else {
+            $('.feeling').removeClass("feeling-noquestion");
+        }
+    }
 
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()

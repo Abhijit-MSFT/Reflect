@@ -212,7 +212,9 @@ input[type="date"]::-webkit-inner-spin-button {
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-    -webkit-appearance: none;
+    color: transparent;
+    background: none;
+    z-index: 1;
 }
 
 input[type="date"] {
@@ -314,6 +316,10 @@ input[type="date"] {
     color: #f3f2f1;
     font-weight: 500;
     margin-left: 16px;
+}
+
+.feeling-noquestion {
+    opacity: .5;
 }
 
 .smiles {

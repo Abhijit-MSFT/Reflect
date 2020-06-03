@@ -191,6 +191,12 @@
     font-size: 14px;
 }
 
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: transparent;
+    background: none;
+    z-index: 1;
+}
+
 input[type="date"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     display: none;
@@ -232,7 +238,7 @@ input[type="date"] {
     margin-right: 6px;
 }
 
-/*.date-icon {
+.date-icon {
     position: relative;
     cursor: pointer;
 }
@@ -247,7 +253,7 @@ input[type="date"] {
         right: 12px;
         bottom: 28px;
         pointer-events: none;
-    }*/
+    }
 
 .date-ip {
     width: 100%;
@@ -302,6 +308,10 @@ input[type="date"] {
     color: #252424;
     font-weight: 500;
     margin-left: 16px;
+}
+
+.feeling-noquestion{
+    color:gray;
 }
 
 .smiles {
