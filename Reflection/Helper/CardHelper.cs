@@ -32,12 +32,12 @@ namespace Reflection.Helper
             _telemetry.TrackEvent("FeedBackCard");
             try
             {
-                //DirectoryInfo folderInfo = new DirectoryInfo(@"wwwroot/images/reflectimages");
+                DirectoryInfo folderInfo = new DirectoryInfo(@"wwwroot/images/reflectimages");
 
-                //foreach (FileInfo file in folderInfo.GetFiles())
-                //{
-                //    file.Delete();
-                //}
+                foreach (FileInfo file in folderInfo.GetFiles())
+                {
+                    file.Delete();
+                }
                 for (int i = 1; i <= 5; i++)
                 {
                     if (!keyValues.ContainsKey(i))
