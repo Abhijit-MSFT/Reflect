@@ -273,10 +273,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return _configuration["BaseUri"] + "/Images/Avatar.png";
         }
 
-        [HttpPost("api/GetReflectionAdaptiveCard")]
-        public string GetReflectionAdaptiveCard(TaskInfo taskInfo)
+        [HttpPost]
+        [Route("ReflectionAdaptiveCard")]
+        public string ReflectionAdaptiveCard([FromBody]TaskInfo taskInfo)
         {
-            CardHelper card = new CardHelper(_configuration,_telemetry);
+            CardHelper card = new CardHelper(_configuration, _telemetry);
             var data = card.CreateNewPostCard(taskInfo);
             string output = JsonConvert.SerializeObject(data);
             return output;
