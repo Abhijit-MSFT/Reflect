@@ -366,11 +366,18 @@ namespace Reflection.Helper
         }
 
 
-        public async Task DeleteRecurrsionDataAsync(Guid reflectionId)
+        /// <summary>
+        /// Delete Reflection and recurssion related to that reflection
+        /// </summary>
+        /// <param name="Iconfiguration">Reads The config from app settings</param>
+        /// <param name="reflectionId">Specific reflectionid that is to be deleted</param>
+
+
+        public  async Task DeleteRecurrsionDataAsync(Guid reflectionId)
         {
-            _telemetry.TrackEvent("DeleteReflections");
             try
             {
+                _telemetry.TrackEvent("DeleteRecurrsionDataAsync");
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
                 var reflection = await reflectionDataRepository.GetReflectionData(reflectionId);
@@ -381,11 +388,37 @@ namespace Reflection.Helper
             catch (Exception ex)
             {
                 _telemetry.TrackException(ex);
-
             }
 
 
+        }
+        /// <summary>
+        /// update Reflection and recurssion related to that reflection
+        /// </summary>
+        /// <param name="Iconfiguration">Reads The config from app settings</param>
+        /// <param name="reflection">COmbination of reflection and recurssion to save data</param>
 
+
+        public  async Task SaveEditRecurssionDataAsync(RecurssionScreenData reflection)
+        {
+            try
+            {
+                _telemetry.TrackEvent("SaveEditRecurssionDataAsync");
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration,_telemetry);
+                RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration,_telemetry);
+                var reflectiondata = await reflectionDataRepository.GetReflectionData(reflection.RefID);
+                var recurssion = await recurssionDataRepository.GetRecurssionData(reflectiondata.RecurrsionID);
+                reflectiondata.Privacy = reflection.Privacy;
+                recurssion.ExecutionDate = reflection.ExecutionDate;
+                recurssion.ExecutionTime = reflection.ExecutionTime;
+                recurssion.RecursstionType = reflection.RecurssionType;
+                await recurssionDataRepository.CreateOrUpdateAsync(recurssion);
+                await reflectionDataRepository.CreateOrUpdateAsync(reflectiondata);
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+            }
         }
 
 

@@ -158,17 +158,41 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         }
 
 
-        
 
         [HttpPost]
         [Route("ReflectionAdaptiveCard")]
         public string ReflectionAdaptiveCard([FromBody]TaskInfo taskInfo)
         {
-            _telemetry.TrackEvent("GetReflectionAdaptiveCard");
-            CardHelper card = new CardHelper(_configuration,_telemetry);
-            var data = card.CreateNewPostCard(taskInfo);
-            string output = JsonConvert.SerializeObject(data);
-            return output;
+            try
+            {
+                _telemetry.TrackEvent("ReflectionAdaptiveCard");
+                CardHelper card = new CardHelper(_configuration, _telemetry);
+                var data = card.CreateNewPostCard(taskInfo);
+                string output = JsonConvert.SerializeObject(data);
+                return output;
+            }
+            catch(Exception e)
+            {
+                _telemetry.TrackEvent("ReflectionAdaptiveCard Exception "+ e);
+                return null;
+            }
+        }
+
+        [HttpPost]
+        [Route("api/SaveRecurssionData")]
+        public async Task<string> SaveRecurssionData([FromBody]RecurssionScreenData data)
+        {
+            try
+            {
+                _telemetry.TrackEvent("SaveRecurssionData");
+                await _dbHelper.SaveEditRecurssionDataAsync(data);
+                return "true";
+            }
+            catch (Exception e)
+            {
+                _telemetry.TrackEvent("SaveRecurssionData Exception " + e);
+                return "false";
+            }
         }
 
     }

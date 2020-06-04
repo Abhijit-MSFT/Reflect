@@ -20,12 +20,6 @@
         <div class="" role="document">
             <div class="">
                 <div class="modal-mb-sc2">
-                    @*<div class="recurring">Recurring posts</div>*@
-                    @*<div class="recu-desc">
-                            View and manage recurring posts below. Previous posts will not be affected
-                            and any changes will automatically apply only
-                            to future posts.
-                        </div>*@
                     <table class="table custom-tb">
                         <thead>
                             <tr>
@@ -62,6 +56,69 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="deleteRecurssion()">Yes</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">NO</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="edit">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>Edit Recurrance</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5 id="currentrecurrsionquestion"></h5>
+                     <div class="privacy">Privacy</div>
+                    <div class="input-group custom-in">
+                        <select class="cs htmlEle" id="currentprivacy">
+                            <option value="public" selected>Public - Names will be displayed with responses</option>
+                            <option value="anonymous">Anonymous - Names will be omitted from responses</option>
+                            <option value="owner" selected>Owner-Responses with names displayed for owners only</option>
+                        </select>
+                        <span class="sel-chev3"></span>
+                    </div>
+                    <div class="post">
+                        <div class="row custom-rw">
+                            <div class="col-6 custom-col">
+                                <div class="date">
+                                    <div class="blk-head" id="currentdate">Date</div>
+                                    <input type="date" data-date="" data-date-format="MMMM DD, YYYY" value="2020-06-02"  class="date-ip htmlEle" id="execdate" />
+                                    <span class="date-icon"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 custom-col">
+                                <div class="blk-head">Time</div>
+                                <div class="selc">
+                                    <select class="cs htmlEle" id="currentexectime">
+                                        <option value="Send now" selected>Send now</option>
+                                        <option value="Send later">Send later</option>
+                                    </select>
+                                    <span class="sel-chev2"></span>
+                                </div>
+                            </div>
+                            <div class="col-6 custom-col">
+                                <div class="blk-head rec">Recurrence</div>
+                                <div class="selc">
+                                    <select class="cs htmlEle" id="currentrecurrance">
+                                        <option value="Does not repeat" selected>Does not repeat </option>
+                                        <option value="Every weekday">Every weekday (Mon-Fri)</option>
+                                        <option value="Weekly">Weekly</option>
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="Custom">Custom</option>
+                                    </select>
+                                    <span class="sel-chev2"></span>
+                                </div>
+                            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="saveRecurssion()">Save</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
             </div>
         </div>
     </div>

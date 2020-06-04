@@ -20,5 +20,7 @@ namespace Reflection.Interfaces
         Task<ViewReflectionsEntity> GetViewReflectionsData(Guid reflectionId);
         Task<List<RecurssionScreenData>> GetRecurrencePostsDataAsync(string email);
         Task DeleteRecurrsionDataAsync(Guid reflectionId);
+
+        Task SaveEditRecurssionDataAsync(RecurssionScreenData reflection);
     }
 }
