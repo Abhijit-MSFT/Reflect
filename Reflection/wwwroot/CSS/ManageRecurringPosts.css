@@ -171,6 +171,20 @@ td.delete-icon {
     margin-right: 8%;
 }
 
+td.edit-icon {
+    vertical-align: middle;
+}
+
+.edit-icon:before {
+    content: "\E328";
+    font-family: "Teams Assets";
+    font-size: 16px;
+    color: #6266a5;
+    float: right;
+    cursor: pointer;
+    margin-right: 8%;
+}
+
 .mf {
     margin-top: 32px;
     border-top: 2px solid #edebe9;
