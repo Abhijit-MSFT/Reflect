@@ -2,6 +2,7 @@
 var userobject = {};
 var accesstoken = "";
 $(document).ready(function () {
+    $("#usertext").html(" " + userName);
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
         if (context.theme == "default") {
@@ -26,23 +27,7 @@ $(document).ready(function () {
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         }
-    });
-    $.ajax({
-        url: "/api/GetAccessTokenAsync",
-        type: "Get",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Accept: "application/json",
-        },
-        success: function (token) {
-            accesstoken = token;
-            microsoftTeams.getContext(function (context) {
-                if (token !== undefined && token !== null && token !== "") {
-                    GetUserDetails(context.userPrincipalName, token);
-                    GetDefaultQuestions(context.userPrincipalName);
-                }
-            });
-        },
+        GetDefaultQuestions(context.userPrincipalName);
     });
     $("body").click(function (e) {
         if (e.target.className !== "form-control questioninput") {
@@ -147,15 +132,6 @@ $(function () {
 })
 
 function setPrivacy() {
-    microsoftTeams.getContext(function (context) {
-        if (
-            accesstoken !== undefined &&
-            accesstoken !== null &&
-            accesstoken !== ""
-        ) {
-            GetUserDetails(context.userPrincipalName, accesstoken);
-        }
-    });
     $("#privacytext").html($("#privacy").val());
 }
 
@@ -183,31 +159,6 @@ function GetDefaultQuestions(userPrincipleName) {
 }
 
 
-function GetUserDetails(principalName, appAccessToken) {
-    $.ajax({
-        url: "https://graph.microsoft.com/beta/users/" + principalName,
-        type: "GET",
-        beforeSend: function (request) {
-            request.setRequestHeader("Authorization", "Bearer " + appAccessToken);
-        },
-        success: function (response) {
-            console.log("Success");
-            if (response !== null) {
-                var name = response.displayName;
-                alert(userNameArray[0]);
-                var userNameArray = name.split(" ");
-                console.log(userNameArray[0]);
-                alert(userNameArray[0]);
-                $("#usertext").html(" " + userNameArray[0] + " " + userNameArray[1]);
-            } else {
-                alert("Something went wrong");
-            }
-        },
-        error: function () {
-            console.log("Failed");
-        },
-    });
-}
 
 submitHandler = (err, result) => {
     //if (result.action == "Chaining") {

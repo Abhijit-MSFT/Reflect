@@ -29,21 +29,27 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         private readonly ReflectionDataRepository _refrepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly TelemetryClient _telemetry;
+        private readonly IDataBase _dbHelper;
 
         public HomeController(QuestionsDataRepository dataRepository, IConfiguration configuration,
-            ReflectionDataRepository refrepository, IWebHostEnvironment webHostEnvironment, TelemetryClient telemetry)
+            ReflectionDataRepository refrepository, IWebHostEnvironment webHostEnvironment, TelemetryClient telemetry, IDataBase dbHelper)
         {
             _repository = dataRepository;
             _configuration = configuration;
             _refrepository = refrepository;
             _webHostEnvironment = webHostEnvironment;
             _telemetry = telemetry;
+            _dbHelper = dbHelper;
         }
 
-        [Route("")]
-        public ActionResult Index()
+        [Route("{userName}")]
+        public ActionResult Index(string userName)
         {
             _telemetry.TrackEvent("Index");
+            if (userName!=null)
+            {
+                ViewBag.UserName = userName;
+            }
             return View();
         }
 
@@ -69,7 +75,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             _telemetry.TrackEvent("DeleteReflections");
             try
             {
-                await DBHelper.DeleteRecurrsionDataAsync(Guid.Parse(reflectionid), _configuration);
+                await _dbHelper.DeleteRecurrsionDataAsync(Guid.Parse(reflectionid));
                 return "Deleted";
             }
             catch (Exception ex)
@@ -93,7 +99,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             _telemetry.TrackEvent("GetReflections");
             try
             {
-                var data = await DBHelper.GetViewReflectionsData(reflectionid, _configuration);
+                var data = await _dbHelper.GetViewReflectionsData(reflectionid);
                 var jsondata = new JObject();
                 jsondata["feedback"] = JsonConvert.SerializeObject(data.FeedbackData);
                 jsondata["reflection"] = JsonConvert.SerializeObject(data.ReflectionData);
@@ -114,7 +120,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             try
             {
                 _telemetry.TrackEvent("GetRecurssions");
-                var data = await DBHelper.GetRecurrencePostsDataAsync(_configuration, email);
+                var data = await _dbHelper.GetRecurrencePostsDataAsync(email);
                 var jsondata = new JObject();
                 jsondata["recurssions"] = JsonConvert.SerializeObject(data); ;
                 return jsondata.ToString();
@@ -152,130 +158,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet("api/GetAccessTokenAsync")]
-        public async Task<string> GetAccessToken()
-        {
-            _telemetry.TrackEvent("GetAccessToken");
-
-            try
-            {
-                string tenant = _configuration["Tenant"];
-                string appId = _configuration["AppId"];
-                string appSecret = _configuration["AppSecret"];
-                string response = await POST($"https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token",
-                                  $"grant_type=client_credentials&client_id={appId}&client_secret={appSecret}"
-                                  + "&scope=https%3A%2F%2Fgraph.microsoft.com%2F.default");
-
-                string accessToken = JsonConvert.DeserializeObject<Reflection.Model.TokenResponse>(response).access_token;
-                return accessToken;
-            }
-            catch (Exception ex)
-            {
-                _telemetry.TrackException(ex);
-                return null;
-            }
-        }
-        /// <summary>
-        /// Http Post request for retreiving the meta data about the access token
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="body"></param>
-        /// <returns></returns>
-        public async Task<string> POST(string url, string body)
-        {
-            _telemetry.TrackEvent("POST");
-
-            try
-            {
-                HttpClient httpClient = new HttpClient();
-
-                var request = new HttpRequestMessage(HttpMethod.Post, url);
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                request.Content = new StringContent(body, Encoding.UTF8, "application/x-www-form-urlencoded");
-                HttpResponseMessage response = await httpClient.SendAsync(request);
-                string responseBody = await response.Content.ReadAsStringAsync();
-
-                if (!response.IsSuccessStatusCode)
-                    throw new Exception(responseBody);
-                return responseBody;
-            }
-            catch (Exception ex)
-            {
-
-                _telemetry.TrackException(ex);
-                return null;
-            }
-            
-        }
-
-        [HttpGet("ProfilePhoto")]
-        public async Task<string> GetPhoto(string token, string userid)
-        {
-            _telemetry.TrackEvent("GetPhoto");
-            string profilePhotoUrl = string.Empty;
-            try
-            {
-                string endpoint = $"{_configuration["UsersEndPoint"]}{userid}/photo/$value";
-                using (var client = new HttpClient())
-                {
-                    using (var request = new HttpRequestMessage(HttpMethod.Get, endpoint))
-                    {
-                        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                        using (HttpResponseMessage response = await client.SendAsync(request))
-                        {
-                            if (response.IsSuccessStatusCode)
-                            {
-                                var photo = await response.Content.ReadAsStreamAsync();
-                                try
-                                {
-                                    var fileName = userid + ".png";
-                                    string imagePath = _webHostEnvironment.WebRootPath + "\\Images\\ProfilePictures\\";
-                                    if (!System.IO.Directory.Exists(imagePath))
-                                        System.IO.Directory.CreateDirectory(imagePath);
-                                    imagePath += fileName;
-                                    using (var fileStream = System.IO.File.Create(imagePath))
-                                    {
-                                        photo.Seek(0, SeekOrigin.Begin);
-                                        photo.CopyTo(fileStream);
-                                    }
-                                    profilePhotoUrl = _configuration["BaseUri"] + "/images/ProfilePictures/" + fileName;
-                                }
-                                catch (Exception ex)
-                                {
-                                    _telemetry.TrackException(ex);
-                                    profilePhotoUrl = GetDefaultProfilePicture();
-                                }
-                            }
-                            else
-                            {
-                                profilePhotoUrl = GetDefaultProfilePicture();
-                            }
-                        }
-                    }
-                }
-
-            }
-            catch (Exception ex)
-            {
-                _telemetry.TrackException(ex);
-                profilePhotoUrl = GetDefaultProfilePicture();
-            }
-            return profilePhotoUrl;
-        }
-
-        private string GetDefaultProfilePicture()
-        {
-            return _configuration["BaseUri"] + "/Images/Avatar.png";
-        }
+        
 
         [HttpPost("api/GetReflectionAdaptiveCard")]
         public string GetReflectionAdaptiveCard(TaskInfo taskInfo)
         {
+            _telemetry.TrackEvent("GetReflectionAdaptiveCard");
             CardHelper card = new CardHelper(_configuration,_telemetry);
             var data = card.CreateNewPostCard(taskInfo);
             string output = JsonConvert.SerializeObject(data);

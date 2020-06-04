@@ -1,4 +1,5 @@
-﻿let accesstoken;
+﻿let contextPrincipalName;
+
 $(document).ready(function () {
     $(".loader").show();
     microsoftTeams.initialize();
@@ -25,27 +26,9 @@ $(document).ready(function () {
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         }
+        contextPrincipalName = context.userPrincipalName;
     });
-    $.ajax({
-        url: "/api/GetAccessTokenAsync",
-        type: "Get",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Accept: "application/json",
-        },
-        success: function (token) {
-            accesstoken = token;
-        },
-        complete: function () {
-            if (
-                accesstoken !== undefined &&
-                accesstoken !== null &&
-                accesstoken !== ""
-            ) {
-                GetReflections();
-            }
-        },
-    });
+    GetReflections();
 });
 
 function GetReflections() {
@@ -72,6 +55,7 @@ function GetReflections() {
                 var datacount = 0;
                 var width = 0;
                 var descriptio = "";
+                var chatUrl = "https://teams.microsoft.com/l/chat/0/0?users=";
                 Object.keys(JSON.parse(data.feedback)).forEach((x) => {
                     totalcount = totalcount + feedback[x].length;
                 });
@@ -124,11 +108,9 @@ function GetReflections() {
                                 data.FullName + "," +
                                 '</span><div class="card custom-profle-card ' +
                                 data.FeedbackID +
-                                '"> <div class="card-body"> <img src="' +
-                                GetPhoto(data.FeedbackGivenBy, accesstoken) +
-                                '" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
+                                '"> <div class="card-body"> <img src="../Images/Avatar.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
                                 data.FullName +
-                                '</div > <div class="start-chat"> <span class="chat-icon" ></span > <span class="st-chat-txt">Start a chat</span> </div > <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt"> ' +
+                                '</div > <div class="start-chat" style = "pointer-events: ' + GetChatConfig(data.FeedbackGivenBy) + ';"  > <span class="chat-icon" onclick = "microsoftTeams.executeDeepLink(' + "'" + chatUrl + data.FeedbackGivenBy + "'" + ');" ></span > <span class="st-chat-txt">Start a chat</span> </div > <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt"> ' +
                                 data.FeedbackGivenBy +
                                 " </span> </div> </div > </div > ";
                         });
@@ -163,24 +145,7 @@ function GetReflections() {
         },
     });
 }
+function GetChatConfig(userId) {
+    return (userId == contextPrincipalName) ? "none" : "all";
+};
 
-function GetPhoto(userid, accesstoken) {
-    let profilepath;
-    $.ajax({
-        url: "/ProfilePhoto",
-        data: { token: accesstoken, userid: userid },
-        type: "GET",
-        async: false,
-        success: function (response) {
-            if (response !== null && response != "") {
-                profilepath = response;
-            } else {
-                alert("Something went wrong");
-            }
-        },
-        error: function () {
-            console.log("Failed");
-        },
-    });
-    return profilepath;
-}

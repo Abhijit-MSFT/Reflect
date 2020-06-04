@@ -27,13 +27,15 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         private readonly IConfiguration _configuration;
         private readonly TelemetryClient _telemetry;
         private readonly ICard _cardHelper;
+        private readonly IDataBase _dbHelper;
 
         //private readonly FeedbackDataRepository feedbackDataRepository;
-        public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper)
+        public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper, IDataBase dbHelper)
         {
             _configuration = configuration;
             _telemetry = telemetry;
             _cardHelper = cardHelper;
+            _dbHelper = dbHelper;
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -44,8 +46,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             {
                 //CardHelper cardhelper = new CardHelper(_configuration);
 
-                FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration);
-                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration);
+                FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 if (turnContext.Activity.Value != null)
                 {
                     var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
@@ -55,7 +57,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     {
                         var name = (turnContext.Activity.From.Name).Split();
                         response.userName = name[0] + ' ' + name[1];
-                        response.emailId = await DBHelper.GetUserEmailId(turnContext);
+                        response.emailId = await _dbHelper.GetUserEmailId(turnContext);
 
                         //Check if this is user's second feedback
                         FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
@@ -66,7 +68,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         }
                         else
                         {
-                            await DBHelper.SaveReflectionFeedbackDataAsync(response, _configuration);
+                            await _dbHelper.SaveReflectionFeedbackDataAsync(response);
                         }
 
                         try
@@ -120,7 +122,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         }
 
         protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
-        
+
         {
             _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
 
@@ -170,14 +172,14 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             var name = (turnContext.Activity.From.Name).Split();
                             //CardHelper cardhelper = new CardHelper(_configuration);
                             taskInfo.postCreateBy = name[0] + ' ' + name[1];
-                            taskInfo.postCreatedByEmail = await DBHelper.GetUserEmailId(turnContext);
+                            taskInfo.postCreatedByEmail = await _dbHelper.GetUserEmailId(turnContext);
                             taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
                             taskInfo.postSendNowFlag = (taskInfo.executionTime == "Send now") ? true : false;
                             taskInfo.IsActive = (taskInfo.executionTime == "Send now") ? false : true;
                             taskInfo.questionRowKey = Guid.NewGuid().ToString();
                             taskInfo.recurrsionRowKey = Guid.NewGuid().ToString();
                             taskInfo.reflectionRowKey = Guid.NewGuid().ToString();
-                            await DBHelper.SaveReflectionDataAsync(taskInfo, _configuration);
+                            await _dbHelper.SaveReflectionDataAsync(taskInfo);
                             if (taskInfo.postSendNowFlag == true)
                             {
                                 var typingActivity = MessageFactory.Text(string.Empty);
@@ -202,7 +204,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             return null;
                         }
                     case "ManageRecurringPosts":
-                        var postCreatedByEmail = await DBHelper.GetUserEmailId(turnContext);
+                        var postCreatedByEmail = await _dbHelper.GetUserEmailId(turnContext);
                         var response = new MessagingExtensionActionResponse()
                         {
                             Task = new TaskModuleContinueResponse()
@@ -249,7 +251,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 }
                 else if (action.CommandId == "createreflect")
                 {
-                    url = this._configuration["BaseUri"];
+                    var name = (turnContext.Activity.From.Name).Split();
+                    var userName = name[0] + ' ' + name[1];
+                    url = this._configuration["BaseUri"] + "/" + userName;
                 }
 
                 var response = new MessagingExtensionActionResponse()
