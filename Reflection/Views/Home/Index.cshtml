@@ -20,7 +20,7 @@
                 <div class="modal-body modal-mb">
                     <div class="question">Question</div>
                     <div class="custom-in">
-                        <input type="text" list="questions" name="questions" id="questions-list" class="input-select" placeholder="Please select or enter question" onchange="getSelectedOption(this)" />
+                        <input type="text" list="questions" name="questions" id="questions-list" class="input-select" placeholder="Enter a reflection question" onchange="getSelectedOption(this)" />
                         <datalist id="questions" class="htmlEle">
                         </datalist>
                         <span class="sel-chev"></span>
@@ -40,7 +40,7 @@
                             <div class="col-6 custom-col">
                                 <div class="date">
                                     <div class="blk-head" id="date">Date</div>
-                                    <input type="date" alt="date" class="date-ip htmlEle" id="execdate" />
+                                    <input type="date" data-date="" data-date-format="MMMM DD, YYYY" value="2020-06-02"  class="date-ip htmlEle" id="execdate" />
                                     <span class="date-icon"></span>
                                 </div>
                             </div>
@@ -113,6 +113,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
     <script src="~/Scripts/Index.js"></script>
 </body>
 </html>

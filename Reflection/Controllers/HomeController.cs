@@ -216,19 +216,16 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         public async Task<string> GetPhoto(string token, string userid)
         {
             _telemetry.TrackEvent("GetPhoto");
+            string profilePhotoUrl = string.Empty;
             try
             {
-                string profilePhotoUrl = string.Empty;
-
                 string endpoint = $"{_configuration["UsersEndPoint"]}{userid}/photo/$value";
-
                 using (var client = new HttpClient())
                 {
                     using (var request = new HttpRequestMessage(HttpMethod.Get, endpoint))
                     {
                         request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
                         using (HttpResponseMessage response = await client.SendAsync(request))
                         {
                             if (response.IsSuccessStatusCode)
@@ -237,45 +234,43 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                                 try
                                 {
                                     var fileName = userid + ".png";
-
                                     string imagePath = _webHostEnvironment.WebRootPath + "\\Images\\ProfilePictures\\";
-
                                     if (!System.IO.Directory.Exists(imagePath))
-
                                         System.IO.Directory.CreateDirectory(imagePath);
-
                                     imagePath += fileName;
-
                                     using (var fileStream = System.IO.File.Create(imagePath))
-
                                     {
                                         photo.Seek(0, SeekOrigin.Begin);
-
                                         photo.CopyTo(fileStream);
                                     }
-
                                     profilePhotoUrl = _configuration["BaseUri"] + "/images/ProfilePictures/" + fileName;
-
-
                                 }
                                 catch (Exception ex)
                                 {
                                     _telemetry.TrackException(ex);
-                                    return null;
+                                    profilePhotoUrl = GetDefaultProfilePicture();
                                 }
+                            }
+                            else
+                            {
+                                profilePhotoUrl = GetDefaultProfilePicture();
                             }
                         }
                     }
                 }
-                return profilePhotoUrl;
 
             }
             catch (Exception ex)
             {
                 _telemetry.TrackException(ex);
-                return null;
-
+                profilePhotoUrl = GetDefaultProfilePicture();
             }
+            return profilePhotoUrl;
+        }
+
+        private string GetDefaultProfilePicture()
+        {
+            return _configuration["BaseUri"] + "/Images/Avatar.png";
         }
 
         [HttpPost("api/GetReflectionAdaptiveCard")]

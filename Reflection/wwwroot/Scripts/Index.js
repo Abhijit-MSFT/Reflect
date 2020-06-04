@@ -65,9 +65,32 @@ $(document).ready(function () {
                         $(".box").hide();
                     }
                 });
+            if ($('#questions-list').val().length == 0) {
+                $('#selectedTxt').text("No reflection question entered");
+                $('.feeling').addClass("feeling-noquestion");
+            } else {
+                $('.feeling').removeClass("feeling-noquestion");
+            }
         })
         .change();
+
+    $(".date-ip").on("change", function () {
+        this.setAttribute(
+            "data-date",
+            moment(this.value, "YYYY-MM-DD")
+                .format(this.getAttribute("data-date-format"))
+        )
+    }).trigger("change")
+
 });
+
+$('#questions-list').keyup(function () {
+    if ($(this).val().length == 0) {
+        $('.btn-send').prop("disabled", true);
+    } else {
+        $('.btn-send').removeAttr('disabled');
+    }
+}).keyup(); 
 
 function SendAdaptiveCard() {
     var list = document.querySelectorAll(".htmlEle");
@@ -109,9 +132,19 @@ function SendAdaptiveCard() {
     return true;
 }
 
-function getSelectedOption(event) {
-    $("#selectedTxt").html($("#questions-list").val());
-}
+    function getSelectedOption(event) {
+        $('#selectedTxt').html($("#questions-list").val());
+        if ($('#questions-list').val().length == 0) {
+            $('#selectedTxt').text("No reflection question entered");
+            $('.feeling').addClass("feeling-noquestion");
+        } else {
+            $('.feeling').removeClass("feeling-noquestion");
+        }
+    }
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
 
 function setPrivacy() {
     microsoftTeams.getContext(function (context) {
@@ -136,16 +169,19 @@ function GetDefaultQuestions(userPrincipleName) {
             data.forEach((x) => {
                 blockdata =
                     blockdata +
-                    ' <option class="default-opt" id="' +
+                    ' <option class="default-opt" data-toggle="tooltip" data-placement="top" id="' +
                     x.questionID +
-                    '" value="' +
-                    x.question +
-                    '">';
+                '" value="' +
+                x.question + 
+                '" title="' +
+                x.question +
+                    '"/>';
             });
             $("#questions").html(blockdata);
         },
     });
 }
+
 
 function GetUserDetails(principalName, appAccessToken) {
     $.ajax({
@@ -214,3 +250,4 @@ function addShowHideButton() {
         $("#questionsblock").removeClass("showquestions");
     }
 }
+

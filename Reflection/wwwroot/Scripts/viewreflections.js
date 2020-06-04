@@ -165,7 +165,7 @@ function GetReflections() {
 }
 
 function GetPhoto(userid, accesstoken) {
-    var profilepath = "../Images/Avatar.png";
+    let profilepath;
     $.ajax({
         url: "/ProfilePhoto",
         data: { token: accesstoken, userid: userid },
