@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
@@ -32,12 +33,12 @@ namespace Reflection.Helper
             _telemetry.TrackEvent("FeedBackCard");
             try
             {
-                DirectoryInfo folderInfo = new DirectoryInfo(@"wwwroot/images/reflectimages");
+                //DirectoryInfo folderInfo = new DirectoryInfo(@"wwwroot/images/reflectimages");
 
-                foreach (FileInfo file in folderInfo.GetFiles())
-                {
-                    file.Delete();
-                }
+                //foreach (FileInfo file in folderInfo.GetFiles())
+                //{
+                //    file.Delete();
+                //}
                 for (int i = 1; i <= 5; i++)
                 {
                     if (!keyValues.ContainsKey(i))
@@ -89,7 +90,9 @@ namespace Reflection.Helper
                 }
                 var datastring = "/Images/reflectimages/" + Guid.NewGuid() + ".png";
                 string outputFileName = @"wwwroot" + datastring;
-                saveImage(thumbBMP, outputFileName);
+                //Use RoundedImage...
+                Image RoundedImage = this.RoundCorners(thumbBMP, 10, Color.White);
+                saveImage(RoundedImage, outputFileName);
                 return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
                 {
                     Body = new List<AdaptiveElement>
@@ -241,7 +244,7 @@ namespace Reflection.Helper
 
         }
 
-        public Task<string> saveImage(Bitmap data, string Filepath)
+        public Task<string> saveImage(Image data, string Filepath)
         {
             _telemetry.TrackEvent("saveImage");
 
@@ -265,6 +268,25 @@ namespace Reflection.Helper
                 return null;
             }
 
+        }
+
+        public Image RoundCorners(Image StartImage, int CornerRadius, Color BackgroundColor)
+        {
+            CornerRadius *= 2;
+            Bitmap RoundedImage = new Bitmap(StartImage.Width, StartImage.Height);
+            using (Graphics g = Graphics.FromImage(RoundedImage))
+            {
+                g.Clear(BackgroundColor);
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+                Brush brush = new TextureBrush(StartImage);
+                GraphicsPath gp = new GraphicsPath();
+                gp.AddArc(0, 0, CornerRadius, CornerRadius, 180, 90);
+                gp.AddArc(0 + RoundedImage.Width - CornerRadius, 0, CornerRadius, CornerRadius, 270, 90);
+                gp.AddArc(0 + RoundedImage.Width - CornerRadius, 0 + RoundedImage.Height - CornerRadius, CornerRadius, CornerRadius, 0, 90);
+                gp.AddArc(0, 0 + RoundedImage.Height - CornerRadius, CornerRadius, CornerRadius, 90, 90);
+                g.FillPath(brush, gp);
+                return RoundedImage;
+            }
         }
         public AdaptiveCard CreateNewPostCard(TaskInfo data)
         {
