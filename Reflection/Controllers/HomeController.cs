@@ -160,8 +160,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
 
         
 
-        [HttpPost("api/GetReflectionAdaptiveCard")]
-        public string GetReflectionAdaptiveCard(TaskInfo taskInfo)
+        [HttpPost]
+        [Route("ReflectionAdaptiveCard")]
+        public string ReflectionAdaptiveCard([FromBody]TaskInfo taskInfo)
         {
             _telemetry.TrackEvent("GetReflectionAdaptiveCard");
             CardHelper card = new CardHelper(_configuration,_telemetry);

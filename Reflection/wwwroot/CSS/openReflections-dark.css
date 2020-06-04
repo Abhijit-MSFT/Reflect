@@ -50,7 +50,7 @@
     display: inline;
 }
 
-    .reflections-sc2::before {
+    /*.reflections-sc2::before {
         content: "\E329";
         font-family: "Teams Assets";
         font-size: 14px;
@@ -59,7 +59,7 @@
         margin-right: 1%;
         top: 2px;
         position: relative;
-    }
+    }*/
 
 .float-right {
     float: right !important;
@@ -195,7 +195,7 @@ div[class^="card custom-profle-card"] {
     position: absolute;
     width: 320px;
     height: 191px;
-    background: #ffffff;
+    background: #2d2c2c;
     box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.3);
     display: none;
 }
@@ -216,7 +216,7 @@ div[class^="card custom-profle-card"] {
     font-family: Segoe UI;
     font-weight: bold;
     font-size: 14px;
-    color: #000000;
+    color: white;
 }
 
 .start-chat,
@@ -235,7 +235,7 @@ div[class^="card custom-profle-card"] {
     content: "\E340";
     font-family: "Teams Assets";
     font-size: 16px;
-    color: #484644;
+    color: #c8c6c4;
     cursor: pointer;
     vertical-align: middle;
 }
@@ -255,11 +255,11 @@ div[class^="card custom-profle-card"] {
 }
 
 .st-chat-txt {
-    color: #484644;
+    color: #a6a8da;
 }
 
 .mail-txt {
-    color: #6264a7;
+    color: #a6a8da;
 }
 
 /*loader*/

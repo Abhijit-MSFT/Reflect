@@ -12,7 +12,7 @@ namespace Reflection.Interfaces
     public interface ICard
     {
         AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid reflectionId);
-        Task<string> saveImage(Bitmap data, string Filepath);
+        Task<string> saveImage(Image data, string Filepath);
         AdaptiveCard CreateNewPostCard(TaskInfo data);
 
     }

@@ -69,7 +69,10 @@ namespace Reflection.Model
         public string type { get; set; }
     }
 
-
+    public class QuestionTest
+    {
+        public string Question { get; set; }
+    }
 
     public class TaskModuleActionHelper
     {
