@@ -3,11 +3,6 @@
 $(document).ready(function () {
     $(".loader").show();
     microsoftTeams.initialize();
-    var head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
-        link = document.createElement("link"); // create the link node
-    link.setAttribute("href", "../CSS/openReflections.css");
-    link.setAttribute("rel", "stylesheet");
-    link.setAttribute("type", "text/css");
     head.appendChild(link);
     microsoftTeams.getContext(function (context) {
         if (context.theme == "default") {
