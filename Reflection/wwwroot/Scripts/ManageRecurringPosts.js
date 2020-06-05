@@ -43,6 +43,14 @@ $('.edit-icon').click(function () {
 });
 
 
+$(".date-ip").on("change", function () {
+    this.setAttribute(
+        "data-date",
+        moment(this.value, "YYYY-MM-DD")
+            .format(this.getAttribute("data-date-format"))
+    )
+}).trigger("change")
+
 
 function getRecurssions() {
     var email = $("#contextemail").val();
@@ -67,7 +75,7 @@ function getRecurssions() {
                 else {
                     sendpostat = "Every Week Day " + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
                 }
-                blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td>' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="edit-icon" id="edit' + x.RefID + '" data-toggle="modal" data-target="#edit"></td><td class="delete-icon" id="delete' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
+                blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="edit-icon" id="edit' + x.RefID + '" data-toggle="modal" data-target="#edit"></td><td class="delete-icon" id="delete' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
             })
             $("#tablebody").html(blockdata);
             setTimeout(() => {

@@ -71,7 +71,7 @@
                 </div>
                 <div class="modal-body">
                     <h5 id="currentrecurrsionquestion"></h5>
-                     <div class="privacy">Privacy</div>
+                    <div class="privacy2">Privacy</div>
                     <div class="input-group custom-in">
                         <select class="cs htmlEle" id="currentprivacy">
                             <option value="public" selected>Public - Names will be displayed with responses</option>
@@ -85,7 +85,7 @@
                             <div class="col-6 custom-col">
                                 <div class="date">
                                     <div class="blk-head" id="currentdate">Date</div>
-                                    <input type="date" data-date="" data-date-format="MMMM DD, YYYY" value="2020-06-02"  class="date-ip htmlEle" id="execdate" />
+                                    <input type="date" data-date="" data-date-format="MMMM DD, YYYY" value="2020-06-02" class="date-ip htmlEle" id="execdate" />
                                     <span class="date-icon"></span>
                                 </div>
                             </div>
@@ -112,13 +112,13 @@
                                     <span class="sel-chev2"></span>
                                 </div>
                             </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn-send" data-dismiss="modal" onclick="saveRecurssion()">Save</button>
+                            <button type="button" class="btn-cancle" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="saveRecurssion()">Save</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
             </div>
         </div>
     </div>
@@ -126,6 +126,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
     <script src="~/Scripts/ManageRecurringPosts.js"></script>
 </body>
 </html>

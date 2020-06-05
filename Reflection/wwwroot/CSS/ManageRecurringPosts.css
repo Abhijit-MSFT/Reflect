@@ -90,6 +90,13 @@
     text-align: center;
 }
 
+.privacy2 {
+    text-align: left;
+    margin: .5rem 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 .hw-r-u {
     font-family: Segoe UI;
     font-size: 14px;
@@ -247,6 +254,155 @@ td.edit-icon {
     }
 }
 
+.cs {
+    height: 32px;
+    font-family: Segoe UI;
+    font-size: 14px;
+    color: #252424;
+    padding: 4px 12px;
+    background-color: #f3f2f1;
+    border-radius: 3px;
+    border: none !important;
+    width: 100%;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+    .cs:focus {
+        border-color: white !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+.sel-chev3::before {
+    content: "\E447";
+    font-family: "Teams Assets";
+    pointer-events: none;
+    position: absolute;
+    right: 10px;
+    float: right;
+    color: #6264a7;
+    top: 4px;
+}
+
+.blk-head {
+    font-family: Segoe UI;
+    font-size: 14px;
+    color: #252424;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.date-ip,
+.time-ip {
+    background: #f3f2f1;
+    border-radius: 3px;
+    height: 32px;
+    font-size: 14px;
+}
+
+    .date-ip:before {
+        content: attr(data-date);
+    }
+
+.date-icon {
+    position: relative;
+    cursor: pointer;
+}
+
+    .date-icon::before {
+        content: "\E503";
+        font-family: "Teams Assets";
+        font-size: 14px;
+        color: #6266a5;
+        position: relative;
+        float: right;
+        right: 12px;
+        bottom: 28px;
+        pointer-events: none;
+    }
+
+.date-ip {
+    width: 100%;
+    padding-left: 8px;
+    border: none;
+    outline: none;
+}
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    color: transparent;
+    background: none;
+    z-index: 1;
+}
+
+input[type="date"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    display: none;
+}
+
+input::-webkit-datetime-edit, input::-webkit-inner-spin-button, input::-webkit-clear-button {
+    display: none;
+}
+
+input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 39px;
+    color: #6266a5;
+    right: 10px;
+}
+
+.sel-chev2::before {
+    content: "\E447";
+    font-family: "Teams Assets";
+    pointer-events: none;
+    position: relative;
+    color: #6264a7;
+    float: right;
+    right: 10px;
+    bottom: 28px;
+}
+
+.custom-col {
+    height: 70px;
+}
+
+.date, .blk-head {
+    margin-top: .5rem;
+}
+
+.btn-cancle {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    box-sizing: border-box;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    color: black;
+    width: 118px;
+    height: 32px;
+    font-weight: 500;
+    font-size: 14px;
+    margin-right: 16px;
+    cursor: pointer;
+}
+
+    .btn-cancle:focus,
+    .btn-send:focus {
+        outline-color: #dddddd;
+    }
+
+.btn-send {
+    background-color: #6266a5;
+    color: #ffffff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+    width: 118px;
+    height: 32px;
+    border-radius: 3px;
+    box-sizing: border-box;
+    border: 1px solid #6266a5;
+    font-size: 14px;
+    cursor: pointer;
+}
 
 @media screen and (max-width: 425px) {
     .custom-mc, .review-blk {
