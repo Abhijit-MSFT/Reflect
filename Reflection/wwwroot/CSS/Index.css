@@ -73,6 +73,7 @@
     font-size: 14px;
     color: #252424;
     padding: 4px 12px;
+    padding-right: 2rem;
 }
 
     .input-select::-webkit-calendar-picker-indicator {
@@ -327,6 +328,7 @@ input[type="date"] {
 
 .mf {
     padding: 3% 0;
+    display:block;
 }
 
 .btn-cancle {
@@ -375,6 +377,7 @@ input[type="date"] {
     float: left;
     color: #6266a5;
     cursor: pointer;
+    margin-top: .2rem;
 }
 
 .manage {

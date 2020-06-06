@@ -47,7 +47,7 @@
 .modal-mb-sc2 {
     margin-top: 16px;
     padding: 0;
-    height: 400px;
+    height: 500px;
 }
 
 .recurring {
@@ -193,9 +193,8 @@ td.edit-icon {
 }
 
 .mf {
-    margin-top: 32px;
     border-top: 2px solid #edebe9;
-    padding-top: 3%;
+    display: block;
 }
 
 .float-left {
