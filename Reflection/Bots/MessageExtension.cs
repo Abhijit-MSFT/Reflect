@@ -53,7 +53,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
                     var reply = Activity.CreateMessageActivity();
 
-                    if (response.type == "saveFeedback")
+                    if (response.type == ReflectConstants.SaveFeedBack)
                     {
                         var name = (turnContext.Activity.From.Name).Split();
                         response.userName = name[0] + ' ' + name[1];
@@ -157,6 +157,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("OnTeamsMessagingExtensionSubmitActionAsync");
+            ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
 
             try
             {
@@ -187,15 +188,18 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 await turnContext.SendActivityAsync(typingActivity);
                                 var adaptiveCard = _cardHelper.CreateNewPostCard(taskInfo);
                                 var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
-                                await turnContext.SendActivityAsync(message, cancellationToken);
+                                var resultid=await turnContext.SendActivityAsync(message, cancellationToken);
+                                ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(taskInfo.reflectionID);
+                                reflectData.ReflectMessageId = resultid.Id;
+                                await reflectionDataRepository.InsertOrMergeAsync(reflectData);
                             }
                             else
                             {
                                 var reply = MessageFactory.Text(string.Empty);
-
                                 reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals";
                                 await turnContext.SendActivityAsync(reply);
                             }
+                            
                             return null;
                         }
                         catch (Exception ex)
@@ -239,39 +243,70 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             try
             {
                 var url = this._configuration["BaseUri"];
-                if (action.CommandId == "recurringreflections")
+                if (action.CommandId == ReflectConstants.RecurringPosts)
                 {
                     url = this._configuration["BaseUri"] + "/ManageRecurringPosts";
+                    var response = new MessagingExtensionActionResponse()
+                    {
+                        Task = new TaskModuleContinueResponse()
+                        {
+                            Value = new TaskModuleTaskInfo()
+                            {
+                                Height = 620,
+                                Width = 800,
+                                Title = "Invite people to share how they feel",
+                                Url = url
+                            },
+                        },
+                    };
+                    return response;
                 }
-                else if (action.CommandId == "removeposts")
+                else if (action.CommandId == ReflectConstants.RemovePosts)
                 {
-                    var activity = Activity.CreateMessageActivity();
-                    await turnContext.DeleteActivityAsync(activity.Id);
+                    if(turnContext.Activity.Conversation.Id!=null)
+                    {
+                        var replymessageid = turnContext.Activity.Conversation.Id.Split("=");
+                        var activity = Activity.CreateMessageActivity();
+                        bool isDelete = await _dbHelper.RemoveReflectionId(replymessageid[1]);
+                        if(isDelete)
+                        {
+                            await turnContext.DeleteActivityAsync(replymessageid[1]);
+                            activity.Text = "Refelct Id removed successfully";
+                        }
+                        else
+                        {
+                            activity.Text = "Refelct have feedback and not removed";
+                        }
+                        await turnContext.SendActivityAsync(activity);
+                        
+                    }
 
+                    return null;
                 }
-                else if (action.CommandId == "createreflect")
+                else if (action.CommandId == ReflectConstants.CreateReflect)
                 {
                     var name = (turnContext.Activity.From.Name).Split();
                     var userName = name[0] + ' ' + name[1];
                     url = this._configuration["BaseUri"] + "/" + userName;
-                }
-
-                var response = new MessagingExtensionActionResponse()
-                {
-                    Task = new TaskModuleContinueResponse()
+                    var response = new MessagingExtensionActionResponse()
                     {
-                        Value = new TaskModuleTaskInfo()
+                        Task = new TaskModuleContinueResponse()
                         {
-                            Height = 620,
-                            Width = 800,
-                            Title = "Invite people to share how they feel",
-                            Url = url
+                            Value = new TaskModuleTaskInfo()
+                            {
+                                Height = 620,
+                                Width = 800,
+                                Title = "Invite people to share how they feel",
+                                Url = url
+                            },
                         },
-                    },
-                };
-
-                return response;
-
+                    };
+                    return response;
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {

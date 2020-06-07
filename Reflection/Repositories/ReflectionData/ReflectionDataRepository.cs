@@ -48,6 +48,25 @@ namespace Reflection.Repositories.ReflectionData
 
         }
 
+        public async Task<ReflectionDataEntity> GetReflectionData(string reflectMessagId)
+        {
+            _telemetry.TrackEvent("GetReflectionData");
+            try
+            {
+                var allReflections = await this.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
+                ReflectionDataEntity refData = allReflections.Where(c => c.ReflectMessageId == reflectMessagId).FirstOrDefault();
+                return refData;
+            }
+            catch (Exception ex)
+            {
+
+                _telemetry.TrackException(ex);
+                return null;
+
+            }
+        }
+
+
         public async Task<string> GetmessageIdfromReflection(Guid refId)
         {
             _telemetry.TrackEvent("GetmessageIdfromReflection");

@@ -40,6 +40,8 @@ namespace Reflection.Model
 
         public string questionRowKey { get; set; }
         public string type { get; set; }
+
+        public string reflectMessageId { get; set; }
     }
 
     public class UserfeedbackInfo
@@ -112,6 +114,14 @@ namespace Reflection.Model
         public string Color { get; set; }
 
         public string Description { get; set; }
+    }
+
+    public static class ReflectConstants
+    {
+        public static readonly string SaveFeedBack = "saveFeedback";
+        public static readonly string RemovePosts = "removeposts";
+        public static readonly string RecurringPosts = "recurringreflections";
+        public static readonly string CreateReflect = "createreflect";
     }
 
 

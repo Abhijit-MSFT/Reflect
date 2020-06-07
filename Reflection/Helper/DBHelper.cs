@@ -1,12 +1,9 @@
 ﻿using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Teams;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Reflection.Interfaces;
 using Reflection.Model;
@@ -16,10 +13,8 @@ using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reflection.Helper
@@ -72,7 +67,8 @@ namespace Reflection.Helper
                         MessageID = taskInfo.messageID,
                         ChannelID = taskInfo.channelID,
                         SendNowFlag = taskInfo.postSendNowFlag,
-                        IsActive = taskInfo.IsActive
+                        IsActive = taskInfo.IsActive,
+                        ReflectMessageId = taskInfo.reflectMessageId
                     };
                     await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
                     if (await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question, taskInfo.postCreatedByEmail) == false)
@@ -84,7 +80,6 @@ namespace Reflection.Helper
                         var ques = await questionsDataRepository.GetQuestionData(taskInfo.questionID);
                         taskInfo.questionRowKey = ques.RowKey;
                     }
-
 
                     if (!(taskInfo.recurssionType == "Does not repeat" && taskInfo.postSendNowFlag == true))
                     {
@@ -109,11 +104,7 @@ namespace Reflection.Helper
             _telemetry.TrackEvent("DeleteReflections");
             try
             {
-
-
-
                 QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(_configuration, _telemetry);
-
                 QuestionsDataEntity questionEntity = new QuestionsDataEntity
                 {
                     QuestionID = taskInfo.questionID,
@@ -246,20 +237,6 @@ namespace Reflection.Helper
             }
         }
 
-        //public  async Task<List<string>> GetTeamMember(ITurnContext<IInvokeActivity> turnContext)
-        //{
-        //    IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
-        //    var members = await connector.Conversations.GetConversationMembersAsync(turnContext.Activity.Conversation.Id);
-
-        //    return members.ToList();
-        //}
-
-        //public  async Task<List<ReflectionDataEntity>> GetAllReflection()
-        //{
-        //    RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(configuration);
-        //    var allReflections = recurssionDataRepository.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
-        //}
-
         /// <summary>
         /// Add Reflection data in Table Storage.
         /// </summary>
@@ -305,40 +282,15 @@ namespace Reflection.Helper
             _telemetry.TrackEvent("DeleteReflections");
             try
             {
-
-
-
-
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(_configuration, _telemetry);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
-                //RecurssionScreenData recurssionScreenData = new RecurssionScreenData();
-
-
                 List<ReflectionDataEntity> allActiveRefs = await reflectionDataRepository.GetAllActiveReflection(email);
                 List<Guid?> allActiveRefIDs = allActiveRefs.Select(c => c.ReflectionID).ToList();
                 List<Guid?> allActiveQuestionIDs = allActiveRefs.Select(c => c.QuestionID).ToList();
-
-
                 List<QuestionsDataEntity> allQuestionsData = await questionsDataRepository.GetAllQuestionData(allActiveQuestionIDs);
                 List<RecurssionDataEntity> allRecurssionData = await recurssionDataRepository.GetAllRecurssionData(allActiveRefIDs);
-
                 List<RecurssionScreenData> screenData = new List<RecurssionScreenData>();
-                //recurssionScreenData.Add
-                //foreach (var x in allActiveRefs)
-                //{
-                //    RecurssionScreenData recurssionScreenData = new RecurssionScreenData();
-                //    recurssionScreenData.RefID = x.ReflectionID;
-                //    recurssionScreenData.CreatedBy = x.CreatedBy;
-                //    recurssionScreenData.RefCreatedDate = x.RefCreatedDate;
-                //    recurssionScreenData.Privacy = x.Privacy;
-                //    recurssionScreenData.Question = allQuestionsData.Where(c => c.QuestionID.ToString() == x.QuestionID.ToString()).Select(d => d.Question).FirstOrDefault().ToString();
-                //    recurssionScreenData.ExecutionDate = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.ExecutionDate).FirstOrDefault();
-                //    recurssionScreenData.ExecutionTime = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.ExecutionTime).FirstOrDefault();
-                //    recurssionScreenData.RecurssionType = allRecurssionData.Where(c => c.RecurssionID.ToString() == x.RecurrsionID.ToString()).Select(d => d.RecursstionType).FirstOrDefault();
-                //    if (recurssionScreenData.RecurssionType != null)
-                //        screenData.Add(recurssionScreenData);
-                //}
                 foreach (var rec in allRecurssionData)
                 {
                     RecurssionScreenData recurssionScreenData = new RecurssionScreenData();
@@ -354,8 +306,6 @@ namespace Reflection.Helper
                     if (recurssionScreenData.RecurssionType != null)
                         screenData.Add(recurssionScreenData);
                 }
-
-
                 return screenData;
             }
             catch (Exception ex)
@@ -371,8 +321,6 @@ namespace Reflection.Helper
         /// </summary>
         /// <param name="Iconfiguration">Reads The config from app settings</param>
         /// <param name="reflectionId">Specific reflectionid that is to be deleted</param>
-
-
         public  async Task DeleteRecurrsionDataAsync(Guid reflectionId)
         {
             try
@@ -389,8 +337,35 @@ namespace Reflection.Helper
             {
                 _telemetry.TrackException(ex);
             }
+        }
 
-
+        /// <summary>
+        /// Remove Reflection 
+        /// </summary>
+        /// <param name="Iconfiguration">Reads The config from app settings</param>
+        /// <param name="reflectionMessageId">Specific MessageId that is to be deleted</param>
+        public async Task<bool> RemoveReflectionId(string reflectionMessageId)
+        {
+            bool isReflectDeleted = false;
+            try
+            {
+                _telemetry.TrackEvent("RemoveMessageId");
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
+                FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
+                var reflection = await reflectionDataRepository.GetReflectionData(reflectionMessageId);
+                var feedbackCount = await feedbackDataRepository.GetReflectionFeedback(reflection.ReflectionID);
+                if(feedbackCount.Count < 1)
+                {
+                    await reflectionDataRepository.DeleteAsync(reflection);
+                    isReflectDeleted = true;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+            }
+            return isReflectDeleted;
         }
         /// <summary>
         /// update Reflection and recurssion related to that reflection

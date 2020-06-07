@@ -22,5 +22,7 @@ namespace Reflection.Interfaces
         Task DeleteRecurrsionDataAsync(Guid reflectionId);
 
         Task SaveEditRecurssionDataAsync(RecurssionScreenData reflection);
+
+        Task<bool> RemoveReflectionId(string reflectMessageId);
     }
 }

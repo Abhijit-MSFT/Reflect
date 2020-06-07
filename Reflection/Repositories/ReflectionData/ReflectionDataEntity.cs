@@ -59,5 +59,10 @@ namespace Reflection.Repositories.ReflectionData
         /// Gets or sets active flag.
         /// </summary>
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Reflect Message Id
+        /// </summary>
+        public string ReflectMessageId { get; set; }
     }
 }
