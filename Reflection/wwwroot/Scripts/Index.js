@@ -50,7 +50,7 @@ $(document).ready(function () {
                         $(".box").hide();
                     }
                 });
-            if ($('#questions-list').val().length == 0) {
+            if ($('#questions-list').val().length == 0 || length == " ") {
                 $('#selectedTxt').text("No reflection question entered");
                 $('.feeling').addClass("feeling-noquestion");
             } else {
@@ -60,17 +60,19 @@ $(document).ready(function () {
         .change();
 
     $(".date-ip").on("change", function () {
+        var today = moment().format('YYYY-MM-DD');
+        $('#execdate').val(today);
+
         this.setAttribute(
             "data-date",
             moment(this.value, "YYYY-MM-DD")
                 .format(this.getAttribute("data-date-format"))
         )
     }).trigger("change")
-
 });
 
 $('#questions-list').keyup(function () {
-    if ($(this).val().length == 0) {
+    if ($(this).val().length == 0 || length == " ") {
         $('.btn-send').prop("disabled", true);
     } else {
         $('.btn-send').removeAttr('disabled');
@@ -119,7 +121,7 @@ function SendAdaptiveCard() {
 
     function getSelectedOption(event) {
         $('#selectedTxt').html($("#questions-list").val());
-        if ($('#questions-list').val().length == 0) {
+        if ($('#questions-list').val().length == 0 || length == " ") {
             $('#selectedTxt').text("No reflection question entered");
             $('.feeling').addClass("feeling-noquestion");
         } else {
@@ -127,25 +129,19 @@ function SendAdaptiveCard() {
         }
     }
 
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-})
-
 function setPrivacy() {
     $("#privacytext").html($("#privacy").val());
 }
 
 function GetDefaultQuestions(userPrincipleName) {
-    var blockdata = "";
+    var blockdata = '<option value=" " readonly>My questions</option>';
     $.ajax({
         type: "GET",
         url: "api/GetAllDefaultQuestions/" + userPrincipleName,
         success: function (data) {
             questions = data;
             data.forEach((x) => {
-                blockdata =
-                    blockdata +
-                    ' <option class="default-opt" data-toggle="tooltip" data-placement="top" id="' +
+                blockdata += ' <option class="default-opt" id="' +
                     x.questionID +
                 '" value="' +
                 x.question + 
@@ -157,8 +153,6 @@ function GetDefaultQuestions(userPrincipleName) {
         },
     });
 }
-
-
 
 submitHandler = (err, result) => {
     //if (result.action == "Chaining") {
