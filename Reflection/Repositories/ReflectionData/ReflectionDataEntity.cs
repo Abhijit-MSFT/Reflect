@@ -64,5 +64,13 @@ namespace Reflection.Repositories.ReflectionData
         /// Reflect Message Id
         /// </summary>
         public string ReflectMessageId { get; set; }
+        /// <summary>
+        /// TenantId
+        /// </summary>
+        public string TenantId { get; set; }
+        /// <summary>
+        /// ServiceUrl
+        /// </summary>
+        public string ServiceUrl { get; set; }
     }
 }

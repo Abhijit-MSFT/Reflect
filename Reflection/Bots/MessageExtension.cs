@@ -180,6 +180,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             taskInfo.questionRowKey = Guid.NewGuid().ToString();
                             taskInfo.recurrsionRowKey = Guid.NewGuid().ToString();
                             taskInfo.reflectionRowKey = Guid.NewGuid().ToString();
+                            taskInfo.serviceUrl = turnContext.Activity.ServiceUrl;
+                            taskInfo.teantId = turnContext.Activity.Conversation.TenantId;
                             await _dbHelper.SaveReflectionDataAsync(taskInfo);
                             if (taskInfo.postSendNowFlag == true)
                             {
@@ -245,7 +247,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 var url = this._configuration["BaseUri"];
                 if (action.CommandId == ReflectConstants.RecurringPosts)
                 {
-                    url = this._configuration["BaseUri"] + "/ManageRecurringPosts";
+                    var postCreatedByEmail = await _dbHelper.GetUserEmailId(turnContext);
+                    url = this._configuration["BaseUri"] + "/ManageRecurringPosts/" + postCreatedByEmail;
                     var response = new MessagingExtensionActionResponse()
                     {
                         Task = new TaskModuleContinueResponse()

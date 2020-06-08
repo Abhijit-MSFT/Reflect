@@ -42,6 +42,8 @@ namespace Reflection.Model
         public string type { get; set; }
 
         public string reflectMessageId { get; set; }
+        public string teantId { get; set; }
+        public string serviceUrl { get; set; }
     }
 
     public class UserfeedbackInfo

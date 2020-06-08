@@ -68,7 +68,9 @@ namespace Reflection.Helper
                         ChannelID = taskInfo.channelID,
                         SendNowFlag = taskInfo.postSendNowFlag,
                         IsActive = taskInfo.IsActive,
-                        ReflectMessageId = taskInfo.reflectMessageId
+                        ReflectMessageId = taskInfo.reflectMessageId,
+                        TenantId = taskInfo.teantId,
+                        ServiceUrl = taskInfo.serviceUrl
                     };
                     await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
                     if (await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question, taskInfo.postCreatedByEmail) == false)
