@@ -5,14 +5,14 @@ $(document).ready(function () {
     $("#usertext").html(" " + userName);
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
-        if (context.theme == "default") {
+        if (context.theme === "default") {
             var head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
                 link = document.createElement("link"); // create the link node
             link.setAttribute("href", "../CSS/Index.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
-        } else if (context.theme == "dark") {
+        } else if (context.theme === "dark") {
             var head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
             link.setAttribute("href", "../CSS/Index-dark.css");
@@ -50,7 +50,7 @@ $(document).ready(function () {
                         $(".box").hide();
                     }
                 });
-            if ($('#questions-list').val().length == 0 || length == " ") {
+            if ($('#questions-list').val().length === 0) {
                 $('#selectedTxt').text("No reflection question entered");
                 $('.feeling').addClass("feeling-noquestion");
             } else {
@@ -72,7 +72,7 @@ $(document).ready(function () {
 });
 
 $('#questions-list').keyup(function () {
-    if ($(this).val().length == 0 || length == " ") {
+    if ($(this).val().length === 0) {
         $('.btn-send').prop("disabled", true);
     } else {
         $('.btn-send').removeAttr('disabled');
@@ -121,7 +121,7 @@ function SendAdaptiveCard() {
 
     function getSelectedOption(event) {
         $('#selectedTxt').html($("#questions-list").val());
-        if ($('#questions-list').val().length == 0 || length == " ") {
+        if ($('#questions-list').val().length === 0) {
             $('#selectedTxt').text("No reflection question entered");
             $('.feeling').addClass("feeling-noquestion");
         } else {
@@ -134,19 +134,21 @@ function setPrivacy() {
 }
 
 function GetDefaultQuestions(userPrincipleName) {
-    var blockdata = '<option value=" " readonly>My questions</option>';
+    var blockdata = "";
     $.ajax({
         type: "GET",
         url: "api/GetAllDefaultQuestions/" + userPrincipleName,
         success: function (data) {
             questions = data;
             data.forEach((x) => {
-                blockdata += ' <option class="default-opt" id="' +
+                blockdata =
+                    blockdata +
+                    ' <option class="default-opt" data-toggle="tooltip" data-placement="top" id="' +
                     x.questionID +
-                '" value="' +
-                x.question + 
-                '" title="' +
-                x.question +
+                    '" value="' +
+                    x.question +
+                    '" title="' +
+                    x.question +
                     '"/>';
             });
             $("#questions").html(blockdata);
@@ -180,7 +182,7 @@ function openTaskModule() {
 
 function closeTaskModule() {
     let closeTaskInfo = {
-        action: "closeFirstTaskModule",
+        action: "closeFirstTaskModule"
     };
     microsoftTeams.tasks.submitTask(closeTaskInfo);
     return true;
