@@ -389,3 +389,18 @@ input[type="date"] {
     margin-left: 12px;
     cursor: pointer;
 }
+input#timepick {
+    width: 100%;
+    background-color: #f3f2f1;
+    outline: none;
+    border: none;
+    height: 32px;
+    font-size: 14px;
+    padding-left: 8px;
+}
+
+ul.ui-timepicker-viewport {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 14px;
+    text-align: left;
+}

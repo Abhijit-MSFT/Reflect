@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
     <link href="~/CSS/Index.css" rel="stylesheet" />
     <script type="text/javascript">
         let userName = '@ViewBag.UserName';
@@ -43,17 +44,18 @@
                             <div class="col-6 custom-col">
                                 <div class="date">
                                     <div class="blk-head" id="date">Date</div>
-                                    <input type="date" data-date="" data-date-format="ddd MMM DD, YYYY" value=""  class="date-ip htmlEle" id="execdate" />
+                                    <input type="date" data-date="" data-date-format="ddd MMM DD, YYYY" value="" class="date-ip htmlEle" id="execdate" />
                                     <span class="date-icon"></span>
                                 </div>
                             </div>
                             <div class="col-6 custom-col">
                                 <div class="blk-head">Time</div>
                                 <div class="selc">
-                                    <select class="cs htmlEle" id="exectime">
-                                        <option value="Send now" selected>Send now</option>
-                                        <option value="Send later">Send later</option>
-                                    </select>
+                                    @*<select class="cs htmlEle" id="exectime">
+                                            <option value="Send now" selected>Send now</option>
+                                            <option value="Send later">Send later</option>
+                                        </select>*@
+                                    <input class="timepicker" id="timepick" />
                                     <span class="sel-chev2"></span>
                                 </div>
                                 @*<div class="time-ip htmlEle">
@@ -117,6 +119,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
     <script src="~/Scripts/Index.js"></script>
 </body>
 </html>

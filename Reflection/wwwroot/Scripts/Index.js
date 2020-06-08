@@ -127,7 +127,18 @@ function SendAdaptiveCard() {
         } else {
             $('.feeling').removeClass("feeling-noquestion");
         }
-    }
+}
+
+$('#timepick').timepicker({
+    timeFormat: 'h:mm p',
+    interval: 30,
+    minTime: '12:00 am',
+    maxTime: '11:30pm',
+    defaultTime: 'auto',
+    dynamic: false,
+    dropdown: true,
+    scrollbar: false
+});
 
 function setPrivacy() {
     $("#privacytext").html($("#privacy").val());
