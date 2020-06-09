@@ -140,6 +140,8 @@ $('#timepick').timepicker({
     scrollbar: false
 });
 
+$('#timepick').timepicker('setTime', new Date().getHours() + ':' + new Date().getMinutes());
+
 function setPrivacy() {
     $("#privacytext").html($("#privacy").val());
 }
