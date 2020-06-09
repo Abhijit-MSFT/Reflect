@@ -38,7 +38,7 @@ namespace Reflection.Helper
         /// <returns>A task that represents the work queued to execute.</returns>
         public async Task SaveReflectionDataAsync(TaskInfo taskInfo)
         {
-            _telemetry.TrackEvent("DeleteReflections");
+            _telemetry.TrackEvent("SaveReflectionDataAsync");
             try
             {
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
@@ -83,7 +83,7 @@ namespace Reflection.Helper
                         taskInfo.questionRowKey = ques.RowKey;
                     }
 
-                    if (!(taskInfo.recurssionType == "Does not repeat" && taskInfo.postSendNowFlag == true))
+                    if (!(taskInfo.postSendNowFlag == true))
                     {
                         await SaveRecurssionDataAsync(taskInfo);
                     }
@@ -135,7 +135,7 @@ namespace Reflection.Helper
         /// <returns>A task that represents the work queued to execute.</returns>
         public async Task SaveRecurssionDataAsync(TaskInfo taskInfo)
         {
-            _telemetry.TrackEvent("DeleteReflections");
+            _telemetry.TrackEvent("SaveRecurssionDataAsync");
             try
             {
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
@@ -206,7 +206,7 @@ namespace Reflection.Helper
         //make above method and below method generic - need this change
         public async Task<string> GetUserEmailId<T>(ITurnContext<T> turnContext) where T : Microsoft.Bot.Schema.IActivity
         {
-            _telemetry.TrackEvent("DeleteReflections");
+            _telemetry.TrackEvent("GetUserEmailId");
 
             // Fetch the members in the current conversation
             try
@@ -214,6 +214,7 @@ namespace Reflection.Helper
                 IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
 
                 var members = await connector.Conversations.GetConversationMembersAsync(turnContext.Activity.Conversation.Id);
+                var user = AsTeamsChannelAccounts(members).FirstOrDefault(m => m.Id == turnContext.Activity.From.Id);
                 return AsTeamsChannelAccounts(members).FirstOrDefault(m => m.Id == turnContext.Activity.From.Id).UserPrincipalName;
             }
             catch (Exception ex)
@@ -231,7 +232,7 @@ namespace Reflection.Helper
         /// <returns>A task that represents the work queued to execute.</returns>
         private IEnumerable<TeamsChannelAccount> AsTeamsChannelAccounts(IEnumerable<ChannelAccount> channelAccountList)
         {
-            _telemetry.TrackEvent("DeleteReflections");
+            _telemetry.TrackEvent("AsTeamsChannelAccounts");
 
             foreach (ChannelAccount channelAccount in channelAccountList)
             {
@@ -247,7 +248,7 @@ namespace Reflection.Helper
         /// <returns>A task that represents the work queued to execute.</returns>
         public async Task<ViewReflectionsEntity> GetViewReflectionsData(Guid reflectionId)
         {
-            _telemetry.TrackEvent("DeleteReflections");
+            _telemetry.TrackEvent("GetViewReflectionsData");
 
             try
             {
@@ -281,7 +282,7 @@ namespace Reflection.Helper
 
         public async Task<List<RecurssionScreenData>> GetRecurrencePostsDataAsync(string email)
         {
-            _telemetry.TrackEvent("DeleteReflections");
+            _telemetry.TrackEvent("GetRecurrencePostsDataAsync");
             try
             {
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);

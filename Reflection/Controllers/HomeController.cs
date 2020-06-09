@@ -122,7 +122,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                 _telemetry.TrackEvent("GetRecurssions");
                 var data = await _dbHelper.GetRecurrencePostsDataAsync(email);
                 var jsondata = new JObject();
-                jsondata["recurssions"] = JsonConvert.SerializeObject(data); ;
+                jsondata["recurssions"] = JsonConvert.SerializeObject(data); 
                 return jsondata.ToString();
             }
             catch (Exception ex)

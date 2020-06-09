@@ -176,7 +176,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             taskInfo.postCreatedByEmail = await _dbHelper.GetUserEmailId(turnContext);
                             taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
                             taskInfo.postSendNowFlag = (taskInfo.executionTime == "Send now") ? true : false;
-                            taskInfo.IsActive = (taskInfo.executionTime == "Send now") ? false : true;
+                            taskInfo.IsActive = true;
                             taskInfo.questionRowKey = Guid.NewGuid().ToString();
                             taskInfo.recurrsionRowKey = Guid.NewGuid().ToString();
                             taskInfo.reflectionRowKey = Guid.NewGuid().ToString();
@@ -198,7 +198,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             else
                             {
                                 var reply = MessageFactory.Text(string.Empty);
-                                reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals";
+                                if(taskInfo.recurssionType== "Does not repeat")
+                                    reply.Text = "Your data is recorded and will be executed at time specified by you.";
+                                else
+                                reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals.";
                                 await turnContext.SendActivityAsync(reply);
                             }
                             

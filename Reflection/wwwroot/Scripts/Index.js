@@ -1,6 +1,7 @@
 ﻿var questions = [];
 var userobject = {};
 var accesstoken = "";
+
 $(document).ready(function () {
     $("#usertext").html(" " + userName);
     microsoftTeams.initialize();
@@ -140,6 +141,8 @@ $('#timepick').timepicker({
     scrollbar: false
 });
 
+$('#timepick').timepicker('setTime', new Date().getHours() + ':' + new Date().getMinutes());
+
 function setPrivacy() {
     $("#privacytext").html($("#privacy").val());
 }
@@ -161,11 +164,24 @@ function GetDefaultQuestions(userPrincipleName) {
                     '" title="' +
                     x.question +
                     '"/>';
+               
             });
             $("#questions").html(blockdata);
+            GetRecurssionsCount(userPrincipleName);
         },
     });
 }
+function GetRecurssionsCount(userPrincipleName) {
+    $.ajax({
+        type: "GET",
+        url: "api/GetRecurssions/" + userPrincipleName,
+        success: function (data) {
+            recurssions = JSON.parse(JSON.parse(data).recurssions);
+            $("#recurssionscount").html("(" + recurssions.length + ")");
+        },
+    });
+}
+
 
 submitHandler = (err, result) => {
     //if (result.action == "Chaining") {
