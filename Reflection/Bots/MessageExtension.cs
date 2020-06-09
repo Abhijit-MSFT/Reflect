@@ -157,12 +157,17 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("OnTeamsMessagingExtensionSubmitActionAsync");
+
+            
+            
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
 
             try
             {
                 TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
-
+                //below two lines of code is added to test proactive message for scheduler
+                //ProactiveMessageHelper proactiveMessageHelper = new ProactiveMessageHelper(_cardHelper);
+                //await proactiveMessageHelper.SendCardToTeamAsync(turnContext, taskInfo, cancellationToken, _configuration);
                 switch (taskInfo.action)
                 {
                     case "reflection":

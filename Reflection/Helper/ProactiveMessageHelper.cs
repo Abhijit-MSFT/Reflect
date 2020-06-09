@@ -6,12 +6,22 @@ using Reflection.Model;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Microsoft.Bot.Builder;
+using System.Threading;
+using Microsoft.Extensions.Configuration;
+using Reflection.Interfaces;
+using AdaptiveCards;
 
 namespace Reflection.Helper
 {
     public class ProactiveMessageHelper
     {
+        private readonly ICard _cardHelper;
 
+        public ProactiveMessageHelper(ICard cardHelper)
+        {
+            _cardHelper = cardHelper;
+        }
         public static async Task<NotificationSendStatus> SendPersonalNotification(string serviceUrl, string tenantId, User userDetails, string messageText, Attachment attachment)
         {
             MicrosoftAppCredentials.TrustServiceUrl(serviceUrl, DateTime.MaxValue);
@@ -160,6 +170,47 @@ namespace Reflection.Helper
                 //ErrorLogService.LogError(ex);
                 return new NotificationSendStatus() { IsSuccessful = false, FailureMessage = ex.Message };
             }
+        }
+
+        public async Task<ConversationResourceResponse> SendCardToTeamAsync(ITurnContext turnContext, TaskInfo taskInfo, CancellationToken cancellationToken, IConfiguration configuration)
+        {
+            var id = configuration["MicrosoftAppId"];
+            var pass = configuration["MicrosoftAppPassword"];
+            var channelid = configuration["ChannelID"];
+            var credentials = new MicrosoftAppCredentials(id, pass);
+
+            var adaptiveCard = _cardHelper.CreateNewPostCard(taskInfo);
+            var conversationParameters = new ConversationParameters
+            {
+                Activity = (Activity)(MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard })),
+                ChannelData = new TeamsChannelData { Channel = new ChannelInfo(channelid) },
+            };
+            var tcs = new TaskCompletionSource<ConversationResourceResponse>();
+            try
+            {
+                await ((BotFrameworkAdapter)turnContext.Adapter).CreateConversationAsync(
+                        null,       // If we set channel = "msteams", there is an error as preinstalled middleware expects ChannelData to be present
+                        turnContext.Activity.ServiceUrl,
+                        credentials,
+                        conversationParameters,
+                        (newTurnContext, newCancellationToken) =>
+                        {
+                            var activity = newTurnContext.Activity;
+                            tcs.SetResult(new ConversationResourceResponse
+                            {
+                                Id = activity.Conversation.Id,
+                                ActivityId = activity.Id,
+                                ServiceUrl = activity.ServiceUrl,
+                            });
+                            return Task.CompletedTask;
+                        },
+                        cancellationToken);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            return await tcs.Task;
         }
     }
 }
