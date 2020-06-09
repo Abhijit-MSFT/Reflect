@@ -85,16 +85,16 @@
                             <div class="col-6 custom-col">
                                 <div class="date">
                                     <div class="blk-head" id="currentdate">Date</div>
-                                    <input type="date" data-date="" data-date-format="MMMM DD, YYYY" value="2020-06-02" class="date-ip htmlEle" id="execdate" />
+                                    <input type="date"  class="date-ip htmlEle" ata-date="" data-date-format="ddd MMM DD, YYYY" id="execdate" />
                                     <span class="date-icon"></span>
                                 </div>
                             </div>
                             <div class="col-6 custom-col">
                                 <div class="blk-head">Time</div>
                                 <div class="selc">
-                                    <select class="cs htmlEle" id="currentexectime">
+                                    <select class="cs htmlEle" id="exectime">
                                         <option value="Send now" selected>Send now</option>
-                                        <option value="Send later">Send later</option>
+                                        <optgroup label="Send later"></optgroup>
                                     </select>
                                     <span class="sel-chev2"></span>
                                 </div>
@@ -128,5 +128,6 @@
     <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
     <script src="~/Scripts/ManageRecurringPosts.js"></script>
+    <script src="~/Scripts/timevalues.js"></script>
 </body>
 </html>

@@ -67,10 +67,10 @@ function getRecurssions() {
             blockdata = "";
             recurssions.forEach(x => {
                 if (x.RecurssionType == "Monthly") {
-                    sendpostat = "Every Month " + new Date(x.RefCreatedDate).getDate() + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
+                    sendpostat = "Every Month " + new Date(x.RefCreatedDate).getDate() + " at " + x.ExecutionTime;
                 }
                 else if (x.RecurssionType == "Weekly"){
-                    sendpostat = "Every Week " + weeks[new Date(x.RefCreatedDate).getDay()] + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
+                    sendpostat = "Every Week " + weeks[new Date(x.RefCreatedDate).getDay()] + " at " + x.ExecutionTime;
                 }
                 else {
                     sendpostat = "Every Week Day " + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
@@ -92,8 +92,18 @@ function getRecurssions() {
                         var ques = recurssions.find(x => x.RefID == editid)
                         $("#currentrecurrsionquestion").html(ques.Question)
                         $("#currentprivacy").val(ques.Privacy);
-                        $("#currentdate").val(new Date(ques.ExecutionDate))
-                        $("#currentexectime").val(ques.ExecutionTime)
+                        var time = new Date(ques.ExecutionDate).toLocaleDateString().split('/');
+                        if (time.length) {
+                            time.reverse();
+                            if (time[1] < 10) {
+                                time[1] = "0" + time[1]
+                            }
+                            if (time[2] < 10) {
+                                time[2] = "0" + time[2]
+                            }
+                        }
+                        $("#execdate").val(time.join('-'))
+                        $("#exectime").val(ques.ExecutionTime)
                         $("#currentrecurrance").val(ques.RecurssionType);
                     });
                 });
@@ -125,7 +135,7 @@ function saveRecurssion() {
         headers: {
             "Content-Type": "application/json",
         },
-        data: JSON.stringify({ "refID": editid, "executionTime": $("#currentexectime").val(), "executionDate": $("#currentdate").val(), "privacy": $("#currentprivacy").val(), "recurssionType": $("#currentrecurrance").val() }),
+        data: JSON.stringify({ "refID": editid, "executionTime": $("#exectime").val(), "executionDate": $("#execdate").val(), "privacy": $("#currentprivacy").val(), "recurssionType": $("#currentrecurrance").val() }),
         success: function (data) {
             if (data == "true") {
                 $("#tablebody").html("");
