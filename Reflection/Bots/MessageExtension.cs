@@ -270,16 +270,14 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     {
                         var replymessageid = turnContext.Activity.Conversation.Id.Split("=");
                         var activity = Activity.CreateMessageActivity();
-                        bool isDelete = await _dbHelper.RemoveReflectionId(replymessageid[1]);
-                        if(isDelete)
+                        string messageId = await _dbHelper.RemoveReflectionId(replymessageid[1]);
+                        if(messageId!=null)
                         {
-                            await turnContext.DeleteActivityAsync(replymessageid[1]);
-                            activity.Text = "Refelct Id removed successfully";
+                            await turnContext.DeleteActivityAsync(messageId);
+                            
                         }
-                        else
-                        {
-                            activity.Text = "Refelct have feedback and not removed";
-                        }
+                        await turnContext.DeleteActivityAsync(replymessageid[1]);
+                        activity.Text = "Refelct Id removed successfully";
                         await turnContext.SendActivityAsync(activity);
                         
                     }

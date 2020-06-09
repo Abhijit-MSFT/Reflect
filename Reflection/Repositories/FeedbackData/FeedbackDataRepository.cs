@@ -55,6 +55,23 @@ namespace Reflection.Repositories.FeedbackData
             }
         }
 
+        public async Task<FeedbackDataEntity> GetFeedbackonRefId(Guid? reflid)
+        {
+            _telemetry.TrackEvent("GetReflectionFeedback");
+            try
+            {
+                var allFeedbacks = await this.GetAllAsync(PartitionKeyNames.FeedbackDataTable.TableName);
+                FeedbackDataEntity feedbackResult = allFeedbacks.Where(c => c.ReflectionID == reflid).FirstOrDefault();
+                return feedbackResult ?? null;
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+
+            }
+        }
+
         public async Task<FeedbackDataEntity> GetReflectionFeedback(Guid reflid, string email)
         {
             _telemetry.TrackEvent("GetReflectionFeedback");

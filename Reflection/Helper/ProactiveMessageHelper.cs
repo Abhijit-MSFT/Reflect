@@ -121,7 +121,7 @@ namespace Reflection.Helper
 
                 if (attachment != null)
                     replyMessage.Attachments.Add(attachment);
-                
+
                 using (var connectorClient = new ConnectorClient(new Uri(serviceUrl)))
                 {
                     var parameters = new ConversationParameters

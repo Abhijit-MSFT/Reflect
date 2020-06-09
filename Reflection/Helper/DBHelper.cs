@@ -346,28 +346,26 @@ namespace Reflection.Helper
         /// </summary>
         /// <param name="Iconfiguration">Reads The config from app settings</param>
         /// <param name="reflectionMessageId">Specific MessageId that is to be deleted</param>
-        public async Task<bool> RemoveReflectionId(string reflectionMessageId)
+        public async Task<string> RemoveReflectionId(string reflectionMessageId)
         {
-            bool isReflectDeleted = false;
+            string messageId = null;
             try
             {
                 _telemetry.TrackEvent("RemoveMessageId");
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 var reflection = await reflectionDataRepository.GetReflectionData(reflectionMessageId);
-                var feedbackCount = await feedbackDataRepository.GetReflectionFeedback(reflection.ReflectionID);
-                if(feedbackCount.Count < 1)
-                {
-                    await reflectionDataRepository.DeleteAsync(reflection);
-                    isReflectDeleted = true;
-                }
+                messageId = reflection.MessageID;
+                var feedbackCount = await feedbackDataRepository.GetFeedbackonRefId(reflection.ReflectionID);
+                await feedbackDataRepository.DeleteAsync(feedbackCount);
+                await reflectionDataRepository.DeleteAsync(reflection);
                 
             }
             catch (Exception ex)
             {
                 _telemetry.TrackException(ex);
             }
-            return isReflectDeleted;
+            return messageId;
         }
         /// <summary>
         /// update Reflection and recurssion related to that reflection
