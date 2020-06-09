@@ -42,4 +42,6 @@
       <Exec Command="powershell.exe Compress-Archive -Path \&quot;$(ProjectDir)Manifest\*\&quot; -DestinationPath \&quot;$(TargetDir)helloworldapp.zip\&quot; -Force" />
     </Target>
 
+    <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+
 </Project>
