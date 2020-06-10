@@ -74,6 +74,10 @@ $(document).ready(function () {
             $('#sendnow').attr("disabled", "true");
             $('#exectime').val("00:00 AM")
         }
+        else {
+            $('#sendnow').removeAttr("disabled");
+            $('#exectime').val("Send now")
+        }
     }).trigger("change")
 });
 
