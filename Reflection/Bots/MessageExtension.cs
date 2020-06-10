@@ -12,14 +12,13 @@ using Reflection.Interfaces;
 using Reflection.Model;
 using Reflection.Repositories.FeedbackData;
 using Reflection.Repositories.ReflectionData;
-using Microsoft.ApplicationInsights;
-using Reflection.Interfaces;
 using Reflection.Repositories.RecurssionData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Reflection.Repositories.QuestionsData;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
