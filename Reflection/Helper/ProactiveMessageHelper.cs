@@ -112,7 +112,7 @@ namespace Reflection.Helper
 
         }
 
-        public static async Task<NotificationSendStatus> SendChannelNotification(ChannelAccount botAccount, string serviceUrl, string channelId, string messageText, Attachment attachment, TeamsChannelData channelData)
+        public static async Task<NotificationSendStatus> SendChannelNotification(ChannelAccount botAccount, string serviceUrl, string channelId, string messageText, Attachment attachment)
         {
             try
             {
@@ -130,7 +130,7 @@ namespace Reflection.Helper
                         ChannelData = new TeamsChannelData
                         {
                             Channel = new ChannelInfo(channelId),
-                            Tenant = channelData.Tenant,
+                            Tenant = new TenantInfo("tenant_id"),
                             Notification = new NotificationInfo() { Alert = true }
                         },
                         IsGroup = true,

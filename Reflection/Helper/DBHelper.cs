@@ -152,9 +152,29 @@ namespace Reflection.Helper
                     CreatedDate = DateTime.Now,
                     ExecutionDate = taskInfo.executionDate,
                     ExecutionTime = Convert.ToDateTime(taskInfo.executionTime).ToUniversalTime().ToLongTimeString(),
-                    RecurssionEndDate = taskInfo.executionDate.AddDays(30)
+                    RecurssionEndDate = taskInfo.executionDate.AddDays(30),
+                    NextExecutionDate = taskInfo.executionDate
 
                 };
+                await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+            }
+        }
+        /// <summary>
+        /// UpdateRecurssionDataAsync
+        /// </summary>
+        /// <param name="recurssionEntity"></param>
+        /// <returns></returns>
+        public async Task UpdateRecurssionDataAsync(RecurssionDataEntity recurssionEntity)
+        {
+            _telemetry.TrackEvent("UpdateRecurssionDataAsync");
+            try
+            {
+                RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
+                // Need to set the next execution date 
                 await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
             }
             catch (Exception ex)
@@ -324,7 +344,7 @@ namespace Reflection.Helper
         /// </summary>
         /// <param name="Iconfiguration">Reads The config from app settings</param>
         /// <param name="reflectionId">Specific reflectionid that is to be deleted</param>
-        public  async Task DeleteRecurrsionDataAsync(Guid reflectionId)
+        public async Task DeleteRecurrsionDataAsync(Guid reflectionId)
         {
             try
             {
@@ -360,7 +380,7 @@ namespace Reflection.Helper
                 var feedbackCount = await feedbackDataRepository.GetFeedbackonRefId(reflection.ReflectionID);
                 await feedbackDataRepository.DeleteAsync(feedbackCount);
                 await reflectionDataRepository.DeleteAsync(reflection);
-                
+
             }
             catch (Exception ex)
             {
@@ -375,13 +395,13 @@ namespace Reflection.Helper
         /// <param name="reflection">COmbination of reflection and recurssion to save data</param>
 
 
-        public  async Task SaveEditRecurssionDataAsync(RecurssionScreenData reflection)
+        public async Task SaveEditRecurssionDataAsync(RecurssionScreenData reflection)
         {
             try
             {
                 _telemetry.TrackEvent("SaveEditRecurssionDataAsync");
-                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration,_telemetry);
-                RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration,_telemetry);
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
+                RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
                 var reflectiondata = await reflectionDataRepository.GetReflectionData(reflection.RefID);
                 var recurssion = await recurssionDataRepository.GetRecurssionData(reflectiondata.RecurrsionID);
                 reflectiondata.Privacy = reflection.Privacy;

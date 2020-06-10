@@ -1,4 +1,5 @@
-﻿using Microsoft.ApplicationInsights;
+﻿using Bogus.DataSets;
+using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -67,6 +68,24 @@ namespace Reflection.Repositories.RecurssionData
             }
         }
 
+        public async Task<List<RecurssionDataEntity>> GetAllRecurssionData()
+        {
+            DateTime dateTime = DateTime.UtcNow;
+            _telemetry.TrackEvent("GetAllRecurssionData");
+            try
+            {
+                var recurssionData = await this.GetAllAsync(PartitionKeyNames.RecurssionDataTable.TableName);
+                var recData = recurssionData.Where(c => c.RecursstionType != "Does not repeat" && c.ExecutionDate != null).ToList();
+                var intervalRecords = recData.Where(r => dateTime.Subtract((DateTime)r.ExecutionDate).TotalSeconds < 60 && dateTime.Subtract((DateTime)r.ExecutionDate).TotalSeconds > 0).ToList();
+                return intervalRecords;
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+
+            }
+        }
 
     }
 }
