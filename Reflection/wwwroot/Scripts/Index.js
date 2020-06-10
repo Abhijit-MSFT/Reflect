@@ -4,6 +4,8 @@ var accesstoken = "";
 
 $(document).ready(function () {
     $("#usertext").html(" " + userName);
+    var today = moment().format('YYYY-MM-DD');
+    $('#execdate').val(today);
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
         if (context.theme === "default") {
@@ -61,8 +63,6 @@ $(document).ready(function () {
         .change();
 
     $(".date-ip").on("change", function () {
-        var today = moment().format('YYYY-MM-DD');
-        $('#execdate').val(today);
 
         this.setAttribute(
             "data-date",
