@@ -1,8 +1,6 @@
-﻿using AdaptiveCards;
-using Microsoft.ApplicationInsights;
+﻿using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,14 +8,9 @@ using Reflection.Helper;
 using Reflection.Interfaces;
 using Reflection.Model;
 using Reflection.Repositories.QuestionsData;
-using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
@@ -156,9 +149,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             }
 
         }
-
-
-
         [HttpPost]
         [Route("ReflectionAdaptiveCard")]
         public string ReflectionAdaptiveCard([FromBody]TaskInfo taskInfo)

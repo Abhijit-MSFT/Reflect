@@ -1,25 +1,25 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Schema;
-using Microsoft.Bot.Builder.Teams;
-using Microsoft.Bot.Schema.Teams;
-using Newtonsoft.Json.Linq;
-using System.Linq;
-using System;
-using System.Collections.Generic;
+﻿using AdaptiveCards;
 using Bogus;
-using Newtonsoft.Json;
-using Reflection.Helper;
-using Reflection.Model;
+using Microsoft.ApplicationInsights;
+using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Teams;
+using Microsoft.Bot.Schema;
+using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.Configuration;
-using AdaptiveCards;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Reflection.Interfaces;
+using Reflection.Model;
 using Reflection.Repositories.FeedbackData;
-using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.ReflectionData;
 using Microsoft.ApplicationInsights;
 using Reflection.Interfaces;
 using Reflection.Repositories.RecurssionData;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
@@ -45,8 +45,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
             try
             {
-                //CardHelper cardhelper = new CardHelper(_configuration);
-
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
@@ -111,8 +109,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             }
                             else
                             {
+                                //await turnContext.UpdateActivityAsync(reply);
                                 reply.Id = reflectData.MessageID;
                                 await turnContext.UpdateActivityAsync(reply);
+                                
+                                
                             }
                         }
                         catch (System.Exception e)
