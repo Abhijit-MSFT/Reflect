@@ -230,3 +230,33 @@ function addShowHideButton() {
     }
 }
 
+$('#recurrance').on('change', function () {
+    if (this.value == 'Custom') {
+        $(".custom-cal").show();
+    }
+    else {
+        $(".custom-cal").hide();
+    }
+
+});
+
+$('#dwm').on('change', function () {
+    if (this.value == 'day') {
+        $(".eve-day-start").show();
+        $(".card").removeClass("week month");
+        $(".card").addClass("day");
+        $(".day-select,.eve-week-start,.month-cal").hide();
+    }
+    else if (this.value == 'week') {
+        $(".day-select,.eve-week-start").show();
+        $(".card").removeClass("day month");
+        $(".card").addClass("week");
+        $(".eve-day-start,.eve-month-start,.month-cal").hide();
+    }
+    else {
+        $(".day-select,.eve-week-start,.eve-day-start,.day-select").hide();
+        $(".month-cal,.eve-month-start").show();
+        $(".card").removeClass("week day");
+        $(".card").addClass("month");
+    }
+});

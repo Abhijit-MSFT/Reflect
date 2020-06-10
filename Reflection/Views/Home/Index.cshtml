@@ -76,6 +76,78 @@
                                     <span class="sel-chev2"></span>
                                 </div>
                             </div>
+                            <div class="custom-cal col-6 custom-col">
+                                <div class="card day">
+                                    <div class="card-body">
+                                        <div class="recurrence">Recurrence</div>
+                                        <div class="repeat">
+                                            <div class="re">Repeat every</div>
+                                            <div class="sel-day">
+                                                <select name="number" class="number">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                </select>
+                                            </div>
+                                            <div class="sel-day-day">
+                                                <select name="day" class="day-drp" id="dwm">
+                                                    <option value="day">Day</option>
+                                                    <option value="week">Week</option>
+                                                    <option value="month">Month</option>
+                                                </select>
+                                                <span class="down-chev"></span>
+                                            </div>
+                                        </div>
+                                        <div class="eve-day-start">Every day, starting 4/1</div>
+
+                                        <div class="day-select">
+                                            <span class="s">S</span>
+                                            <span class="m">
+                                                <img src="~/Images/m.png" alt="monday" class="day-img">
+                                            </span>
+                                            <span class="t">T</span>
+                                            <span class="w">
+                                                <img src="~/Images/w.png" alt="wednesday" class="day-img">
+                                            </span>
+                                            <span class="thr">T</span>
+                                            <span class="f">
+                                                <img src="~/Images/f.png" alt="friday" class="day-img">
+                                            </span>
+                                            <span class="sat">S</span>
+                                        </div>
+                                        <div class="eve-week-start">Every Mon, Wed, Fri, starting 6/5</div>
+
+                                        <div class="month-cal">
+                                            <div class="form-check">
+                                                <input class="form-check-input on-day-radio" type="radio" name="days-check" id="on-day"
+                                                       value="option1" checked>
+                                                <label class="form-check-label on-day" for="on-day">
+                                                    On day
+                                                </label>
+                                                <select name="number" class="number">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input on-the-radio" type="radio" name="days-check" id="on-the-day"
+                                                       value="option2">
+                                                <label class="form-check-label on-day" for="on-the-day">
+                                                    On the
+                                                </label>
+                                                <select name="number" class="day-number">
+                                                    <option value="First">First</option>
+                                                    <option value="Second">Second</option>
+                                                </select>
+                                                <select name="number" class="days-text">
+                                                    <option value="Monday">Monday</option>
+                                                    <option value="Tuesday">Tuesday</option>
+                                                </select>
+                                            </div>
+                                            <div class="eve-month-start">Every month on first Wednesday, starting 4/1</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="prev">Preview</div>
