@@ -63,12 +63,17 @@ $(document).ready(function () {
         .change();
 
     $(".date-ip").on("change", function () {
-
+        
         this.setAttribute(
             "data-date",
             moment(this.value, "YYYY-MM-DD")
                 .format(this.getAttribute("data-date-format"))
         )
+        var today = moment().format('YYYY-MM-DD');
+        if ($('#execdate').val() !== today) {
+            $('#sendnow').attr("disabled", "true");
+            $('#exectime').val("00:00 AM")
+        }
     }).trigger("change")
 });
 
