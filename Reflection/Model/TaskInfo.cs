@@ -49,7 +49,7 @@ namespace Reflection.Model
     public class UserfeedbackInfo
     {
         public int feedbackId { get; set; }
-        public Guid reflectionId { get; set; }
+        public string reflectionId { get; set; }
         public string action { get; set; }
         public string type { get; set; }
         public string userName { get; set; }

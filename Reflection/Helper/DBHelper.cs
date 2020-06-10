@@ -189,7 +189,7 @@ namespace Reflection.Helper
                         RowKey = rowKey.ToString(),
                         FeedbackID = feedbackID,
                         FullName = taskInfo.userName,
-                        ReflectionID = taskInfo.reflectionId,
+                        ReflectionID = Guid.Parse(taskInfo.reflectionId),
                         FeedbackGivenBy = taskInfo.emailId, //need changes - send it in card response and capture it
                         Feedback = Convert.ToInt32(taskInfo.feedbackId)
 
