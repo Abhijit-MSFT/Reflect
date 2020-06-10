@@ -110,7 +110,8 @@ namespace Reflection.Helper
                                 {
 
                                     new AdaptiveImage() { PixelWidth=12,PixelHeight=12, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1", HorizontalAlignment = AdaptiveHorizontalAlignment.Center }
-                                }
+                                },
+                                
 
                             },
                             new AdaptiveColumn()
@@ -240,8 +241,6 @@ namespace Reflection.Helper
                 return null;
             }
 
-
-
         }
 
         public Task<string> saveImage(Image data, string Filepath)
@@ -307,20 +306,10 @@ namespace Reflection.Helper
                                 Width=AdaptiveColumnWidth.Auto,
                                 Items = new List<AdaptiveElement>()
                                 {
-                                    new AdaptiveTextBlock("Posted by "+ $"{data.postCreateBy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
+                                    new AdaptiveTextBlock("Posted by "+ $"{data.postCreateBy}" + " | Response are" + $"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
                                 }
 
-                            },
-                            new AdaptiveColumn()
-                            {
-                                Width=AdaptiveColumnWidth.Auto,
-                                Items = new List<AdaptiveElement>()
-                                {
-                                    new AdaptiveTextBlock("| Responses are "+ $"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
-                                }
-
-                            },
-
+                            }
                         }
                     },
                     new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100},
@@ -334,7 +323,7 @@ namespace Reflection.Helper
                                 Items=new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/1.png"),PixelHeight=32, PixelWidth=32, AltText="Good",
+                                    new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/1.png"),PixelHeight=32, PixelWidth=32, AltText="Good", 
                                         Style =AdaptiveImageStyle.Person, Id="1", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'1', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } }
                                 }
 

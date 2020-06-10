@@ -1,24 +1,22 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using AdaptiveCards;
+using Bogus;
+using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Builder;
-using Microsoft.Bot.Schema;
 using Microsoft.Bot.Builder.Teams;
+using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Linq;
+using Reflection.Interfaces;
+using Reflection.Model;
+using Reflection.Repositories.FeedbackData;
+using Reflection.Repositories.ReflectionData;
 using System;
 using System.Collections.Generic;
-using Bogus;
-using Newtonsoft.Json;
-using Reflection.Helper;
-using Reflection.Model;
-using Microsoft.Extensions.Configuration;
-using AdaptiveCards;
-using Reflection.Repositories.FeedbackData;
-using Reflection.Repositories.QuestionsData;
-using Reflection.Repositories.ReflectionData;
-using Microsoft.ApplicationInsights;
-using Reflection.Interfaces;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
@@ -44,8 +42,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
             try
             {
-                //CardHelper cardhelper = new CardHelper(_configuration);
-
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 if (turnContext.Activity.Value != null)
@@ -96,8 +92,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             }
                             else
                             {
+                                //await turnContext.UpdateActivityAsync(reply);
                                 reply.Id = reflectData.MessageID;
                                 await turnContext.UpdateActivityAsync(reply);
+                                
+                                
                             }
                         }
                         catch (System.Exception e)
