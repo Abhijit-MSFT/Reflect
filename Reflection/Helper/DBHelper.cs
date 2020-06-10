@@ -151,7 +151,7 @@ namespace Reflection.Helper
                     RecursstionType = taskInfo.recurssionType,
                     CreatedDate = DateTime.Now,
                     ExecutionDate = taskInfo.executionDate,
-                    ExecutionTime = taskInfo.executionTime,
+                    ExecutionTime = Convert.ToDateTime(taskInfo.executionTime).ToUniversalTime().ToLongTimeString(),
                     RecurssionEndDate = taskInfo.executionDate.AddDays(30)
 
                 };
