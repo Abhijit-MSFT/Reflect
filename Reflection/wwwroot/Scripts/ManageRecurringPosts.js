@@ -32,7 +32,9 @@ $(document).ready(function () {
     getRecurssions();
 });
 
-
+$("tbody#tablebody").on("click", "td.date-day", function () {
+    $('#week').toggle();
+});
 
 $('.delete-icon').click(function () {
     $('#myModal').modal('show');
@@ -145,3 +147,4 @@ function saveRecurssion() {
         }
     });
 }
+
