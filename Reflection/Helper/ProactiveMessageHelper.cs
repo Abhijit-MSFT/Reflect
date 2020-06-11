@@ -6,12 +6,18 @@ using Reflection.Model;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using Microsoft.Extensions.Configuration;
 
 namespace Reflection.Helper
 {
     public class ProactiveMessageHelper
     {
+        private IConfiguration _configuration;
 
+        public ProactiveMessageHelper(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
         public static async Task<NotificationSendStatus> SendPersonalNotification(string serviceUrl, string tenantId, User userDetails, string messageText, Attachment attachment)
         {
             MicrosoftAppCredentials.TrustServiceUrl(serviceUrl, DateTime.MaxValue);
@@ -112,7 +118,7 @@ namespace Reflection.Helper
 
         }
 
-        public static async Task<NotificationSendStatus> SendChannelNotification(ChannelAccount botAccount, string serviceUrl, string channelId, string messageText, Attachment attachment)
+        public async Task<NotificationSendStatus> SendChannelNotification(ChannelAccount botAccount, string serviceUrl, string channelId, string messageText, Attachment attachment)
         {
             try
             {
@@ -121,8 +127,8 @@ namespace Reflection.Helper
 
                 if (attachment != null)
                     replyMessage.Attachments.Add(attachment);
-
-                using (var connectorClient = new ConnectorClient(new Uri(serviceUrl)))
+                MicrosoftAppCredentials.TrustServiceUrl(serviceUrl, DateTime.MaxValue);
+                using (var connectorClient = new ConnectorClient(new Uri(serviceUrl), _configuration["MicrosoftAppId"], _configuration["MicrosoftAppPassword"]))
                 {
                     var parameters = new ConversationParameters
                     {
@@ -130,7 +136,6 @@ namespace Reflection.Helper
                         ChannelData = new TeamsChannelData
                         {
                             Channel = new ChannelInfo(channelId),
-                            Tenant = new TenantInfo("tenant_id"),
                             Notification = new NotificationInfo() { Alert = true }
                         },
                         IsGroup = true,
