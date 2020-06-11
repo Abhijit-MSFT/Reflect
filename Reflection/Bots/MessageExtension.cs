@@ -242,8 +242,23 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 },
                             },
                         };
+                       return response;
 
-                        return response;
+                    case "OpenDetailfeedback":
+                        var responsefeedback= new MessagingExtensionActionResponse()
+                        {
+                            Task = new TaskModuleContinueResponse()
+                            {
+                                Value = new TaskModuleTaskInfo()
+                                {
+                                    Height = 600,
+                                    Width = 780,
+                                    Title = "Check the pulse on emotinal well-being",
+                                    Url = this._configuration["BaseUri"] + "/openReflectionFeedback/" + taskInfo.reflectionID+"/"+taskInfo.feedback
+                                },
+                            },
+                        };
+                        return responsefeedback;
                     default:
                         return null;
                 };

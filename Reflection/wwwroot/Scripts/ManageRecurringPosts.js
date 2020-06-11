@@ -68,14 +68,28 @@ function getRecurssions() {
             var sendpostat = "";
             blockdata = "";
             recurssions.forEach(x => {
+               var timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
+               var timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + Math.floor((-1 * new Date().getTimezoneOffset()) / 60) * 6
+               var mode=' AM'
+               if (timeminutes == '60') {
+                    timehours = timehours + 1
+                    timeminutes = '00';
+                }
+                
+                if (timehours > 11) {
+                    mode=' PM'
+                }
+                if (timehours > 12) {
+                    timehours = timehours - 12
+                }
                 if (x.RecurssionType == "Monthly") {
-                    sendpostat = "Every Month " + new Date(x.RefCreatedDate).getDate() + " at " + x.ExecutionTime;
+                    sendpostat = "Every Month " + new Date(x.ExecutionDate).getDate() + " at " + timehours + ":" + timeminutes + mode;
                 }
                 else if (x.RecurssionType == "Weekly"){
-                    sendpostat = "Every Week " + weeks[new Date(x.RefCreatedDate).getDay()] + " at " + x.ExecutionTime;
+                    sendpostat = "Every Week " + weeks[new Date(x.ExecutionDate).getDay()] + " at " + timehours + ":" + timeminutes + mode;;
                 }
                 else {
-                    sendpostat = "Every Week Day " + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
+                    sendpostat = "Every Week Day " + " at " + timehours + ":" + timeminutes + mode;;
                 }
                 blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="edit-icon" id="edit' + x.RefID + '" data-toggle="modal" data-target="#edit"></td><td class="delete-icon" id="delete' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
             })
@@ -148,3 +162,10 @@ function saveRecurssion() {
     });
 }
 
+function gotoIndex() {
+    let linkInfo = {
+        action: "reflection",
+    };
+    microsoftTeams.tasks.submitTask(linkInfo);
+    return true;
+}

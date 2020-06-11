@@ -2,10 +2,16 @@
 var userobject = {};
 var accesstoken = "";
 
+
 $(document).ready(function () {
+    $('.js-example-basic-single').select2();
+    $(".js-example-tags").select2({
+        tags: true
+    });
     $("#usertext").html(" " + userName);
     var today = moment().format('YYYY-MM-DD');
     $('#execdate').val(today);
+    $('.select2-selection__arrow').remove()
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
         if (context.theme === "default") {
@@ -38,29 +44,29 @@ $(document).ready(function () {
             $("#questionsblock").removeClass("showquestions");
         }
     });
-    $("select")
-        .change(function () {
-            $(this)
-                .find("option:selected")
-                .each(function () {
-                    var optionValue = $(this).attr("value");
-                    if (optionValue) {
-                        $(".box")
-                            .not("." + optionValue)
-                            .hide();
-                        $("." + optionValue).show();
-                    } else {
-                        $(".box").hide();
-                    }
-                });
-            if ($('#questions-list').val().length === 0) {
-                $('#selectedTxt').text("No reflection question entered");
-                $('.feeling').addClass("feeling-noquestion");
-            } else {
-                $('.feeling').removeClass("feeling-noquestion");
-            }
-        })
-        .change();
+    //$("select")
+    //    .change(function () {
+    //        $(this)
+    //            .find("option:selected")
+    //            .each(function () {
+    //                var optionValue = $(this).attr("value");
+    //                if (optionValue) {
+    //                    $(".box")
+    //                        .not("." + optionValue)
+    //                        .hide();
+    //                    $("." + optionValue).show();
+    //                } else {
+    //                    $(".box").hide();
+    //                }
+    //            });
+    //        if ($('#questions-list').val().length === 0) {
+    //            $('#selectedTxt').text("No reflection question entered");
+    //            $('.feeling').addClass("feeling-noquestion");
+    //        } else {
+    //            $('.feeling').removeClass("feeling-noquestion");
+    //        }
+    //    })
+    //    .change();
 
     $(".date-ip").on("change", function () {
         
@@ -72,22 +78,15 @@ $(document).ready(function () {
         var today = moment().format('YYYY-MM-DD');
         if ($('#execdate').val() !== today) {
             $('#sendnow').attr("disabled", "true");
-            $('#exectime').val("00:00 AM")
+            $('#exectime').select2().val("00:00 AM").trigger("change")
         }
         else {
             $('#sendnow').removeAttr("disabled");
-            $('#exectime').val("Send now")
+            $('#exectime').select2().val("Send now").trigger("change")
         }
     }).trigger("change")
 });
 
-$('#questions-list').keyup(function () {
-    if ($(this).val().length === 0) {
-        $('.btn-send').prop("disabled", true);
-    } else {
-        $('.btn-send').removeAttr('disabled');
-    }
-}).keyup(); 
 
 function SendAdaptiveCard() {
     var list = document.querySelectorAll(".htmlEle");
@@ -96,7 +95,7 @@ function SendAdaptiveCard() {
         htmObj[obj.getAttribute("data-attr")] = obj.value;
     });
     let index = questions.findIndex(
-        (x) => x.question === $("#questions-list").val()
+        (x) => x.question === $("#questions").val()
     );
     var questionid = null;
     if (index !== -1) {
@@ -105,7 +104,7 @@ function SendAdaptiveCard() {
     }
 
     let taskInfo = {
-        question: $("#questions-list").val(),
+        question: $("#questions").val(),
         questionID: questionid,
         privacy: $("#privacy").val(),
         executionDate: $("#execdate").val(),
@@ -119,7 +118,7 @@ function SendAdaptiveCard() {
     taskInfo.card = "";
     taskInfo.height = "medium";
     taskInfo.width = "medium";
-    if (!$("#questions-list").val()) {
+    if (!$("#questions").val()) {
         alert("Please select " + $(".question").text());
     } else if (!$(".date-ip").val()) {
         alert("Please select " + $("#date").text());
@@ -130,8 +129,8 @@ function SendAdaptiveCard() {
 }
 
     function getSelectedOption(event) {
-        $('#selectedTxt').html($("#questions-list").val());
-        if ($('#questions-list').val().length === 0) {
+        $('#selectedTxt').html($("#questions").val());
+        if ($('#questions').val().length === 0) {
             $('#selectedTxt').text("No reflection question entered");
             $('.feeling').addClass("feeling-noquestion");
         } else {
@@ -166,16 +165,17 @@ function GetDefaultQuestions(userPrincipleName) {
             data.forEach((x) => {
                 blockdata =
                     blockdata +
-                    ' <option class="default-opt" data-toggle="tooltip" data-placement="top" id="' +
+                    ' <option class="default-opt" id="' +
                     x.questionID +
                     '" value="' +
                     x.question +
                     '" title="' +
                     x.question +
-                    '"/>';
+                    '">'+x.question+'</option>';
                
             });
             $("#questions").html(blockdata);
+            $("#selectedTxt").html($("#questions").val());
             GetRecurssionsCount(userPrincipleName);
         },
     });

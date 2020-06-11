@@ -21,18 +21,18 @@ $(document).ready(function () {
         presentdate.setMinutes(presentdate.getMinutes() + 30);
         timestring = '';
     }
-    exectime
     timearray.forEach(x => {
         var time = '';
-        if (x.split(':')[0] > 12) {
+        if (x.split(':')[0] >= 12) {
             var timearray = x.split(':');
+            if(timearray[0]>12)
             timearray[0] = timearray[0] - 12;
             time = timearray.join(':') + ' PM'
         }
         else {
             time = x + ' AM'
         }
-        optiondata = optiondata + '<option val="' + time + '">' + time + '</option>';
+        optiondata = optiondata + '<option value="' + time + '" id="'+time+'">' + time + '</option>';
     });
     $("#exectime").append(optiondata);
 });

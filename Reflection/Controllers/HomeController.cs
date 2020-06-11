@@ -86,6 +86,15 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
+        [Route("openReflectionFeedback/{reflectionid}/{feedbackId}")]
+        public ActionResult OpenReflectionFeedback(Guid reflectionId,int feedbackId)
+        {
+            _telemetry.TrackEvent("OpenReflections");
+            ViewBag.reflectionId = reflectionId;
+            ViewBag.feedbackId = feedbackId;
+            return View();
+        }
+
         [Route("api/GetReflections/{reflectionid}")]
         public async Task<string> GetReflections(Guid reflectionid)
         {
