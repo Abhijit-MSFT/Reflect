@@ -72,21 +72,21 @@ function GetReflections() {
                         width = 0;
                         description = "";
                     }
-                    if (i == 1) {
+                    if (i === 1) {
                         color = "green";
-                        img = "1.png";
-                    } else if (i == 2) {
+                        img = "Default_1.png";
+                    } else if (i === 2) {
                         color = "light-green";
-                        img = "2.png";
-                    } else if (i == 3) {
+                        img = "Default_2.png";
+                    } else if (i === 3) {
                         color = "orng";
-                        img = "3.png";
-                    } else if (i == 4) {
+                        img = "Default_3.png";
+                    } else if (i === 4) {
                         color = "red";
-                        img = "4.png";
-                    } else if (i == 5) {
+                        img = "Default_4.png";
+                    } else if (i === 5) {
                         color = "dark-red";
-                        img = "5.png";
+                        img = "Default_5.png";
                     }
                     blockdata =
                         blockdata +
