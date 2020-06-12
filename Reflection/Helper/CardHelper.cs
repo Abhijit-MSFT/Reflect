@@ -382,122 +382,123 @@ namespace Reflection.Helper
                             },
                         }
                     }//,
-                   // new AdaptiveColumnSet
-                   // {
-                   //     Columns = new List<AdaptiveColumn>()
-                   //     {
-                   //          new AdaptiveColumn()
-                   //         {
-                   //             Width=AdaptiveColumnWidth.Auto,
-                   //             Height=AdaptiveHeight.Auto,
-                   //             Items =new List<AdaptiveElement>()
-                   //                         {
-                   //                             new AdaptiveChoiceSetInput
-                   //                                {
-                   //                                    Style=AdaptiveChoiceInputStyle.Expanded,
-                   //                                     Choices = new List<AdaptiveChoice>()
-                   //                                     {
-                   //                                          new AdaptiveChoice()
-                   //                                         {
-                   //                                             Title="",
-                   //                                             Value="1"
-                   //                                         }
-                   //                                     }
-                   //                                 }
-                   //                           }
+                     // new AdaptiveColumnSet
+                     // {
+                     //     Columns = new List<AdaptiveColumn>()
+                     //     {
+                     //          new AdaptiveColumn()
+                     //         {
+                     //             Width=AdaptiveColumnWidth.Auto,
+                     //             Height=AdaptiveHeight.Auto,
+                     //             Items =new List<AdaptiveElement>()
+                     //                         {
+                     //                             new AdaptiveChoiceSetInput
+                     //                                {
+                     //                                    Style=AdaptiveChoiceInputStyle.Expanded,
+                     //                                     Choices = new List<AdaptiveChoice>()
+                     //                                     {
+                     //                                          new AdaptiveChoice()
+                     //                                         {
+                     //                                             Title="",
+                     //                                             Value="1"
+                     //                                         }
+                     //                                     }
+                     //                                 }
+                     //                           }
 
-                   //         },
-                   //          new AdaptiveColumn()
-                   //         {
-                   //             Width=AdaptiveColumnWidth.Auto,
-                   //             Height=AdaptiveHeight.Auto,
-                   //             Items=new List<AdaptiveElement>()
-                   //             {
+                    //         },
+                    //          new AdaptiveColumn()
+                    //         {
+                    //             Width=AdaptiveColumnWidth.Auto,
+                    //             Height=AdaptiveHeight.Auto,
+                    //             Items=new List<AdaptiveElement>()
+                    //             {
 
-                   //                  new AdaptiveChoiceSetInput
-                   //                                {
-                   //                                    Style=AdaptiveChoiceInputStyle.Expanded,
-                   //                                     Choices = new List<AdaptiveChoice>()
-                   //                                     {
-                   //                                          new AdaptiveChoice()
-                   //                                         {
-                   //                                             Title="",
-                   //                                             Value="2"
-                   //                                         }
-                   //                                     }
-                   //                                 }
-                   //             }
+                    //                  new AdaptiveChoiceSetInput
+                    //                                {
+                    //                                    Style=AdaptiveChoiceInputStyle.Expanded,
+                    //                                     Choices = new List<AdaptiveChoice>()
+                    //                                     {
+                    //                                          new AdaptiveChoice()
+                    //                                         {
+                    //                                             Title="",
+                    //                                             Value="2"
+                    //                                         }
+                    //                                     }
+                    //                                 }
+                    //             }
 
-                   //         },
-                   //          new AdaptiveColumn()
-                   //         {
-                   //             Width=AdaptiveColumnWidth.Auto,
-                   //             Height=AdaptiveHeight.Auto,
-                   //             Items=new List<AdaptiveElement>()
-                   //             {
+                    //         },
+                    //          new AdaptiveColumn()
+                    //         {
+                    //             Width=AdaptiveColumnWidth.Auto,
+                    //             Height=AdaptiveHeight.Auto,
+                    //             Items=new List<AdaptiveElement>()
+                    //             {
 
-                   //                  new AdaptiveChoiceSetInput
-                   //                                {
-                   //                                    Style=AdaptiveChoiceInputStyle.Expanded,
-                   //                                     Choices = new List<AdaptiveChoice>()
-                   //                                     {
-                   //                                          new AdaptiveChoice()
-                   //                                         {
-                   //                                             Title="",
-                   //                                             Value="3"
-                   //                                         }
-                   //                                     }
-                   //                                 }
-                   //             }
+                    //                  new AdaptiveChoiceSetInput
+                    //                                {
+                    //                                    Style=AdaptiveChoiceInputStyle.Expanded,
+                    //                                     Choices = new List<AdaptiveChoice>()
+                    //                                     {
+                    //                                          new AdaptiveChoice()
+                    //                                         {
+                    //                                             Title="",
+                    //                                             Value="3"
+                    //                                         }
+                    //                                     }
+                    //                                 }
+                    //             }
 
-                   //         },
-                   //          new AdaptiveColumn()
-                   //         {
-                   //             Width=AdaptiveColumnWidth.Auto,
-                   //             Height=AdaptiveHeight.Auto,
-                   //             Items=new List<AdaptiveElement>()
-                   //             {
+                    //         },
+                    //          new AdaptiveColumn()
+                    //         {
+                    //             Width=AdaptiveColumnWidth.Auto,
+                    //             Height=AdaptiveHeight.Auto,
+                    //             Items=new List<AdaptiveElement>()
+                    //             {
 
-                   //                 new AdaptiveChoiceSetInput
-                   //                                {
-                   //                                    Style=AdaptiveChoiceInputStyle.Expanded,
-                   //                                     Choices = new List<AdaptiveChoice>()
-                   //                                     {
-                   //                                          new AdaptiveChoice()
-                   //                                         {
-                   //                                             Title="",
-                   //                                             Value="4"
-                   //                                         }
-                   //                                     }
-                   //                                 }
-                   //             }
+                    //                 new AdaptiveChoiceSetInput
+                    //                                {
+                    //                                    Style=AdaptiveChoiceInputStyle.Expanded,
+                    //                                     Choices = new List<AdaptiveChoice>()
+                    //                                     {
+                    //                                          new AdaptiveChoice()
+                    //                                         {
+                    //                                             Title="",
+                    //                                             Value="4"
+                    //                                         }
+                    //                                     }
+                    //                                 }
+                    //             }
 
-                   //         },
-                   //          new AdaptiveColumn()
-                   //         {
-                   //             Width=AdaptiveColumnWidth.Auto,
-                   //             Height=AdaptiveHeight.Auto,
-                   //             Items=new List<AdaptiveElement>()
-                   //             {
+                    //         },
+                    //          new AdaptiveColumn()
+                    //         {
+                    //             Width=AdaptiveColumnWidth.Auto,
+                    //             Height=AdaptiveHeight.Auto,
+                    //             Items=new List<AdaptiveElement>()
+                    //             {
 
-                   //                new AdaptiveChoiceSetInput
-                   //                                {
-                   //                                    Style=AdaptiveChoiceInputStyle.Expanded,
-                   //                                     Choices = new List<AdaptiveChoice>()
-                   //                                     {
-                   //                                          new AdaptiveChoice()
-                   //                                         {
-                   //                                             Title="",
-                   //                                             Value="5"
-                   //                                         }
-                   //                                     }
-                   //                                 }
-                   //            }
+                    //                new AdaptiveChoiceSetInput
+                    //                                {
+                    //                                    Style=AdaptiveChoiceInputStyle.Expanded,
+                    //                                     Choices = new List<AdaptiveChoice>()
+                    //                                     {
+                    //                                          new AdaptiveChoice()
+                    //                                         {
+                    //                                             Title="",
+                    //                                             Value="5"
+                    //                                         }
+                    //                                     }
+                    //                                 }
+                    //            }
 
-                   //         },
-                   //     }
-                   // },
-                   //}
+                    //         },
+                    //     }
+                    // },
+                    //}
+                    }
                 };
 
             }

@@ -117,7 +117,8 @@ function GetReflections() {
                         });
                     }
                     //blockdata = feedback[i].length > 5 ? blockdata + 'more' : blockdata;
-                    blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"'+reflection.ReflectionID+'")> more</span>'
+                    //enable this for detailed screen
+                    //blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"'+reflection.ReflectionID+'")> more</span>'
                     blockdata =
                         blockdata +
                         '</div><div class="cnt-box">' +
