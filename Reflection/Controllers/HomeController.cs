@@ -89,7 +89,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         [Route("openReflectionFeedback/{reflectionid}/{feedbackId}")]
         public ActionResult OpenReflectionFeedback(Guid reflectionId,int feedbackId)
         {
-            _telemetry.TrackEvent("OpenReflections");
+            _telemetry.TrackEvent("OpenReflectionFeedback");
             ViewBag.reflectionId = reflectionId;
             ViewBag.feedbackId = feedbackId;
             return View();

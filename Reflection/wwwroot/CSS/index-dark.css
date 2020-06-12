@@ -225,6 +225,14 @@ input[type="date"] {
     background: #201f1f;
     color: #ffffff;
 }
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #ffffff!important;
+}
+.select2-container--default .select2-selection--single {
+    border: none !important;
+    background-color: #201f1f !important;
+    color: #ffffff;
+}
 
 .time-ip {
     padding-left: 12px;

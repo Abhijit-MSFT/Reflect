@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
-    <link href="~/CSS/view2.css" rel="stylesheet" type="text/css" />
     <title>view2</title>
 </head>
 
@@ -16,7 +15,7 @@
         <div class="modal-dialog modal-dialog-centered modal-md" role="document">
             <div class="modal-content custom-mc">
                 <div class="modal-body modal-mb-sc2">
-                    <div class="feeling-abt">How are you feeling about the test today?</div>
+                    <div class="feeling-abt" id="questiontitle"></div>
                     <div class="review-blk" id="feedbackblock">
 
                     </div>
@@ -24,7 +23,6 @@
                     <div class="names-list">
                         <table class="table">
                             <tbody id="peopledata">
-                                
                             </tbody>
                         </table>
                     </div>
@@ -36,12 +34,13 @@
             </div>
         </div>
     </div>
-</body>
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-<script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
-<script src="~/Scripts/viewreflectionsfeedbcak.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
+    <script src="~/Scripts/viewreflectionsfeedbcak.js"></script>
+</body>
 
 </html>

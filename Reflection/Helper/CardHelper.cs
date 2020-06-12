@@ -33,12 +33,13 @@ namespace Reflection.Helper
             _telemetry.TrackEvent("FeedBackCard");
             try
             {
-                //DirectoryInfo folderInfo = new DirectoryInfo(@"wwwroot/images/reflectimages");
+                DirectoryInfo folderinfo = new DirectoryInfo(@"wwwroot/images/reflectimages");
 
-                //foreach (FileInfo file in folderInfo.GetFiles())
-                //{
-                //    file.Delete();
-                //}
+                foreach (FileInfo file in folderinfo.GetFiles())
+                {
+                    if(Guid.Parse(file.Name.Split("@")[0])==reflectionId)
+                    file.Delete();
+                }
                 for (int i = 1; i <= 5; i++)
                 {
                     if (!keyValues.ContainsKey(i))
@@ -88,7 +89,7 @@ namespace Reflection.Helper
                         previouswidth = previouswidth + width + 1;
                     }
                 }
-                var datastring = "/Images/reflectimages/" + Guid.NewGuid() + ".png";
+                var datastring = "/Images/reflectimages/" + reflectionId+"@"+ Path.GetRandomFileName().Replace(".", "") + ".png";
                 string outputFileName = @"wwwroot" + datastring;
                 //Use RoundedImage...
                 Image RoundedImage = this.RoundCorners(thumbBMP, 10, Color.White);
@@ -293,10 +294,10 @@ namespace Reflection.Helper
             _telemetry.TrackEvent("CreateNewPostCard");
             uint pixelHeight = Convert.ToUInt32(FeedbackId == 0 ? 32 : 46);
             try
-            {
+            {  
                 return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
                 {
-                    Body = new List<AdaptiveElement>
+                    Body =new List<AdaptiveElement>
                 {
                     new AdaptiveColumnSet
                     {
@@ -324,10 +325,10 @@ namespace Reflection.Helper
                                 Height=AdaptiveHeight.Auto,
                                 Items =new List<AdaptiveElement>()
                                             {
-                                   
-                                                new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] +(FeedbackId==0?"/images/1.png":FeedbackId==1?"/images/1_selected_light.png":"/images/1_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32, AltText="Good", 
+
+                                                new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] +(FeedbackId==0?"/images/1.png":FeedbackId==1?"/images/1_selected_light.png":"/images/1_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32, AltText="Good",
                                                     Style =AdaptiveImageStyle.Default, Id="1", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'1', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } },
-                                               
+
                                             }
 
                             },
@@ -380,8 +381,123 @@ namespace Reflection.Helper
 
                             },
                         }
-                    }
-                }
+                    }//,
+                   // new AdaptiveColumnSet
+                   // {
+                   //     Columns = new List<AdaptiveColumn>()
+                   //     {
+                   //          new AdaptiveColumn()
+                   //         {
+                   //             Width=AdaptiveColumnWidth.Auto,
+                   //             Height=AdaptiveHeight.Auto,
+                   //             Items =new List<AdaptiveElement>()
+                   //                         {
+                   //                             new AdaptiveChoiceSetInput
+                   //                                {
+                   //                                    Style=AdaptiveChoiceInputStyle.Expanded,
+                   //                                     Choices = new List<AdaptiveChoice>()
+                   //                                     {
+                   //                                          new AdaptiveChoice()
+                   //                                         {
+                   //                                             Title="",
+                   //                                             Value="1"
+                   //                                         }
+                   //                                     }
+                   //                                 }
+                   //                           }
+
+                   //         },
+                   //          new AdaptiveColumn()
+                   //         {
+                   //             Width=AdaptiveColumnWidth.Auto,
+                   //             Height=AdaptiveHeight.Auto,
+                   //             Items=new List<AdaptiveElement>()
+                   //             {
+
+                   //                  new AdaptiveChoiceSetInput
+                   //                                {
+                   //                                    Style=AdaptiveChoiceInputStyle.Expanded,
+                   //                                     Choices = new List<AdaptiveChoice>()
+                   //                                     {
+                   //                                          new AdaptiveChoice()
+                   //                                         {
+                   //                                             Title="",
+                   //                                             Value="2"
+                   //                                         }
+                   //                                     }
+                   //                                 }
+                   //             }
+
+                   //         },
+                   //          new AdaptiveColumn()
+                   //         {
+                   //             Width=AdaptiveColumnWidth.Auto,
+                   //             Height=AdaptiveHeight.Auto,
+                   //             Items=new List<AdaptiveElement>()
+                   //             {
+
+                   //                  new AdaptiveChoiceSetInput
+                   //                                {
+                   //                                    Style=AdaptiveChoiceInputStyle.Expanded,
+                   //                                     Choices = new List<AdaptiveChoice>()
+                   //                                     {
+                   //                                          new AdaptiveChoice()
+                   //                                         {
+                   //                                             Title="",
+                   //                                             Value="3"
+                   //                                         }
+                   //                                     }
+                   //                                 }
+                   //             }
+
+                   //         },
+                   //          new AdaptiveColumn()
+                   //         {
+                   //             Width=AdaptiveColumnWidth.Auto,
+                   //             Height=AdaptiveHeight.Auto,
+                   //             Items=new List<AdaptiveElement>()
+                   //             {
+
+                   //                 new AdaptiveChoiceSetInput
+                   //                                {
+                   //                                    Style=AdaptiveChoiceInputStyle.Expanded,
+                   //                                     Choices = new List<AdaptiveChoice>()
+                   //                                     {
+                   //                                          new AdaptiveChoice()
+                   //                                         {
+                   //                                             Title="",
+                   //                                             Value="4"
+                   //                                         }
+                   //                                     }
+                   //                                 }
+                   //             }
+
+                   //         },
+                   //          new AdaptiveColumn()
+                   //         {
+                   //             Width=AdaptiveColumnWidth.Auto,
+                   //             Height=AdaptiveHeight.Auto,
+                   //             Items=new List<AdaptiveElement>()
+                   //             {
+
+                   //                new AdaptiveChoiceSetInput
+                   //                                {
+                   //                                    Style=AdaptiveChoiceInputStyle.Expanded,
+                   //                                     Choices = new List<AdaptiveChoice>()
+                   //                                     {
+                   //                                          new AdaptiveChoice()
+                   //                                         {
+                   //                                             Title="",
+                   //                                             Value="5"
+                   //                                         }
+                   //                                     }
+                   //                                 }
+                   //            }
+
+                   //         },
+                   //     }
+                   // },
+                   //}
                 };
 
             }

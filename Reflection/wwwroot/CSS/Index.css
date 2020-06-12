@@ -412,6 +412,11 @@ ul.ui-timepicker-viewport {
     display: none;
 }
 
+.select2-container--default .select2-selection--single {
+    border: none!important;
+    background-color: #f3f2f1!important;
+}
+
 .custom-cal {
     position: absolute;
     left: 50%;

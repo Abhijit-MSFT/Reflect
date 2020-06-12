@@ -11,7 +11,7 @@ $(document).ready(function () {
     $("#usertext").html(" " + userName);
     var today = moment().format('YYYY-MM-DD');
     $('#execdate').val(today);
-    $('.select2-selection__arrow').remove()
+    $(".select2-selection__arrow").remove()
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
         if (context.theme === "default") {
@@ -78,11 +78,13 @@ $(document).ready(function () {
         var today = moment().format('YYYY-MM-DD');
         if ($('#execdate').val() !== today) {
             $('#sendnow').attr("disabled", "true");
-            $('#exectime').select2().val("00:00 AM").trigger("change")
+            $('#exectime').select2().val("00:00 AM").trigger("change");
+            $(".select2-selection__arrow").remove()
         }
         else {
             $('#sendnow').removeAttr("disabled");
-            $('#exectime').select2().val("Send now").trigger("change")
+            $('#exectime').select2().val("Send now").trigger("change");
+            $(".select2-selection__arrow").remove()
         }
     }).trigger("change")
 });
