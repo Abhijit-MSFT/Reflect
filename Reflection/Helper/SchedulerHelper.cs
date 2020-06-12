@@ -72,10 +72,14 @@ namespace Reflection.Helper
                         ContentType = AdaptiveCard.ContentType,
                         Content = newPostCard
                     };
-                    await new ProactiveMessageHelper(_configuration).SendChannelNotification(channelAccount, reflectionData.ServiceUrl, reflectionData.ChannelID, "", newPostCardAttachment);
+                    var proactiveNotification = await new ProactiveMessageHelper(_configuration).SendChannelNotification(channelAccount, reflectionData.ServiceUrl, reflectionData.ChannelID, "", newPostCardAttachment);
+                    if(proactiveNotification.IsSuccessful && proactiveNotification.MessageId != null)
+                    {
+                        reflectionData.ReflectMessageId = proactiveNotification.MessageId.Split("=")[1];
+                        await _dbHelper.UpdateReflectionMessageIdAsync(reflectionData);
+                    }
                     await _dbHelper.UpdateRecurssionDataNextExecutionDateTimeAsync(recurssionDataEntity);
                 }
-
             }
             catch (Exception ex)
             {

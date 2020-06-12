@@ -95,6 +95,19 @@ namespace Reflection.Helper
             }
         }
 
+        public async Task UpdateReflectionMessageIdAsync(ReflectionDataEntity reflectionDataEntity)
+        {
+            _telemetry.TrackEvent("SaveReflectionMessageIdAsync");
+            try
+            {
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
+                await reflectionDataRepository.CreateOrUpdateAsync(reflectionDataEntity);
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+            }
+        }
         /// <summary>
         /// Add Reflection data in Table Storage.
         /// </summary>

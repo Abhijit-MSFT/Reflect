@@ -74,7 +74,7 @@ namespace Reflection.Repositories.RecurssionData
             try
             {
                 var recurssionData = await this.GetAllAsync(PartitionKeyNames.RecurssionDataTable.TableName);
-                var recData = recurssionData.Where(c => c.RecursstionType != "Does not repeat" && c.NextExecutionDate != null).ToList();
+                var recData = recurssionData.Where(c => c.NextExecutionDate != null).ToList();
                 var intervalRecords = recData.Where(r => dateTime.Subtract((DateTime)r.NextExecutionDate).TotalSeconds < 60 && dateTime.Subtract((DateTime)r.NextExecutionDate).TotalSeconds > 0).ToList();
                 return intervalRecords;
             }
