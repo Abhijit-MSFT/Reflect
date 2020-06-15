@@ -1,32 +1,25 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = "";
+}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
-<title>Screen2</title>
+    <title>Screen2</title>
 
-    <script>
-        microsoftTeams.initialize();
-        function closeTaskModule() {
-            let closeTaskInfo = {
-                action: "closeFirstTaskModule"
-            };
-            microsoftTeams.tasks.submitTask(closeTaskInfo);
-            return true;
-        };
-    </script>
 </head>
 
 <body>
     <div class="loader"></div>
     <div class="modal2">
         <!-- Modal -->
-        <div role="document">
+        <div role="document"  class="openreflection">
             <div class="custom-mc">
                 <input type="text" id="reflectionid" value="@ViewBag.reflectionId" style="display:none" />
-                <div class="modal-mb-sc2"  style="display:none">
+                <div class="modal-mb-sc2" style="display:none">
                     <div class="sc2br-blk">
                         <div class="created-sc2">Posted by <span id="createdby"></span></div>
                         <span class="divider">|</span>

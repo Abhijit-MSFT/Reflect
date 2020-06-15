@@ -85,13 +85,10 @@
                                         <div class="repeat">
                                             <div class="re">Repeat every</div>
                                             <div class="sel-day">
-                                                <select name="number" class="number">
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                </select>
+                                                <input name="number" value="1" class="number" type="text" pattern="\d*" maxlength="2" id="number" />
                                             </div>
                                             <div class="sel-day-day">
-                                                <select name="day" class="day-drp" id="dwm">
+                                                <select name="day" class="day-drp" id="dwm" value="day">
                                                     <option value="day">Day</option>
                                                     <option value="week">Week</option>
                                                     <option value="month">Month</option>
@@ -99,54 +96,53 @@
                                                 <span class="down-chev"></span>
                                             </div>
                                         </div>
-                                        <div class="eve-day-start">Every day, starting 4/1</div>
 
                                         <div class="day-select">
-                                            <span class="s">S</span>
-                                            <span class="m">
-                                                <img src="~/Images/m.png" alt="monday" class="day-img">
-                                            </span>
-                                            <span class="t">T</span>
-                                            <span class="w">
-                                                <img src="~/Images/w.png" alt="wednesday" class="day-img">
-                                            </span>
-                                            <span class="thr">T</span>
-                                            <span class="f">
-                                                <img src="~/Images/f.png" alt="friday" class="day-img">
-                                            </span>
-                                            <span class="sat">S</span>
+                                            <button class="weekselect" id="Sunday">S</button>
+                                            <button class="weekselect" id="Monday">M</button>
+                                            <button class="weekselect" id="Tuesday">T</button>
+                                            <button class="weekselect" id="Wednesday">W</button>
+                                            <button class="weekselect" id="Thursday">T</button>
+                                            <button class="weekselect" id="Friday">F</button>
+                                            <button class="weekselect" id="Saturday">S</button>
                                         </div>
-                                        <div class="eve-week-start">Every Mon, Wed, Fri, starting 6/5</div>
 
                                         <div class="month-cal">
                                             <div class="form-check">
                                                 <input class="form-check-input on-day-radio" type="radio" name="days-check" id="on-day"
-                                                       value="option1" checked>
+                                                       value="days" checked>
                                                 <label class="form-check-label on-day" for="on-day">
                                                     On day
                                                 </label>
-                                                <select name="number" class="number">
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                </select>
+                                                <input name="number" class="number" value="1"  id="monthdate"  type="text" pattern="\d*" maxlength="2"/>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input on-the-radio" type="radio" name="days-check" id="on-the-day"
-                                                       value="option2">
+                                                       value="weeks">
                                                 <label class="form-check-label on-day" for="on-the-day">
                                                     On the
                                                 </label>
-                                                <select name="number" class="day-number">
+                                                <select name="number" class="day-number" id="weekseries">
                                                     <option value="First">First</option>
                                                     <option value="Second">Second</option>
+                                                    <option value="Third">Third</option>
+                                                    <option value="Fourth">Fourth</option>
+                                                    <option value="Last">Last</option>
                                                 </select>
-                                                <select name="number" class="days-text">
+                                                <select name="number" class="days-text" id="weekday">
+                                                    <option value="Sunday">Sunday</option>
                                                     <option value="Monday">Monday</option>
                                                     <option value="Tuesday">Tuesday</option>
+                                                    <option value="Wednesday">Wednesday</option>
+                                                    <option value="Thursday">Thursday</option>
+                                                    <option value="Friday">Friday</option>
+                                                    <option value="Saturday">Saturday</option>
+
                                                 </select>
                                             </div>
-                                            <div class="eve-month-start">Every month on first Wednesday, starting 4/1</div>
                                         </div>
+
+                                        <div class="finaldates" id="finaldates">Every <span id="customnumber"></span> <span id="customtype"></span> <span id="slectedweeks"></span> starting from <span id="startdatedisplay"></span></div>
                                     </div>
                                 </div>
                             </div>

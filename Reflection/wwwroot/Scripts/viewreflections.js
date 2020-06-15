@@ -3,6 +3,13 @@
 $(document).ready(function () {
     $(".loader").show();
     microsoftTeams.initialize();
+    function closeTaskModule() {
+        let closeTaskInfo = {
+            action: "closeFirstTaskModule"
+        };
+        microsoftTeams.tasks.submitTask(closeTaskInfo);
+        return true;
+    };
     microsoftTeams.getContext(function (context) {
         if (context.theme == "default") {
             var head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
@@ -118,7 +125,7 @@ function GetReflections() {
                     }
                     //blockdata = feedback[i].length > 5 ? blockdata + 'more' : blockdata;
                     //enable this for detailed screen
-                    //blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"'+reflection.ReflectionID+'")> more</span>'
+                    blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"'+reflection.ReflectionID+'")> more</span>'
                     blockdata =
                         blockdata +
                         '</div><div class="cnt-box">' +
@@ -153,11 +160,9 @@ function GetChatConfig(userId) {
     return (userId == contextPrincipalName) ? "none" : "all";
 };
 
-function openDetailReflection(feedback,reflectionid) {
+function openDetailReflection() {
     let linkInfo = {
-        action: "OpenDetailfeedback",
-        feedback: feedback,
-        reflectionID: reflectionid
+        action: "OpenDetailfeedback"
     };
     microsoftTeams.tasks.submitTask(linkInfo);
     return true;

@@ -4,6 +4,7 @@ var accesstoken = "";
 
 
 $(document).ready(function () {
+   
     $('.js-example-basic-single').select2();
     $(".js-example-tags").select2({
         tags: true
@@ -11,7 +12,15 @@ $(document).ready(function () {
     $("#usertext").html(" " + userName);
     var today = moment().format('YYYY-MM-DD');
     $('#execdate').val(today);
+    $("#startdatedisplay").html(today);
+    $("#customnumber").html($("#number").val());
+    $("#customtype").html($("#dwm").val()+"(s)");
     $(".select2-selection__arrow").remove()
+    var monthval = ""
+    for (i = 1; i <= 31; i++) {
+        monthval = monthval + '<option value="' + i + '">' + i + '</option>';
+    }
+    $("#monthdate").html(monthval);
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
         if (context.theme === "default") {
@@ -38,35 +47,6 @@ $(document).ready(function () {
         }
         GetDefaultQuestions(context.userPrincipalName);
     });
-    $("body").click(function (e) {
-        if (e.target.className !== "form-control questioninput") {
-            $("#questionsblock").addClass("hidequestions");
-            $("#questionsblock").removeClass("showquestions");
-        }
-    });
-    //$("select")
-    //    .change(function () {
-    //        $(this)
-    //            .find("option:selected")
-    //            .each(function () {
-    //                var optionValue = $(this).attr("value");
-    //                if (optionValue) {
-    //                    $(".box")
-    //                        .not("." + optionValue)
-    //                        .hide();
-    //                    $("." + optionValue).show();
-    //                } else {
-    //                    $(".box").hide();
-    //                }
-    //            });
-    //        if ($('#questions-list').val().length === 0) {
-    //            $('#selectedTxt').text("No reflection question entered");
-    //            $('.feeling').addClass("feeling-noquestion");
-    //        } else {
-    //            $('.feeling').removeClass("feeling-noquestion");
-    //        }
-    //    })
-    //    .change();
 
     $(".date-ip").on("change", function () {
         
@@ -86,6 +66,7 @@ $(document).ready(function () {
             $('#exectime').select2().val("Send now").trigger("change");
             $(".select2-selection__arrow").remove()
         }
+        $("#startdatedisplay").html($('#execdate').val());
     }).trigger("change")
 });
 
@@ -114,7 +95,7 @@ function SendAdaptiveCard() {
         postDate: "",
         isDefaultQuestion: false,
         //postSendNowFlag: true,
-        recurssionType: $("#recurrance").val(),
+        recurssionType: $("#recurrance").val() == 'Custom' ? $("#finaldates").html() : $("#recurrance").val(),
         action: "sendAdaptiveCard",
     };
     taskInfo.card = "";
@@ -140,18 +121,6 @@ function SendAdaptiveCard() {
         }
 }
 
-$('#timepick').timepicker({
-    timeFormat: 'h:mm p',
-    interval: 30,
-    minTime: '12:00 am',
-    maxTime: '11:30pm',
-    defaultTime: 'auto',
-    dynamic: false,
-    dropdown: true,
-    scrollbar: false
-});
-
-$('#timepick').timepicker('setTime', new Date().getHours() + ':' + new Date().getMinutes());
 
 function setPrivacy() {
     $("#privacytext").html($("#privacy").val());
@@ -195,24 +164,12 @@ function GetRecurssionsCount(userPrincipleName) {
 
 
 submitHandler = (err, result) => {
-    //if (result.action == "Chaining") {
-    //        let taskInfo = {
-    //        title: "",
-    //        height: "",
-    //        width: "",
-    //        Url: ""
-    //    };
-    //    taskInfo.Url = "https://1a48ca6e.ngrok.io/First";
-    //    taskInfo.height = 550;
-    //    taskInfo.width = 780;
-    //    microsoftTeams.tasks.startTask(taskInfo, submitHandler)
-    //}
     console.log("Reached submithandler!");
 };
 
 function openTaskModule() {
     let linkInfo = {
-        action: "ManageRecurringPosts",
+        action: "ManageRecurringPosts"
     };
     microsoftTeams.tasks.submitTask(linkInfo);
     return true;
@@ -239,6 +196,7 @@ function addShowHideButton() {
 $('#recurrance').on('change', function () {
     if (this.value == 'Custom') {
         $(".custom-cal").show();
+         $(".day-select,.eve-week-start,.month-cal").hide();
     }
     else {
         $(".custom-cal").hide();
@@ -252,17 +210,57 @@ $('#dwm').on('change', function () {
         $(".card").removeClass("week month");
         $(".card").addClass("day");
         $(".day-select,.eve-week-start,.month-cal").hide();
+        $("#slectedweeks").html()
     }
     else if (this.value == 'week') {
         $(".day-select,.eve-week-start").show();
         $(".card").removeClass("day month");
         $(".card").addClass("week");
         $(".eve-day-start,.eve-month-start,.month-cal").hide();
+        var slectedweeks = [];
+        var weekdays = $(".weekselect");
+        weekdays.each(x => {
+            if ($(weekdays[x]).hasClass('selectedweek')) {
+                slectedweeks.push($(weekdays[x]).attr("id"))
+            }
+        })
+        $("#slectedweeks").html(slectedweeks.join(','))
     }
     else {
         $(".day-select,.eve-week-start,.eve-day-start,.day-select").hide();
         $(".month-cal,.eve-month-start").show();
         $(".card").removeClass("week day");
         $(".card").addClass("month");
+        $("#slectedweeks").html()
     }
+    $("#startdatedisplay").html($("#execdate").val());
+    $("#customnumber").html($("#number").val());
+    $("#customtype").html($("#dwm").val() + "(s)");
+});
+
+$('#number').on('change', function () {
+    $("#customnumber").html($("#number").val());
+});
+
+$("#monthdate").on('keyup', function () {
+    if (this.value > 31) {
+        this.value = this.value[0];
+    }
+});
+
+$(".weekselect").on('click', function () {
+    if ($(this).hasClass('selectedweek')) {
+        $(this).removeClass('selectedweek');
+    }
+    else {
+        $(this).addClass('selectedweek');
+    }
+    var slectedweeks = [];
+    var weekdays = $(".weekselect");
+    weekdays.each(x => {
+        if ($(weekdays[x]).hasClass('selectedweek')) {
+            slectedweeks.push($(weekdays[x]).attr("id"))
+        }
+    })
+    $("#slectedweeks").html(slectedweeks.join(','))
 });
