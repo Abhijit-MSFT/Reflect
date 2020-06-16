@@ -31,9 +31,48 @@
                         <tbody id="tablebody">
                         </tbody>
                     </table>
+
+                    <div class="card week" id="week">
+                        <div class="card-body">
+                            <div class="recurrence">Recurrence</div>
+                            <div class="repeat">
+                                <div class="re">Repeat every</div>
+                                <div class="sel-day">
+                                    <select name="number" class="number">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                                <div class="sel-day-day">
+                                    <select name="day" class="day-drp">
+                                        <option value="Week">Week</option>
+                                        <option value="weeks">weeks</option>
+                                    </select>
+                                    <span class="down-chev"></span>
+                                </div>
+                            </div>
+                            <div class="day-select">
+                                <span class="s">S</span>
+                                <span class="m">
+                                    <img src="~/Images/m.png" alt="monday" class="day-img">
+                                </span>
+                                <span class="t">T</span>
+                                <span class="w">
+                                    <img src="~/Images/w.png" alt="wednesday" class="day-img">
+                                </span>
+                                <span class="thr">T</span>
+                                <span class="f">
+                                    <img src="~/Images/f.png" alt="friday" class="day-img">
+                                </span>
+                                <span class="sat">S</span>
+                            </div>
+                            <div class="eve-week-start">Every Mon, Wed, Fri, starting 6/5</div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="mf modal-footer">
-                    <div class="float-left">
+                    <div class="float-left" onclick="gotoIndex()">
                         <span class="left-chev"></span>
                         Back
                     </div>
@@ -85,16 +124,15 @@
                             <div class="col-6 custom-col">
                                 <div class="date">
                                     <div class="blk-head" id="currentdate">Date</div>
-                                    <input type="date" data-date="" data-date-format="MMMM DD, YYYY" value="2020-06-02" class="date-ip htmlEle" id="execdate" />
+                                    <input type="date"  class="date-ip htmlEle" ata-date="" data-date-format="ddd MMM DD, YYYY" id="execdate" />
                                     <span class="date-icon"></span>
                                 </div>
                             </div>
                             <div class="col-6 custom-col">
                                 <div class="blk-head">Time</div>
                                 <div class="selc">
-                                    <select class="cs htmlEle" id="currentexectime">
-                                        <option value="Send now" selected>Send now</option>
-                                        <option value="Send later">Send later</option>
+                                    <select class="cs htmlEle" id="exectime">
+                                        
                                     </select>
                                     <span class="sel-chev2"></span>
                                 </div>
@@ -128,5 +166,6 @@
     <script src="@("https://unpkg.com/@microsoft/teams-js@1.4.1/dist/MicrosoftTeams.min.js")"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
     <script src="~/Scripts/ManageRecurringPosts.js"></script>
+    <script src="~/Scripts/timevalues.js"></script>
 </body>
 </html>

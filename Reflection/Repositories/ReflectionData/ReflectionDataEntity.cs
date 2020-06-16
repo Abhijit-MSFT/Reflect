@@ -45,6 +45,7 @@ namespace Reflection.Repositories.ReflectionData
         /// </summary>
         public string MessageID { get; set; }
 
+
         /// <summary>
         /// Gets or sets Send now flag.
         /// </summary>

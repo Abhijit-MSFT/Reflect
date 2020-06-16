@@ -32,7 +32,9 @@ $(document).ready(function () {
     getRecurssions();
 });
 
-
+$("tbody#tablebody").on("click", "td.date-day", function () {
+    $('#week').toggle();
+});
 
 $('.delete-icon').click(function () {
     $('#myModal').modal('show');
@@ -66,14 +68,28 @@ function getRecurssions() {
             var sendpostat = "";
             blockdata = "";
             recurssions.forEach(x => {
+               var timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
+               var timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + Math.floor((-1 * new Date().getTimezoneOffset()) / 60) * 6
+               var mode=' AM'
+               if (timeminutes == '60') {
+                    timehours = timehours + 1
+                    timeminutes = '00';
+                }
+                
+                if (timehours > 11) {
+                    mode=' PM'
+                }
+                if (timehours > 12) {
+                    timehours = timehours - 12
+                }
                 if (x.RecurssionType == "Monthly") {
-                    sendpostat = "Every Month " + new Date(x.RefCreatedDate).getDate() + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
+                    sendpostat = "Every Month " + new Date(x.ExecutionDate).getDate() + " at " + timehours + ":" + timeminutes + mode;
                 }
                 else if (x.RecurssionType == "Weekly"){
-                    sendpostat = "Every Week " + weeks[new Date(x.RefCreatedDate).getDay()] + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
+                    sendpostat = "Every Week " + weeks[new Date(x.ExecutionDate).getDay()] + " at " + timehours + ":" + timeminutes + mode;;
                 }
                 else {
-                    sendpostat = "Every Week Day " + " at " + new Date(x.RefCreatedDate).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true, minute: 'numeric' });
+                    sendpostat = "Every Week Day " + " at " + timehours + ":" + timeminutes + mode;;
                 }
                 blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="edit-icon" id="edit' + x.RefID + '" data-toggle="modal" data-target="#edit"></td><td class="delete-icon" id="delete' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
             })
@@ -92,8 +108,18 @@ function getRecurssions() {
                         var ques = recurssions.find(x => x.RefID == editid)
                         $("#currentrecurrsionquestion").html(ques.Question)
                         $("#currentprivacy").val(ques.Privacy);
-                        $("#currentdate").val(new Date(ques.ExecutionDate))
-                        $("#currentexectime").val(ques.ExecutionTime)
+                        var time = new Date(ques.ExecutionDate).toLocaleDateString().split('/');
+                        if (time.length) {
+                            time.reverse();
+                            if (time[1] < 10) {
+                                time[1] = "0" + time[1]
+                            }
+                            if (time[2] < 10) {
+                                time[2] = "0" + time[2]
+                            }
+                        }
+                        $("#execdate").val(time.join('-'))
+                        $("#exectime").val(ques.ExecutionTime)
                         $("#currentrecurrance").val(ques.RecurssionType);
                     });
                 });
@@ -125,7 +151,7 @@ function saveRecurssion() {
         headers: {
             "Content-Type": "application/json",
         },
-        data: JSON.stringify({ "refID": editid, "executionTime": $("#currentexectime").val(), "executionDate": $("#currentdate").val(), "privacy": $("#currentprivacy").val(), "recurssionType": $("#currentrecurrance").val() }),
+        data: JSON.stringify({ "refID": editid, "executionTime": $("#exectime").val(), "executionDate": $("#execdate").val(), "privacy": $("#currentprivacy").val(), "recurssionType": $("#currentrecurrance").val() }),
         success: function (data) {
             if (data == "true") {
                 $("#tablebody").html("");
@@ -134,4 +160,12 @@ function saveRecurssion() {
 
         }
     });
+}
+
+function gotoIndex() {
+    let linkInfo = {
+        action: "reflection",
+    };
+    microsoftTeams.tasks.submitTask(linkInfo);
+    return true;
 }

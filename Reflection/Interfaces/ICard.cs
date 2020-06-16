@@ -13,7 +13,7 @@ namespace Reflection.Interfaces
     {
         AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid reflectionId);
         Task<string> saveImage(Image data, string Filepath);
-        AdaptiveCard CreateNewPostCard(TaskInfo data);
+        AdaptiveCard CreateNewPostCard(TaskInfo data,int FeedbackId);
 
     }
 }

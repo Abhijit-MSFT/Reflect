@@ -6,21 +6,17 @@ using Reflection.Model;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using Microsoft.Bot.Builder;
-using System.Threading;
 using Microsoft.Extensions.Configuration;
-using Reflection.Interfaces;
-using AdaptiveCards;
 
 namespace Reflection.Helper
 {
     public class ProactiveMessageHelper
     {
-        private readonly ICard _cardHelper;
+        private IConfiguration _configuration;
 
-        public ProactiveMessageHelper(ICard cardHelper)
+        public ProactiveMessageHelper(IConfiguration configuration)
         {
-            _cardHelper = cardHelper;
+            _configuration = configuration;
         }
         public static async Task<NotificationSendStatus> SendPersonalNotification(string serviceUrl, string tenantId, User userDetails, string messageText, Attachment attachment)
         {
@@ -122,7 +118,7 @@ namespace Reflection.Helper
 
         }
 
-        public static async Task<NotificationSendStatus> SendChannelNotification(ChannelAccount botAccount, string serviceUrl, string channelId, string messageText, Attachment attachment, TeamsChannelData channelData)
+        public async Task<NotificationSendStatus> SendChannelNotification(ChannelAccount botAccount, string serviceUrl, string channelId, string messageText, Attachment attachment)
         {
             try
             {
@@ -131,8 +127,8 @@ namespace Reflection.Helper
 
                 if (attachment != null)
                     replyMessage.Attachments.Add(attachment);
-                
-                using (var connectorClient = new ConnectorClient(new Uri(serviceUrl)))
+                MicrosoftAppCredentials.TrustServiceUrl(serviceUrl, DateTime.MaxValue);
+                using (var connectorClient = new ConnectorClient(new Uri(serviceUrl), _configuration["MicrosoftAppId"], _configuration["MicrosoftAppPassword"]))
                 {
                     var parameters = new ConversationParameters
                     {
@@ -140,7 +136,6 @@ namespace Reflection.Helper
                         ChannelData = new TeamsChannelData
                         {
                             Channel = new ChannelInfo(channelId),
-                            Tenant = channelData.Tenant,
                             Notification = new NotificationInfo() { Alert = true }
                         },
                         IsGroup = true,
@@ -170,47 +165,6 @@ namespace Reflection.Helper
                 //ErrorLogService.LogError(ex);
                 return new NotificationSendStatus() { IsSuccessful = false, FailureMessage = ex.Message };
             }
-        }
-
-        public async Task<ConversationResourceResponse> SendCardToTeamAsync(ITurnContext turnContext, TaskInfo taskInfo, CancellationToken cancellationToken, IConfiguration configuration)
-        {
-            var id = configuration["MicrosoftAppId"];
-            var pass = configuration["MicrosoftAppPassword"];
-            var channelid = configuration["ChannelID"];
-            var credentials = new MicrosoftAppCredentials(id, pass);
-
-            var adaptiveCard = _cardHelper.CreateNewPostCard(taskInfo);
-            var conversationParameters = new ConversationParameters
-            {
-                Activity = (Activity)(MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard })),
-                ChannelData = new TeamsChannelData { Channel = new ChannelInfo(channelid) },
-            };
-            var tcs = new TaskCompletionSource<ConversationResourceResponse>();
-            try
-            {
-                await ((BotFrameworkAdapter)turnContext.Adapter).CreateConversationAsync(
-                        null,       // If we set channel = "msteams", there is an error as preinstalled middleware expects ChannelData to be present
-                        turnContext.Activity.ServiceUrl,
-                        credentials,
-                        conversationParameters,
-                        (newTurnContext, newCancellationToken) =>
-                        {
-                            var activity = newTurnContext.Activity;
-                            tcs.SetResult(new ConversationResourceResponse
-                            {
-                                Id = activity.Conversation.Id,
-                                ActivityId = activity.Id,
-                                ServiceUrl = activity.ServiceUrl,
-                            });
-                            return Task.CompletedTask;
-                        },
-                        cancellationToken);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-            return await tcs.Task;
         }
     }
 }

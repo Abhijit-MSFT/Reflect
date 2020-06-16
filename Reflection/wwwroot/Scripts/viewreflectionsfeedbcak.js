@@ -3,18 +3,11 @@
 $(document).ready(function () {
     $(".loader").show();
     microsoftTeams.initialize();
-    function closeTaskModule() {
-        let closeTaskInfo = {
-            action: "closeFirstTaskModule"
-        };
-        microsoftTeams.tasks.submitTask(closeTaskInfo);
-        return true;
-    };
     microsoftTeams.getContext(function (context) {
         if (context.theme == "default") {
             var head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
                 link = document.createElement("link"); // create the link node
-            link.setAttribute("href", "../CSS/openReflections.css");
+            link.setAttribute("href", "../CSS/view2.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
@@ -57,6 +50,7 @@ function GetReflections() {
                 $("#questiontitle").text(question.Question);
                 $("#privacy").text(reflection.Privacy);
                 var blockdata = "";
+                var peopledata = "";
                 var color = "white";
                 var totalcount = 0;
                 var datacount = 0;
@@ -67,6 +61,7 @@ function GetReflections() {
                     totalcount = totalcount + feedback[x].length;
                 });
                 for (i = 1; i <= 5; i++) {
+                    if (i == $("#feedbackId").val()) {
                     if (Object.keys(feedback).indexOf(i.toString()) !== -1) {
                         datacount = feedback[i].length;
                         description =
@@ -96,74 +91,34 @@ function GetReflections() {
                         img = "Default_5.png";
                     }
                     blockdata =
-                        blockdata +
-                        '<div class="media"><img src="../Images/' +
+                            blockdata + 
+                    '<div class="media"><img src="../../Images/' +
                         img +
-                        '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' +
+                        '" class="align-self-start smil" alt="smile1"><div class="media-body cb-smile"><div class="progress custom-pr"><div class="progress-bar bg-' +
                         color +
                         '" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:' +
                         width.toString() +
-                        '%"></div></div>';
+                    '%"></div></div><div class="cnt-box box1">' + width + '% ('+datacount+')</div></div>';
 
-                    if (description) {
-                        feedback[i].forEach((data,index) => {
-                            blockdata =
-                                blockdata +
-                                '<span class="smile-desc" id="' +
-                                data.FeedbackID +
-                                '">' +
-                                data.FullName
-                            blockdata = index+1 != feedback[i].length ? blockdata + ',' : blockdata +''
-                            blockdata = blockdata+'</span><div class="card custom-profle-card ' +
-                                data.FeedbackID +
-                                '"> <div class="card-body"> <img src="../Images/Avatar.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
-                                data.FullName +
-                                '</div > <div class="start-chat" style = "pointer-events: ' + GetChatConfig(data.FeedbackGivenBy) + ';"  > <span class="chat-icon" onclick = "microsoftTeams.executeDeepLink(' + "'" + chatUrl + data.FeedbackGivenBy + "'" + ');" ></span > <span class="st-chat-txt">Start a chat</span> </div > <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt"> ' +
-                                data.FeedbackGivenBy +
-                                " </span> </div> </div > </div > ";
-                        });
-                    }
-                    //blockdata = feedback[i].length > 5 ? blockdata + 'more' : blockdata;
-                    //enable this for detailed screen
-                    blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"'+reflection.ReflectionID+'")> more</span>'
-                    blockdata =
-                        blockdata +
-                        '</div><div class="cnt-box">' +
-                        width +
-                        '%<span class="cnt">(' +
-                        datacount +
-                        ")</span></div ></div >";
+                        if (description) {
+                            feedback[i].forEach((names, index) => {
+                                peopledata =
+                                    peopledata + '<tr> <td class="text-left"><div class="media"><img class="align-self-center avatar" src="../../Images/Avatar.png" alt="image" width="40" heigth="40"> <div class="media-body ml-3 mt-1 names">'+
+                                names.FullName + '</div> </div></td><td class="text-right"></td></tr >'
+                            });
+                        }
+                  }
                 }
-                $("#reviewblock").html(blockdata);
-                $(".custom-profle-card ").css("display", "none");
-                $(".smile-desc").hover(function (event) {
-                    $(".custom-profle-card").css("display", "none");
-                    $("." + $(event.target)[0].id).show();
-                });
+                $("#feedbackblock").html(blockdata);
+                $("#peopledata").html(peopledata);
 
-                $("body").on("click blur", function (event) {
-                    if (!$(event.target).hasClass("custom-profle-card")) {
-                        $(".custom-profle-card").css("display", "none");
-                    }
-                });
-
-                $(".custom-profle-card > *").on("click", function (e) {
-                    e.stopPropagation();
-                });
             } else {
                 alert("no data");
             }
+
         },
     });
 }
 function GetChatConfig(userId) {
     return (userId == contextPrincipalName) ? "none" : "all";
 };
-
-function openDetailReflection() {
-    let linkInfo = {
-        action: "OpenDetailfeedback"
-    };
-    microsoftTeams.tasks.submitTask(linkInfo);
-    return true;
-}

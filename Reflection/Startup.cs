@@ -10,14 +10,11 @@ using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Quartz;
-using Quartz.Impl;
 using Reflection.Helper;
 using Reflection.Interfaces;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
-using System.Collections.Specialized;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
@@ -45,7 +42,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
             services.AddTransient<IBot, MessageExtension>();
             services.AddApplicationInsightsTelemetry();
-            services.AddSingleton(provider => GetScheduler());
+            services.AddHostedService<SchedulerHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,22 +78,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
             //app.UseHttpsRedirection();
 
-        }
-
-        private IScheduler GetScheduler()
-        {
-            var properties = new NameValueCollection
-            {
-                ["quartz.scheduler.instanceName"] = "",
-                ["quartz.threadPool.type"] = "Quartz.SimpleThreadPool, Quartz",
-                ["quartz.threadPool.threadCount"] = "3",
-                ["quartz.jobStore.type"] = "Quartz.Simpl.RAMJobStore, Quartz",
-            };
-
-            var schedulerFactory = new StdSchedulerFactory();
-            var scheduler = schedulerFactory.GetScheduler().Result;
-            scheduler.Start();
-            return scheduler;
         }
     }
 }

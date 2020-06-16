@@ -44,12 +44,14 @@ namespace Reflection.Model
         public string reflectMessageId { get; set; }
         public string teantId { get; set; }
         public string serviceUrl { get; set; }
+
+        public int feedback { get; set; }
     }
 
     public class UserfeedbackInfo
     {
         public int feedbackId { get; set; }
-        public Guid reflectionId { get; set; }
+        public string reflectionId { get; set; }
         public string action { get; set; }
         public string type { get; set; }
         public string userName { get; set; }

@@ -1,44 +1,26 @@
 ﻿var questions = [];
 var userobject = {};
 var accesstoken = "";
-var timearray = [];
-var timestring = '';
-var optiondata = '';
+
+
 $(document).ready(function () {
-    var presentdate = new Date();
-    var minutes = presentdate.getMinutes();
-    if (minutes < 30) {
-        presentdate.setMinutes(30)
-    }
-    else {
-        presentdate.setHours(presentdate.getHours() + 1)
-        presentdate.setMinutes(00)
-    }
-    var nextdate = new Date(presentdate.toISOString());
-    nextdate.setDate(nextdate.getDate() + 1);
-    while (presentdate < nextdate) {
-        timestring = timestring + (presentdate.getHours() == '0' ? '00' : presentdate.getHours());
-        timestring = timestring + ":";
-        timestring = timestring + (presentdate.getMinutes() == '0' ? '00' : presentdate.getMinutes());
-        timearray.push(timestring);
-        presentdate.setMinutes(presentdate.getMinutes() + 30);
-        timestring = '';
-    }
-    exectime
-    timearray.forEach(x => {
-        var time = '';
-        if (x.split(':')[0] > 12) {
-            var timearray = x.split(':');
-            timearray[0] = timearray[0] - 12;
-            time = timearray.join(':') + ' PM'
-        }
-        else {
-            time =x+' AM'
-        }
-        optiondata = optiondata + '<option val="' + time + '">' + time + '</option>';
+   
+    $('.js-example-basic-single').select2();
+    $(".js-example-tags").select2({
+        tags: true
     });
-    $("#exectime").append(optiondata);
     $("#usertext").html(" " + userName);
+    var today = moment().format('YYYY-MM-DD');
+    $('#execdate').val(today);
+    $("#startdatedisplay").html(today);
+    $("#customnumber").html($("#number").val());
+    $("#customtype").html($("#dwm").val()+"(s)");
+    $(".select2-selection__arrow").remove()
+    var monthval = ""
+    for (i = 1; i <= 31; i++) {
+        monthval = monthval + '<option value="' + i + '">' + i + '</option>';
+    }
+    $("#monthdate").html(monthval);
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
         if (context.theme === "default") {
@@ -63,58 +45,31 @@ $(document).ready(function () {
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         }
-        GetRecurssionsCount(context.userPrincipleName)
         GetDefaultQuestions(context.userPrincipalName);
     });
-    $("body").click(function (e) {
-        if (e.target.className !== "form-control questioninput") {
-            $("#questionsblock").addClass("hidequestions");
-            $("#questionsblock").removeClass("showquestions");
-        }
-    });
-    $("select")
-        .change(function () {
-            $(this)
-                .find("option:selected")
-                .each(function () {
-                    var optionValue = $(this).attr("value");
-                    if (optionValue) {
-                        $(".box")
-                            .not("." + optionValue)
-                            .hide();
-                        $("." + optionValue).show();
-                    } else {
-                        $(".box").hide();
-                    }
-                });
-            if ($('#questions-list').val().length === 0) {
-                $('#selectedTxt').text("No reflection question entered");
-                $('.feeling').addClass("feeling-noquestion");
-            } else {
-                $('.feeling').removeClass("feeling-noquestion");
-            }
-        })
-        .change();
 
     $(".date-ip").on("change", function () {
-        var today = moment().format('YYYY-MM-DD');
-        $('#execdate').val(today);
-
+        
         this.setAttribute(
             "data-date",
             moment(this.value, "YYYY-MM-DD")
                 .format(this.getAttribute("data-date-format"))
         )
+        var today = moment().format('YYYY-MM-DD');
+        if ($('#execdate').val() !== today) {
+            $('#sendnow').attr("disabled", "true");
+            $('#exectime').select2().val("00:00 AM").trigger("change");
+            $(".select2-selection__arrow").remove()
+        }
+        else {
+            $('#sendnow').removeAttr("disabled");
+            $('#exectime').select2().val("Send now").trigger("change");
+            $(".select2-selection__arrow").remove()
+        }
+        $("#startdatedisplay").html($('#execdate').val());
     }).trigger("change")
 });
 
-$('#questions-list').keyup(function () {
-    if ($(this).val().length === 0) {
-        $('.btn-send').prop("disabled", true);
-    } else {
-        $('.btn-send').removeAttr('disabled');
-    }
-}).keyup(); 
 
 function SendAdaptiveCard() {
     var list = document.querySelectorAll(".htmlEle");
@@ -123,7 +78,7 @@ function SendAdaptiveCard() {
         htmObj[obj.getAttribute("data-attr")] = obj.value;
     });
     let index = questions.findIndex(
-        (x) => x.question === $("#questions-list").val()
+        (x) => x.question === $("#questions").val()
     );
     var questionid = null;
     if (index !== -1) {
@@ -132,7 +87,7 @@ function SendAdaptiveCard() {
     }
 
     let taskInfo = {
-        question: $("#questions-list").val(),
+        question: $("#questions").val(),
         questionID: questionid,
         privacy: $("#privacy").val(),
         executionDate: $("#execdate").val(),
@@ -140,13 +95,13 @@ function SendAdaptiveCard() {
         postDate: "",
         isDefaultQuestion: false,
         //postSendNowFlag: true,
-        recurssionType: $("#recurrance").val(),
+        recurssionType: $("#recurrance").val() == 'Custom' ? $("#finaldates").html() : $("#recurrance").val(),
         action: "sendAdaptiveCard",
     };
     taskInfo.card = "";
     taskInfo.height = "medium";
     taskInfo.width = "medium";
-    if (!$("#questions-list").val()) {
+    if (!$("#questions").val()) {
         alert("Please select " + $(".question").text());
     } else if (!$(".date-ip").val()) {
         alert("Please select " + $("#date").text());
@@ -157,8 +112,8 @@ function SendAdaptiveCard() {
 }
 
     function getSelectedOption(event) {
-        $('#selectedTxt').html($("#questions-list").val());
-        if ($('#questions-list').val().length === 0) {
+        $('#selectedTxt').html($("#questions").val());
+        if ($('#questions').val().length === 0) {
             $('#selectedTxt').text("No reflection question entered");
             $('.feeling').addClass("feeling-noquestion");
         } else {
@@ -166,18 +121,6 @@ function SendAdaptiveCard() {
         }
 }
 
-$('#timepick').timepicker({
-    timeFormat: 'h:mm p',
-    interval: 30,
-    minTime: '12:00 am',
-    maxTime: '11:30pm',
-    defaultTime: 'auto',
-    dynamic: false,
-    dropdown: true,
-    scrollbar: false
-});
-
-$('#timepick').timepicker('setTime', new Date().getHours() + ':' + new Date().getMinutes());
 
 function setPrivacy() {
     $("#privacytext").html($("#privacy").val());
@@ -193,15 +136,18 @@ function GetDefaultQuestions(userPrincipleName) {
             data.forEach((x) => {
                 blockdata =
                     blockdata +
-                    ' <option class="default-opt" data-toggle="tooltip" data-placement="top" id="' +
+                    ' <option class="default-opt" id="' +
                     x.questionID +
                     '" value="' +
                     x.question +
                     '" title="' +
                     x.question +
-                    '"/>';
+                    '">'+x.question+'</option>';
+               
             });
             $("#questions").html(blockdata);
+            $("#selectedTxt").html($("#questions").val());
+            GetRecurssionsCount(userPrincipleName);
         },
     });
 }
@@ -218,24 +164,12 @@ function GetRecurssionsCount(userPrincipleName) {
 
 
 submitHandler = (err, result) => {
-    //if (result.action == "Chaining") {
-    //        let taskInfo = {
-    //        title: "",
-    //        height: "",
-    //        width: "",
-    //        Url: ""
-    //    };
-    //    taskInfo.Url = "https://1a48ca6e.ngrok.io/First";
-    //    taskInfo.height = 550;
-    //    taskInfo.width = 780;
-    //    microsoftTeams.tasks.startTask(taskInfo, submitHandler)
-    //}
     console.log("Reached submithandler!");
 };
 
 function openTaskModule() {
     let linkInfo = {
-        action: "ManageRecurringPosts",
+        action: "ManageRecurringPosts"
     };
     microsoftTeams.tasks.submitTask(linkInfo);
     return true;
@@ -259,3 +193,74 @@ function addShowHideButton() {
     }
 }
 
+$('#recurrance').on('change', function () {
+    if (this.value == 'Custom') {
+        $(".custom-cal").show();
+         $(".day-select,.eve-week-start,.month-cal").hide();
+    }
+    else {
+        $(".custom-cal").hide();
+    }
+
+});
+
+$('#dwm').on('change', function () {
+    if (this.value == 'day') {
+        $(".eve-day-start").show();
+        $(".card").removeClass("week month");
+        $(".card").addClass("day");
+        $(".day-select,.eve-week-start,.month-cal").hide();
+        $("#slectedweeks").html()
+    }
+    else if (this.value == 'week') {
+        $(".day-select,.eve-week-start").show();
+        $(".card").removeClass("day month");
+        $(".card").addClass("week");
+        $(".eve-day-start,.eve-month-start,.month-cal").hide();
+        var slectedweeks = [];
+        var weekdays = $(".weekselect");
+        weekdays.each(x => {
+            if ($(weekdays[x]).hasClass('selectedweek')) {
+                slectedweeks.push($(weekdays[x]).attr("id"))
+            }
+        })
+        $("#slectedweeks").html(slectedweeks.join(','))
+    }
+    else {
+        $(".day-select,.eve-week-start,.eve-day-start,.day-select").hide();
+        $(".month-cal,.eve-month-start").show();
+        $(".card").removeClass("week day");
+        $(".card").addClass("month");
+        $("#slectedweeks").html()
+    }
+    $("#startdatedisplay").html($("#execdate").val());
+    $("#customnumber").html($("#number").val());
+    $("#customtype").html($("#dwm").val() + "(s)");
+});
+
+$('#number').on('change', function () {
+    $("#customnumber").html($("#number").val());
+});
+
+$("#monthdate").on('keyup', function () {
+    if (this.value > 31) {
+        this.value = this.value[0];
+    }
+});
+
+$(".weekselect").on('click', function () {
+    if ($(this).hasClass('selectedweek')) {
+        $(this).removeClass('selectedweek');
+    }
+    else {
+        $(this).addClass('selectedweek');
+    }
+    var slectedweeks = [];
+    var weekdays = $(".weekselect");
+    weekdays.each(x => {
+        if ($(weekdays[x]).hasClass('selectedweek')) {
+            slectedweeks.push($(weekdays[x]).attr("id"))
+        }
+    })
+    $("#slectedweeks").html(slectedweeks.join(','))
+});
