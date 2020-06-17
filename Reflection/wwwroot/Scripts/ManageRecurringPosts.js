@@ -1,26 +1,27 @@
-﻿var blockdata = ""
-var deleteid = ""
-var editid = ""
-var weeks=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+﻿let blockdata = ""
+let deleteid = ""
+let editid = ""
+let weeks=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
 $(document).ready(function () {
+    $(".loader").show();
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
         if (context.theme == "default") {
-            var head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
+            let head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
                 link = document.createElement("link"); // create the link node
             link.setAttribute("href", "../CSS/ManageRecurringPosts.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         } else if (context.theme == "dark") {
-            var head = document.getElementsByTagName("head")[0],
+            let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
             link.setAttribute("href", "../CSS/ManageRecurringPosts-dark.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         } else {
-            var head = document.getElementsByTagName("head")[0],
+            let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
             link.setAttribute("href", "../CSS/ManageRecurringPosts-dark.css");
             link.setAttribute("rel", "stylesheet");
@@ -28,7 +29,6 @@ $(document).ready(function () {
             head.appendChild(link);
         }
     });
-    $(".loader").show();
     getRecurssions();
 });
 
@@ -55,7 +55,7 @@ $(".date-ip").on("change", function () {
 
 
 function getRecurssions() {
-    var email = $("#contextemail").val();
+    let email = $("#contextemail").val();
     $.ajax({
         type: 'GET',
         url: '/api/GetRecurssions/' + email,
@@ -65,12 +65,12 @@ function getRecurssions() {
             recurssions = JSON.parse(JSON.parse(data).recurssions);
             $("#questioncount").html("(" + recurssions.length + ")");
             daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            var sendpostat = "";
+            let sendpostat = "";
             blockdata = "";
             recurssions.forEach(x => {
-               var timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
-               var timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + Math.floor((-1 * new Date().getTimezoneOffset()) / 60) * 6
-               var mode=' AM'
+               let timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
+               let timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + Math.floor((-1 * new Date().getTimezoneOffset()) / 60) * 6
+               let mode=' AM'
                if (timeminutes == '60') {
                     timehours = timehours + 1
                     timeminutes = '00';
@@ -105,10 +105,10 @@ function getRecurssions() {
                 recurssions.forEach(x => {
                     $(document).on("click", "#edit" + x.RefID, function (event) {
                         editid = event.currentTarget.id.split('it')[1];
-                        var ques = recurssions.find(x => x.RefID == editid)
+                        let ques = recurssions.find(x => x.RefID == editid)
                         $("#currentrecurrsionquestion").html(ques.Question)
                         $("#currentprivacy").val(ques.Privacy);
-                        var time = new Date(ques.ExecutionDate).toLocaleDateString().split('/');
+                        let time = new Date(ques.ExecutionDate).toLocaleDateString().split('/');
                         if (time.length) {
                             time.reverse();
                             if (time[1] < 10) {
