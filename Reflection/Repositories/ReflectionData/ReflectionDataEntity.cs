@@ -1,4 +1,8 @@
-﻿using Microsoft.Azure.Cosmos.Table;
+﻿// <copyright file="ReflectionDataEntity.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Microsoft.Azure.Cosmos.Table;
 using System;
 
 namespace Reflection.Repositories.ReflectionData
@@ -45,14 +49,13 @@ namespace Reflection.Repositories.ReflectionData
         /// </summary>
         public string MessageID { get; set; }
 
-
         /// <summary>
         /// Gets or sets Send now flag.
         /// </summary>
         public bool? SendNowFlag { get; set; }
 
         /// <summary>
-        /// Gets or sets Channel ID.
+        /// Gets or sets ChannelID.
         /// </summary>
         public string ChannelID { get; set; }
 
@@ -62,15 +65,17 @@ namespace Reflection.Repositories.ReflectionData
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// Reflect Message Id
+        /// Gets or sets ReflectMessageId
         /// </summary>
         public string ReflectMessageId { get; set; }
+
         /// <summary>
-        /// TenantId
+        /// Gets or sets TenantId
         /// </summary>
         public string TenantId { get; set; }
+
         /// <summary>
-        /// ServiceUrl
+        /// Gets or sets ServiceUrl
         /// </summary>
         public string ServiceUrl { get; set; }
     }

@@ -1,23 +1,17 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// <copyright file="User.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Newtonsoft.Json;
 
 namespace Reflection.Model
 {
     public class User : DatabaseItem
     {
+        /// <summary>
+        /// Gets or sets Type.
+        /// </summary>
         [JsonProperty("type")]
         public override string Type { get; set; } = nameof(User);
-
-        public string Name { get; set; }
-
-        [JsonProperty("aadObjectId")]
-        public string AadObjectId { get; set; }
-
-        public string BotConversationId { get; set; }
-
-        public string PersonalConversationId { get; set; }
     }
 }

@@ -1,4 +1,9 @@
-﻿using AdaptiveCards;
+﻿// <copyright file="MessageExtension.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+
+using AdaptiveCards;
 using Bogus;
 using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Builder;
@@ -17,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Reflection.Common;
 using System.Threading.Tasks;
 using Reflection.Repositories.QuestionsData;
 
@@ -28,8 +34,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         private readonly TelemetryClient _telemetry;
         private readonly ICard _cardHelper;
         private readonly IDataBase _dbHelper;
-
-        //private readonly FeedbackDataRepository feedbackDataRepository;
+                
         public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper, IDataBase dbHelper)
         {
             _configuration = configuration;
@@ -37,6 +42,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             _cardHelper = cardHelper;
             _dbHelper = dbHelper;
         }
+
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
@@ -48,12 +54,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
                 QuestionsDataRepository questiondatarepository = new QuestionsDataRepository(_configuration, _telemetry);
+
                 if (turnContext.Activity.Value != null)
                 {
                     var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
                     var reply = Activity.CreateMessageActivity();
                     var adaptiveupdatereply = Activity.CreateMessageActivity();
-                    if (response.type == ReflectConstants.SaveFeedBack)
+                    if (response.type == Constants.SaveFeedBack)
                     {
                         var name = (turnContext.Activity.From.Name).Split();
                         response.userName = name[0] + ' ' + name[1];
@@ -73,7 +80,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                         try
                         {
-                            //Get reflect data to check if mseeage id is present - if not update it
+                            //Check if message id is present in reflect data
                             ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(Guid.Parse(response.reflectionId));
                             QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                             Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId));
@@ -108,7 +115,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             }
                             else
                             {
-                                //await turnContext.UpdateActivityAsync(reply);
                                 reply.Id = reflectData.MessageID;
                                 await turnContext.UpdateActivityAsync(reply);
                                 
@@ -118,14 +124,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         catch (System.Exception e)
                         {
                             _telemetry.TrackException(e);
-                            //messageid = null;
                             Console.WriteLine(e.Message.ToString());
                         }
                     }
                 }
                 else
-                {
-                    // This is a regular text message.
+                {                    
                     await turnContext.SendActivityAsync(MessageFactory.Text($"Hello from the TeamsMessagingExtensionsActionPreviewBot."), cancellationToken);
                 }
 
@@ -180,9 +184,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             try
             {
                 TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
-                //below two lines of code is added to test proactive message for scheduler
-                //ProactiveMessageHelper proactiveMessageHelper = new ProactiveMessageHelper(_cardHelper);
-                //await proactiveMessageHelper.SendCardToTeamAsync(turnContext, taskInfo, cancellationToken, _configuration);
                 switch (taskInfo.action)
                 {
                     case "reflection":
@@ -191,7 +192,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         try
                         {
                             var name = (turnContext.Activity.From.Name).Split();
-                            //CardHelper cardhelper = new CardHelper(_configuration);
                             taskInfo.postCreateBy = name[0] + ' ' + name[1];
                             taskInfo.postCreatedByEmail = await _dbHelper.GetUserEmailId(turnContext);
                             taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
@@ -223,8 +223,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 else
                                 reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals.";
                                 await turnContext.SendActivityAsync(reply);
-                            }
-                            
+                            }                            
                             return null;
                         }
                         catch (Exception ex)
@@ -283,7 +282,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             try
             {
                 var url = this._configuration["BaseUri"];
-                if (action.CommandId == ReflectConstants.RecurringPosts)
+                if (action.CommandId == Constants.RecurringPosts)
                 {
                     var postCreatedByEmail = await _dbHelper.GetUserEmailId(turnContext);
                     url = this._configuration["BaseUri"] + "/ManageRecurringPosts/" + postCreatedByEmail;
@@ -302,7 +301,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     };
                     return response;
                 }
-                else if (action.CommandId == ReflectConstants.RemovePosts)
+                else if (action.CommandId == Constants.RemovePosts)
                 {
                     if(turnContext.Activity.Conversation.Id!=null)
                     {
@@ -322,7 +321,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                     return null;
                 }
-                else if (action.CommandId == ReflectConstants.CreateReflect)
+                else if (action.CommandId == Constants.CreateReflect)
                 {
                     var name = (turnContext.Activity.From.Name).Split();
                     var userName = name[0] + ' ' + name[1];
@@ -463,13 +462,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             catch (Exception ex)
             {
                 _telemetry.TrackException(ex);
-            }
-
-            //return base.OnTeamsMessagingExtensionCardButtonClickedAsync(turnContext, cardData, cancellationToken);
+            }            
         }
     }
 
 }
-
-//QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(_configuration);
-//var defaultQuestions = await questionsDataRepository.GetAllDefaultQuestions();

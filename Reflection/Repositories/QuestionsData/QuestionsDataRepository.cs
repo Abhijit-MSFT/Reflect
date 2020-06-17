@@ -1,6 +1,9 @@
-﻿using Microsoft.ApplicationInsights;
+﻿// <copyright file="QuestionDataRepository.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
-using Reflection.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,8 +35,7 @@ namespace Reflection.Repositories.QuestionsData
         /// Get the default questions.
         /// </summary>
         /// <param name=""></param>
-        /// <returns>Questions which have default flag true</returns>
-        /// 
+        /// <returns>Questions which have default flag true<</returns>
         public async Task<List<QuestionsDataEntity>> GetAllDefaultQuestionsForUser(string userEmail)
         {
             _telemetry.TrackEvent("GetAllDefaultQuestionsForUser");
@@ -53,6 +55,11 @@ namespace Reflection.Repositories.QuestionsData
             }
         }
 
+        /// <summary>
+        /// Get questions by id.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>Get questions by question id</returns>
         public async Task<List<QuestionsDataEntity>> GetQuestionsByQID(Guid? qID)
         {
             _telemetry.TrackEvent("GetQuestionsByQID");
@@ -72,7 +79,11 @@ namespace Reflection.Repositories.QuestionsData
             }
         }
 
-
+        /// <summary>
+        /// Get all the questions.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>Get all questions</returns>
         public async Task<List<QuestionsDataEntity>> GetAllQuestionData(List<Guid?> quesID)
         {
             _telemetry.TrackEvent("GetAllQuestionData");
@@ -93,6 +104,11 @@ namespace Reflection.Repositories.QuestionsData
 
         }
 
+        /// <summary>
+        /// Check if question is already present.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>True/False - question is present/not present</returns>
         public async Task<bool> IsQuestionAlreadtPresent(string question, string email)
         {
             _telemetry.TrackEvent("IsQuestionAlreadtPresent");
@@ -100,7 +116,6 @@ namespace Reflection.Repositories.QuestionsData
             {
 
                 var allRows = await this.GetAllAsync(PartitionKeyNames.QuestionsDataTable.TableName);
-                //var result = allRows.Any(c => c.Question == question && c.IsDefaultFlag == true ? true : c.CreatedByEmail == email);
                 var result = allRows.Where(c => c.Question == question);
 
                 if (result.Any(c => c.IsDefaultFlag == true || c.CreatedByEmail == email))
@@ -114,6 +129,12 @@ namespace Reflection.Repositories.QuestionsData
                 return false;
             }
         }
+
+        /// <summary>
+        /// Get all the questions.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>Get all questions</returns>
         public async Task<QuestionsDataEntity> GetQuestionData(Guid? quesID)
         {
             _telemetry.TrackEvent("GetQuestionData");

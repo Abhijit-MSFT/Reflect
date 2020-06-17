@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="FeedbackDataRepository.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,11 +33,10 @@ namespace Reflection.Repositories.FeedbackData
 
 
         /// <summary>
-        /// Get the default questions.
+        /// Get the reflection feedback data
         /// </summary>
-        /// <param name=""></param>
-        /// <returns>Questions which have default flag true</returns>
-        /// 
+        /// <param name="reflectionId"></param>
+        /// <returns>Dictionary containing feedback of the reflections</returns>        
         public async Task<Dictionary<int, List<FeedbackDataEntity>>> GetReflectionFeedback(Guid? reflectionId)
         {
             _telemetry.TrackEvent("GetReflectionFeedback");
@@ -55,6 +58,11 @@ namespace Reflection.Repositories.FeedbackData
             }
         }
 
+        /// <summary>
+        /// Get the reflection feedback data
+        /// </summary>
+        /// <param name="reflectionId"></param>
+        /// <returns>feedBackDataEntity model with feedback of the reflection</returns>
         public async Task<FeedbackDataEntity> GetFeedbackonRefId(Guid? reflid)
         {
             _telemetry.TrackEvent("GetReflectionFeedback");
@@ -72,6 +80,12 @@ namespace Reflection.Repositories.FeedbackData
             }
         }
 
+        /// <summary>
+        /// Get the reflection feedback data
+        /// </summary>
+        /// <param name="reflid">reflectionID</param>
+        /// <param name="email">useremailid</param>
+        /// <returns>feedBackDataEntity model with feedback of the reflection</returns>
         public async Task<FeedbackDataEntity> GetReflectionFeedback(Guid reflid, string email)
         {
             _telemetry.TrackEvent("GetReflectionFeedback");

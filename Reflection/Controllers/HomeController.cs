@@ -1,4 +1,8 @@
-﻿using Microsoft.ApplicationInsights;
+﻿// <copyright file="HomeController.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

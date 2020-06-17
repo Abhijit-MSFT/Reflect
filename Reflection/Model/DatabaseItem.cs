@@ -1,17 +1,17 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// <copyright file="DatabaseItem.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Newtonsoft.Json;
 
 namespace Reflection.Model
 {
     public class DatabaseItem
     {
+        /// <summary>
+        /// Gets or sets Type.
+        /// </summary>
         [JsonProperty("type")]
         public virtual string Type { get; set; }
-
-        [JsonProperty("id")]
-        public string Id { get; set; }
     }
 }
