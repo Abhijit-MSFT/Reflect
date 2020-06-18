@@ -1,4 +1,8 @@
-﻿using Microsoft.ApplicationInsights;
+﻿// <copyright file="ReflectionDataRepository.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -25,9 +29,13 @@ namespace Reflection.Repositories.ReflectionData
                 isFromAzureFunction)
         {
             _telemetry = telemetry;
-
         }
 
+        /// <summary>
+        /// Get reflectiondata by reflection id.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>Refleaction data</returns>
         public async Task<ReflectionDataEntity> GetReflectionData(Guid? refID)
         {
             _telemetry.TrackEvent("GetReflectionData");
@@ -37,17 +45,18 @@ namespace Reflection.Repositories.ReflectionData
                 ReflectionDataEntity refData = allReflections.Where(c => c.ReflectionID == refID).FirstOrDefault();
                 return refData;
             }
-
             catch (Exception ex)
             {
-
                 _telemetry.TrackException(ex);
                 return null;
-
             }
-
         }
 
+        /// <summary>
+        /// Get reflection data by messageid.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>receurssion data interval wise for give reflection id</returns>
         public async Task<ReflectionDataEntity> GetReflectionData(string reflectMessagId)
         {
             _telemetry.TrackEvent("GetReflectionData");
@@ -59,33 +68,17 @@ namespace Reflection.Repositories.ReflectionData
             }
             catch (Exception ex)
             {
-
                 _telemetry.TrackException(ex);
                 return null;
-
             }
         }
 
 
-        public async Task<string> GetmessageIdfromReflection(Guid refId)
-        {
-            _telemetry.TrackEvent("GetmessageIdfromReflection");
-            try
-            {
-                var allRefs = await this.GetAllAsync(PartitionKeyNames.ReflectionDataTable.TableName);
-                var dataEntity = allRefs.Where(c => c.ReflectionID == refId).FirstOrDefault();
-                return dataEntity.MessageID;
-            }
-
-            catch (Exception ex)
-            {
-
-                _telemetry.TrackException(ex);
-                return null;
-
-            }
-
-        }
+        /// <summary>
+        /// Get all active reflections by email id.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>all active reflection data</returns>
         public async Task<List<ReflectionDataEntity>> GetAllActiveReflection(string email)
         {
             _telemetry.TrackEvent("GetAllActiveReflection");
@@ -97,10 +90,8 @@ namespace Reflection.Repositories.ReflectionData
             }
             catch (Exception ex)
             {
-
                 _telemetry.TrackException(ex);
                 return null;
-
             }
 
         }

@@ -1,4 +1,8 @@
-﻿using AdaptiveCards;
+﻿// <copyright file="SchedulerHelper.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using AdaptiveCards;
 using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
@@ -35,6 +39,7 @@ namespace Reflection.Helper
             _dbHelper = dbHelper;
         }
 
+        
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("StartAsync");
@@ -94,5 +99,6 @@ namespace Reflection.Helper
 
             return Task.CompletedTask;
         }
+
     }
 }

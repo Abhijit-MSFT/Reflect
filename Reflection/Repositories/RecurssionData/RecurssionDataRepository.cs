@@ -1,4 +1,8 @@
-﻿using Microsoft.ApplicationInsights;
+﻿// <copyright file="RecurssionDataRepository.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Microsoft.ApplicationInsights;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -26,14 +30,18 @@ namespace Reflection.Repositories.RecurssionData
         {
             _telemetry = telemetry;
         }
+
+        /// <summary>
+        /// Get all the recurssions.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>receurssion data for all the reflection id's</returns>
         public async Task<List<RecurssionDataEntity>> GetAllRecurssionData(List<Guid?> RefIds)
         {
             _telemetry.TrackEvent("GetAllRecurssionData");
 
             try
             {
-
-
                 var allRows = await this.GetAllAsync(PartitionKeyNames.RecurssionDataTable.TableName);
                 List<RecurssionDataEntity> result = allRows.Where(c => RefIds.Contains(c.ReflectionID) && c.RecursstionType != "Does not repeat").ToList();
                 return result;
@@ -43,17 +51,19 @@ namespace Reflection.Repositories.RecurssionData
 
                 _telemetry.TrackException(ex);
                 return null;
-
             }
         }
 
+        /// <summary>
+        /// Get all the recurssions.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>receurssion data for give reflection id</returns>
         public async Task<RecurssionDataEntity> GetRecurssionData(Guid? RecurssionId)
         {
             _telemetry.TrackEvent("GetRecurssionData");
             try
             {
-
-
                 var allRows = await this.GetAllAsync(PartitionKeyNames.RecurssionDataTable.TableName);
                 RecurssionDataEntity result = allRows.Where(c => c.RecurssionID == RecurssionId).FirstOrDefault();
                 return result;
@@ -67,6 +77,11 @@ namespace Reflection.Repositories.RecurssionData
             }
         }
 
+        /// <summary>
+        /// Get all the recurssions.
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>receurssion data interval wise for give reflection id</returns>
         public async Task<List<RecurssionDataEntity>> GetAllRecurssionData()
         {
             DateTime dateTime = DateTime.UtcNow;

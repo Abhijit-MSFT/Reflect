@@ -1,4 +1,8 @@
-﻿using Microsoft.ApplicationInsights;
+﻿// <copyright file="DBHelper.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
@@ -31,11 +35,10 @@ namespace Reflection.Helper
         }
 
         /// <summary>
-        /// Add Reflection data in Table Storage.
+        /// Save Reflection data in Table Storage based on different conditions
         /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
-        /// <returns>A task that represents the work queued to execute.</returns>
+        /// <param name="taskInfo">This parameter is a ViewModel</param>
+        /// <returns>Null</returns>
         public async Task SaveReflectionDataAsync(TaskInfo taskInfo)
         {
             _telemetry.TrackEvent("SaveReflectionDataAsync");
@@ -56,7 +59,7 @@ namespace Reflection.Helper
                     ReflectionDataEntity reflectEntity = new ReflectionDataEntity
                     {
                         ReflectionID = taskInfo.reflectionID,
-                        PartitionKey = PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition, // read it from json
+                        PartitionKey = PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition, 
                         RowKey = taskInfo.reflectionRowKey,
                         CreatedBy = taskInfo.postCreateBy,
                         CreatedByEmail = taskInfo.postCreatedByEmail,
@@ -64,8 +67,8 @@ namespace Reflection.Helper
                         QuestionID = taskInfo.questionID,
                         Privacy = taskInfo.privacy,
                         RecurrsionID = taskInfo.recurssionID,
-                        MessageID = taskInfo.messageID,
                         ChannelID = taskInfo.channelID,
+                        MessageID = taskInfo.messageID,
                         SendNowFlag = taskInfo.postSendNowFlag,
                         IsActive = taskInfo.IsActive,
                         ReflectMessageId = taskInfo.reflectMessageId,
@@ -73,6 +76,7 @@ namespace Reflection.Helper
                         ServiceUrl = taskInfo.serviceUrl
                     };
                     await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
+                    
                     if (await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question, taskInfo.postCreatedByEmail) == false)
                     {
                         await SaveQuestionsDataAsync(taskInfo);
@@ -95,25 +99,11 @@ namespace Reflection.Helper
             }
         }
 
-        public async Task UpdateReflectionMessageIdAsync(ReflectionDataEntity reflectionDataEntity)
-        {
-            _telemetry.TrackEvent("SaveReflectionMessageIdAsync");
-            try
-            {
-                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
-                await reflectionDataRepository.CreateOrUpdateAsync(reflectionDataEntity);
-            }
-            catch (Exception ex)
-            {
-                _telemetry.TrackException(ex);
-            }
-        }
         /// <summary>
-        /// Add Reflection data in Table Storage.
+        /// Save Question data in Table Storage based on different conditions
         /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
-        /// <returns>A task that represents the work queued to execute.</returns>
+        /// <param name="taskInfo">This parameter is a ViewModel</param>
+        /// <returns>Null</returns>
         public async Task SaveQuestionsDataAsync(TaskInfo taskInfo)
         {
             _telemetry.TrackEvent("DeleteReflections");
@@ -126,8 +116,8 @@ namespace Reflection.Helper
                     PartitionKey = PartitionKeyNames.QuestionsDataTable.QuestionsDataPartition,
                     RowKey = taskInfo.questionRowKey,
                     Question = taskInfo.question,
+                    IsDefaultFlag = false,
                     QuestionCreatedDate = DateTime.Now,
-                    IsDefaultFlag = false, //handle default flag logic
                     CreatedBy = taskInfo.postCreateBy,
                     CreatedByEmail = taskInfo.postCreatedByEmail
                 };
@@ -140,12 +130,12 @@ namespace Reflection.Helper
             }
         }
 
+
         /// <summary>
-        /// Add Reflection data in Table Storage.
+        /// Save Reflection Recurssion data in Table Storage
         /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
-        /// <returns>A task that represents the work queued to execute.</returns>
+        /// <param name="taskInfo">This parameter is a ViewModel</param>
+        /// <returns>Null</returns>
         public async Task SaveRecurssionDataAsync(TaskInfo taskInfo)
         {
             _telemetry.TrackEvent("SaveRecurssionDataAsync");
@@ -176,65 +166,11 @@ namespace Reflection.Helper
             }
         }
 
-        public DateTime GetNextWeekday()
-        {
-            DateTime nextWorkingDay = DateTime.UtcNow.AddDays(1);
-            while (nextWorkingDay.DayOfWeek == DayOfWeek.Saturday || nextWorkingDay.DayOfWeek == DayOfWeek.Sunday)
-                nextWorkingDay = nextWorkingDay.AddDays(1);
-            return nextWorkingDay;
-        }
-        public DateTime GetNextWeeklyday(DayOfWeek day)
-        {
-            DateTime nextWeeklyday = DateTime.UtcNow.AddDays(1);
-            while (nextWeeklyday.DayOfWeek != day)
-                nextWeeklyday = nextWeeklyday.AddDays(1);
-            return nextWeeklyday;
-        }
-
         /// <summary>
-        /// 
+        /// Save Reflection feedback data in Feedback Table Storage 
         /// </summary>
-        /// <param name="recurssionEntity"></param>
-        /// <returns></returns>
-        public async Task UpdateRecurssionDataNextExecutionDateTimeAsync(RecurssionDataEntity recurssionEntity)
-        {
-            _telemetry.TrackEvent("UpdateRecurssionDataNextExecutionDateTimeAsync");
-            try
-            {
-                DateTime nextExecutionDate = Convert.ToDateTime(recurssionEntity.NextExecutionDate);
-                RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
-
-                switch (recurssionEntity.RecursstionType.ToLower().Trim())
-                {
-                    case "every weekday":
-                        DateTime? nextWeekDay = GetNextWeekday();
-                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextWeekDay ? nextWeekDay : null;
-                        break;
-                    case "weekly":
-                        DateTime? nextWeeklyday = GetNextWeeklyday(nextExecutionDate.DayOfWeek);
-                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextWeeklyday ? nextWeeklyday : null;
-                        break;
-                    case "monthly":
-                        DateTime? nextMonthlyday = nextExecutionDate.AddMonths(1);
-                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextMonthlyday ? nextMonthlyday : null;
-                        break;
-                    default:
-                        break;
-                }
-                await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
-            }
-            catch (Exception ex)
-            {
-                _telemetry.TrackException(ex);
-            }
-        }
-
-        /// <summary>
-        /// Add Reflection data in Table Storage.
-        /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
-        /// <returns>A task that represents the work queued to execute.</returns>
+        /// <param name="taskInfo">This parameter is a ViewModel</param>
+        /// <returns>Null</returns>
         public async Task SaveReflectionFeedbackDataAsync(UserfeedbackInfo taskInfo)
         {
             _telemetry.TrackEvent("DeleteReflections");
@@ -246,8 +182,7 @@ namespace Reflection.Helper
                 if (taskInfo != null)
                 {
                     var feedbackID = Guid.NewGuid();
-                    var rowKey = Guid.NewGuid();
-                    //string email = await GetUserEmailId(turnContext);
+                    var rowKey = Guid.NewGuid();                    
 
                     FeedbackDataEntity feedbackDataEntity = new FeedbackDataEntity
                     {
@@ -256,7 +191,7 @@ namespace Reflection.Helper
                         FeedbackID = feedbackID,
                         FullName = taskInfo.userName,
                         ReflectionID = Guid.Parse(taskInfo.reflectionId),
-                        FeedbackGivenBy = taskInfo.emailId, //need changes - send it in card response and capture it
+                        FeedbackGivenBy = taskInfo.emailId, 
                         Feedback = Convert.ToInt32(taskInfo.feedbackId)
 
                     };
@@ -269,65 +204,49 @@ namespace Reflection.Helper
             }
         }
 
-        //make above method and below method generic - need this change
-        public async Task<string> GetUserEmailId<T>(ITurnContext<T> turnContext) where T : Microsoft.Bot.Schema.IActivity
+        /// <summary>
+        /// Save Reflection and Recurssion data in Table Storage based on edits made in edit view
+        /// </summary>
+        /// <param name="reflection">This model carry any changes made in existing reflections on edit screen</param>
+        /// <returns>Null</returns>
+        public async Task SaveEditRecurssionDataAsync(RecurssionScreenData reflection)
         {
-            _telemetry.TrackEvent("GetUserEmailId");
-
-            // Fetch the members in the current conversation
             try
             {
-                IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
-
-                var members = await connector.Conversations.GetConversationMembersAsync(turnContext.Activity.Conversation.Id);
-                var user = AsTeamsChannelAccounts(members).FirstOrDefault(m => m.Id == turnContext.Activity.From.Id);
-                return AsTeamsChannelAccounts(members).FirstOrDefault(m => m.Id == turnContext.Activity.From.Id).UserPrincipalName;
+                _telemetry.TrackEvent("SaveEditRecurssionDataAsync");
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
+                RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
+                var reflectiondata = await reflectionDataRepository.GetReflectionData(reflection.RefID);
+                var recurssion = await recurssionDataRepository.GetRecurssionData(reflectiondata.RecurrsionID);
+                reflectiondata.Privacy = reflection.Privacy;
+                recurssion.ExecutionDate = reflection.ExecutionDate;
+                recurssion.ExecutionTime = reflection.ExecutionTime;
+                recurssion.RecursstionType = reflection.RecurssionType;
+                await recurssionDataRepository.CreateOrUpdateAsync(recurssion);
+                await reflectionDataRepository.CreateOrUpdateAsync(reflectiondata);
             }
             catch (Exception ex)
             {
                 _telemetry.TrackException(ex);
-                return "";
             }
         }
 
         /// <summary>
-        /// Add Reflection data in Table Storage.
+        /// Get the data from the Reflection table storage based on the reflection id
         /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
-        /// <returns>A task that represents the work queued to execute.</returns>
-        private IEnumerable<TeamsChannelAccount> AsTeamsChannelAccounts(IEnumerable<ChannelAccount> channelAccountList)
-        {
-            _telemetry.TrackEvent("AsTeamsChannelAccounts");
-
-            foreach (ChannelAccount channelAccount in channelAccountList)
-            {
-                yield return JObject.FromObject(channelAccount).ToObject<TeamsChannelAccount>();
-            }
-        }
-
-        /// <summary>
-        /// Add Reflection data in Table Storage.
-        /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
-        /// <returns>A task that represents the work queued to execute.</returns>
+        /// <param name="reflectionID">reflection id of the existing reflection</param>
+        /// <returns>ViewReflectionsEntity</returns>
         public async Task<ViewReflectionsEntity> GetViewReflectionsData(Guid reflectionId)
         {
             _telemetry.TrackEvent("GetViewReflectionsData");
 
             try
             {
-
-                //var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
-                //var refID = response.reflectionId;
-
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 ViewReflectionsEntity viewReflectionsEntity = new ViewReflectionsEntity();
                 QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(_configuration, _telemetry);
-                //Guid gID = Guid.Parse("933a3991-29e9-4391-bdce-a81096b23c20"); for testing purpose
-
+             
                 //Get reflection data
                 ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(reflectionId) ?? null;
                 Dictionary<int, List<FeedbackDataEntity>> feedbackData = await feedbackDataRepository.GetReflectionFeedback(reflectionId) ?? null;
@@ -346,6 +265,11 @@ namespace Reflection.Helper
 
         }
 
+        /// <summary>
+        /// Get the data from the Recurrence able storage based on the email id
+        /// </summary>
+        /// <param name="emailid">emilid of the creator of the reflection</param>
+        /// <returns>RecurssionScreenData model</returns>
         public async Task<List<RecurssionScreenData>> GetRecurrencePostsDataAsync(string email)
         {
             _telemetry.TrackEvent("GetRecurrencePostsDataAsync");
@@ -386,10 +310,68 @@ namespace Reflection.Helper
 
 
         /// <summary>
-        /// Delete Reflection and recurssion related to that reflection
+        /// Based on generic turnconext get the email id of the user
         /// </summary>
-        /// <param name="Iconfiguration">Reads The config from app settings</param>
-        /// <param name="reflectionId">Specific reflectionid that is to be deleted</param>
+        /// <param name="turnContext">bot context for the activity</param>
+        /// <returns>email id string</returns>
+        public async Task<string> GetUserEmailId<T>(ITurnContext<T> turnContext) where T : Microsoft.Bot.Schema.IActivity
+        {
+            _telemetry.TrackEvent("GetUserEmailId");
+                        
+            try
+            {
+                IConnectorClient connector = turnContext.TurnState.Get<IConnectorClient>();
+
+                var members = await connector.Conversations.GetConversationMembersAsync(turnContext.Activity.Conversation.Id);
+                var user = AsTeamsChannelAccounts(members).FirstOrDefault(m => m.Id == turnContext.Activity.From.Id);
+                return AsTeamsChannelAccounts(members).FirstOrDefault(m => m.Id == turnContext.Activity.From.Id).UserPrincipalName;
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// Update the messageId of the card to use this id in future to update the same card again
+        /// </summary>
+        /// <param name="ReflectionDataEntity">ReflectionDataEntity model</param>
+        /// <returns>Null</returns>
+        public async Task UpdateReflectionMessageIdAsync(ReflectionDataEntity reflectionDataEntity)
+        {
+            _telemetry.TrackEvent("SaveReflectionMessageIdAsync");
+            try
+            {
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
+                await reflectionDataRepository.CreateOrUpdateAsync(reflectionDataEntity);
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ChannelAccount">ChannelAccount model</param>
+        /// <returns>TeamsChannelAccount</returns>
+        private IEnumerable<TeamsChannelAccount> AsTeamsChannelAccounts(IEnumerable<ChannelAccount> channelAccountList)
+        {
+            _telemetry.TrackEvent("AsTeamsChannelAccounts");
+
+            foreach (ChannelAccount channelAccount in channelAccountList)
+            {
+                yield return JObject.FromObject(channelAccount).ToObject<TeamsChannelAccount>();
+            }
+        }
+
+        /// <summary>
+        /// Delete recurrence data based on the reflection id
+        /// </summary>
+        /// <param name="reflectionid">reflectionid</param>
+        /// <returns>Null</returns>
         public async Task DeleteRecurrsionDataAsync(Guid reflectionId)
         {
             try
@@ -409,10 +391,10 @@ namespace Reflection.Helper
         }
 
         /// <summary>
-        /// Remove Reflection 
+        /// Remove reflectionid based in messageid
         /// </summary>
-        /// <param name="Iconfiguration">Reads The config from app settings</param>
-        /// <param name="reflectionMessageId">Specific MessageId that is to be deleted</param>
+        /// <param name="messageid">messageid</param>
+        /// <returns>messageid</returns>
         public async Task<string> RemoveReflectionId(string reflectionMessageId)
         {
             string messageId = null;
@@ -434,37 +416,70 @@ namespace Reflection.Helper
             }
             return messageId;
         }
+
         /// <summary>
-        /// update Reflection and recurssion related to that reflection
+        /// Get the next working day
         /// </summary>
-        /// <param name="Iconfiguration">Reads The config from app settings</param>
-        /// <param name="reflection">COmbination of reflection and recurssion to save data</param>
-
-
-        public async Task SaveEditRecurssionDataAsync(RecurssionScreenData reflection)
+        /// <param name=""></param>
+        /// <returns>next week day</returns>
+        public DateTime GetNextWeekday()
         {
+            DateTime nextWorkingDay = DateTime.UtcNow.AddDays(1);
+            while (nextWorkingDay.DayOfWeek == DayOfWeek.Saturday || nextWorkingDay.DayOfWeek == DayOfWeek.Sunday)
+                nextWorkingDay = nextWorkingDay.AddDays(1);
+            return nextWorkingDay;
+        }
+
+        /// <summary>
+        /// Get the next working day
+        /// </summary>
+        /// <param name="currentDay">currentDay</param>
+        /// <returns>next working day</returns>
+        public DateTime GetNextWeeklyday(DayOfWeek day)
+        {
+            DateTime nextWeeklyday = DateTime.UtcNow.AddDays(1);
+            while (nextWeeklyday.DayOfWeek != day)
+                nextWeeklyday = nextWeeklyday.AddDays(1);
+            return nextWeeklyday;
+        }
+
+        /// <summary>
+        /// Update recurssion table based on day
+        /// </summary>
+        /// <param name="recurssionEntity"></param>
+        /// <returns>Null</returns>
+        public async Task UpdateRecurssionDataNextExecutionDateTimeAsync(RecurssionDataEntity recurssionEntity)
+        {
+            _telemetry.TrackEvent("UpdateRecurssionDataNextExecutionDateTimeAsync");
             try
             {
-                _telemetry.TrackEvent("SaveEditRecurssionDataAsync");
-                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
+                DateTime nextExecutionDate = Convert.ToDateTime(recurssionEntity.NextExecutionDate);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
-                var reflectiondata = await reflectionDataRepository.GetReflectionData(reflection.RefID);
-                var recurssion = await recurssionDataRepository.GetRecurssionData(reflectiondata.RecurrsionID);
-                reflectiondata.Privacy = reflection.Privacy;
-                recurssion.ExecutionDate = reflection.ExecutionDate;
-                recurssion.ExecutionTime = reflection.ExecutionTime;
-                recurssion.RecursstionType = reflection.RecurssionType;
-                await recurssionDataRepository.CreateOrUpdateAsync(recurssion);
-                await reflectionDataRepository.CreateOrUpdateAsync(reflectiondata);
+
+                switch (recurssionEntity.RecursstionType.ToLower().Trim())
+                {
+                    case "every weekday":
+                        DateTime? nextWeekDay = GetNextWeekday();
+                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextWeekDay ? nextWeekDay : null;
+                        break;
+                    case "weekly":
+                        DateTime? nextWeeklyday = GetNextWeeklyday(nextExecutionDate.DayOfWeek);
+                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextWeeklyday ? nextWeeklyday : null;
+                        break;
+                    case "monthly":
+                        DateTime? nextMonthlyday = nextExecutionDate.AddMonths(1);
+                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextMonthlyday ? nextMonthlyday : null;
+                        break;
+                    default:
+                        break;
+                }
+                await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
             }
             catch (Exception ex)
             {
                 _telemetry.TrackException(ex);
             }
         }
-
-
-
 
     }
 }

@@ -3,15 +3,15 @@
   "manifestVersion": "1.5",
   "version": "1.0.0",
   "id": "ee733610-f70c-44f7-92c5-ed5af9d776b5",
-  "packageName": "com.contoso.helloworld",
+  "packageName": "com.microsoft.reflection",
   "developer": {
-    "name": "Contoso",
+    "name": "Microsoft",
     "websiteUrl": "https://www.microsoft.com",
     "privacyUrl": "https://www.microsoft.com/privacy",
     "termsOfUseUrl": "https://www.microsoft.com/termsofuse"
   },
   "name": {
-    "short": "Reflect local",
+    "short": "Reflect",
     "full": "Reflect Bot"
   },
   "description": {

@@ -1,4 +1,8 @@
-﻿using Bogus.DataSets;
+﻿// <copyright file="QuestionDataEntity.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Bogus.DataSets;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Bot.Schema;
 using System;
@@ -31,10 +35,14 @@ namespace Reflection.Repositories.QuestionsData
         public bool IsDefaultFlag { get; set; }
 
         /// <summary>
-        /// Gets or sets user email id.
+        /// Gets or sets userCreatedBy.
         /// </summary>
         public string CreatedBy { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets user CreatedByEmail.
+        /// </summary>
         public string CreatedByEmail { get; set; }
 
     }

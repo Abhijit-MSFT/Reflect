@@ -1,91 +1,178 @@
-﻿using Newtonsoft.Json;
+﻿// <copyright file="TaskInfo.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Threading.Tasks;
 
 namespace Reflection.Model
 {
     public class TaskInfo
     {
+        /// <summary>
+        /// Gets or sets question.
+        /// </summary>
         public string question { get; set; }
+
+        /// <summary>
+        /// Gets or sets privacy.
+        /// </summary>
         public string privacy { get; set; }
+
+        /// <summary>
+        /// Gets or sets postCreateBy.
+        /// </summary>
         public string postCreateBy { get; set; }
 
+        /// <summary>
+        /// Gets or sets postCreatedByEmail.
+        /// </summary>
         public string postCreatedByEmail { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets executionDate.
+        /// </summary>
         public DateTime executionDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets executionTime.
+        /// </summary>
         public string executionTime { get; set; }
-        public DateTime? postDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets postSendNowFlag.
+        /// </summary>
         [DefaultValue(false)]
         public bool postSendNowFlag { get; set; }
-        public string repeatFrequency { get; set; }
-        public string recurssionType { get; set; }
-        public bool IsActive { get; set; }
-        public string action { get; set; }
-        public int? card { get; set; }
-        public int? userResponce { get; set; }
-        public string messageID { get; set; }
-        public string channelID { get; set; }
-        public Guid? reflectionID { get; set; }
-        public Guid? questionID { get; set; }
-        public Guid? recurssionID { get; set; }
-        public bool isDefaultQuestion { get; set; }
 
+        /// <summary>
+        /// Gets or sets recurssionType.
+        /// </summary>
+        public string recurssionType { get; set; }
+
+        /// <summary>
+        /// Gets or sets IsActive.
+        /// </summary>
+        public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Gets or sets action.
+        /// </summary>
+        public string action { get; set; }
+
+        /// <summary>
+        /// Gets or sets messageID.
+        /// </summary>
+        public string messageID { get; set; }
+
+        /// <summary>
+        /// Gets or sets channelID.
+        /// </summary>
+        public string channelID { get; set; }
+
+        /// <summary>
+        /// Gets or sets reflectionID.
+        /// </summary>
+        public Guid? reflectionID { get; set; }
+
+        /// <summary>
+        /// Gets or sets questionID.
+        /// </summary>
+        public Guid? questionID { get; set; }
+
+        /// <summary>
+        /// Gets or sets recurssionID.
+        /// </summary>
+        public Guid? recurssionID { get; set; }
+
+        /// <summary>
+        /// Gets or sets reflectionRowKey.
+        /// </summary>
         public string reflectionRowKey { get; set; }
 
+        /// <summary>
+        /// Gets or sets recurrsionRowKey.
+        /// </summary>
         public string recurrsionRowKey { get; set; }
 
+        /// <summary>
+        /// Gets or sets questionRowKey.
+        /// </summary>
         public string questionRowKey { get; set; }
-        public string type { get; set; }
 
+        /// <summary>
+        /// Gets or sets reflectMessageId.
+        /// </summary>
         public string reflectMessageId { get; set; }
+
+        /// <summary>
+        /// Gets or sets teantId.
+        /// </summary>
         public string teantId { get; set; }
+
+        /// <summary>
+        /// Gets or sets serviceUrl.
+        /// </summary>
         public string serviceUrl { get; set; }
 
+        /// <summary>
+        /// Gets or sets feedback.
+        /// </summary>
         public int feedback { get; set; }
     }
 
     public class UserfeedbackInfo
     {
+        /// <summary>
+        /// Gets or sets feedbackId.
+        /// </summary>
         public int feedbackId { get; set; }
+
+        /// <summary>
+        /// Gets or sets reflectionId.
+        /// </summary>
         public string reflectionId { get; set; }
-        public string action { get; set; }
+
+        /// <summary>
+        /// Gets or sets type.
+        /// </summary>
         public string type { get; set; }
+
+        /// <summary>
+        /// Gets or sets userName.
+        /// </summary>
         public string userName { get; set; }
+
+        /// <summary>
+        /// Gets or sets emailId.
+        /// </summary>
         public string emailId { get; set; }
-        public string messageId { get; set; }
     }
-
-    public class MessageDetails
-    {
-        public string messageid { get; set; }
-    }
-
+        
     public class ReflctionData
     {
+        /// <summary>
+        /// Gets or sets data.
+        /// </summary>
         public Data data { get; set; }
     }
 
     public class Data
     {
+        /// <summary>
+        /// Gets or sets URL.
+        /// </summary>
         public string URL { get; set; }
-        public string type { get; set; }
-    }
-
-    public class QuestionTest
-    {
-        public string Question { get; set; }
     }
 
     public class TaskModuleActionHelper
     {
         public class AdaptiveCardValue<T>
         {
-            [JsonProperty("msteams")]
-            public object Type { get; set; } = JsonConvert.DeserializeObject("{\"type\": \"task/fetch\" }");
+            /// <summary>
+            /// Gets or sets Data.
+            /// </summary>
             [JsonProperty("data")]
             public T Data { get; set; }
         }
@@ -93,40 +180,16 @@ namespace Reflection.Model
 
     public class ActionDetails
     {
+        /// <summary>
+        /// Gets or sets type.
+        /// </summary>
         public string type { get; set; }
-        public string ActionType { get; set; }
     }
     public class TaskModuleActionDetails : ActionDetails
     {
+        /// <summary>
+        /// Gets or sets URL.
+        /// </summary>
         public string URL { get; set; }
-        public string Title { get; set; }
-        public string Width { get; set; }
-        public string Height { get; set; }
     }
-
-    public class Responses
-    {
-        public string Createdby { get; set; }
-        public string QuestionTitle { get; set; }
-
-        public List<OptionResponse> OptionResponses { get; set; }
-
-    }
-    public class OptionResponse
-    {
-        public int Width { get; set; }
-        public string Color { get; set; }
-
-        public string Description { get; set; }
-    }
-
-    public static class ReflectConstants
-    {
-        public static readonly string SaveFeedBack = "saveFeedback";
-        public static readonly string RemovePosts = "removeposts";
-        public static readonly string RecurringPosts = "recurringreflections";
-        public static readonly string CreateReflect = "createreflect";
-    }
-
-
 }
