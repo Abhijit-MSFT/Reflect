@@ -8,16 +8,12 @@ using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OData.Edm;
 using Reflection.Interfaces;
 using Reflection.Model;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -71,7 +67,7 @@ namespace Reflection.Helper
                     taskInfo.postCreateBy = reflectionData.CreatedBy;
                     taskInfo.privacy = reflectionData.Privacy;
                     taskInfo.reflectionID = reflectionData.ReflectionID;
-                    var newPostCard = _cardHelper.CreateNewPostCard(taskInfo, 0);
+                    var newPostCard = _cardHelper.CreateNewReflect(taskInfo, 0);
                     Attachment newPostCardAttachment = new Attachment()
                     {
                         ContentType = AdaptiveCard.ContentType,

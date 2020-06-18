@@ -2,7 +2,6 @@
 // Copyright (c) Microsoft. All rights reserved.
 // </copyright>
 
-
 using AdaptiveCards;
 using Bogus;
 using Microsoft.ApplicationInsights;
@@ -42,7 +41,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             _cardHelper = cardHelper;
             _dbHelper = dbHelper;
         }
-
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
@@ -90,7 +88,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             taskInfo.postCreateBy = reflectData.CreatedBy;
                             taskInfo.privacy = reflectData.Privacy;
                             taskInfo.reflectionID = reflectData.ReflectionID;
-                            var updateadaptivecard = _cardHelper.CreateNewPostCard(taskInfo,response.feedbackId);                            Attachment attachment = new Attachment()
+                            var updateadaptivecard = _cardHelper.CreateNewReflect(taskInfo,response.feedbackId);                            Attachment attachment = new Attachment()
                             {
                                 ContentType = AdaptiveCard.ContentType,
                                 Content = adaptiveCard
@@ -144,7 +142,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         {
             _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
-
             try
             {
                 ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
@@ -175,12 +172,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
-            _telemetry.TrackEvent("OnTeamsMessagingExtensionSubmitActionAsync");
-
-            
-            
+            _telemetry.TrackEvent("OnTeamsMessagingExtensionSubmitActionAsync");                      
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
-
             try
             {
                 TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
@@ -208,7 +201,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 var typingActivity = MessageFactory.Text(string.Empty);
                                 typingActivity.Type = ActivityTypes.Typing;
                                 await turnContext.SendActivityAsync(typingActivity);
-                                var adaptiveCard = _cardHelper.CreateNewPostCard(taskInfo,0);
+                                var adaptiveCard = _cardHelper.CreateNewReflect(taskInfo,0);
                                 var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
                                 var resultid=await turnContext.SendActivityAsync(message, cancellationToken);
                                 ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(taskInfo.reflectionID);

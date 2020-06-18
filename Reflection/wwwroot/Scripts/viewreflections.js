@@ -11,22 +11,22 @@ $(document).ready(function () {
         return true;
     };
     microsoftTeams.getContext(function (context) {
-        if (context.theme == "default") {
-            var head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
+        if (context.theme === "default") {
+            let head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
                 link = document.createElement("link"); // create the link node
             link.setAttribute("href", "../CSS/openReflections.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
-        } else if (context.theme == "dark") {
-            var head = document.getElementsByTagName("head")[0],
+        } else if (context.theme === "dark") {
+            let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
             link.setAttribute("href", "../CSS/openReflections-dark.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         } else {
-            var head = document.getElementsByTagName("head")[0],
+            let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
             link.setAttribute("href", "../CSS/openReflections-dark.css");
             link.setAttribute("rel", "stylesheet");
@@ -70,7 +70,7 @@ function GetReflections() {
                     if (Object.keys(feedback).indexOf(i.toString()) !== -1) {
                         datacount = feedback[i].length;
                         description =
-                            reflection.Privacy == "anonymous"
+                            reflection.Privacy === "anonymous"
                                 ? ""
                                 : feedback[i].map((x) => x.FullName).join(",");
                         width = ((datacount * 100) / totalcount).toFixed(0);
@@ -113,7 +113,7 @@ function GetReflections() {
                                 data.FeedbackID +
                                 '">' +
                                 data.FullName
-                            blockdata = index+1 != feedback[i].length ? blockdata + ',' : blockdata +''
+                            blockdata = index+1 !== feedback[i].length ? blockdata + ',' : blockdata +''
                             blockdata = blockdata+'</span><div class="card custom-profle-card ' +
                                 data.FeedbackID +
                                 '"> <div class="card-body"> <img src="../Images/Avatar.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
@@ -157,8 +157,8 @@ function GetReflections() {
     });
 }
 function GetChatConfig(userId) {
-    return (userId == contextPrincipalName) ? "none" : "all";
-};
+    return (userId === contextPrincipalName) ? "none" : "all";
+}
 
 function openDetailReflection() {
     let linkInfo = {

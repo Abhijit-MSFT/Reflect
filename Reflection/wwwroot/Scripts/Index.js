@@ -92,7 +92,7 @@ function SendAdaptiveCard() {
         isDefaultQuestion: false,
         //postSendNowFlag: true,
         recurssionType:
-            $("#recurrance").val() == "Custom"
+            $("#recurrance").val() === "Custom"
                 ? $("#finaldates").html()
                 : $("#recurrance").val(),
         action: "sendAdaptiveCard",

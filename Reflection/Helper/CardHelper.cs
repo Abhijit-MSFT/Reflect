@@ -231,7 +231,7 @@ namespace Reflection.Helper
                         }
                     },
                 },
-            };
+             };
 
             }
             catch (Exception ex)
@@ -303,9 +303,9 @@ namespace Reflection.Helper
         /// <param name="data">This is viewModel holds the forntend data</param>
         /// <param name="feedbackId">Current reflection id</param>
         /// <returns>AdaptiveCard</returns>
-        public AdaptiveCard CreateNewPostCard(TaskInfo data, int feedbackId)
+        public AdaptiveCard CreateNewReflect(TaskInfo data, int feedbackId)
         {
-            _telemetry.TrackEvent("CreateNewPostCard");
+            _telemetry.TrackEvent("CreateNewReflect");
             uint pixelHeight = Convert.ToUInt32(feedbackId == 0 ? 32 : 46);
 
             try
@@ -341,7 +341,7 @@ namespace Reflection.Helper
                                     Items =new List<AdaptiveElement>()
                                                 {
 
-                                                    new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] +(feedbackId==0?"/images/1.png":feedbackId==1?"/images/1_selected_light.png":"/images/1_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32, AltText="Good",
+                                                    new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] +(feedbackId==0?"/images/Default_1.png":feedbackId==1?"/images/1_selected_light.png":"/images/1_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32, AltText="Good",
                                                         Style =AdaptiveImageStyle.Default, Id="1", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'1', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } },
 
                                                 }
@@ -354,7 +354,7 @@ namespace Reflection.Helper
                                     Items=new List<AdaptiveElement>()
                                     {
 
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/2.png":feedbackId==2?"/images/2_selected_light.png":"/images/2_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
+                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_2.png":feedbackId==2?"/images/2_selected_light.png":"/images/2_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
                                             Style =AdaptiveImageStyle.Default, Id="2", SelectAction = new AdaptiveSubmitAction() { DataJson = @"{'feedbackId':'2', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } },
                                     }
 
@@ -366,7 +366,7 @@ namespace Reflection.Helper
                                     Items=new List<AdaptiveElement>()
                                     {
 
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/3.png":feedbackId==3?"/images/3_selected_light.png":"/images/3_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
+                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_3.png":feedbackId==3?"/images/3_selected_light.png":"/images/3_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
                                             Style =AdaptiveImageStyle.Default, Id="3", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'3', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } }
                                     }
 
@@ -378,7 +378,7 @@ namespace Reflection.Helper
                                     Items=new List<AdaptiveElement>()
                                     {
 
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/4.png":feedbackId==4?"/images/4_selected_light.png":"/images/4_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
+                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_4.png":feedbackId==4?"/images/4_selected_light.png":"/images/4_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
                                             Style =AdaptiveImageStyle.Default, Id="4", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'4', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } }
                                     }
 
@@ -390,7 +390,7 @@ namespace Reflection.Helper
                                     Items=new List<AdaptiveElement>()
                                     {
 
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/5.png":feedbackId==5?"/images/5_selected_light.png":"/images/5_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
+                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_5.png":feedbackId==5?"/images/5_selected_light.png":"/images/5_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
                                             Style =AdaptiveImageStyle.Default, Id="5", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'5', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } }
                                    }
 
