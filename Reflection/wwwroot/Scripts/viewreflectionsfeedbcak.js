@@ -4,22 +4,22 @@ $(document).ready(function () {
     $(".loader").show();
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
-        if (context.theme == "default") {
-            var head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
+        if (context.theme === "default") {
+            let head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
                 link = document.createElement("link"); // create the link node
             link.setAttribute("href", "../CSS/view2.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
-        } else if (context.theme == "dark") {
-            var head = document.getElementsByTagName("head")[0],
+        } else if (context.theme === "dark") {
+            let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
             link.setAttribute("href", "../CSS/openReflections-dark.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         } else {
-            var head = document.getElementsByTagName("head")[0],
+            let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
             link.setAttribute("href", "../CSS/openReflections-dark.css");
             link.setAttribute("rel", "stylesheet");
@@ -43,29 +43,29 @@ function GetReflections() {
                 data = JSON.parse(data);
             }
             if (data && data.feedback && data.reflection && data.question) {
-                var feedback = JSON.parse(data.feedback);
-                var reflection = JSON.parse(data.reflection);
-                var question = JSON.parse(data.question);
+                let feedback = JSON.parse(data.feedback);
+                let reflection = JSON.parse(data.reflection);
+                let question = JSON.parse(data.question);
                 $("#createdby").text(reflection.CreatedBy);
                 $("#questiontitle").text(question.Question);
                 $("#privacy").text(reflection.Privacy);
-                var blockdata = "";
-                var peopledata = "";
-                var color = "white";
-                var totalcount = 0;
-                var datacount = 0;
-                var width = 0;
-                var descriptio = "";
-                var chatUrl = "https://teams.microsoft.com/l/chat/0/0?users=";
+                let blockdata = "";
+                let peopledata = "";
+                let color = "white";
+                let totalcount = 0;
+                let datacount = 0;
+                let width = 0;
+                let descriptio = "";
+                let chatUrl = "https://teams.microsoft.com/l/chat/0/0?users=";
                 Object.keys(JSON.parse(data.feedback)).forEach((x) => {
                     totalcount = totalcount + feedback[x].length;
                 });
                 for (i = 1; i <= 5; i++) {
-                    if (i == $("#feedbackId").val()) {
+                    if (i === $("#feedbackId").val()) {
                     if (Object.keys(feedback).indexOf(i.toString()) !== -1) {
                         datacount = feedback[i].length;
                         description =
-                            reflection.Privacy == "anonymous"
+                            reflection.Privacy === "anonymous"
                                 ? ""
                                 : feedback[i].map((x) => x.FullName).join(",");
                         width = ((datacount * 100) / totalcount).toFixed(0);
@@ -120,5 +120,5 @@ function GetReflections() {
     });
 }
 function GetChatConfig(userId) {
-    return (userId == contextPrincipalName) ? "none" : "all";
+    return (userId === contextPrincipalName) ? "none" : "all";
 };

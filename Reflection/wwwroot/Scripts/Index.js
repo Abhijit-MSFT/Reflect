@@ -7,6 +7,7 @@ $(document).ready(function () {
     $(".js-example-tags").select2({
         tags: true,
     });
+    $("#privacytext").html($("#privacy").val());
     $("#usertext").html(" " + userName);
     let today = moment().format("YYYY-MM-DD");
     $("#execdate").val(today);

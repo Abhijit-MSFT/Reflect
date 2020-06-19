@@ -1,6 +1,6 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-//
+// <copyright file="BotController.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
 // Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.6.2
 
 using System;
@@ -36,8 +36,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             _telemetry.TrackEvent("PostAsync");
             try
             {
-                // Delegate the processing of the HTTP POST to the adapter.
-                // The adapter will invoke the bot.
                 await Adapter.ProcessAsync(Request, Response, Bot);
             }
             catch (Exception ex)

@@ -1,10 +1,14 @@
-﻿using AdaptiveCards;
+﻿
+// <copyright file="ICard.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using AdaptiveCards;
 using Reflection.Model;
 using Reflection.Repositories.FeedbackData;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Reflection.Interfaces
@@ -13,7 +17,7 @@ namespace Reflection.Interfaces
     {
         AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid reflectionId);
         Task<string> saveImage(Image data, string Filepath);
-        AdaptiveCard CreateNewPostCard(TaskInfo data,int FeedbackId);
+        AdaptiveCard CreateNewReflect(TaskInfo data, int FeedbackId);
 
     }
 }

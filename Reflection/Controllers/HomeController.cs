@@ -1,4 +1,8 @@
-﻿using Microsoft.ApplicationInsights;
+﻿// <copyright file="HomeController.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -39,7 +43,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         public ActionResult Index(string userName)
         {
             _telemetry.TrackEvent("Index");
-            if (userName!=null)
+            if (userName != null)
             {
                 ViewBag.UserName = userName;
             }
@@ -87,7 +91,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         }
 
         [Route("openReflectionFeedback/{reflectionid}/{feedbackId}")]
-        public ActionResult OpenReflectionFeedback(Guid reflectionId,int feedbackId)
+        public ActionResult OpenReflectionFeedback(Guid reflectionId, int feedbackId)
         {
             _telemetry.TrackEvent("OpenReflectionFeedback");
             ViewBag.reflectionId = reflectionId;
@@ -124,7 +128,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                 _telemetry.TrackEvent("GetRecurssions");
                 var data = await _dbHelper.GetRecurrencePostsDataAsync(email);
                 var jsondata = new JObject();
-                jsondata["recurssions"] = JsonConvert.SerializeObject(data); 
+                jsondata["recurssions"] = JsonConvert.SerializeObject(data);
                 return jsondata.ToString();
             }
             catch (Exception ex)
@@ -166,13 +170,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             {
                 _telemetry.TrackEvent("ReflectionAdaptiveCard");
                 CardHelper card = new CardHelper(_configuration, _telemetry);
-                var data = card.CreateNewPostCard(taskInfo,0);
+                var data = card.CreateNewReflect(taskInfo, 0);
                 string output = JsonConvert.SerializeObject(data);
                 return output;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                _telemetry.TrackEvent("ReflectionAdaptiveCard Exception "+ e);
+                _telemetry.TrackEvent("ReflectionAdaptiveCard Exception " + e);
                 return null;
             }
         }

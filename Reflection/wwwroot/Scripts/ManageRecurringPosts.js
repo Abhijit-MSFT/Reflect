@@ -6,14 +6,14 @@ $(document).ready(function () {
     $(".loader").show();
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
-        if (context.theme == "default") {
+        if (context.theme === "default") {
             let head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
                 link = document.createElement("link"); // create the link node
             link.setAttribute("href", "../CSS/ManageRecurringPosts.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
-        } else if (context.theme == "dark") {
+        } else if (context.theme === "dark") {
             let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
             link.setAttribute("href", "../CSS/ManageRecurringPosts-dark.css");
@@ -71,7 +71,7 @@ function getRecurssions() {
                let timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
                let timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + Math.floor((-1 * new Date().getTimezoneOffset()) / 60) * 6
                let mode=' AM'
-               if (timeminutes == '60') {
+               if (timeminutes === '60') {
                     timehours = timehours + 1
                     timeminutes = '00';
                 }
@@ -82,10 +82,10 @@ function getRecurssions() {
                 if (timehours > 12) {
                     timehours = timehours - 12
                 }
-                if (x.RecurssionType == "Monthly") {
+                if (x.RecurssionType === "Monthly") {
                     sendpostat = "Every Month " + new Date(x.ExecutionDate).getDate() + " at " + timehours + ":" + timeminutes + mode;
                 }
-                else if (x.RecurssionType == "Weekly"){
+                else if (x.RecurssionType === "Weekly"){
                     sendpostat = "Every Week " + weeks[new Date(x.ExecutionDate).getDay()] + " at " + timehours + ":" + timeminutes + mode;;
                 }
                 else {
@@ -105,7 +105,7 @@ function getRecurssions() {
                 recurssions.forEach(x => {
                     $(document).on("click", "#edit" + x.RefID, function (event) {
                         editid = event.currentTarget.id.split('it')[1];
-                        let ques = recurssions.find(x => x.RefID == editid)
+                        let ques = recurssions.find(x => x.RefID === editid)
                         $("#currentrecurrsionquestion").html(ques.Question)
                         $("#currentprivacy").val(ques.Privacy);
                         let time = new Date(ques.ExecutionDate).toLocaleDateString().split('/');
@@ -135,7 +135,7 @@ function deleteRecurssion() {
         type: 'GET',
         url: '/api/DeleteReflection/' + deleteid,
         success: function (data) {
-            if (data == "Deleted") {
+            if (data === "Deleted") {
                 $("#tablebody").html("");
                 getRecurssions();
             }
@@ -153,7 +153,7 @@ function saveRecurssion() {
         },
         data: JSON.stringify({ "refID": editid, "executionTime": $("#exectime").val(), "executionDate": $("#execdate").val(), "privacy": $("#currentprivacy").val(), "recurssionType": $("#currentrecurrance").val() }),
         success: function (data) {
-            if (data == "true") {
+            if (data === "true") {
                 $("#tablebody").html("");
                 getRecurssions();
             }

@@ -1,4 +1,8 @@
-﻿using AdaptiveCards;
+﻿// <copyright file="MessageExtension.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using AdaptiveCards;
 using Bogus;
 using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Builder;
@@ -29,7 +33,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         private readonly ICard _cardHelper;
         private readonly IDataBase _dbHelper;
 
-        //private readonly FeedbackDataRepository feedbackDataRepository;
         public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper, IDataBase dbHelper)
         {
             _configuration = configuration;
@@ -48,6 +51,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
                 QuestionsDataRepository questiondatarepository = new QuestionsDataRepository(_configuration, _telemetry);
+
                 if (turnContext.Activity.Value != null)
                 {
                     var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
@@ -73,7 +77,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                         try
                         {
-                            //Get reflect data to check if mseeage id is present - if not update it
+                            //Check if message id is present in reflect data
                             ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(Guid.Parse(response.reflectionId));
                             QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                             Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId));
@@ -83,7 +87,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             taskInfo.postCreateBy = reflectData.CreatedBy;
                             taskInfo.privacy = reflectData.Privacy;
                             taskInfo.reflectionID = reflectData.ReflectionID;
-                            var updateadaptivecard = _cardHelper.CreateNewPostCard(taskInfo,response.feedbackId);                            Attachment attachment = new Attachment()
+                            var updateadaptivecard = _cardHelper.CreateNewReflect(taskInfo, response.feedbackId); Attachment attachment = new Attachment()
                             {
                                 ContentType = AdaptiveCard.ContentType,
                                 Content = adaptiveCard
@@ -108,24 +112,21 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             }
                             else
                             {
-                                //await turnContext.UpdateActivityAsync(reply);
                                 reply.Id = reflectData.MessageID;
                                 await turnContext.UpdateActivityAsync(reply);
-                                
-                                
+
+
                             }
                         }
                         catch (System.Exception e)
                         {
                             _telemetry.TrackException(e);
-                            //messageid = null;
                             Console.WriteLine(e.Message.ToString());
                         }
                     }
                 }
                 else
                 {
-                    // This is a regular text message.
                     await turnContext.SendActivityAsync(MessageFactory.Text($"Hello from the TeamsMessagingExtensionsActionPreviewBot."), cancellationToken);
                 }
 
@@ -140,7 +141,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
         {
             _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
-
             try
             {
                 ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
@@ -173,11 +173,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         {
             _telemetry.TrackEvent("OnTeamsMessagingExtensionSubmitActionAsync");
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
-
             try
             {
                 TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());
-
                 switch (taskInfo.action)
                 {
                     case "reflection":
@@ -186,7 +184,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         try
                         {
                             var name = (turnContext.Activity.From.Name).Split();
-                            //CardHelper cardhelper = new CardHelper(_configuration);
                             taskInfo.postCreateBy = name[0] + ' ' + name[1];
                             taskInfo.postCreatedByEmail = await _dbHelper.GetUserEmailId(turnContext);
                             taskInfo.channelID = turnContext.Activity.TeamsGetChannelId();
@@ -203,9 +200,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 var typingActivity = MessageFactory.Text(string.Empty);
                                 typingActivity.Type = ActivityTypes.Typing;
                                 await turnContext.SendActivityAsync(typingActivity);
-                                var adaptiveCard = _cardHelper.CreateNewPostCard(taskInfo,0);
+                                var adaptiveCard = _cardHelper.CreateNewReflect(taskInfo, 0);
                                 var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
-                                var resultid=await turnContext.SendActivityAsync(message, cancellationToken);
+                                var resultid = await turnContext.SendActivityAsync(message, cancellationToken);
                                 ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(taskInfo.reflectionID);
                                 reflectData.ReflectMessageId = resultid.Id;
                                 await reflectionDataRepository.InsertOrMergeAsync(reflectData);
@@ -213,13 +210,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             else
                             {
                                 var reply = MessageFactory.Text(string.Empty);
-                                if(taskInfo.recurssionType== "Does not repeat")
+                                if (taskInfo.recurssionType == "Does not repeat")
                                     reply.Text = "Your data is recorded and will be executed at time specified by you.";
                                 else
-                                reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals.";
+                                    reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals.";
                                 await turnContext.SendActivityAsync(reply);
                             }
-                            
                             return null;
                         }
                         catch (Exception ex)
@@ -242,10 +238,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 },
                             },
                         };
-                       return response;
+                        return response;
 
                     case "OpenDetailfeedback":
-                        var responsefeedback= new MessagingExtensionActionResponse()
+                        var responsefeedback = new MessagingExtensionActionResponse()
                         {
                             Task = new TaskModuleContinueResponse()
                             {
@@ -254,7 +250,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                     Height = 600,
                                     Width = 780,
                                     Title = "Check the pulse on emotinal well-being",
-                                    Url = this._configuration["BaseUri"] + "/openReflectionFeedback/" + taskInfo.reflectionID+"/"+taskInfo.feedback
+                                    Url = this._configuration["BaseUri"] + "/openReflectionFeedback/" + taskInfo.reflectionID + "/" + taskInfo.feedback
                                 },
                             },
                         };
@@ -299,20 +295,20 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 }
                 else if (action.CommandId == ReflectConstants.RemovePosts)
                 {
-                    if(turnContext.Activity.Conversation.Id!=null)
+                    if (turnContext.Activity.Conversation.Id != null)
                     {
                         var replymessageid = turnContext.Activity.Conversation.Id.Split("=");
                         var activity = Activity.CreateMessageActivity();
                         string messageId = await _dbHelper.RemoveReflectionId(replymessageid[1]);
-                        if(messageId!=null)
+                        if (messageId != null)
                         {
                             await turnContext.DeleteActivityAsync(messageId);
-                            
+
                         }
                         await turnContext.DeleteActivityAsync(replymessageid[1]);
                         activity.Text = "Refelct Id removed successfully";
                         await turnContext.SendActivityAsync(activity);
-                        
+
                     }
 
                     return null;
@@ -459,12 +455,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             {
                 _telemetry.TrackException(ex);
             }
-
-            //return base.OnTeamsMessagingExtensionCardButtonClickedAsync(turnContext, cardData, cancellationToken);
         }
     }
 
 }
-
-//QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(_configuration);
-//var defaultQuestions = await questionsDataRepository.GetAllDefaultQuestions();

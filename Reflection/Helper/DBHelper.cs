@@ -1,4 +1,8 @@
-﻿using Microsoft.ApplicationInsights;
+﻿// <copyright file="DBHelper.cs" company="Microsoft">
+// Copyright (c) Microsoft. All rights reserved.
+// </copyright>
+
+using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Schema;
@@ -31,11 +35,10 @@ namespace Reflection.Helper
         }
 
         /// <summary>
-        /// Add Reflection data in Table Storage.
+        /// Save Reflection data in Table Storage based on different conditions
         /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
-        /// <returns>A task that represents the work queued to execute.</returns>
+        /// <param name="taskInfo">This parameter is a ViewModel</param>
+        /// <returns>Null</returns>
         public async Task SaveReflectionDataAsync(TaskInfo taskInfo)
         {
             _telemetry.TrackEvent("SaveReflectionDataAsync");
@@ -56,7 +59,7 @@ namespace Reflection.Helper
                     ReflectionDataEntity reflectEntity = new ReflectionDataEntity
                     {
                         ReflectionID = taskInfo.reflectionID,
-                        PartitionKey = PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition, // read it from json
+                        PartitionKey = PartitionKeyNames.ReflectionDataTable.ReflectionDataPartition,
                         RowKey = taskInfo.reflectionRowKey,
                         CreatedBy = taskInfo.postCreateBy,
                         CreatedByEmail = taskInfo.postCreatedByEmail,
@@ -64,8 +67,8 @@ namespace Reflection.Helper
                         QuestionID = taskInfo.questionID,
                         Privacy = taskInfo.privacy,
                         RecurrsionID = taskInfo.recurssionID,
-                        MessageID = taskInfo.messageID,
                         ChannelID = taskInfo.channelID,
+                        MessageID = taskInfo.messageID,
                         SendNowFlag = taskInfo.postSendNowFlag,
                         IsActive = taskInfo.IsActive,
                         ReflectMessageId = taskInfo.reflectMessageId,
@@ -73,6 +76,7 @@ namespace Reflection.Helper
                         ServiceUrl = taskInfo.serviceUrl
                     };
                     await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
+
                     if (await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question, taskInfo.postCreatedByEmail) == false)
                     {
                         await SaveQuestionsDataAsync(taskInfo);
@@ -109,11 +113,10 @@ namespace Reflection.Helper
             }
         }
         /// <summary>
-        /// Add Reflection data in Table Storage.
+        /// Save Question data in Table Storage based on different conditions
         /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
-        /// <returns>A task that represents the work queued to execute.</returns>
+        /// <param name="taskInfo">This parameter is a ViewModel</param>
+        /// <returns>Null</returns>
         public async Task SaveQuestionsDataAsync(TaskInfo taskInfo)
         {
             _telemetry.TrackEvent("DeleteReflections");
@@ -126,8 +129,8 @@ namespace Reflection.Helper
                     PartitionKey = PartitionKeyNames.QuestionsDataTable.QuestionsDataPartition,
                     RowKey = taskInfo.questionRowKey,
                     Question = taskInfo.question,
+                    IsDefaultFlag = false,
                     QuestionCreatedDate = DateTime.Now,
-                    IsDefaultFlag = false, //handle default flag logic
                     CreatedBy = taskInfo.postCreateBy,
                     CreatedByEmail = taskInfo.postCreatedByEmail
                 };
@@ -140,12 +143,12 @@ namespace Reflection.Helper
             }
         }
 
+
         /// <summary>
-        /// Add Reflection data in Table Storage.
+        /// Save Reflection Recurssion data in Table Storage
         /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
-        /// <returns>A task that represents the work queued to execute.</returns>
+        /// <param name="taskInfo">This parameter is a ViewModel</param>
+        /// <returns>Null</returns>
         public async Task SaveRecurssionDataAsync(TaskInfo taskInfo)
         {
             _telemetry.TrackEvent("SaveRecurssionDataAsync");
@@ -175,7 +178,11 @@ namespace Reflection.Helper
                 _telemetry.TrackException(ex);
             }
         }
-
+        /// <summary>
+        /// Get the next working day
+        /// </summary>
+        /// <param name=""></param>
+        /// <returns>next week day</returns>
         public DateTime GetNextWeekday()
         {
             DateTime nextWorkingDay = DateTime.UtcNow.AddDays(1);
@@ -183,6 +190,12 @@ namespace Reflection.Helper
                 nextWorkingDay = nextWorkingDay.AddDays(1);
             return nextWorkingDay;
         }
+
+        /// <summary>
+        /// Get the next working day
+        /// </summary>
+        /// <param name="currentDay">currentDay</param>
+        /// <returns>next working day</returns>
         public DateTime GetNextWeeklyday(DayOfWeek day)
         {
             DateTime nextWeeklyday = DateTime.UtcNow.AddDays(1);
@@ -192,10 +205,10 @@ namespace Reflection.Helper
         }
 
         /// <summary>
-        /// 
+        /// Update recurssion table based on day
         /// </summary>
         /// <param name="recurssionEntity"></param>
-        /// <returns></returns>
+        /// <returns>Null</returns>
         public async Task UpdateRecurssionDataNextExecutionDateTimeAsync(RecurssionDataEntity recurssionEntity)
         {
             _telemetry.TrackEvent("UpdateRecurssionDataNextExecutionDateTimeAsync");
@@ -247,7 +260,6 @@ namespace Reflection.Helper
                 {
                     var feedbackID = Guid.NewGuid();
                     var rowKey = Guid.NewGuid();
-                    //string email = await GetUserEmailId(turnContext);
 
                     FeedbackDataEntity feedbackDataEntity = new FeedbackDataEntity
                     {
@@ -256,7 +268,7 @@ namespace Reflection.Helper
                         FeedbackID = feedbackID,
                         FullName = taskInfo.userName,
                         ReflectionID = Guid.Parse(taskInfo.reflectionId),
-                        FeedbackGivenBy = taskInfo.emailId, //need changes - send it in card response and capture it
+                        FeedbackGivenBy = taskInfo.emailId,
                         Feedback = Convert.ToInt32(taskInfo.feedbackId)
 
                     };
@@ -318,15 +330,10 @@ namespace Reflection.Helper
 
             try
             {
-
-                //var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
-                //var refID = response.reflectionId;
-
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 ViewReflectionsEntity viewReflectionsEntity = new ViewReflectionsEntity();
                 QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(_configuration, _telemetry);
-                //Guid gID = Guid.Parse("933a3991-29e9-4391-bdce-a81096b23c20"); for testing purpose
 
                 //Get reflection data
                 ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(reflectionId) ?? null;
@@ -346,6 +353,11 @@ namespace Reflection.Helper
 
         }
 
+        /// <summary>
+        /// Get the data from the Recurrence able storage based on the email id
+        /// </summary>
+        /// <param name="emailid">emilid of the creator of the reflection</param>
+        /// <returns>RecurssionScreenData model</returns>
         public async Task<List<RecurssionScreenData>> GetRecurrencePostsDataAsync(string email)
         {
             _telemetry.TrackEvent("GetRecurrencePostsDataAsync");
@@ -383,13 +395,11 @@ namespace Reflection.Helper
                 return null;
             }
         }
-
-
         /// <summary>
-        /// Delete Reflection and recurssion related to that reflection
+        /// Delete recurrence data based on the reflection id
         /// </summary>
-        /// <param name="Iconfiguration">Reads The config from app settings</param>
-        /// <param name="reflectionId">Specific reflectionid that is to be deleted</param>
+        /// <param name="reflectionid">reflectionid</param>
+        /// <returns>Null</returns>
         public async Task DeleteRecurrsionDataAsync(Guid reflectionId)
         {
             try
@@ -409,10 +419,10 @@ namespace Reflection.Helper
         }
 
         /// <summary>
-        /// Remove Reflection 
+        /// Remove reflectionid based in messageid
         /// </summary>
-        /// <param name="Iconfiguration">Reads The config from app settings</param>
-        /// <param name="reflectionMessageId">Specific MessageId that is to be deleted</param>
+        /// <param name="messageid">messageid</param>
+        /// <returns>messageid</returns>
         public async Task<string> RemoveReflectionId(string reflectionMessageId)
         {
             string messageId = null;
