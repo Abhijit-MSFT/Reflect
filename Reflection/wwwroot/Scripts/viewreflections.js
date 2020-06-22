@@ -112,8 +112,8 @@ function GetReflections() {
                                 '<span class="smile-desc" id="' +
                                 data.FeedbackID +
                                 '">' +
-                                data.FullName
-                            blockdata = index+1 != feedback[i].length ? blockdata + ',' : blockdata +''
+                                data.FullName;
+                            blockdata = index + 1 !== feedback[i].length ? blockdata + ',' : blockdata + '';
                             blockdata = blockdata+'</span><div class="card custom-profle-card ' +
                                 data.FeedbackID +
                                 '"> <div class="card-body"> <img src="../Images/Avatar.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
@@ -125,7 +125,7 @@ function GetReflections() {
                     }
                     //blockdata = feedback[i].length > 5 ? blockdata + 'more' : blockdata;
                     //enable this for detailed screen
-                    blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"'+reflection.ReflectionID+'")> more</span>'
+                    //blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"' + reflection.ReflectionID + '")> more</span>';
                     blockdata =
                         blockdata +
                         '</div><div class="cnt-box">' +
@@ -161,9 +161,9 @@ function GetChatConfig(userId) {
 };
 
 function openDetailReflection() {
-    let linkInfo = {
+    let detailedRelectionInfo = {
         action: "OpenDetailfeedback"
     };
-    microsoftTeams.tasks.submitTask(linkInfo);
+    microsoftTeams.tasks.submitTask(detailedRelectionInfo);
     return true;
 }
