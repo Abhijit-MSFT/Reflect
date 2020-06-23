@@ -68,6 +68,7 @@ $(document).ready(function () {
             $("#startdatedisplay").html($("#execdate").val());
         })
         .trigger("change");
+        $("#privacytext").html($("#privacy").val());
 });
 
 function SendAdaptiveCard() {
