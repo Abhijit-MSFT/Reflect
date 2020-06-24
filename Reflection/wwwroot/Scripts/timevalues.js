@@ -14,9 +14,9 @@ $(document).ready(function () {
     let nextdate = new Date(presentdate.toISOString());
     nextdate.setDate(nextdate.getDate() + 1);
     while (presentdate < nextdate) {
-        timestring = timestring + (presentdate.getHours() === '0' ? '00' : presentdate.getHours());
+        timestring = timestring + (presentdate.getHours() === 0 ? '00' : presentdate.getHours());
         timestring = timestring + ":";
-        timestring = timestring + (presentdate.getMinutes() === '0' ? '00' : presentdate.getMinutes());
+        timestring = timestring + (presentdate.getMinutes() === 0 ? '00' : presentdate.getMinutes());
         timearray.push(timestring);
         presentdate.setMinutes(presentdate.getMinutes() + 30);
         timestring = '';

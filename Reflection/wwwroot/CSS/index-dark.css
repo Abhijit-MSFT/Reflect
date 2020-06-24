@@ -51,11 +51,6 @@ body {
     color: #252424;
 }
 
-.modal-mb {
-    /*margin: 32px;*/
-    padding: 0;
-}
-
 .mc {
     border: none !important;
     background-color: #2d2c2c;
@@ -182,13 +177,8 @@ input[type="text"].input-select::placeholder {
     margin-bottom: 12px;
 }
 
-/*.rec {
-    margin-top: 16px;
-}
-*/
-.container {
-    padding-right: 10px;
-    padding-left: 10px;
+.cont {
+    margin:0 32px;
 }
 
 .custom-rw {
@@ -205,6 +195,7 @@ input[type="text"].input-select::placeholder {
     border-radius: 3px;
     height: 32px;
     font-size: 14px;
+    font-family: Segoe UI;
 }
 
 input[type="date"]::-webkit-inner-spin-button {
@@ -226,18 +217,22 @@ input[type="date"] {
     color: #ffffff;
 }
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-    color: #ffffff!important;
+    color: #ffffff !important;
+    line-height: 32px !important;
+    font-size: 14px !important;
 }
 .select2-container--default .select2-selection--single {
     border: none !important;
     background-color: #201f1f !important;
     color: #ffffff;
+    border-radius: 2px !important;
 }
 
 .time-ip {
     padding-left: 12px;
     line-height: 2.3;
     cursor: pointer;
+    font-family: Segoe UI;
 }
 
 .time-icon::before {
@@ -421,4 +416,7 @@ ul.ui-timepicker-viewport {
     font-size: 14px;
     text-align: left;
     color:whitesmoke;
+}
+.select2-container .select2-selection--single {
+    height: 31px !important;
 }

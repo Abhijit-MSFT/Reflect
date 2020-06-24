@@ -19,23 +19,23 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="cont">
         <div class="" role="document">
-            <div class="modal-content mc">
-                <div class="modal-body modal-mb">
+            <div class="mc">
+                <div class="">
                     <div class="question">Question (Max: 150 words)</div>
                     <div class="custom-in">
                         @*<input type="text" list="questions" maxlength="150" name="questions" id="questions-list" class="input-select" placeholder="Enter a reflection question" onchange="getSelectedOption(this)" />
-                        <datalist class="htmlEle" id="questions">
-                        </datalist>*@
+            <datalist class="htmlEle" id="questions">
+            </datalist>*@
                         <select placeholder="Enter a reflection question" class="form-control js-example-tags" id="questions" onchange="getSelectedOption(this)">
                             <optgroup label="Potential Questions">Potential Questions</optgroup>
                         </select>
                         <span class="sel-chev"></span>
                     </div>
                     <div class="privacy">Privacy</div>
-                    <div class="input-group custom-in">
-                        <select class="cs htmlEle" id="privacy" onchange="setPrivacy()">
+                    <div class="input-group custom-in ">
+                        <select class="cs htmlEle js-example-tags" id="privacy" onchange="setPrivacy()">
                             <option value="public" selected>Public (Names will be displayed with responses)</option>
                             <option value="anonymous">Anonymous (Names will be omitted from responses)</option>
                             <option value="owner">Owner (Responses with names displayed for owners only)</option>
@@ -114,7 +114,7 @@
                                                 <label class="form-check-label on-day" for="on-day">
                                                     On day
                                                 </label>
-                                                <input name="number" class="number" value="1"  id="monthdate"  type="text" pattern="\d*" maxlength="2"/>
+                                                <input name="number" class="number" value="1" id="monthdate" type="text" pattern="\d*" maxlength="2" />
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input on-the-radio" type="radio" name="days-check" id="on-the-day"

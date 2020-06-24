@@ -103,12 +103,15 @@
     color: #252423;
     margin: 19px 0 0 15px;
     border-top: 1px solid #ececec !important;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .privacy-cl {
     vertical-align: middle !important;
     text-transform: capitalize;
+    font-family: Segoe UI;
+    color: #484644;
+    font-size: 12px;
 }
 
 .hw-r-u,
