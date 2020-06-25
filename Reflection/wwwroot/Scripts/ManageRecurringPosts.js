@@ -68,19 +68,24 @@ function getRecurssions() {
             let sendpostat = "";
             blockdata = "";
             recurssions.forEach(x => {
-               let timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
-               let timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + Math.floor((-1 * new Date().getTimezoneOffset()) / 60) * 6
-               let mode=' AM'
-               if (timeminutes === '60') {
-                    timehours = timehours + 1
-                    timeminutes = '00';
-                }
-                
-                if (timehours > 11) {
-                    mode=' PM'
-                }
-                if (timehours > 12) {
-                    timehours = timehours - 12
+                let timehours = ""
+                let timeminutes = ""
+                let mode = ' AM'
+                if (x.ExecutionTime) {
+                    timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
+                    timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + Math.floor((-1 * new Date().getTimezoneOffset()) / 60) * 6
+
+                    if (timeminutes === '60') {
+                        timehours = timehours + 1
+                        timeminutes = '00';
+                    }
+
+                    if (timehours > 11) {
+                        mode = ' PM'
+                    }
+                    if (timehours > 12) {
+                        timehours = timehours - 12
+                    }
                 }
                 if (x.RecurssionType === "Monthly") {
                     sendpostat = "Every Month " + new Date(x.ExecutionDate).getDate() + " at " + timehours + ":" + timeminutes + mode;
