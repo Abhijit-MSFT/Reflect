@@ -103,7 +103,7 @@ function GetReflections() {
                         if (description) {
                             feedback[i].forEach((names, index) => {
                                 peopledata =
-                                    peopledata + '<tr> <td class="text-left"><div class="media"><img class="align-self-center avatar" src="../../Images/Avatar.png" alt="image" width="40" heigth="40"> <div class="media-body ml-3 mt-1 names">'+
+                                    peopledata + '<tr> <td class="text-left"><div class="media"><img class="align-self-center avatar" src="../../Images/default_avatar_default_theme.png" alt="image" width="40" heigth="40"> <div class="media-body ml-3 mt-1 names">'+
                                 names.FullName + '</div> </div></td><td class="text-right"></td></tr >'
                             });
                         }
