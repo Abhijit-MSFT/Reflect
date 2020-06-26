@@ -397,7 +397,6 @@ input::-webkit-calendar-picker-indicator {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
     border-radius: 3px;
     color: white;
-    width: 118px;
     height: 32px;
     font-weight: 500;
     font-size: 14px;
@@ -405,6 +404,10 @@ input::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
 
+.editbuttons {
+    float: right;
+    margin-top: 2%;
+}
     .btn-cancle:focus,
     .btn-send:focus {
         outline-color: #dddddd;

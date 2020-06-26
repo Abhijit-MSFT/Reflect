@@ -15,7 +15,7 @@
 
 <body>
     <div class="loader"></div>
-    <div class="container">
+    <div class="container" id="managetable">
         <!-- Modal -->
         <input type="text" value=@ViewBag.emailid id="contextemail" style="display:none" />
         <div class="" role="document">
@@ -25,7 +25,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="qutin">Question<span id="questioncount"></span></th>
-                                <th scope="col" class="privacy">Privacy</th>
+                                <th scope="col" class="privacy">Anonymous</th>
                                 <th scope="col" class="snd-post">Send post at</th>
                             </tr>
                         </thead>
@@ -60,124 +60,89 @@
             </div>
         </div>
     </div>
-    <div class="modal" tabindex="-1" role="dialog" id="edit">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4>Edit Recurrance</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <h5 id="currentrecurrsionquestion"></h5>
-                    <div class="post">
-                        <div class="row custom-rw">
-                            <div class="col-6 custom-col">
-                                <div class="date">
-                                    <div class="blk-head" id="date">Date</div>
-                                    <input type="date" data-date="" data-date-format="ddd MMM DD, YYYY" value="" class="date-ip htmlEle" id="execdate" />
-                                    <span class="date-icon"></span>
-                                </div>
-                            </div>
-                            <div class="col-6 custom-col">
-                                <div class="blk-head">Time</div>
-                                <div class="selc">
-                                    <select class="cs htmlEle js-example-basic-single" name="state" id="exectime">
-                                        
-                                    </select>
-                                    <span class="sel-chev2"></span>
-                                </div>
-                            </div>
-                            <div class="col-6 custom-col">
-                                <div class="blk-head rec">Recurrence</div>
-                                <div class="selc">
-                                    <select class="cs htmlEle" id="recurrance">
-                                        <option value="Every weekday">Every weekday (Mon-Fri)</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Monthly">Monthly</option>
-                                        <option value="Custom">Custom</option>
-                                    </select>
-                                    <span class="sel-chev2"></span>
-                                </div>
-                            </div>
-                            <div class="custom-cal col-6 custom-col">
-                                <div class="card day">
-                                    <div class="card-body">
-                                        <div class="recurrence">Recurrence</div>
-                                        <div class="repeat">
-                                            <div class="re">Repeat every</div>
-                                            <div class="sel-day">
-                                                <input name="number" value="1" class="number" type="text" pattern="\d*" maxlength="2" id="number" />
-                                            </div>
-                                            <div class="sel-day-day">
-                                                <select name="day" class="day-drp" id="dwm" value="day">
-                                                    <option value="day">Day</option>
-                                                    <option value="week">Week</option>
-                                                    <option value="month">Month</option>
-                                                </select>
-                                                <span class="down-chev"></span>
-                                            </div>
-                                        </div>
+    <div class="container" tabindex="-1"  id="edit">
+                <div class="">
+                    <table class="table custom-tb">
+                        <tbody id="tablebodydetails">
+                        </tbody>
+                    </table>
+                            <div class="post">
+                                <div class="row custom-rw">
+                                    <div class="custom-col">
+                                        <div class="card day">
+                                            <div class="card-body">
+                                                <div class="recurrence">Recurrence</div>
+                                                <div class="repeat">
+                                                    <div class="re">Repeat every</div>
+                                                    <div class="sel-day">
+                                                        <input name="number" value="1" class="number" type="text" pattern="\d*" maxlength="2" id="number" />
+                                                    </div>
+                                                    <div class="sel-day-day">
+                                                        <select name="day" class="day-drp" id="dwm" value="day">
+                                                            <option value="day">Day</option>
+                                                            <option value="week">Week</option>
+                                                            <option value="month">Month</option>
+                                                        </select>
+                                                        <span class="down-chev"></span>
+                                                    </div>
+                                                </div>
 
-                                        <div class="day-select">
-                                            <button class="weekselect" id="Sunday">S</button>
-                                            <button class="weekselect" id="Monday">M</button>
-                                            <button class="weekselect" id="Tuesday">T</button>
-                                            <button class="weekselect" id="Wednesday">W</button>
-                                            <button class="weekselect" id="Thursday">T</button>
-                                            <button class="weekselect" id="Friday">F</button>
-                                            <button class="weekselect" id="Saturday">S</button>
-                                        </div>
+                                                <div class="day-select">
+                                                    <button class="weekselect" id="Sunday">S</button>
+                                                    <button class="weekselect" id="Monday">M</button>
+                                                    <button class="weekselect" id="Tuesday">T</button>
+                                                    <button class="weekselect" id="Wednesday">W</button>
+                                                    <button class="weekselect" id="Thursday">T</button>
+                                                    <button class="weekselect" id="Friday">F</button>
+                                                    <button class="weekselect" id="Saturday">S</button>
+                                                </div>
 
-                                        <div class="month-cal">
-                                            <div class="form-check">
-                                                <input class="form-check-input on-day-radio" type="radio" name="days-check" id="on-day"
-                                                       value="days" checked>
-                                                <label class="form-check-label on-day" for="on-day">
-                                                    On day
-                                                </label>
-                                                <input name="number" class="number" value="1" id="monthdate" type="text" pattern="\d*" maxlength="2" />
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input on-the-radio" type="radio" name="days-check" id="on-the-day"
-                                                       value="weeks">
-                                                <label class="form-check-label on-day" for="on-the-day">
-                                                    On the
-                                                </label>
-                                                <select name="number" class="day-number" id="weekseries">
-                                                    <option value="First">First</option>
-                                                    <option value="Second">Second</option>
-                                                    <option value="Third">Third</option>
-                                                    <option value="Fourth">Fourth</option>
-                                                    <option value="Last">Last</option>
-                                                </select>
-                                                <select name="number" class="days-text" id="weekday">
-                                                    <option value="Sunday">Sunday</option>
-                                                    <option value="Monday">Monday</option>
-                                                    <option value="Tuesday">Tuesday</option>
-                                                    <option value="Wednesday">Wednesday</option>
-                                                    <option value="Thursday">Thursday</option>
-                                                    <option value="Friday">Friday</option>
-                                                    <option value="Saturday">Saturday</option>
+                                                <div class="month-cal">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input on-day-radio" type="radio" name="days-check" id="on-day"
+                                                               value="days" checked>
+                                                        <label class="form-check-label on-day" for="on-day">
+                                                            On day
+                                                        </label>
+                                                        <input name="number" class="number" value="1" id="monthdate" type="text" pattern="\d*" maxlength="2" />
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input on-the-radio" type="radio" name="days-check" id="on-the-day"
+                                                               value="weeks">
+                                                        <label class="form-check-label on-day" for="on-the-day">
+                                                            On the
+                                                        </label>
+                                                        <select name="number" class="day-number" id="weekseries">
+                                                            <option value="First">First</option>
+                                                            <option value="Second">Second</option>
+                                                            <option value="Third">Third</option>
+                                                            <option value="Fourth">Fourth</option>
+                                                            <option value="Last">Last</option>
+                                                        </select>
+                                                        <select name="number" class="days-text" id="weekday">
+                                                            <option value="Sunday">Sunday</option>
+                                                            <option value="Monday">Monday</option>
+                                                            <option value="Tuesday">Tuesday</option>
+                                                            <option value="Wednesday">Wednesday</option>
+                                                            <option value="Thursday">Thursday</option>
+                                                            <option value="Friday">Friday</option>
+                                                            <option value="Saturday">Saturday</option>
 
-                                                </select>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="finaldates" id="finaldates">Every <span id="customnumber"></span> <span id="customtype"></span> <span id="slectedweeks"></span> starting from <span id="startdatedisplay"></span></div>
                                             </div>
                                         </div>
-
-                                        <div class="finaldates" id="finaldates">Every <span id="customnumber"></span> <span id="customtype"></span> <span id="slectedweeks"></span> starting from <span id="startdatedisplay"></span></div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+</div>
+                <div class="editbuttons">
+                    <button type="button" class="btn-cancle" onclick="cancelRecurssion()">Cancel Recurring Reflection</button>
+                    <button type="button" class="btn-send" onclick="saveRecurssion()">Done</button>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-send" data-dismiss="modal" onclick="saveRecurssion()">Save</button>
-                    <button type="button" class="btn-cancle" data-dismiss="modal">Cancel</button>
-                </div>
-            </div>
-        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
