@@ -17,7 +17,7 @@
 }
 
 .modal2 {
-    margin: 0 16px;
+    margin: 0 32px;
 }
 
 .modal-mb-sc2 {
@@ -27,6 +27,7 @@
 
 .sc2br-blk {
     box-sizing: border-box;
+    margin-top: 16px;
 }
 
 .created-sc2 {

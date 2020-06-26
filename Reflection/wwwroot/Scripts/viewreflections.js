@@ -116,7 +116,7 @@ function GetReflections() {
                             blockdata = index + 1 !== feedback[i].length ? blockdata + ',' : blockdata + '';
                             blockdata = blockdata+'</span><div class="card custom-profle-card ' +
                                 data.FeedbackID +
-                                '"> <div class="card-body"> <img src="../Images/Avatar.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
+                                '"> <div class="card-body"> <img src="../Images/default_avatar_default_theme.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
                                 data.FullName +
                                 '</div > <div class="start-chat" style = "pointer-events: ' + GetChatConfig(data.FeedbackGivenBy) + ';"  > <span class="chat-icon" onclick = "microsoftTeams.executeDeepLink(' + "'" + chatUrl + data.FeedbackGivenBy + "'" + ');" ></span > <span class="st-chat-txt">Start a chat</span> </div > <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt"> ' +
                                 data.FeedbackGivenBy +

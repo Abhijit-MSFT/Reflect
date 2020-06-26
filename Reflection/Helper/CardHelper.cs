@@ -116,18 +116,19 @@ namespace Reflection.Helper
                             {
                                 Width = AdaptiveColumnWidth.Auto,
                                 VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Medium,
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { PixelWidth=12,PixelHeight=12, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1", HorizontalAlignment = AdaptiveHorizontalAlignment.Center }
+                                    new AdaptiveImage() { PixelWidth=12,PixelHeight=12, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1", HorizontalAlignment = AdaptiveHorizontalAlignment.Center}
                                 },
-
-
+                                
                             },
                             new AdaptiveColumn()
                             {
                                 Width = AdaptiveColumnWidth.Auto,
                                 VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Small,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[1].Count.ToString())
@@ -138,6 +139,7 @@ namespace Reflection.Helper
                             {
                                 Width = AdaptiveColumnWidth.Auto,
                                 VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Medium,
                                 Items = new List<AdaptiveElement>()
                                 {
 
@@ -149,6 +151,7 @@ namespace Reflection.Helper
                             {
                                 Width = AdaptiveColumnWidth.Auto,
                                 VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Small,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[2].Count.ToString())
@@ -159,6 +162,7 @@ namespace Reflection.Helper
                             {
                                 Width = AdaptiveColumnWidth.Auto,
                                 VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Medium,
                                 Items = new List<AdaptiveElement>()
                                 {
 
@@ -171,6 +175,7 @@ namespace Reflection.Helper
                             {
                                 Width = AdaptiveColumnWidth.Auto,
                                 VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Small,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[3].Count.ToString())
@@ -181,6 +186,7 @@ namespace Reflection.Helper
                             {
                                 Width = AdaptiveColumnWidth.Auto,
                                 VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Medium,
                                 Items = new List<AdaptiveElement>()
                                 {
 
@@ -193,6 +199,7 @@ namespace Reflection.Helper
                             {
                                 Width = AdaptiveColumnWidth.Auto,
                                 VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Small,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[4].Count.ToString())
@@ -203,6 +210,7 @@ namespace Reflection.Helper
                             {
                                 Width = AdaptiveColumnWidth.Auto,
                                 VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Medium,
                                 Items = new List<AdaptiveElement>()
                                 {
 
@@ -214,6 +222,8 @@ namespace Reflection.Helper
                             new AdaptiveColumn()
                             {
                                 Width = AdaptiveColumnWidth.Auto,
+                                VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Small,
                                 Items = new List<AdaptiveElement>()
                                 {
                                     new AdaptiveTextBlock(keyValues[5].Count.ToString())
