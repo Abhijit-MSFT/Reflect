@@ -28,14 +28,14 @@
                         @*<input type="text" list="questions" maxlength="150" name="questions" id="questions-list" class="input-select" placeholder="Enter a reflection question" onchange="getSelectedOption(this)" />
             <datalist class="htmlEle" id="questions">
             </datalist>*@
-                        <select placeholder="Enter a reflection question" class="form-control js-example-tags" id="questions" onchange="getSelectedOption(this)">
+                        <select placeholder="Enter a reflection question" class="form-control js-example-tags question-length" id="questions" onchange="getSelectedOption(this)">
                             <optgroup label="Potential Questions">Potential Questions</optgroup>
                         </select>
                         <span class="sel-chev"></span>
                     </div>
                     <div class="privacy">Privacy</div>
                     <div class="input-group custom-in ">
-                        <select class="cs htmlEle js-example-tags" id="privacy" onchange="setPrivacy()">
+                        <select class="cs htmlEle js-example-tags" id="privacy" data-minimum-results-for-search="Infinity" onchange="setPrivacy()">
                             <option value="public" selected>Public (Names will be displayed with responses)</option>
                             <option value="anonymous">Anonymous (Names will be omitted from responses)</option>
                             <option value="owner">Owner (Responses with names displayed for owners only)</option>
@@ -68,7 +68,7 @@
                             <div class="col-6 custom-col">
                                 <div class="blk-head rec">Recurrence</div>
                                 <div class="selc">
-                                    <select class="cs htmlEle js-example-tags" id="recurrance">
+                                    <select class="cs htmlEle js-example-tags" id="recurrance" data-minimum-results-for-search="Infinity">
                                         <option value="Does not repeat" selected>Does not repeat </option>
                                         <option value="Every weekday">Every weekday (Mon-Fri)</option>
                                         <option value="Weekly">Weekly</option>

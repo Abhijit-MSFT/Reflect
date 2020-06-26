@@ -75,8 +75,8 @@
 .snd-post {
     font-family: Segoe UI;
     font-size: 14px;
-    color: #000000;
-    font-weight: 500;
+    color: #484644;
+    font-weight: 400;
     padding-top: 0px !important;
 }
 
@@ -111,7 +111,7 @@
     text-transform: capitalize;
     font-family: Segoe UI;
     color: #484644;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .hw-r-u,
