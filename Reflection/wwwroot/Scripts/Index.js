@@ -6,6 +6,7 @@ $(document).ready(function () {
     $(".js-example-basic-single").select2();
     $(".js-example-tags").select2({
         tags: true,
+        maximumInputLength: 150 
     });
     $("#privacytext").html($("#privacy").val());
     $("#usertext").html(" " + userName);
@@ -83,6 +84,21 @@ function SendAdaptiveCard() {
         questionid = questions[index].questionID;
         console.log(questionid);
     }
+    let rectype = "";
+    if ($("#recurrance").val() === "Custom") {
+        if ($("#dwm").val() === "month") {
+            if ($("input[name='days-check']:checked").val() === "days") {
+                rectype = "Day " + $("#monthdate").val()+" "+$("#finaldates").html();
+            }
+            if ($("input[name='days-check']:checked").val() === "weeks") {
+                rectype = $("#weekseries").val() + " " + $("#weekday").val()+" "+ $("#finaldates").html();
+            }
+            
+        }
+        else rectype = $("#finaldates").html();
+    }
+    else rectype = $("#recurrance").val();
+
 
     let taskInfo = {
         question: $("#questions").val(),
@@ -93,10 +109,8 @@ function SendAdaptiveCard() {
         postDate: "",
         isDefaultQuestion: false,
         //postSendNowFlag: true,
-        recurssionType:
-            $("#recurrance").val() == "Custom"
-                ? $("#finaldates").html()
-                : $("#recurrance").val(),
+        recurssionType: rectype,
+            
         action: "sendAdaptiveCard",
     };
     taskInfo.card = "";
@@ -146,8 +160,9 @@ function GetDefaultQuestions(userPrincipleName) {
                     x.question +
                     "</option>";
             });
-            $("#questions").html(blockdata);
+            $("#questions").append(blockdata);
             $("#selectedTxt").html($("#questions").val());
+            $(".select2-search__field").attr("maxlength", "150");
             GetRecurssionsCount(userPrincipleName);
         },
     });
@@ -259,3 +274,4 @@ $(".weekselect").on("click", function () {
     });
     $("#slectedweeks").html(slectedweeks.join(","));
 });
+

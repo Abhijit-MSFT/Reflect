@@ -54,7 +54,6 @@ body {
 .modal-mb-sc2 {
     margin-top: 16px;
     padding: 0;
-    height: 500px;
 }
 
 .recurring {
@@ -169,15 +168,6 @@ tr:last-child {
     vertical-align: middle !important;
 }
 
-    .date-day::before {
-        content: "\E447";
-        font-family: "Teams Assets";
-        font-size: 14px;
-        color: #ffffff;
-        float: right;
-        cursor: pointer;
-        margin-right: 4%;
-    }
 
 td.delete-icon {
     vertical-align: middle;
