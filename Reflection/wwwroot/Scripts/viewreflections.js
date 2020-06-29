@@ -14,21 +14,21 @@ $(document).ready(function () {
         if (context.theme === "default") {
             let head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
                 link = document.createElement("link"); // create the link node
-            link.setAttribute("href", "../CSS/openReflections.css");
+            link.setAttribute("href", "../../CSS/openReflections.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         } else if (context.theme === "dark") {
             let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
-            link.setAttribute("href", "../CSS/openReflections-dark.css");
+            link.setAttribute("href", "../../CSS/openReflections-dark.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         } else {
             let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
-            link.setAttribute("href", "../CSS/openReflections-dark.css");
+            link.setAttribute("href", "../../CSS/openReflections-dark.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
@@ -97,7 +97,7 @@ function GetReflections() {
                     }
                     blockdata =
                         blockdata +
-                        '<div class="media"><img src="../Images/' +
+                        '<div class="media"><img src="../../Images/' +
                         img +
                         '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' +
                         color +
@@ -116,7 +116,7 @@ function GetReflections() {
                             blockdata = index + 1 !== feedback[i].length ? blockdata + ',' : blockdata + '';
                             blockdata = blockdata+'</span><div class="card custom-profle-card ' +
                                 data.FeedbackID +
-                                '"> <div class="card-body"> <img src="../Images/default_avatar_default_theme.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
+                                '"> <div class="card-body"> <img src="../../Images/default_avatar_default_theme.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
                                 data.FullName +
                                 '</div > <div class="start-chat" style = "pointer-events: ' + GetChatConfig(data.FeedbackGivenBy) + ';"  > <span class="chat-icon" onclick = "microsoftTeams.executeDeepLink(' + "'" + chatUrl + data.FeedbackGivenBy + "'" + ');" ></span > <span class="st-chat-txt">Start a chat</span> </div > <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt"> ' +
                                 data.FeedbackGivenBy +

@@ -110,8 +110,7 @@ function getRecurssions() {
                     sendpostat = (new DOMParser).parseFromString(x.RecurssionType, "text/html").
                         documentElement.textContent + " at " + timehours + ":" + timeminutes + mode;
                 }
-                let privacy = x.Privacy === 'anonymous' ? 'yes' : 'no';
-                blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="edit-icon" id="edit' + x.RefID + '"></td><td class="delete-icon" id="delete' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
+                blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="edit-icon" id="edit' + x.RefID + '"></td><td class="delete-icon" id="delete' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
                 wholedata = wholedata + blockdata
 
                 $(document).on("click", "#edit" + x.RefID, function (event) {
@@ -127,20 +126,27 @@ function getRecurssions() {
                     let timehours = "";
                     let timeminutes = "";
                     let mode = ' AM';
+                  
                     if (x.ExecutionTime) {
-                        timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
-                        timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + Math.floor((-1 * new Date().getTimezoneOffset()) / 60) * 6
+                        if (new Date().getTimezoneOffset().toString().split('.').length > 1) {
+                            timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
+                            timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + parseInt(((new Date().getTimezoneOffset() / 60).toString().split('.')[1]) * 6);
 
-                        if (timeminutes === 60) {
-                            timehours = timehours + 1
-                            timeminutes = '00';
-                        }
+                            if (timeminutes === 60) {
+                                timehours = timehours + 1
+                                timeminutes = '00';
+                            }
 
-                        if (timehours > 11) {
-                            mode = ' PM'
+                            if (timehours > 11) {
+                                mode = ' PM'
+                            }
+                            if (timehours > 12) {
+                                timehours = timehours - 12
+                            }
                         }
-                        if (timehours > 12) {
-                            timehours = timehours - 12
+                        else {
+                            timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60);
+                            timeminutes = "00";
                         }
                     }
                     if (x.RecurssionType === "Monthly") {
@@ -171,8 +177,7 @@ function getRecurssions() {
                         sendpostat = (new DOMParser).parseFromString(x.RecurssionType, "text/html").
                             documentElement.textContent + " at " + timehours + ":" + timeminutes + mode;
                     }
-                    let privacy = ques.Privacy === 'anonymous' ? 'yes' : 'no';
-                    $("#tablebodydetails").html('<tr id="row1"><td class="hw-r-u">' + ques.Question + '<div class="hru-desc">Created by: ' + ques.CreatedBy + ' on ' + new Date(ques.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + privacy + '</td> <td class="date-day">' + sendpostat + '</td></tr>');
+                    $("#tablebodydetails").html('<tr id="row1"><td class="hw-r-u">' + ques.Question + '<div class="hru-desc">Created by: ' + ques.CreatedBy + ' on ' + new Date(ques.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td></tr>');
 
                 });
             })

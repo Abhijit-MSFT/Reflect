@@ -369,7 +369,7 @@ namespace Reflection.Helper
                                                         Data = new TaskModuleActionDetails()
                                                         {
                                                                type ="task/fetch",
-                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID,
+                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/1",
                                                         }
                                                 }}, } },
                                 },
@@ -381,10 +381,16 @@ namespace Reflection.Helper
                                     {
 
                                         new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_2.png":feedbackId==2?"/images/2_selected_light.png":"/images/2_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
-                                            Style =AdaptiveImageStyle.Default, Id="2", SelectAction = new AdaptiveSubmitAction() { DataJson = @"{'feedbackId':'2', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } },
-                                    }
+                                            Style =AdaptiveImageStyle.Default, Id="2", SelectAction = new AdaptiveSubmitAction() { DataJson = @"{'feedbackId':'2', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" , Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                                                    {
+                                                        Data = new TaskModuleActionDetails()
+                                                        {
+                                                               type ="task/fetch",
+                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/2",
+                                                        }
+                                                }}, } },
 
-                                },
+                                 },
                                  new AdaptiveColumn()
                                 {
                                     Width=AdaptiveColumnWidth.Auto,
@@ -393,8 +399,14 @@ namespace Reflection.Helper
                                     {
 
                                         new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_3.png":feedbackId==3?"/images/3_selected_light.png":"/images/3_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
-                                            Style =AdaptiveImageStyle.Default, Id="3", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'3', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } }
-                                    }
+                                            Style =AdaptiveImageStyle.Default, Id="3", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'3', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}", Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                                                    {
+                                                        Data = new TaskModuleActionDetails()
+                                                        {
+                                                               type ="task/fetch",
+                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/3",
+                                                        }
+                                                }}, } },
 
                                 },
                                  new AdaptiveColumn()
@@ -405,8 +417,14 @@ namespace Reflection.Helper
                                     {
 
                                         new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_4.png":feedbackId==4?"/images/4_selected_light.png":"/images/4_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
-                                            Style =AdaptiveImageStyle.Default, Id="4", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'4', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } }
-                                    }
+                                            Style =AdaptiveImageStyle.Default, Id="4", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'4', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" , Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                                                    {
+                                                        Data = new TaskModuleActionDetails()
+                                                        {
+                                                               type ="task/fetch",
+                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/4",
+                                                        }
+                                                }}, } },
 
                                 },
                                  new AdaptiveColumn()
@@ -417,8 +435,14 @@ namespace Reflection.Helper
                                     {
 
                                         new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_5.png":feedbackId==5?"/images/5_selected_light.png":"/images/5_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
-                                            Style =AdaptiveImageStyle.Default, Id="5", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'5', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } }
-                                   }
+                                            Style =AdaptiveImageStyle.Default, Id="5", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'5', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}", Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                                                    {
+                                                        Data = new TaskModuleActionDetails()
+                                                        {
+                                                               type ="task/fetch",
+                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/4",
+                                                        }
+                                                }}, } },
 
                                 },
                             }
