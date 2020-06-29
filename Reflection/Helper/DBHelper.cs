@@ -169,9 +169,9 @@ namespace Reflection.Helper
                     ExecutionDate = taskInfo.executionDate,
                     ExecutionTime = Convert.ToDateTime(taskInfo.executionTime).ToUniversalTime().ToLongTimeString(),
                     RecurssionEndDate = taskInfo.executionDate.AddDays(60),
-                    NextExecutionDate = taskInfo.executionDate.Date.Add(Convert.ToDateTime(taskInfo.executionTime).TimeOfDay).ToUniversalTime()
+                    NextExecutionDate = taskInfo.nextExecutionDate
                 };
-                await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
+                 await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
             }
             catch (Exception ex)
             {

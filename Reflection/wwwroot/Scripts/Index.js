@@ -68,7 +68,7 @@ $(document).ready(function () {
             $("#startdatedisplay").html($("#execdate").val());
         })
         .trigger("change");
-        $("#privacytext").html($("#privacy").val());
+    $("#privacytext").html($("#privacy").val());
 });
 
 function SendAdaptiveCard() {
@@ -90,6 +90,7 @@ function SendAdaptiveCard() {
         privacy: $("#privacy").val(),
         executionDate: $("#execdate").val(),
         executionTime: $("#exectime").val(),
+        nextExecutionDate: CombineDateAndTime($("#execdate").val(), $("#exectime").val()),
         postDate: "",
         isDefaultQuestion: false,
         //postSendNowFlag: true,
@@ -97,19 +98,46 @@ function SendAdaptiveCard() {
             $("#recurrance").val() == "Custom"
                 ? $("#finaldates").html()
                 : $("#recurrance").val(),
-        action: "sendAdaptiveCard",
+                action: "sendAdaptiveCard",
     };
-    taskInfo.card = "";
-    taskInfo.height = "medium";
-    taskInfo.width = "medium";
-    if (!$("#questions").val()) {
-        alert("Please select " + $(".question").text());
-    } else if (!$(".date-ip").val()) {
-        alert("Please select " + $("#date").text());
-    } else {
-        microsoftTeams.tasks.submitTask(taskInfo);
+taskInfo.card = "";
+taskInfo.height = "medium";
+taskInfo.width = "medium";
+if (!$("#questions").val()) {
+    alert("Please select " + $(".question").text());
+} else if (!$(".date-ip").val()) {
+    alert("Please select " + $("#date").text());
+} else {
+    microsoftTeams.tasks.submitTask(taskInfo);
+}
+return true;
+}
+
+
+function CombineDateAndTime(date, time) {
+    if ($('#exectime').val() !== "Send now") {
+        time = getTwentyFourHourTime(time);
+        return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
     }
-    return true;
+    else {
+        return "";
+    }
+
+};
+
+function getTwentyFourHourTime(time) {
+    var hours = Number(time.match(/^(\d+)/)[1]);
+    var minutes = Number(time.match(/:(\d+)/)[1]);
+    var AMPM = time.match(/\s(.*)$/)[1].toLowerCase();
+
+    if (AMPM == "pm" && hours < 12) hours = hours + 12;
+    if (AMPM == "am" && hours == 12) hours = hours - 12;
+    var sHours = hours.toString();
+    var sMinutes = minutes.toString();
+    if (hours < 10) sHours = "0" + sHours;
+    if (minutes < 10) sMinutes = "0" + sMinutes;
+
+    return sHours + ':' + sMinutes;
 }
 
 function getSelectedOption(event) {
