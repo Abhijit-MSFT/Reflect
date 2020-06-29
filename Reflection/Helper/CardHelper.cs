@@ -364,10 +364,14 @@ namespace Reflection.Helper
                                                 {
 
                                                     new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] +(feedbackId==0?"/images/Default_1.png":feedbackId==1?"/images/1_selected_light.png":"/images/1_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32, AltText="Good",
-                                                        Style =AdaptiveImageStyle.Default, Id="1", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'1', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" } },
-
-                                                }
-
+                                                        Style =AdaptiveImageStyle.Default, Id="1", SelectAction = new AdaptiveSubmitAction() {Type = "Action.Submit", Title = "View reflections", DataJson=@"{'type':'task/fetch','reflectionId':'" + data.reflectionID +"' }", Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                                                    {
+                                                        Data = new TaskModuleActionDetails()
+                                                        {
+                                                               type ="task/fetch",
+                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID,
+                                                        }
+                                                }}, } },
                                 },
                                  new AdaptiveColumn()
                                 {
