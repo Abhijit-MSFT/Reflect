@@ -36,7 +36,20 @@ $(document).ready(function () {
         contextPrincipalName = context.userPrincipalName;
     });
     GetReflections();
+    Checkin();
 });
+
+function Checkin() {
+    if ($(".emoji-selected-img img").attr('src') == '') {
+        $(".check-in").show();
+        $(".selected-img").hide();
+        $(".select-img").removeClass("active");
+    } else {
+        $(".check-in").hide();
+        $(".selected-img").show();
+
+    }
+}
 
 function GetReflections() {
     $.ajax({

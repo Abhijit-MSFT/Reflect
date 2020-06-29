@@ -4,6 +4,9 @@
     font-style: normal;
 }
 
+.manage-R{
+    margin:0 32px;
+}
 
 .custom-mh {
     margin: 32px 32px 0 32px;
@@ -47,6 +50,8 @@
 .modal-mb-sc2 {
     margin-top: 16px;
     padding: 0;
+    overflow: auto;
+    height: 500px;
 }
 
 .recurring {
@@ -103,6 +108,7 @@
     margin: 19px 0 0 15px;
     border-top: 1px solid #ececec !important;
     font-weight: 500;
+    padding-left:0px !important;
 }
 
 .privacy-cl {
@@ -116,7 +122,7 @@
 .hw-r-u,
 .cus-box,
 .date-day {
-    padding: 0.4rem 0.75rem !important;
+    padding: 0.4rem 0rem !important;
 }
 
 .date-day {

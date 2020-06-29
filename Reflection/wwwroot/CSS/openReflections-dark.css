@@ -111,7 +111,7 @@
 
 .custom-pr {
     height: 24px !important;
-    width: 380px;
+    width: auto;
 }
 
 .bg-green {
