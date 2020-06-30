@@ -75,21 +75,42 @@ function Emojibg() {
     else { $(".emoji-selected").css("background-color", "#E9FCE9"); }
     $("#img1").click(function () {
         $(".emoji-selected").css("background-color", "#E4F4EB");
+        $(".selected-img").attr("src", "/Images/Default_1.png");
+        $(".selected-img").show();
+        $(".img1").addClass("active");
+        $(".check-in").hide();
     });
     $("#img2").click(function () {
         $(".emoji-selected").css("background-color", "#E9FCE9");
+        $(".selected-img").attr("src", "/Images/Default_2.png");
+        $(".selected-img").show();
+        $(".img2").addClass("active");
+        $(".check-in").hide();
     });
     $("#img3").click(function () {
         $(".emoji-selected").css("background-color", "#FFF7CC");
+        $(".selected-img").attr("src", "/Images/Default_3.png");
+        $(".selected-img").show();
+        $(".img3").addClass("active");
+        $(".check-in").hide();
     });
     $("#img4").click(function () {
         $(".emoji-selected").css("background-color", "#FFECE4");
+        $(".selected-img").show();
+        $(".img4").addClass("active");
+        $(".check-in").hide();
     });
     $("#img5").click(function () {
         $(".emoji-selected").css("background-color", "#FEE6E3");
+        $(".selected-img").attr("src", "/Images/Default_5.png");
+        $(".selected-img").show();
+        $(".img5").addClass("active");
+        $(".check-in").hide();
     });
     $(".remove").click(function () {
         $(".emoji-selected").css("background-color", "#F4F4F4");
+        $(".selected-img").hide();
+        $(".check-in").show();
     });
 }
 
