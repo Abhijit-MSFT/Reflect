@@ -100,6 +100,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
+       
+
         [Route("api/GetReflections/{reflectionid}")]
         public async Task<string> GetReflections(Guid reflectionid)
         {
@@ -185,6 +187,23 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         [HttpPost]
         [Route("api/SaveRecurssionData")]
         public async Task<string> SaveRecurssionData([FromBody]RecurssionScreenData data)
+        {
+            try
+            {
+                _telemetry.TrackEvent("SaveRecurssionData");
+                await _dbHelper.SaveEditRecurssionDataAsync(data);
+                return "true";
+            }
+            catch (Exception e)
+            {
+                _telemetry.TrackEvent("SaveRecurssionData Exception " + e);
+                return "false";
+            }
+        }
+
+        [HttpPost]
+        [Route("api/SaveUserFeedback")]
+        public async Task<string> SaveUserFeedback([FromBody]RecurssionScreenData data)
         {
             try
             {

@@ -35,6 +35,22 @@ $(document).ready(function () {
         }
         contextPrincipalName = context.userPrincipalName;
     });
+    var feedbackvalue = $("#feedbackId").val();
+    for (i = 1; i < 5; i++) {
+        if (i.toString() === feedbackvalue) {
+            $("#selectedimage").attr("src", "/images/Default_" + i + ".png");
+            $(".select-img").removeClass("active");
+            $("#img" + i).addClass("active");
+            $("#noimageselected").hide();
+        }
+        $("#img" + i).on("click", function () {
+
+        });
+    }
+    if (feedbackvalue === "0") {
+        $(".select-img").removeClass("active");
+        $("#selectedimage").css("display","none");
+    }
     GetReflections();
     Checkin();
 });
