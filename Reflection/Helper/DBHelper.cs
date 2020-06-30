@@ -231,6 +231,9 @@ namespace Reflection.Helper
                         DateTime? nextMonthlyday = nextExecutionDate.AddMonths(1);
                         recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextMonthlyday ? nextMonthlyday : null;
                         break;
+                    case "does not repeat":
+                        recurssionEntity.NextExecutionDate = null;
+                        break;
                     default:
                         break;
                 }

@@ -144,7 +144,26 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             try
             {
                 ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
+                FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
+                RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
+                QuestionsDataRepository questiondatarepository = new QuestionsDataRepository(_configuration, _telemetry);
+                var response = new UserfeedbackInfo();
+                var name = (turnContext.Activity.From.Name).Split();
+                response.userName = name[0] + ' ' + name[1];
+                response.emailId = await _dbHelper.GetUserEmailId(turnContext);
 
+                //Check if this is user's second feedback
+                FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId), response.emailId);
+                if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
+                {
+                    feebackData.Feedback = response.feedbackId;
+                    await feedbackDataRepository.CreateOrUpdateAsync(feebackData);
+                }
+                else
+                {
+                    await _dbHelper.SaveReflectionFeedbackDataAsync(response);
+                }
                 return new TaskModuleResponse
                 {
                     Task = new TaskModuleContinueResponse
