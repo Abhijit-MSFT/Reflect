@@ -37,6 +37,7 @@ $(document).ready(function () {
     });
     GetReflections();
     Checkin();
+    Emojibg();
 });
 
 function Checkin() {
@@ -47,8 +48,33 @@ function Checkin() {
     } else {
         $(".check-in").hide();
         $(".selected-img").show();
-
     }
+   
+}
+
+function Emojibg() {
+    if ($(".emoji-selected-img img").attr('src') == '') {
+        $(".emoji-selected").css("background-color", "#F4F4F4");
+    }
+    else { $(".emoji-selected").css("background-color", "#E9FCE9"); }
+    $("#img1").click(function () {
+        $(".emoji-selected").css("background-color", "#E4F4EB");
+    });
+    $("#img2").click(function () {
+        $(".emoji-selected").css("background-color", "#E9FCE9");
+    });
+    $("#img3").click(function () {
+        $(".emoji-selected").css("background-color", "#FFF7CC");
+    });
+    $("#img4").click(function () {
+        $(".emoji-selected").css("background-color", "#FFECE4");
+    });
+    $("#img5").click(function () {
+        $(".emoji-selected").css("background-color", "#FEE6E3");
+    });
+    $(".remove").click(function () {
+        $(".emoji-selected").css("background-color", "#F4F4F4");
+    });
 }
 
 function GetReflections() {
