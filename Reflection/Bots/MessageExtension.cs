@@ -154,16 +154,16 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 response.emailId = await _dbHelper.GetUserEmailId(turnContext);
 
                 //Check if this is user's second feedback
-                FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId), response.emailId);
-                if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
-                {
-                    feebackData.Feedback = response.feedbackId;
-                    await feedbackDataRepository.CreateOrUpdateAsync(feebackData);
-                }
-                else
-                {
-                    await _dbHelper.SaveReflectionFeedbackDataAsync(response);
-                }
+                //FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId), response.emailId);
+                //if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
+                //{
+                //    feebackData.Feedback = response.feedbackId;
+                //    await feedbackDataRepository.CreateOrUpdateAsync(feebackData);
+                //}
+                //else
+                //{
+                //    await _dbHelper.SaveReflectionFeedbackDataAsync(response);
+                //}
                 return new TaskModuleResponse
                 {
                     Task = new TaskModuleContinueResponse
