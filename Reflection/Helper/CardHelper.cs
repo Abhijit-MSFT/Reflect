@@ -36,7 +36,7 @@ namespace Reflection.Helper
         /// <param name="keyValues">Dictionary of int and FeedbackDataEntity holds the feedbacks received till now</param>
         /// <param name="reflectionId">Current reflection id</param>
         /// <returns>AdaptiveCard</returns>
-        public AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid reflectionId)
+        public AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid? reflectionId)
         {
             _telemetry.TrackEvent("FeedBackCard");
             try
@@ -440,7 +440,7 @@ namespace Reflection.Helper
                                                         Data = new TaskModuleActionDetails()
                                                         {
                                                                type ="task/fetch",
-                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/4",
+                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/5",
                                                         }
                                                 }}, } },
 

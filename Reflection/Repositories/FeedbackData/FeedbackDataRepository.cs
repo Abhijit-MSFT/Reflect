@@ -88,5 +88,21 @@ namespace Reflection.Repositories.FeedbackData
 
             }
         }
+
+        public async Task<string>  DeleteFeedback(FeedbackDataEntity feedback)
+        {
+            _telemetry.TrackEvent("DeleteFeedback");
+            try
+            {
+                await this.DeleteAsync(feedback);
+                return "true";
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return "false";
+
+            }
+        }
     }
 }

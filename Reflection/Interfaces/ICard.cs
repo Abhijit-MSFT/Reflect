@@ -15,7 +15,7 @@ namespace Reflection.Interfaces
 {
     public interface ICard
     {
-        AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid reflectionId);
+        AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid? reflectionId);
         Task<string> saveImage(Image data, string Filepath);
         AdaptiveCard CreateNewReflect(TaskInfo data, int FeedbackId);
 

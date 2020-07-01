@@ -1,5 +1,5 @@
 ﻿let contextPrincipalName;
-
+let contextdata;
 $(document).ready(function () {
     $(".loader").show();
     microsoftTeams.initialize();
@@ -34,26 +34,92 @@ $(document).ready(function () {
             head.appendChild(link);
         }
         contextPrincipalName = context.userPrincipalName;
+        contextdata = context;
     });
     var feedbackvalue = $("#feedbackId").val();
-    for (i = 1; i < 5; i++) {
+    var color = "";
+    for (i = 1; i <=5; i++) {
         if (i.toString() === feedbackvalue) {
             $("#selectedimage").attr("src", "/images/Default_" + i + ".png");
             $(".select-img").removeClass("active");
             $("#img" + i).addClass("active");
-            $("#noimageselected").hide();
+            $(".check-in").hide();
+            if (i === 1)
+                $(".emoji-selected").css("background-color", "#E4F4EB");
+            else if (i === 2)
+                $(".emoji-selected").css("background-color", "#E9FCE9");
+            else if (i === 3)
+                $(".emoji-selected").css("background-color", "#FFF7CC");
+            else if (i === 4)
+                $(".emoji-selected").css("background-color", "#FFECE4");
+            else if (i === 5)
+                $(".emoji-selected").css("background-color", "#FEE6E3");
         }
-        $("#img" + i).on("click", function () {
+        $(document).on("click", "#img" + i, function (event) {
+            imgid = event.currentTarget.id.split('g')[1];
+            if (imgid === "1")
+                color = "#E4F4EB";
+            else if (imgid === "2")
+                color = "#E9FCE9";
+            else if (imgid === "3")
+                color = "#FFF7CC";
+            else if (imgid === "4")
+                color = "#FFECE4";
+            else if (imgid === "5")
+                color = "#FEE6E3";
+            $(".emoji-selected").css("background-color", color);
+            $(".selected-img").attr("src", "/Images/Default_" + imgid + ".png");
+            $(".selected-img").show();
+            $(".select-img").removeClass("active");
+            $("#img" + imgid).addClass("active");
+            $(".check-in").hide();
+            $.ajax({
+                type: 'POST',
+                url: '/api/SaveUserFeedback',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: JSON.stringify({
+                    "feedbackId": parseInt(imgid), "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "","messageId":"",action:"SaveUserFeedback",UserName:""
+                }),
+                success: function (data) {
+                    if (data === "true") {
+                        GetReflections();
+                    }
 
+                }
+            });
         });
+
     }
     if (feedbackvalue === "0") {
         $(".select-img").removeClass("active");
-        $("#selectedimage").css("display","none");
+        $(".selected-img").hide();
+        $(".check-in").show();
+        $(".emoji-selected").css("background-color", "#F4F4F4");
     }
+    $(".remove").click(function () {
+        $(".emoji-selected").css("background-color", "#F4F4F4");
+        $(".selected-img").hide();
+        $(".check-in").show();
+        $.ajax({
+            type: 'POST',
+            url: '/api/SaveUserFeedback',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: JSON.stringify({
+                "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
+            }),
+            success: function (data) {
+                if (data === "true") {
+                    GetReflections();
+                }
+
+            }
+        });
+    });
     GetReflections();
-    Checkin();
-    Emojibg();
 });
 
 function Checkin() {
@@ -68,51 +134,6 @@ function Checkin() {
    
 }
 
-function Emojibg() {
-    if ($(".emoji-selected-img img").attr('src') == '') {
-        $(".emoji-selected").css("background-color", "#F4F4F4");
-    }
-    else { $(".emoji-selected").css("background-color", "#E9FCE9"); }
-    $("#img1").click(function () {
-        $(".emoji-selected").css("background-color", "#E4F4EB");
-        $(".selected-img").attr("src", "/Images/Default_1.png");
-        $(".selected-img").show();
-        $("#img1").addClass("active");
-        $(".check-in").hide();
-    });
-    $("#img2").click(function () {
-        $(".emoji-selected").css("background-color", "#E9FCE9");
-        $(".selected-img").attr("src", "/Images/Default_2.png");
-        $(".selected-img").show();
-        $("#img2").addClass("active");
-        $(".check-in").hide();
-    });
-    $("#img3").click(function () {
-        $(".emoji-selected").css("background-color", "#FFF7CC");
-        $(".selected-img").attr("src", "/Images/Default_3.png");
-        $(".selected-img").show();
-        $("#img3").addClass("active");
-        $(".check-in").hide();
-    });
-    $("#img4").click(function () {
-        $(".emoji-selected").css("background-color", "#FFECE4");
-        $(".selected-img").show();
-        $("#img4").addClass("active");
-        $(".check-in").hide();
-    });
-    $("#img5").click(function () {
-        $(".emoji-selected").css("background-color", "#FEE6E3");
-        $(".selected-img").attr("src", "/Images/Default_5.png");
-        $(".selected-img").show();
-        $("#img5").addClass("active");
-        $(".check-in").hide();
-    });
-    $(".remove").click(function () {
-        $(".emoji-selected").css("background-color", "#F4F4F4");
-        $(".selected-img").hide();
-        $(".check-in").show();
-    });
-}
 
 function GetReflections() {
     $.ajax({
@@ -226,6 +247,12 @@ function GetReflections() {
                 $(".custom-profle-card > *").on("click", function (e) {
                     e.stopPropagation();
                 });
+                let taskInfo = {
+                    reflectionID: $("#reflectionid").val(),
+                    action: "postAdaptivecard",
+                }
+                debugger
+                microsoftTeams.tasks.submitTask(taskInfo);
             } else {
                 alert("no data");
             }

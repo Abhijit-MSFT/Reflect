@@ -11,7 +11,9 @@ using Newtonsoft.Json.Linq;
 using Reflection.Helper;
 using Reflection.Interfaces;
 using Reflection.Model;
+using Reflection.Repositories.FeedbackData;
 using Reflection.Repositories.QuestionsData;
+using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
 using System;
 using System.Collections.Generic;
@@ -203,12 +205,32 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
 
         [HttpPost]
         [Route("api/SaveUserFeedback")]
-        public async Task<string> SaveUserFeedback([FromBody]RecurssionScreenData data)
+        public async Task<string> SaveUserFeedback([FromBody]UserfeedbackInfo data)
         {
             try
             {
-                _telemetry.TrackEvent("SaveRecurssionData");
-                await _dbHelper.SaveEditRecurssionDataAsync(data);
+                _telemetry.TrackEvent("SaveUserFeedback");
+                FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
+                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
+                RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
+                QuestionsDataRepository questiondatarepository = new QuestionsDataRepository(_configuration, _telemetry);
+                // Check if this is user's second feedback
+                FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(data.reflectionId), data.emailId);
+                if (data.feedbackId == 0)
+                {
+                    await feedbackDataRepository.DeleteFeedback(feebackData);
+                }
+                else {
+                    if (feebackData != null && data.emailId == feebackData.FeedbackGivenBy)
+                    {
+                        feebackData.Feedback = data.feedbackId;
+                        await feedbackDataRepository.CreateOrUpdateAsync(feebackData);
+                    }
+                    else
+                    {
+                        await _dbHelper.SaveReflectionFeedbackDataAsync(data);
+                    }
+                }
                 return "true";
             }
             catch (Exception e)
