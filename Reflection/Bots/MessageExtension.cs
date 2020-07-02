@@ -206,17 +206,67 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 response.feedbackId = feedbackId;
                 // Check if this is user's second feedback
                 FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId), response.emailId);
-                if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
+                if (response.feedbackId != 0)
                 {
-                    feebackData.Feedback = response.feedbackId;
-                    await feedbackDataRepository.CreateOrUpdateAsync(feebackData);
-                }
-                else
-                {
-                    await _dbHelper.SaveReflectionFeedbackDataAsync(response);
-                }
+                    if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
+                    {
+                        feebackData.Feedback = response.feedbackId;
+                        await feedbackDataRepository.CreateOrUpdateAsync(feebackData);
+                    }
+                    else
+                    {
+                        await _dbHelper.SaveReflectionFeedbackDataAsync(response);
+                    }
+                    try
+                    {
+                        //Check if message id is present in reflect data
+                        ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(Guid.Parse(response.reflectionId));
+                        QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
+                        Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId));
+                        var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, Guid.Parse(response.reflectionId));
+                        TaskInfo taskInfo = new TaskInfo();
+                        taskInfo.question = question.Question;
+                        taskInfo.postCreateBy = reflectData.CreatedBy;
+                        taskInfo.privacy = reflectData.Privacy;
+                        taskInfo.reflectionID = reflectData.ReflectionID;
+                        var updateadaptivecard = _cardHelper.CreateNewReflect(taskInfo, response.feedbackId);
+                        Attachment attachment = new Attachment()
+                        {
+                            ContentType = AdaptiveCard.ContentType,
+                            Content = adaptiveCard
+                        };
+                        Attachment attachmentadaptive = new Attachment()
+                        {
+                            ContentType = AdaptiveCard.ContentType,
+                            Content = updateadaptivecard
+                        };
+                        var reply = Activity.CreateMessageActivity();
+                        reply.Attachments.Add(attachment);
+                        if (reflectData.MessageID == null)
+                        {
 
+                            var result = turnContext.SendActivityAsync(reply, cancellationToken);
+                            reflectData.MessageID = result.Result.Id;
+                            //update messageid in reflectio table
+                            await reflectionDataRepository.InsertOrMergeAsync(reflectData);
+
+                        }
+                        else
+                        {
+                            reply.Id = reflectData.MessageID;
+                            await turnContext.UpdateActivityAsync(reply);
+
+
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        _telemetry.TrackException(e);
+                        Console.WriteLine(e.Message.ToString());
+                    }
+                }
                 
+
                 return new TaskModuleResponse
                 {
                     Task = new TaskModuleContinueResponse
@@ -330,46 +380,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             },
                         };
                         return responsefeedback;
-                    case "postAdaptivecard":
-                        try
-                        {
-                            var reply = Activity.CreateMessageActivity();
-                            //Check if message id is present in reflect data
-                            ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(taskInfo.reflectionID);
-                            QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
-                            Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(taskInfo.reflectionID);
-                            var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, taskInfo.reflectionID);
-                            
-                             Attachment attachment = new Attachment()
-                            {
-                                ContentType = AdaptiveCard.ContentType,
-                                Content = adaptiveCard
-                            };
-                            reply.Attachments.Add(attachment);
-                            if (reflectData.MessageID == null)
-                            {
-
-                                var result = turnContext.SendActivityAsync(reply, cancellationToken);
-                                reflectData.MessageID = result.Result.Id;
-                                //update messageid in reflectio table
-                                await reflectionDataRepository.InsertOrMergeAsync(reflectData);
-
-                            }
-                            else
-                            {
-                                reply.Id = reflectData.MessageID;
-                                await turnContext.UpdateActivityAsync(reply);
-
-
-                            }
-                            return null;
-                        }
-                        catch (System.Exception e)
-                        {
-                            _telemetry.TrackException(e);
-                            Console.WriteLine(e.Message.ToString());
-                            return null;
-                        }
                     default:
                         return null;
                 };

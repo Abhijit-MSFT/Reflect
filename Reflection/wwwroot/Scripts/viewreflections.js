@@ -83,20 +83,54 @@ $(document).ready(function () {
                     "feedbackId": parseInt(imgid), "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "","messageId":"",action:"SaveUserFeedback",UserName:""
                 }),
                 success: function (data) {
-                    if (data === "true") {
-                        GetReflections();
-                    }
-
+                        if (data === "true") {
+                            let taskInfo = {
+                                reflectionID: $("#reflectionid").val(),
+                                action: "postAdaptivecard"
+                            };
+                            microsoftTeams.tasks.submitTask(taskInfo);
+                        }
                 }
             });
         });
 
     }
     if (feedbackvalue === "0") {
-        $(".select-img").removeClass("active");
-        $(".selected-img").hide();
-        $(".check-in").show();
-        $(".emoji-selected").css("background-color", "#F4F4F4");
+        $.ajax({
+            type: 'POST',
+            url: '/api/GetUserFeedback',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: JSON.stringify({
+                "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": "v-sokasa@microsoft.com", "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
+            }),
+            success: function (data) {
+                if (data !== null && data !== 0) {
+                    $("#selectedimage").attr("src", "/images/Default_" + data + ".png");
+                    $(".select-img").removeClass("active");
+                    $("#img" + data).addClass("active");
+                    $(".check-in").hide();
+                    if (data === 1)
+                        $(".emoji-selected").css("background-color", "#E4F4EB");
+                    else if (data === 2)
+                        $(".emoji-selected").css("background-color", "#E9FCE9");
+                    else if (data === 3)
+                        $(".emoji-selected").css("background-color", "#FFF7CC");
+                    else if (data === 4)
+                        $(".emoji-selected").css("background-color", "#FFECE4");
+                    else if (data === 5)
+                        $(".emoji-selected").css("background-color", "#FEE6E3");
+                }
+                else {
+                    $(".select-img").removeClass("active");
+                    $(".selected-img").hide();
+                    $(".check-in").show();
+                    $(".emoji-selected").css("background-color", "#F4F4F4");
+                }
+            }
+        });
+       
     }
     $(".remove").click(function () {
         $(".emoji-selected").css("background-color", "#F4F4F4");
@@ -113,7 +147,11 @@ $(document).ready(function () {
             }),
             success: function (data) {
                 if (data === "true") {
-                    GetReflections();
+                    let taskInfo = {
+                        reflectionID: $("#reflectionid").val(),
+                        action: "postAdaptivecard"
+                    };
+                    microsoftTeams.tasks.submitTask(taskInfo);
                 }
 
             }
@@ -134,15 +172,6 @@ function Checkin() {
    
 }
 
-function SendFeedbackCard() {
-    alert('arun');
-    let taskInfo = {
-        reflectionID: $("#reflectionid").val(),
-        action: "postAdaptivecard"
-    };
-    microsoftTeams.tasks.submitTask(taskInfo);
-    return true;
-}
 
 function GetReflections() {
     $.ajax({
@@ -256,6 +285,8 @@ function GetReflections() {
                 $(".custom-profle-card > *").on("click", function (e) {
                     e.stopPropagation();
                 });
+               
+                return true;
                 
             } else {
                 alert("no data");

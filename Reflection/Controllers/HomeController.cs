@@ -211,9 +211,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             {
                 _telemetry.TrackEvent("SaveUserFeedback");
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
-                ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
-                RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
-                QuestionsDataRepository questiondatarepository = new QuestionsDataRepository(_configuration, _telemetry);
                 // Check if this is user's second feedback
                 FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(data.reflectionId), data.emailId);
                 if (data.feedbackId == 0)
@@ -240,5 +237,33 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             }
         }
 
+
+        [HttpPost]
+        [Route("api/GetUserFeedback")]
+        public async Task<int?> GetUserFeedback([FromBody]UserfeedbackInfo data)
+        {
+            try
+            {
+                _telemetry.TrackEvent("GetUserFeedback");
+                FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
+                // Check if this is user's second feedback
+                FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(data.reflectionId), data.emailId);
+               
+                    if (feebackData != null && data.emailId == feebackData.FeedbackGivenBy)
+                    {
+                    return feebackData.Feedback;
+                    }
+                    else
+                    {
+                    return 0;
+                    }
+                
+            }
+            catch (Exception e)
+            {
+                _telemetry.TrackEvent("SaveRecurssionData Exception " + e);
+                return null;
+            }
+        }
     }
 }
