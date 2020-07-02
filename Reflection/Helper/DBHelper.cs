@@ -463,9 +463,6 @@ namespace Reflection.Helper
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
                 var reflectiondata = await reflectionDataRepository.GetReflectionData(reflection.RefID);
                 var recurssion = await recurssionDataRepository.GetRecurssionData(reflectiondata.RecurrsionID);
-                reflectiondata.Privacy = reflection.Privacy;
-                recurssion.ExecutionDate = reflection.ExecutionDate;
-                recurssion.ExecutionTime = reflection.ExecutionTime;
                 recurssion.RecursstionType = reflection.RecurssionType;
                 await recurssionDataRepository.CreateOrUpdateAsync(recurssion);
                 await reflectionDataRepository.CreateOrUpdateAsync(reflectiondata);

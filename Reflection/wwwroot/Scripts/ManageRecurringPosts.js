@@ -1,4 +1,5 @@
-﻿let blockdata = ""
+﻿/// <reference path="index.js" />
+let blockdata = ""
 let deleteid = ""
 let editid = ""
 let weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday","Saturday"]
@@ -81,19 +82,31 @@ function getRecurssions() {
                 blockdata = "";
                 let mode = ' AM'
                 if (x.ExecutionTime) {
-                     timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
-                     timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + Math.floor((-1 * new Date().getTimezoneOffset()) / 60) * 6
-                    
-                    if (timeminutes === 60) {
-                        timehours = timehours + 1
-                        timeminutes = '00';
-                    }
+                    if ((new Date().getTimezoneOffset() / 60).toString().split('.').length > 1) {
+                        timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
+                        timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + parseInt(((new Date().getTimezoneOffset() / 60).toString().split('.')[1]) * 6);
 
-                    if (timehours > 11) {
-                        mode = ' PM'
+                        if (timeminutes === 60) {
+                            timehours = timehours + 1
+                            timeminutes = '00';
+                        }
+
+                        if (timehours > 11) {
+                            mode = ' PM'
+                        }
+                        if (timehours > 12) {
+                            timehours = timehours - 12
+                        }
                     }
-                    if (timehours > 12) {
-                        timehours = timehours - 12
+                    else {
+                        timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60);
+                        timeminutes = "00";
+                        if (timehours > 11) {
+                            mode = ' PM'
+                        }
+                        if (timehours > 12) {
+                            timehours = timehours - 12
+                        }
                     }
                 }
                 if (x.RecurssionType === "Monthly") {
@@ -128,7 +141,7 @@ function getRecurssions() {
                     let mode = ' AM';
                   
                     if (x.ExecutionTime) {
-                        if (new Date().getTimezoneOffset().toString().split('.').length > 1) {
+                        if ((new Date().getTimezoneOffset()/60).toString().split('.').length > 1) {
                             timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
                             timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + parseInt(((new Date().getTimezoneOffset() / 60).toString().split('.')[1]) * 6);
 
@@ -147,6 +160,12 @@ function getRecurssions() {
                         else {
                             timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60);
                             timeminutes = "00";
+                            if (timehours > 11) {
+                                mode = ' PM'
+                            }
+                            if (timehours > 12) {
+                                timehours = timehours - 12
+                            }
                         }
                     }
                     if (x.RecurssionType === "Monthly") {
@@ -176,6 +195,31 @@ function getRecurssions() {
                     else {
                         sendpostat = (new DOMParser).parseFromString(x.RecurssionType, "text/html").
                             documentElement.textContent + " at " + timehours + ":" + timeminutes + mode;
+                        div = document.createElement('div')
+                        $(div).html(x.RecurssionType)
+                        var type = $(div).find("#customtype").html().split('(')[0];
+                        $("#dwm").val(type);
+                        $("#dwm").trigger("change");
+                        $("#number").val($(div).find("#customnumber").html());
+                        if (type === 'month') {
+                            data = sendpostat.split(' ');
+                            if (data[0] === "Day") {
+                                $("input[name='days-check']:checked").val("days");
+                                $("#monthdate").val(data[1]);
+                            }
+                            else {
+                                $("input[name='days-check']:checked").val("weeks");
+                                $("#weekseries").val(data[0]);
+                                $("#weekday").val(data[1]);
+                            }
+                        }
+                        if (type === 'week') {
+                            data = sendpostat.split(' ');
+                            weekarray = data[3].split(',');
+                            weekarray.forEach(week => {
+                                $("#" + week).addClass('selectedweek')
+                            })
+                        }
                     }
                     $("#tablebodydetails").html('<tr id="row1"><td class="hw-r-u">' + ques.Question + '<div class="hru-desc">Created by: ' + ques.CreatedBy + ' on ' + new Date(ques.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td></tr>');
 
@@ -210,13 +254,26 @@ function deleteRecurssion() {
 }
 
 function saveRecurssion() {
+    let rectype = "";
+        if ($("#dwm").val() === "month") {
+            if ($("input[name='days-check']:checked").val() === "days") {
+                rectype = "Day " + $("#monthdate").val() + " " + $("#finaldates").html();
+            }
+            if ($("input[name='days-check']:checked").val() === "weeks") {
+                rectype = $("#weekseries").val() + " " + $("#weekday").val() + " " + $("#finaldates").html();
+            }
+
+        }
+        else rectype = $("#finaldates").html();
     $.ajax({
         type: 'POST',
         url: '/api/SaveRecurssionData',
         headers: {
             "Content-Type": "application/json",
         },
-        data: JSON.stringify({ "refID": editid, "executionTime": $("#exectime").val(), "executionDate": $("#execdate").val(), "privacy": $("#currentprivacy").val(), "recurssionType": $("#currentrecurrance").val() }),
+        data: JSON.stringify({
+            "refID": editid, "recurssionType": rectype
+        }),
         success: function (data) {
             if (data === "true") {
                 $("#tablebody").html("");

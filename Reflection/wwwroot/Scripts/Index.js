@@ -100,13 +100,41 @@ function SendAdaptiveCard() {
     else rectype = $("#recurrance").val();
 
 
+    let exectime=""
+    if ($("#exectime").val() !== "Send now") {
+        if ((new Date().getTimezoneOffset() / 60).toString().split('.').length > 1) {
+            timehours = parseInt($("#exectime").val().split(":")[0]) - parseInt((-1 * new Date().getTimezoneOffset()) / 60)
+            timeminutes = parseInt($("#exectime").val().split(":")[1].split(' ')[0]) - parseInt(((new Date().getTimezoneOffset() / 60).toString().split('.')[1]) * 6);
+
+            if (timeminutes === -30) {
+                timehours = timehours - 1;
+                timeminutes = '30';
+            }
+
+            if ($("#exectime").val().split(":")[1].split(' ')[1]==="PM") {
+                timehours = timehours + 12
+            }
+        }
+        else {
+            timehours = parseInt($("#exectime").val().split(":")[0]) - parseInt((-1 * new Date().getTimezoneOffset()) / 60);
+            timeminutes = "00";
+            if ($("#exectime").val().split(":")[1].split('')[1] === "PM") {
+                timehours = timehours + 12
+            }
+        }
+        exectime = timehours + ":" + timeminutes;
+
+    }
+    else
+        exectime = $("#exectime").val()
+
     let taskInfo = {
         question: $("#questions").val(),
         questionID: questionid,
         privacy: $("#privacy").val(),
         executionDate: $("#execdate").val(),
-        executionTime: $("#exectime").val(),
-        nextExecutionDate: CombineDateAndTime($("#execdate").val(), $("#exectime").val()),
+        executionTime: exectime,
+        nextExecutionDate: CombineDateAndTime($("#execdate").val(), exectime),
         postDate: "",
         isDefaultQuestion: false,
         //postSendNowFlag: true,
@@ -129,7 +157,6 @@ function SendAdaptiveCard() {
 
 function CombineDateAndTime(date, time) {
     if ($('#exectime').val() !== "Send now") {
-        time = getTwentyFourHourTime(time);
         return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
     }
     else {
@@ -138,20 +165,6 @@ function CombineDateAndTime(date, time) {
 
 };
 
-function getTwentyFourHourTime(time) {
-    var hours = Number(time.match(/^(\d+)/)[1]);
-    var minutes = Number(time.match(/:(\d+)/)[1]);
-    var AMPM = time.match(/\s(.*)$/)[1].toLowerCase();
-
-    if (AMPM == "pm" && hours < 12) hours = hours + 12;
-    if (AMPM == "am" && hours == 12) hours = hours - 12;
-    var sHours = hours.toString();
-    var sMinutes = minutes.toString();
-    if (hours < 10) sHours = "0" + sHours;
-    if (minutes < 10) sMinutes = "0" + sMinutes;
-
-    return sHours + ':' + sMinutes;
-}
 
 function getSelectedOption(event) {
     $("#selectedTxt").html($("#questions").val());

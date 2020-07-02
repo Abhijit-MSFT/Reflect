@@ -441,8 +441,10 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .editbuttons {
-    float: right;
     margin-top: 2%;
+    bottom: 10%;
+    position: absolute;
+    right: 10%;
 }
 
 .repeat {
