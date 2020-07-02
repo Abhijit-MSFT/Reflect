@@ -247,17 +247,21 @@ function GetReflections() {
                 $(".custom-profle-card > *").on("click", function (e) {
                     e.stopPropagation();
                 });
-                let taskInfo = {
-                    reflectionID: $("#reflectionid").val(),
-                    action: "postAdaptivecard",
-                }
-                debugger
-                microsoftTeams.tasks.submitTask(taskInfo);
+                
             } else {
                 alert("no data");
             }
         },
     });
+}
+
+function SendAdaptiveCard() {
+    let taskInfo = {
+        reflectionID: $("#reflectionid").val(),
+        action: "postAdaptivecard",
+    }
+    debugger
+    microsoftTeams.tasks.submitTask(taskInfo);
 }
 function GetChatConfig(userId) {
     return (userId === contextPrincipalName) ? "none" : "all";
