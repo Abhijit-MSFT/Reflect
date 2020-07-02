@@ -138,6 +138,53 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             }
         }
 
+        protected override async Task<TaskModuleResponse> OnTeamsTaskModuleSubmitAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
+        {
+            ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
+            QuestionsDataRepository questiondatarepository = new QuestionsDataRepository(_configuration, _telemetry);
+            FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
+            try
+            {
+                TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(taskModuleRequest.Data.ToString());
+                var reply = Activity.CreateMessageActivity();
+                //Check if message id is present in reflect data
+                ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(taskInfo.reflectionID);
+                QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
+                Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(taskInfo.reflectionID);
+                var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, taskInfo.reflectionID);
+
+                Attachment attachment = new Attachment()
+                {
+                    ContentType = AdaptiveCard.ContentType,
+                    Content = adaptiveCard
+                };
+                reply.Attachments.Add(attachment);
+                if (reflectData.MessageID == null)
+                {
+
+                    var result = turnContext.SendActivityAsync(reply, cancellationToken);
+                    reflectData.MessageID = result.Result.Id;
+                    //update messageid in reflectio table
+                    await reflectionDataRepository.InsertOrMergeAsync(reflectData);
+
+                }
+                else
+                {
+                    reply.Id = reflectData.MessageID;
+                    await turnContext.UpdateActivityAsync(reply);
+
+
+                }
+                return null;
+            }
+            catch (System.Exception e)
+            {
+                _telemetry.TrackException(e);
+                Console.WriteLine(e.Message.ToString());
+                return null;
+            }
+        }
+
         protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
 
         {

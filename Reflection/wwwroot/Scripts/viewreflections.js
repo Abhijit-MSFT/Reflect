@@ -134,6 +134,15 @@ function Checkin() {
    
 }
 
+function SendFeedbackCard() {
+    alert('arun');
+    let taskInfo = {
+        reflectionID: $("#reflectionid").val(),
+        action: "postAdaptivecard"
+    };
+    microsoftTeams.tasks.submitTask(taskInfo);
+    return true;
+}
 
 function GetReflections() {
     $.ajax({
@@ -255,14 +264,6 @@ function GetReflections() {
     });
 }
 
-function SendAdaptiveCard() {
-    let taskInfo = {
-        reflectionID: $("#reflectionid").val(),
-        action: "postAdaptivecard",
-    }
-    debugger
-    microsoftTeams.tasks.submitTask(taskInfo);
-}
 function GetChatConfig(userId) {
     return (userId === contextPrincipalName) ? "none" : "all";
 };
