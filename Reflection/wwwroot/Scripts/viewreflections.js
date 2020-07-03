@@ -1,5 +1,8 @@
 ﻿let contextPrincipalName;
-let contextdata;
+let feedback;
+let reflection ;
+let question;
+let totalcount = 0;
 $(document).ready(function () {
     $(".loader").show();
     microsoftTeams.initialize();
@@ -84,10 +87,9 @@ $(document).ready(function () {
                     success: function (data) {
                         if (data === "true") {
                             let taskInfo = {
-                                reflectionID: $("#reflectionid").val(),
-                                action: "postAdaptivecard"
+                                reflectionID: $("#reflectionid").val()
                             };
-                            microsoftTeams.tasks.submitTask(taskInfo);
+                            microsoftTeams.tasks.updateTask(taskInfo);
                         }
                     }
                 });
@@ -186,9 +188,9 @@ function GetReflections() {
                 data = JSON.parse(data);
             }
             if (data && data.feedback && data.reflection && data.question) {
-                let feedback = JSON.parse(data.feedback);
-                let reflection = JSON.parse(data.reflection);
-                let question = JSON.parse(data.question);
+                feedback = JSON.parse(data.feedback);
+                reflection = JSON.parse(data.reflection);
+                question = JSON.parse(data.question);
                 $("#createdby").text(reflection.CreatedBy);
                 $("#questiontitle").text(question.Question);
                 $("#privacy").text(reflection.Privacy);
@@ -259,9 +261,10 @@ function GetReflections() {
                                 " </span> </div> </div > </div > ";
                         });
                     }
-                    //blockdata = feedback[i].length > 5 ? blockdata + 'more' : blockdata;
+                   
                     //enable this for detailed screen
-                    //blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"' + reflection.ReflectionID + '")> more</span>';
+                    if (feedback[i] && feedback[i].length > 5)
+                        blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"' + reflection.ReflectionID + '")> more</span>';
                     blockdata =
                         blockdata +
                         '</div><div class="cnt-box">' +
@@ -271,6 +274,7 @@ function GetReflections() {
                         ")</span></div ></div >";
                 }
                 $("#reviewblock").html(blockdata);
+                $("#detaiilfeedbackblock").hide();
                 $(".custom-profle-card ").css("display", "none");
                 $(".smile-desc").hover(function (event) {
                     $(".custom-profle-card").css("display", "none");
@@ -300,10 +304,60 @@ function GetChatConfig(userId) {
     return (userId === contextPrincipalName) ? "none" : "all";
 };
 
-function openDetailReflection() {
-    let detailedRelectionInfo = {
-        action: "OpenDetailfeedback"
-    };
-    microsoftTeams.tasks.submitTask(detailedRelectionInfo);
-    return true;
+function openDetailReflection(feedbackId, reflectionId) {
+    totalcount = 0;
+    Object.keys(feedback).forEach((x) => {
+        totalcount = totalcount + feedback[x].length;
+    });
+    let datacount = feedback[feedbackId].length;
+    let names = feedback[feedbackId];
+    let width = ((datacount * 100) / totalcount).toFixed(0);
+    if (feedbackId === 1) {
+        color = "green";
+        img = "Default_1.png";
+    } else if (feedbackId === 2) {
+        color = "light-green";
+        img = "Default_2.png";
+    } else if (feedbackId === 3) {
+        color = "orng";
+        img = "Default_3.png";
+    } else if (feedbackId === 4) {
+        color = "red";
+        img = "Default_4.png";
+    } else if (feedbackId === 5) {
+        color = "dark-red";
+        img = "Default_5.png";
+    }
+    let blockdata ='<div class="media"><img src="../../Images/' +
+        img +
+        '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' +
+        color +
+        '" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:' +
+        width.toString() +
+        '%"></div></div>';
+
+
+    blockdata =
+        blockdata +
+        '</div><div class="cnt-box">' +
+        width +
+        '%<span class="cnt">(' +
+        datacount +
+        ")</span></div ></div >";
+
+    let peopledata = "";
+    feedback[feedbackId].forEach((names, index) => {
+        peopledata =
+            peopledata + '<tr> <td class="text-left"><div class="media"><img class="align-self-center avatar" src="../../Images/default_avatar_default_theme.png" alt="image" width="40" heigth="40"> <div class="media-body ml-3 mt-1 names">' +
+            names.FullName + '</div> </div></td><td class="text-right"></td></tr >'
+    });
+    $("#reviewblock").hide();
+    $("#detaiilfeedbackblock").show();
+    $("#feedbackblock").html(blockdata);
+    $("#peopledata").html(peopledata);
+}
+
+function closeDetailedFeedback() {
+    $("#detaiilfeedbackblock").hide();
+    $("#reviewblock").show();
 }

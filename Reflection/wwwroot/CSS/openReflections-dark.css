@@ -16,6 +16,11 @@
     outline-color: white !important;
 }
 
+.float-left {
+    color: #A6A7DC;
+    cursor: pointer;
+    font-size: 14px;
+}
 .modal2 {
     margin: 0 32px;
 }

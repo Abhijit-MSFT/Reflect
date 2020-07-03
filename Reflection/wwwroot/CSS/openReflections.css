@@ -134,6 +134,12 @@ div[class^="smile-desc"] {
     margin: 1rem 0 0 1rem;
 }
 
+
+.float-left {
+    color: #6266a5;
+    cursor: pointer;
+    font-size: 14px;
+}
 .cb-smile2 {
     margin: 1rem 1rem 7px 10px;
 }
