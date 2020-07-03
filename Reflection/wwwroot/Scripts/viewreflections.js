@@ -34,55 +34,54 @@ $(document).ready(function () {
             head.appendChild(link);
         }
         contextPrincipalName = context.userPrincipalName;
-        contextdata = context;
-    });
-    var feedbackvalue = $("#feedbackId").val();
-    var color = "";
-    for (i = 1; i <=5; i++) {
-        if (i.toString() === feedbackvalue) {
-            $("#selectedimage").attr("src", "/images/Default_" + i + ".png");
-            $(".select-img").removeClass("active");
-            $("#img" + i).addClass("active");
-            $(".check-in").hide();
-            if (i === 1)
-                $(".emoji-selected").css("background-color", "#E4F4EB");
-            else if (i === 2)
-                $(".emoji-selected").css("background-color", "#E9FCE9");
-            else if (i === 3)
-                $(".emoji-selected").css("background-color", "#FFF7CC");
-            else if (i === 4)
-                $(".emoji-selected").css("background-color", "#FFECE4");
-            else if (i === 5)
-                $(".emoji-selected").css("background-color", "#FEE6E3");
-        }
-        $(document).on("click", "#img" + i, function (event) {
-            imgid = event.currentTarget.id.split('g')[1];
-            if (imgid === "1")
-                color = "#E4F4EB";
-            else if (imgid === "2")
-                color = "#E9FCE9";
-            else if (imgid === "3")
-                color = "#FFF7CC";
-            else if (imgid === "4")
-                color = "#FFECE4";
-            else if (imgid === "5")
-                color = "#FEE6E3";
-            $(".emoji-selected").css("background-color", color);
-            $(".selected-img").attr("src", "/Images/Default_" + imgid + ".png");
-            $(".selected-img").show();
-            $(".select-img").removeClass("active");
-            $("#img" + imgid).addClass("active");
-            $(".check-in").hide();
-            $.ajax({
-                type: 'POST',
-                url: '/api/SaveUserFeedback',
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: JSON.stringify({
-                    "feedbackId": parseInt(imgid), "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "","messageId":"",action:"SaveUserFeedback",UserName:""
-                }),
-                success: function (data) {
+
+        var feedbackvalue = $("#feedbackId").val();
+        var color = "";
+        for (i = 1; i <= 5; i++) {
+            if (i.toString() === feedbackvalue) {
+                $("#selectedimage").attr("src", "/images/Default_" + i + ".png");
+                $(".select-img").removeClass("active");
+                $("#img" + i).addClass("active");
+                $(".check-in").hide();
+                if (i === 1)
+                    $(".emoji-selected").css("background-color", "#E4F4EB");
+                else if (i === 2)
+                    $(".emoji-selected").css("background-color", "#E9FCE9");
+                else if (i === 3)
+                    $(".emoji-selected").css("background-color", "#FFF7CC");
+                else if (i === 4)
+                    $(".emoji-selected").css("background-color", "#FFECE4");
+                else if (i === 5)
+                    $(".emoji-selected").css("background-color", "#FEE6E3");
+            }
+            $(document).on("click", "#img" + i, function (event) {
+                imgid = event.currentTarget.id.split('g')[1];
+                if (imgid === "1")
+                    color = "#E4F4EB";
+                else if (imgid === "2")
+                    color = "#E9FCE9";
+                else if (imgid === "3")
+                    color = "#FFF7CC";
+                else if (imgid === "4")
+                    color = "#FFECE4";
+                else if (imgid === "5")
+                    color = "#FEE6E3";
+                $(".emoji-selected").css("background-color", color);
+                $(".selected-img").attr("src", "/Images/Default_" + imgid + ".png");
+                $(".selected-img").show();
+                $(".select-img").removeClass("active");
+                $("#img" + imgid).addClass("active");
+                $(".check-in").hide();
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/SaveUserFeedback',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: JSON.stringify({
+                        "feedbackId": parseInt(imgid), "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
+                    }),
+                    success: function (data) {
                         if (data === "true") {
                             let taskInfo = {
                                 reflectionID: $("#reflectionid").val(),
@@ -90,74 +89,76 @@ $(document).ready(function () {
                             };
                             microsoftTeams.tasks.submitTask(taskInfo);
                         }
+                    }
+                });
+            });
+
+        }
+        if (feedbackvalue === "0") {
+            debugger
+            $.ajax({
+                type: 'POST',
+                url: '/api/GetUserFeedback',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: JSON.stringify({
+                    "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
+                }),
+                success: function (data) {
+                    if (data !== null && data !== 0) {
+                        $("#selectedimage").attr("src", "/images/Default_" + data + ".png");
+                        $(".select-img").removeClass("active");
+                        $("#img" + data).addClass("active");
+                        $(".check-in").hide();
+                        if (data === 1)
+                            $(".emoji-selected").css("background-color", "#E4F4EB");
+                        else if (data === 2)
+                            $(".emoji-selected").css("background-color", "#E9FCE9");
+                        else if (data === 3)
+                            $(".emoji-selected").css("background-color", "#FFF7CC");
+                        else if (data === 4)
+                            $(".emoji-selected").css("background-color", "#FFECE4");
+                        else if (data === 5)
+                            $(".emoji-selected").css("background-color", "#FEE6E3");
+                    }
+                    else {
+                        $(".select-img").removeClass("active");
+                        $(".selected-img").hide();
+                        $(".check-in").show();
+                        $(".emoji-selected").css("background-color", "#F4F4F4");
+                    }
+                }
+            });
+
+        }
+        $(".remove").click(function () {
+            $(".emoji-selected").css("background-color", "#F4F4F4");
+            $(".selected-img").hide();
+            $(".check-in").show();
+            $.ajax({
+                type: 'POST',
+                url: '/api/SaveUserFeedback',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: JSON.stringify({
+                    "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
+                }),
+                success: function (data) {
+                    if (data === "true") {
+                        let taskInfo = {
+                            reflectionID: $("#reflectionid").val(),
+                            action: "postAdaptivecard"
+                        };
+                        microsoftTeams.tasks.submitTask(taskInfo);
+                    }
+
                 }
             });
         });
-
-    }
-    if (feedbackvalue === "0") {
-        $.ajax({
-            type: 'POST',
-            url: '/api/GetUserFeedback',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            data: JSON.stringify({
-                "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": "v-sokasa@microsoft.com", "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
-            }),
-            success: function (data) {
-                if (data !== null && data !== 0) {
-                    $("#selectedimage").attr("src", "/images/Default_" + data + ".png");
-                    $(".select-img").removeClass("active");
-                    $("#img" + data).addClass("active");
-                    $(".check-in").hide();
-                    if (data === 1)
-                        $(".emoji-selected").css("background-color", "#E4F4EB");
-                    else if (data === 2)
-                        $(".emoji-selected").css("background-color", "#E9FCE9");
-                    else if (data === 3)
-                        $(".emoji-selected").css("background-color", "#FFF7CC");
-                    else if (data === 4)
-                        $(".emoji-selected").css("background-color", "#FFECE4");
-                    else if (data === 5)
-                        $(".emoji-selected").css("background-color", "#FEE6E3");
-                }
-                else {
-                    $(".select-img").removeClass("active");
-                    $(".selected-img").hide();
-                    $(".check-in").show();
-                    $(".emoji-selected").css("background-color", "#F4F4F4");
-                }
-            }
-        });
-       
-    }
-    $(".remove").click(function () {
-        $(".emoji-selected").css("background-color", "#F4F4F4");
-        $(".selected-img").hide();
-        $(".check-in").show();
-        $.ajax({
-            type: 'POST',
-            url: '/api/SaveUserFeedback',
-            headers: {
-                "Content-Type": "application/json",
-            },
-            data: JSON.stringify({
-                "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
-            }),
-            success: function (data) {
-                if (data === "true") {
-                    let taskInfo = {
-                        reflectionID: $("#reflectionid").val(),
-                        action: "postAdaptivecard"
-                    };
-                    microsoftTeams.tasks.submitTask(taskInfo);
-                }
-
-            }
-        });
+        GetReflections();
     });
-    GetReflections();
 });
 
 function Checkin() {
