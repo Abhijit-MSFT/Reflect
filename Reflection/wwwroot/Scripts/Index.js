@@ -134,7 +134,7 @@ function SendAdaptiveCard() {
         privacy: $("#privacy").val(),
         executionDate: $("#execdate").val(),
         executionTime: exectime,
-        nextExecutionDate: CombineDateAndTime($("#execdate").val(), exectime),
+        nextExecutionDate: combineDateAndTime($("#execdate").val(), $("#exectime").val()),
         postDate: "",
         isDefaultQuestion: false,
         //postSendNowFlag: true,
@@ -155,8 +155,9 @@ function SendAdaptiveCard() {
     return true;
 }
 
-function CombineDateAndTime(date, time) {
+function combineDateAndTime(date, time) {
     if ($('#exectime').val() !== "Send now") {
+        time = getTwentyFourHourTime(time);
         return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
     }
     else {
@@ -165,6 +166,20 @@ function CombineDateAndTime(date, time) {
 
 };
 
+function getTwentyFourHourTime(time) {
+    var hours = Number(time.match(/^(\d+)/)[1]);
+    var minutes = Number(time.match(/:(\d+)/)[1]);
+    var AMPM = time.match(/\s(.*)$/)[1].toLowerCase();
+
+    if (AMPM == "pm" && hours < 12) hours = hours + 12;
+    if (AMPM == "am" && hours == 12) hours = hours - 12;
+    var sHours = hours.toString();
+    var sMinutes = minutes.toString();
+    if (hours < 10) sHours = "0" + sHours;
+    if (minutes < 10) sMinutes = "0" + sMinutes;
+
+    return sHours + ':' + sMinutes;
+}
 
 function getSelectedOption(event) {
     $("#selectedTxt").html($("#questions").val());
