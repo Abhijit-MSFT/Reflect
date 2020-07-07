@@ -87,9 +87,10 @@ $(document).ready(function () {
                     success: function (data) {
                         if (data === "true") {
                             let taskInfo = {
-                                reflectionID: $("#reflectionid").val()
+                                reflectionID: $("#reflectionid").val(),
+                                action: "postAdaptivecard"
                             };
-                            microsoftTeams.tasks.updateTask(taskInfo);
+                            microsoftTeams.tasks.submitTask(taskInfo);
                         }
                     }
                 });
@@ -97,7 +98,6 @@ $(document).ready(function () {
 
         }
         if (feedbackvalue === "0") {
-            debugger
             $.ajax({
                 type: 'POST',
                 url: '/api/GetUserFeedback',
@@ -164,7 +164,7 @@ $(document).ready(function () {
 });
 
 function Checkin() {
-    if ($(".emoji-selected-img img").attr('src') == '') {
+    if ($(".emoji-selected-img img").attr('src') === '') {
         $(".check-in").show();
         $(".selected-img").hide();
         $(".select-img").removeClass("active");

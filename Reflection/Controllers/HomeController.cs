@@ -175,7 +175,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             {
                 _telemetry.TrackEvent("ReflectionAdaptiveCard");
                 CardHelper card = new CardHelper(_configuration, _telemetry);
-                var data = card.CreateNewReflect(taskInfo, 0);
+                var data = card.CreateNewReflect(taskInfo);
                 string output = JsonConvert.SerializeObject(data);
                 return output;
             }

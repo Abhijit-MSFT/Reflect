@@ -66,7 +66,7 @@ namespace Reflection.Helper
                     taskInfo.postCreateBy = reflectionData.CreatedBy;
                     taskInfo.privacy = reflectionData.Privacy;
                     taskInfo.reflectionID = reflectionData.ReflectionID;
-                    var newPostCard = _cardHelper.CreateNewReflect(taskInfo, 0);
+                    var newPostCard = _cardHelper.CreateNewReflect(taskInfo);
                     Attachment newPostCardAttachment = new Attachment()
                     {
                         ContentType = AdaptiveCard.ContentType,

@@ -323,12 +323,11 @@ namespace Reflection.Helper
         /// New post adaptive card to create new reflection
         /// </summary>
         /// <param name="data">This is viewModel holds the forntend data</param>
-        /// <param name="feedbackId">Current reflection id</param>
         /// <returns>AdaptiveCard</returns>
-        public AdaptiveCard CreateNewReflect(TaskInfo data, int feedbackId)
+        public AdaptiveCard CreateNewReflect(TaskInfo data)
         {
             _telemetry.TrackEvent("CreateNewReflect");
-            uint pixelHeight = Convert.ToUInt32(feedbackId == 0 ? 32 : 46);
+            //uint pixelHeight = Convert.ToUInt32(feedbackId == 0 ? 32 : 46);
 
             try
             {
@@ -363,7 +362,7 @@ namespace Reflection.Helper
                                     Items =new List<AdaptiveElement>()
                                                 {
 
-                                                    new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] +(feedbackId==0?"/images/Default_1.png":feedbackId==1?"/images/1_selected_light.png":"/images/1_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32, AltText="Good",
+                                                    new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Default_1.png"),PixelHeight=32, PixelWidth=32, AltText="Good",
                                                         Style =AdaptiveImageStyle.Default, Id="1", SelectAction = new AdaptiveSubmitAction() {Type = "Action.Submit", Title = "View reflections", DataJson=@"{'type':'task/fetch','reflectionId':'" + data.reflectionID +"' }", Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                                                     {
                                                         Data = new TaskModuleActionDetails()
@@ -380,7 +379,7 @@ namespace Reflection.Helper
                                     Items=new List<AdaptiveElement>()
                                     {
 
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_2.png":feedbackId==2?"/images/2_selected_light.png":"/images/2_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
+                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Default_2.png"),PixelHeight=32, PixelWidth=32,
                                             Style =AdaptiveImageStyle.Default, Id="2", SelectAction = new AdaptiveSubmitAction() { DataJson = @"{'feedbackId':'2', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" , Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                                                     {
                                                         Data = new TaskModuleActionDetails()
@@ -398,7 +397,7 @@ namespace Reflection.Helper
                                     Items=new List<AdaptiveElement>()
                                     {
 
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_3.png":feedbackId==3?"/images/3_selected_light.png":"/images/3_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
+                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Default_3.png"),PixelHeight=32, PixelWidth=32,
                                             Style =AdaptiveImageStyle.Default, Id="3", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'3', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}", Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                                                     {
                                                         Data = new TaskModuleActionDetails()
@@ -416,7 +415,7 @@ namespace Reflection.Helper
                                     Items=new List<AdaptiveElement>()
                                     {
 
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_4.png":feedbackId==4?"/images/4_selected_light.png":"/images/4_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
+                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Default_4.png"),PixelHeight=32, PixelWidth=32,
                                             Style =AdaptiveImageStyle.Default, Id="4", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'4', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" , Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                                                     {
                                                         Data = new TaskModuleActionDetails()
@@ -434,7 +433,7 @@ namespace Reflection.Helper
                                     Items=new List<AdaptiveElement>()
                                     {
 
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + (feedbackId==0?"/images/Default_5.png":feedbackId==5?"/images/5_selected_light.png":"/images/5_not_selected.png")),PixelHeight=pixelHeight, PixelWidth=32,
+                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Default_5.png"),PixelHeight=32, PixelWidth=32,
                                             Style =AdaptiveImageStyle.Default, Id="5", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'5', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}", Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                                                     {
                                                         Data = new TaskModuleActionDetails()

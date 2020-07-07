@@ -87,7 +87,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             taskInfo.postCreateBy = reflectData.CreatedBy;
                             taskInfo.privacy = reflectData.Privacy;
                             taskInfo.reflectionID = reflectData.ReflectionID;
-                            var updateadaptivecard = _cardHelper.CreateNewReflect(taskInfo, response.feedbackId); 
+                            var updateadaptivecard = _cardHelper.CreateNewReflect(taskInfo); 
                             Attachment attachment = new Attachment()
                             {
                                 ContentType = AdaptiveCard.ContentType,
@@ -186,7 +186,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         }
 
         protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
-
         {
             _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
             try
@@ -229,7 +228,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         taskInfo.postCreateBy = reflectData.CreatedBy;
                         taskInfo.privacy = reflectData.Privacy;
                         taskInfo.reflectionID = reflectData.ReflectionID;
-                        var updateadaptivecard = _cardHelper.CreateNewReflect(taskInfo, response.feedbackId);
+                        var updateadaptivecard = _cardHelper.CreateNewReflect(taskInfo);
                         Attachment attachment = new Attachment()
                         {
                             ContentType = AdaptiveCard.ContentType,
@@ -325,7 +324,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 var typingActivity = MessageFactory.Text(string.Empty);
                                 typingActivity.Type = ActivityTypes.Typing;
                                 await turnContext.SendActivityAsync(typingActivity);
-                                var adaptiveCard = _cardHelper.CreateNewReflect(taskInfo, 0);
+                                var adaptiveCard = _cardHelper.CreateNewReflect(taskInfo);
                                 var message = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = adaptiveCard });
                                 var resultid = await turnContext.SendActivityAsync(message, cancellationToken);
                                 ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(taskInfo.reflectionID);

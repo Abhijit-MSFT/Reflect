@@ -100,7 +100,7 @@ function SendAdaptiveCard() {
     else rectype = $("#recurrance").val();
 
 
-    let exectime=""
+    let exectime = "";
     if ($("#exectime").val() !== "Send now") {
         if ((new Date().getTimezoneOffset() / 60).toString().split('.').length > 1) {
             timehours = parseInt($("#exectime").val().split(":")[0]) - parseInt((-1 * new Date().getTimezoneOffset()) / 60)
@@ -171,8 +171,8 @@ function getTwentyFourHourTime(time) {
     var minutes = Number(time.match(/:(\d+)/)[1]);
     var AMPM = time.match(/\s(.*)$/)[1].toLowerCase();
 
-    if (AMPM == "pm" && hours < 12) hours = hours + 12;
-    if (AMPM == "am" && hours == 12) hours = hours - 12;
+    if (AMPM === "pm" && hours < 12) hours = hours + 12;
+    if (AMPM === "am" && hours === 12) hours = hours - 12;
     var sHours = hours.toString();
     var sMinutes = minutes.toString();
     if (hours < 10) sHours = "0" + sHours;
