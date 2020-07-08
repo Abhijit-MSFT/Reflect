@@ -137,9 +137,8 @@ function SendAdaptiveCard() {
         nextExecutionDate: combineDateAndTime($("#execdate").val(), $("#exectime").val()),
         postDate: "",
         isDefaultQuestion: false,
-        //postSendNowFlag: true,
-        recurssionType: rectype,
-            
+        recurssionType: $("#recurrance").val(),
+        customRecurssionTypeValue: rectype,
         action: "sendAdaptiveCard",
     };
     taskInfo.card = "";
@@ -157,8 +156,9 @@ function SendAdaptiveCard() {
 
 function combineDateAndTime(date, time) {
     if ($('#exectime').val() !== "Send now") {
-        time = getTwentyFourHourTime(time);
-        return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+            time = getTwentyFourHourTime(time);
+            return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+        
     }
     else {
         return "";

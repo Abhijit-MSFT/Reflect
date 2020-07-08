@@ -118,9 +118,9 @@ function getRecurssions() {
                 else if (x.RecurssionType ==="Every weekday"){
                     sendpostat = "Every Week Day " + " at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
                 }
-                else 
+                else if (x.RecurssionType==="Custom")
                 {
-                    sendpostat = (new DOMParser).parseFromString(x.RecurssionType, "text/html").
+                    sendpostat = (new DOMParser).parseFromString(x.CustomRecurssionTypeValue, "text/html").
                         documentElement.textContent + " at " + timehours + ":" + timeminutes + mode;
                 }
                 blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="edit-icon" id="edit' + x.RefID + '"></td><td class="delete-icon" id="delete' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
@@ -192,11 +192,11 @@ function getRecurssions() {
                         $("#Saturday").removeClass("selectedweek");
                         $("#customtype").html("week day");
                     }
-                    else {
-                        sendpostat = (new DOMParser).parseFromString(x.RecurssionType, "text/html").
+                    else if (x.RecurssionType==="Custom") {
+                        sendpostat = (new DOMParser).parseFromString(x.CustomRecurssionTypeValue, "text/html").
                             documentElement.textContent + " at " + timehours + ":" + timeminutes + mode;
                         div = document.createElement('div')
-                        $(div).html(x.RecurssionType)
+                        $(div).html(x.CustomRecurssionTypeValue)
                         var type = $(div).find("#customtype").html().split('(')[0];
                         $("#dwm").val(type);
                         $("#dwm").trigger("change");
@@ -272,7 +272,7 @@ function saveRecurssion() {
             "Content-Type": "application/json",
         },
         data: JSON.stringify({
-            "refID": editid, "recurssionType": rectype
+            "refID": editid, "recurssionType": "Custom", customRecurssionTypeValue: rectype
         }),
         success: function (data) {
             if (data === "true") {

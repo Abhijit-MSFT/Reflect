@@ -228,16 +228,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         taskInfo.postCreateBy = reflectData.CreatedBy;
                         taskInfo.privacy = reflectData.Privacy;
                         taskInfo.reflectionID = reflectData.ReflectionID;
-                        var updateadaptivecard = _cardHelper.CreateNewReflect(taskInfo);
                         Attachment attachment = new Attachment()
                         {
                             ContentType = AdaptiveCard.ContentType,
                             Content = adaptiveCard
-                        };
-                        Attachment attachmentadaptive = new Attachment()
-                        {
-                            ContentType = AdaptiveCard.ContentType,
-                            Content = updateadaptivecard
                         };
                         var reply = Activity.CreateMessageActivity();
                         reply.Attachments.Add(attachment);
@@ -336,6 +330,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 var reply = MessageFactory.Text(string.Empty);
                                 if (taskInfo.recurssionType == "Does not repeat")
                                     reply.Text = "Your data is recorded and will be executed at time specified by you.";
+                                else if(taskInfo.recurssionType == "Custom")
+                                    reply.Text = "Your data is recorded and will be executed on " + taskInfo.customRecurssionTypeValue + " intervals.";
                                 else
                                     reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals.";
                                 await turnContext.SendActivityAsync(reply);

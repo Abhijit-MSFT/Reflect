@@ -24,6 +24,8 @@ namespace Reflection.Model
         public bool postSendNowFlag { get; set; }
         public string repeatFrequency { get; set; }
         public string recurssionType { get; set; }
+        public string customRecurssionTypeValue { get; set; }
+
         public bool IsActive { get; set; }
         public string action { get; set; }
         public int? card { get; set; }
