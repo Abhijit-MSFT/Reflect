@@ -278,11 +278,17 @@ namespace Reflection.Helper
                             break;
                         }
                         if (recurssionEntity.CustomRecurssionTypeValue.Contains("month"))
-                        {
+                        {   
+
                             break;
                         }
                         else
+                        {
+                            DateTime? nextcustomdailyday = DateTime.Now.AddDays(1);
+                            recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextcustomdailyday ? nextcustomdailyday : null;
                             break;
+                        }
+                           
                     default:
                         break;
                 }

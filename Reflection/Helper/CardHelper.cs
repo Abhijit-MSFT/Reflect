@@ -67,35 +67,38 @@ namespace Reflection.Helper
                 var color = Brushes.White;
                 var width = 0;
                 var previouswidth = 0;
-
-                for (int i = 1; i <= 5; i++)
+                if (totalcount > 0)
                 {
-                    if (keyValues.ContainsKey(i))
+                    for (int i = 1; i <= 5; i++)
                     {
-                        if (i == 1)
+                        if (keyValues.ContainsKey(i))
                         {
-                            color = Brushes.MediumSeaGreen;
+                            if (i == 1)
+                            {
+                                color = Brushes.MediumSeaGreen;
+                            }
+                            if (i == 2)
+                            {
+                                color = Brushes.LightGreen;
+                            }
+                            if (i == 3)
+                            {
+                                color = Brushes.Gold;
+                            }
+                            if (i == 4)
+                            {
+                                color = Brushes.LightSalmon;
+                            }
+                            if (i == 5)
+                            {
+                                color = Brushes.Salmon;
+                            }
+                            width = (keyValues[i].Count * 1000) / totalcount;
+                            flagGraphics.FillRectangle(color, previouswidth, 0, width, 40);
+                            previouswidth = previouswidth + width + 1;
                         }
-                        if (i == 2)
-                        {
-                            color = Brushes.LightGreen;
-                        }
-                        if (i == 3)
-                        {
-                            color = Brushes.Gold;
-                        }
-                        if (i == 4)
-                        {
-                            color = Brushes.LightSalmon;
-                        }
-                        if (i == 5)
-                        {
-                            color = Brushes.Salmon;
-                        }
-                        width = (keyValues[i].Count * 1000) / totalcount;
-                        flagGraphics.FillRectangle(color, previouswidth, 0, width, 40);
-                        previouswidth = previouswidth + width + 1;
                     }
+
                 }
                 var datastring = "/Images/reflectimages/" + reflectionId + "@" + Path.GetRandomFileName().Replace(".", "") + ".png";
                 string outputFileName = @"wwwroot" + datastring;

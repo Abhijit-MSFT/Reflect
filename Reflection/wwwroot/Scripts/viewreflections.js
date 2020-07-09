@@ -86,11 +86,7 @@ $(document).ready(function () {
                     }),
                     success: function (data) {
                         if (data === "true") {
-                            let taskInfo = {
-                                reflectionID: $("#reflectionid").val(),
-                                action: "postAdaptivecard"
-                            };
-                            microsoftTeams.tasks.submitTask(taskInfo);
+                            GetReflections();
                         }
                     }
                 });
@@ -149,11 +145,7 @@ $(document).ready(function () {
                 }),
                 success: function (data) {
                     if (data === "true") {
-                        let taskInfo = {
-                            reflectionID: $("#reflectionid").val(),
-                            action: "postAdaptivecard"
-                        };
-                        microsoftTeams.tasks.submitTask(taskInfo);
+                        GetReflections();
                     }
 
                 }
@@ -303,6 +295,15 @@ function GetReflections() {
 function GetChatConfig(userId) {
     return (userId === contextPrincipalName) ? "none" : "all";
 };
+
+function SendFeedbackCard() {
+
+    let taskInfo = {
+        reflectionID: $("#reflectionid").val(),
+        action: "postAdaptivecard"
+    };
+    microsoftTeams.tasks.submitTask(taskInfo);
+}
 
 function openDetailReflection(feedbackId, reflectionId) {
     totalcount = 0;
