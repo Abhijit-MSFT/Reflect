@@ -68,7 +68,7 @@ function GetReflections() {
                             reflection.Privacy === "anonymous"
                                 ? ""
                                 : feedback[i].map((x) => x.FullName).join(",");
-                        width = ((datacount * 100) / totalcount).toFixed(0);
+                        width = (datacount * 100 / totalcount).toFixed(0);
                     } else {
                         datacount = 0;
                         width = 0;
@@ -103,8 +103,8 @@ function GetReflections() {
                         if (description) {
                             feedback[i].forEach((names, index) => {
                                 peopledata =
-                                    peopledata + '<tr> <td class="text-left"><div class="media"><img class="align-self-center avatar" src="../../Images/default_avatar_default_theme.png" alt="image" width="40" heigth="40"> <div class="media-body ml-3 mt-1 names">'+
-                                names.FullName + '</div> </div></td><td class="text-right"></td></tr >'
+                                    peopledata + '<tr> <td class="text-left"><div class="media"><img class="align-self-center avatar" src="../../Images/default_avatar_default_theme.png" alt="image" width="40" heigth="40"> <div class="media-body ml-3 mt-1 names">' +
+                                    names.FullName + '</div> </div></td><td class="text-right"></td></tr >';
                             });
                         }
                   }
@@ -116,9 +116,9 @@ function GetReflections() {
                 alert("no data");
             }
 
-        },
+        }
     });
 }
 function GetChatConfig(userId) {
-    return (userId === contextPrincipalName) ? "none" : "all";
-};
+    return userId === contextPrincipalName ? "none" : "all";
+}

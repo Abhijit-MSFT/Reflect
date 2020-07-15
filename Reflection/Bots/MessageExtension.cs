@@ -1,31 +1,29 @@
 ﻿// <copyright file="MessageExtension.cs" company="Microsoft">
 // Copyright (c) Microsoft. All rights reserved.
 // </copyright>
-
-using AdaptiveCards;
-using Bogus;
-using Microsoft.ApplicationInsights;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Teams;
-using Microsoft.Bot.Schema;
-using Microsoft.Bot.Schema.Teams;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Reflection.Interfaces;
-using Reflection.Model;
-using Reflection.Repositories.FeedbackData;
-using Reflection.Repositories.ReflectionData;
-using Reflection.Repositories.RecurssionData;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Reflection.Repositories.QuestionsData;
-
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AdaptiveCards;
+    using Bogus;
+    using Microsoft.ApplicationInsights;
+    using Microsoft.Bot.Builder;
+    using Microsoft.Bot.Builder.Teams;
+    using Microsoft.Bot.Schema;
+    using Microsoft.Bot.Schema.Teams;
+    using Microsoft.Extensions.Configuration;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using Reflection.Interfaces;
+    using Reflection.Model;
+    using Reflection.Repositories.FeedbackData;
+    using Reflection.Repositories.QuestionsData;
+    using Reflection.Repositories.RecurssionData;
+    using Reflection.Repositories.ReflectionData;
     public class MessageExtension : TeamsActivityHandler
     {
         private readonly IConfiguration _configuration;
@@ -288,9 +286,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         {
             _telemetry.TrackEvent("OnTeamsMessagingExtensionSubmitActionAsync");
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
-            FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
-            RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
-            QuestionsDataRepository questiondatarepository = new QuestionsDataRepository(_configuration, _telemetry);
             try
             {
                 TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(action.Data.ToString());

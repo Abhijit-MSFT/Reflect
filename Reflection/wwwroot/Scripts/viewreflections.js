@@ -1,6 +1,6 @@
 ﻿let contextPrincipalName;
 let feedback;
-let reflection ;
+let reflection;
 let question;
 let totalcount = 0;
 $(document).ready(function () {
@@ -12,7 +12,7 @@ $(document).ready(function () {
         };
         microsoftTeams.tasks.submitTask(closeTaskInfo);
         return true;
-    };
+    }
     microsoftTeams.getContext(function (context) {
         if (context.theme === "default") {
             let head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
@@ -79,7 +79,7 @@ $(document).ready(function () {
                     type: 'POST',
                     url: '/api/SaveUserFeedback',
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "application/json"
                     },
                     data: JSON.stringify({
                         "feedbackId": parseInt(imgid), "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
@@ -98,7 +98,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: '/api/GetUserFeedback',
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json"
                 },
                 data: JSON.stringify({
                     "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
@@ -138,7 +138,7 @@ $(document).ready(function () {
                 type: 'POST',
                 url: '/api/SaveUserFeedback',
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json"
                 },
                 data: JSON.stringify({
                     "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
@@ -203,7 +203,7 @@ function GetReflections() {
                             reflection.Privacy === "anonymous"
                                 ? ""
                                 : feedback[i].map((x) => x.FullName).join(",");
-                        width = ((datacount * 100) / totalcount).toFixed(0);
+                        width = (datacount * 100 / totalcount).toFixed(0);
                     } else {
                         datacount = 0;
                         width = 0;
@@ -288,13 +288,13 @@ function GetReflections() {
             } else {
                 alert("no data");
             }
-        },
+        }
     });
 }
 
 function GetChatConfig(userId) {
-    return (userId === contextPrincipalName) ? "none" : "all";
-};
+    return userId === contextPrincipalName ? "none" : "all";
+}
 
 function SendFeedbackCard() {
 
@@ -312,7 +312,7 @@ function openDetailReflection(feedbackId, reflectionId) {
     });
     let datacount = feedback[feedbackId].length;
     let names = feedback[feedbackId];
-    let width = ((datacount * 100) / totalcount).toFixed(0);
+    let width = (datacount * 100 / totalcount).toFixed(0);
     if (feedbackId === 1) {
         color = "green";
         img = "Default_1.png";
@@ -350,7 +350,7 @@ function openDetailReflection(feedbackId, reflectionId) {
     feedback[feedbackId].forEach((names, index) => {
         peopledata =
             peopledata + '<tr> <td class="text-left"><div class="media"><img class="align-self-center avatar" src="../../Images/default_avatar_default_theme.png" alt="image" width="40" heigth="40"> <div class="media-body ml-3 mt-1 names">' +
-            names.FullName + '</div> </div></td><td class="text-right"></td></tr >'
+            names.FullName + '</div> </div></td><td class="text-right"></td></tr >';
     });
     $("#reviewblock").hide();
     $("#detaiilfeedbackblock").show();
