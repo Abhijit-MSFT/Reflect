@@ -32,7 +32,6 @@ namespace Reflection.Helper
         {
             _configuration = configuration;
             _telemetry = telemetry;
-
         }
 
         /// <summary>
@@ -214,7 +213,6 @@ namespace Reflection.Helper
                                     new AdaptiveImage() { PixelWidth=12,PixelHeight=12, Url = new Uri(_configuration["BaseUri"] + "/images/ref5.png"),
                                         Style = AdaptiveImageStyle.Default, Id = "5", HorizontalAlignment = AdaptiveHorizontalAlignment.Center }
                                 }
-
                             },
                             new AdaptiveColumn()
                             {
@@ -225,7 +223,6 @@ namespace Reflection.Helper
                                 {
                                     new AdaptiveTextBlock(keyValues[5].Count.ToString())
                                 }
-
                             },
                         }
                     }
@@ -248,7 +245,7 @@ namespace Reflection.Helper
                         }
                     },
                 },
-            };
+                };
             }
             catch (Exception ex)
             {
