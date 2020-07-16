@@ -64,16 +64,17 @@
                                 <div class="blk-head rec">Recurrence</div>
                                 <div class="selc">
                                     <select class="cs htmlEle js-example-tags" id="recurrance" data-minimum-results-for-search="Infinity">
-                                        <option value="Does not repeat" selected>Does not repeat </option>
-                                        <option value="Every weekday">Every weekday (Mon-Fri)</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Monthly">Monthly</option>
-                                        <option value="Custom">Custom</option>
+                                        <option value="Does not repeat" selected class="recurranceoption">Does not repeat </option>
+                                        <option value="Every weekday" class="recurranceoption">Every weekday (Mon-Fri)</option>
+                                        <option value="Weekly" class="recurranceoption">Weekly</option>
+                                        <option value="Monthly" class="recurranceoption">Monthly</option>
+                                        <option value="Custom" class="recurranceoption">Custom</option>
                                     </select>
                                     <span class="sel-chev2"></span>
                                 </div>
+                                <div id="customdata"></div>
                             </div>
-                            <div class="custom-cal col-6 custom-col">
+                            <div class="custom-cal col-6 custom-col" id="customrecurrancediv">
                                 <div class="card day">
                                     <div class="card-body">
                                         <div class="recurrence">Recurrence</div>

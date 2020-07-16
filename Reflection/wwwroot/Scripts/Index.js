@@ -103,30 +103,30 @@ function SendAdaptiveCard() {
     let exectime = "";
     if ($("#exectime").val() !== "Send now") {
         if ((new Date().getTimezoneOffset() / 60).toString().split('.').length > 1) {
-            timehours = parseInt($("#exectime").val().split(":")[0]) - parseInt((-1 * new Date().getTimezoneOffset()) / 60)
-            timeminutes = parseInt($("#exectime").val().split(":")[1].split(' ')[0]) - parseInt(((new Date().getTimezoneOffset() / 60).toString().split('.')[1]) * 6);
+            timehours = parseInt($("#exectime").val().split(":")[0]) - parseInt(-1 * new Date().getTimezoneOffset() / 60);
+            timeminutes = parseInt($("#exectime").val().split(":")[1].split(' ')[0]) - parseInt((new Date().getTimezoneOffset() / 60).toString().split('.')[1] * 6);
 
             if (timeminutes === -30) {
                 timehours = timehours - 1;
                 timeminutes = '30';
             }
 
-            if ($("#exectime").val().split(":")[1].split(' ')[1]==="PM") {
-                timehours = timehours + 12
+            if ($("#exectime").val().split(":")[1].split(' ')[1] === "PM") {
+                timehours = timehours + 12;
             }
         }
         else {
-            timehours = parseInt($("#exectime").val().split(":")[0]) - parseInt((-1 * new Date().getTimezoneOffset()) / 60);
+            timehours = parseInt($("#exectime").val().split(":")[0]) - parseInt(-1 * new Date().getTimezoneOffset() / 60);
             timeminutes = "00";
             if ($("#exectime").val().split(":")[1].split('')[1] === "PM") {
-                timehours = timehours + 12
+                timehours = timehours + 12;
             }
         }
         exectime = timehours + ":" + timeminutes;
 
     }
     else
-        exectime = $("#exectime").val()
+        exectime = $("#exectime").val();
 
     let taskInfo = {
         question: $("#questions").val(),
@@ -139,7 +139,7 @@ function SendAdaptiveCard() {
         isDefaultQuestion: false,
         recurssionType: $("#recurrance").val(),
         customRecurssionTypeValue: rectype,
-        action: "sendAdaptiveCard",
+        action: "sendAdaptiveCard"
     };
     taskInfo.card = "";
     taskInfo.height = "medium";
@@ -164,7 +164,7 @@ function combineDateAndTime(date, time) {
         return "";
     }
 
-};
+}
 
 function getTwentyFourHourTime(time) {
     var hours = Number(time.match(/^(\d+)/)[1]);
@@ -201,8 +201,10 @@ function GetDefaultQuestions(userPrincipleName) {
         type: "GET",
         url: "api/GetAllDefaultQuestions/" + userPrincipleName,
         success: function (data) {
-            questions = data;
-            data.forEach((x) => {
+             questions = data;
+            let defaultquestions = data.filter(x => x.isDefaultFlag);
+            let myquestions = data.filter(x => !x.isDefaultFlag);
+            defaultquestions.forEach((x) => {
                 blockdata =
                     blockdata +
                     ' <option class="default-opt" id="' +
@@ -215,11 +217,28 @@ function GetDefaultQuestions(userPrincipleName) {
                     x.question +
                     "</option>";
             });
+            if (myquestions.length > 0) {
+                blockdata = blockdata + '<optgroup label="My Questions">My Questions</optgroup>';
+                myquestions.forEach((x) => {
+                    blockdata =
+                        blockdata +
+                        ' <option class="default-opt" id="' +
+                        x.questionID +
+                        '" value="' +
+                        x.question +
+                        '" title="' +
+                        x.question +
+                        '">' +
+                        x.question +
+                        "</option>";
+                });
+            }
+            
             $("#questions").append(blockdata);
             $("#selectedTxt").html($("#questions").val());
             $(".select2-search__field").attr("maxlength", "150");
             GetRecurssionsCount(userPrincipleName);
-        },
+        }
     });
 }
 function GetRecurssionsCount(userPrincipleName) {
@@ -229,7 +248,7 @@ function GetRecurssionsCount(userPrincipleName) {
         success: function (data) {
             recurssions = JSON.parse(JSON.parse(data).recurssions);
             $("#recurssionscount").html("(" + recurssions.length + ")");
-        },
+        }
     });
 }
 
@@ -239,7 +258,7 @@ submitHandler = (err, result) => {
 
 function openTaskModule() {
     let linkInfo = {
-        action: "ManageRecurringPosts",
+        action: "ManageRecurringPosts"
     };
     microsoftTeams.tasks.submitTask(linkInfo);
     return true;
@@ -247,7 +266,7 @@ function openTaskModule() {
 
 function closeTaskModule() {
     let closeTaskInfo = {
-        action: "closeFirstTaskModule",
+        action: "closeFirstTaskModule"
     };
     microsoftTeams.tasks.submitTask(closeTaskInfo);
     return true;
@@ -266,9 +285,12 @@ function addShowHideButton() {
 $("#recurrance").on("change", function () {
     if (this.value === "Custom") {
         $(".custom-cal").show();
+        $("#customdata").show();
+        $("#customdata").html($("#finaldates").text());
         $(".day-select,.eve-week-start,.month-cal").hide();
     } else {
         $(".custom-cal").hide();
+        $("#customdata").hide();
     }
 });
 
@@ -330,3 +352,17 @@ $(".weekselect").on("click", function () {
     $("#slectedweeks").html(slectedweeks.join(","));
 });
 
+$(document).click(function (e) {
+    // Check if click was triggered on or within #customrecurrancediv
+    if ($(e.target).closest("#customrecurrancediv").length > 0 || $(e.target).closest("#customdata").length > 0) {
+        return false;
+    }
+    $(".custom-cal").hide();
+    if ($("#recurrance").val() === "Custom") {
+        $("#customdata").html($("#finaldates").text());
+    }
+});
+
+$("#customdata").click(function (e) {
+    $(".custom-cal").show();
+});

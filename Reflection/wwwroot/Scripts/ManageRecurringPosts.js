@@ -1,8 +1,8 @@
 ﻿/// <reference path="index.js" />
-let blockdata = ""
-let deleteid = ""
-let editid = ""
-let weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday","Saturday"]
+let blockdata = "";
+let deleteid = "";
+let editid = "";
+let weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 $(document).ready(function () {
     $(".loader").show();
     $("#edit").hide();
@@ -11,7 +11,7 @@ $(document).ready(function () {
     $("#startdatedisplay").html(today);
     $("#customnumber").html($("#number").val());
     $("#customtype").html($("#dwm").val() + "(s)");
-    $('[data-toggle="popover"]').popover()
+    $('[data-toggle="popover"]').popover();
     microsoftTeams.initialize();
     microsoftTeams.getContext(function (context) {
         if (context.theme === "default") {
@@ -58,8 +58,8 @@ $(".date-ip").on("change", function () {
         "data-date",
         moment(this.value, "YYYY-MM-DD")
             .format(this.getAttribute("data-date-format"))
-    )
-}).trigger("change")
+    );
+}).trigger("change");
 
 
 function getRecurssions() {
@@ -77,54 +77,53 @@ function getRecurssions() {
             let blockdata = "";
             let wholedata = "";
             recurssions.forEach(x => {
-                let timehours=""
-                let timeminutes = ""
+                let timehours = "";
+                let timeminutes = "";
                 blockdata = "";
-                let mode = ' AM'
+                let mode = ' AM';
                 if (x.ExecutionTime) {
                     if ((new Date().getTimezoneOffset() / 60).toString().split('.').length > 1) {
-                        timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
-                        timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + parseInt(((new Date().getTimezoneOffset() / 60).toString().split('.')[1]) * 6);
+                        timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt(-1 * new Date().getTimezoneOffset() / 60);
+                        timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + parseInt((new Date().getTimezoneOffset() / 60).toString().split('.')[1] * 6);
 
                         if (timeminutes === 60) {
-                            timehours = timehours + 1
+                            timehours = timehours + 1;
                             timeminutes = '00';
                         }
 
                         if (timehours > 11) {
-                            mode = ' PM'
+                            mode = ' PM';
                         }
                         if (timehours > 12) {
-                            timehours = timehours - 12
+                            timehours = timehours - 12;
                         }
                     }
                     else {
-                        timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60);
+                        timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt(-1 * new Date().getTimezoneOffset() / 60);
                         timeminutes = "00";
                         if (timehours > 11) {
-                            mode = ' PM'
+                            mode = ' PM';
                         }
                         if (timehours > 12) {
-                            timehours = timehours - 12
+                            timehours = timehours - 12;
                         }
                     }
                 }
                 if (x.RecurssionType === "Monthly") {
                     sendpostat = "Every Month " + new Date(x.ExecutionDate).getDate() + " at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
                 }
-                else if (x.RecurssionType === "Weekly"){
+                else if (x.RecurssionType === "Weekly") {
                     sendpostat = "Every Week " + weeks[new Date(x.ExecutionDate).getDay()] + " at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
                 }
-                else if (x.RecurssionType ==="Every weekday"){
+                else if (x.RecurssionType === "Every weekday") {
                     sendpostat = "Every Week Day " + " at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
                 }
-                else if (x.RecurssionType==="Custom")
-                {
+                else if (x.RecurssionType === "Custom") {
                     sendpostat = (new DOMParser).parseFromString(x.CustomRecurssionTypeValue, "text/html").
                         documentElement.textContent + " at " + timehours + ":" + timeminutes + mode;
                 }
                 blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="edit-icon" id="edit' + x.RefID + '"></td><td class="delete-icon" id="delete' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
-                wholedata = wholedata + blockdata
+                wholedata = wholedata + blockdata;
 
                 $(document).on("click", "#edit" + x.RefID, function (event) {
                     $("#edit").show();
@@ -135,36 +134,36 @@ function getRecurssions() {
                     let ques = recurssions.find(x => x.RefID === editid);
                     $("#currentrecurrsionquestion").html(ques.Question);
                     let date = moment(ques.ExecutionDate).format("ddd MMM DD, YYYY");
-                    $("#execdate").attr("data-date", date)
+                    $("#execdate").attr("data-date", date);
                     let timehours = "";
                     let timeminutes = "";
                     let mode = ' AM';
-                  
+
                     if (x.ExecutionTime) {
-                        if ((new Date().getTimezoneOffset()/60).toString().split('.').length > 1) {
-                            timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60)
-                            timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + parseInt(((new Date().getTimezoneOffset() / 60).toString().split('.')[1]) * 6);
+                        if ((new Date().getTimezoneOffset() / 60).toString().split('.').length > 1) {
+                            timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt(-1 * new Date().getTimezoneOffset() / 60);
+                            timeminutes = parseInt(x.ExecutionTime.split(":")[1]) + parseInt((new Date().getTimezoneOffset() / 60).toString().split('.')[1] * 6);
 
                             if (timeminutes === 60) {
-                                timehours = timehours + 1
+                                timehours = timehours + 1;
                                 timeminutes = '00';
                             }
 
                             if (timehours > 11) {
-                                mode = ' PM'
+                                mode = ' PM';
                             }
                             if (timehours > 12) {
-                                timehours = timehours - 12
+                                timehours = timehours - 12;
                             }
                         }
                         else {
-                            timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt((-1 * new Date().getTimezoneOffset()) / 60);
+                            timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt(-1 * new Date().getTimezoneOffset() / 60);
                             timeminutes = "00";
                             if (timehours > 11) {
-                                mode = ' PM'
+                                mode = ' PM';
                             }
                             if (timehours > 12) {
-                                timehours = timehours - 12
+                                timehours = timehours - 12;
                             }
                         }
                     }
@@ -192,11 +191,11 @@ function getRecurssions() {
                         $("#Saturday").removeClass("selectedweek");
                         $("#customtype").html("week day");
                     }
-                    else if (x.RecurssionType==="Custom") {
+                    else if (x.RecurssionType === "Custom") {
                         sendpostat = (new DOMParser).parseFromString(x.CustomRecurssionTypeValue, "text/html").
                             documentElement.textContent + " at " + timehours + ":" + timeminutes + mode;
-                        div = document.createElement('div')
-                        $(div).html(x.CustomRecurssionTypeValue)
+                        div = document.createElement('div');
+                        $(div).html(x.CustomRecurssionTypeValue);
                         var type = $(div).find("#customtype").html().split('(')[0];
                         $("#dwm").val(type);
                         $("#dwm").trigger("change");
@@ -217,14 +216,14 @@ function getRecurssions() {
                             data = sendpostat.split(' ');
                             weekarray = data[3].split(',');
                             weekarray.forEach(week => {
-                                $("#" + week).addClass('selectedweek')
-                            })
+                                $("#" + week).addClass('selectedweek');
+                            });
                         }
                     }
                     $("#tablebodydetails").html('<tr id="row1"><td class="hw-r-u">' + ques.Question + '<div class="hru-desc">Created by: ' + ques.CreatedBy + ' on ' + new Date(ques.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td></tr>');
 
                 });
-            })
+            });
             $("#tablebody").html(wholedata);
             setTimeout(() => {
                 recurssions.forEach(x => {
@@ -269,7 +268,7 @@ function saveRecurssion() {
         type: 'POST',
         url: '/api/SaveRecurssionData',
         headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
         },
         data: JSON.stringify({
             "refID": editid, "recurssionType": "Custom", customRecurssionTypeValue: rectype
@@ -288,7 +287,7 @@ function saveRecurssion() {
 
 function gotoIndex() {
     let linkInfo = {
-        action: "reflection",
+        action: "reflection"
     };
     microsoftTeams.tasks.submitTask(linkInfo);
     return true;

@@ -401,6 +401,10 @@ div[class^="card custom-profle-card"] {
     display: inline-block;
 }
 
+.emoji-selected-img {
+    cursor: pointer;
+}
+
 .selected-img {
     height: 32px;
     width: 32px;
@@ -460,7 +464,7 @@ div[class^="card custom-profle-card"] {
 }
 
 .parent-hover {
-    display: inherit;
+    display: inline-block;
 }
 
     .parent-hover:hover .custom-emoji-card {

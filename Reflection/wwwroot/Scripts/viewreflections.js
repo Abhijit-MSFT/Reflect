@@ -1,10 +1,11 @@
 ﻿let contextPrincipalName;
 let feedback;
-let reflection ;
+let reflection;
 let question;
 let totalcount = 0;
 $(document).ready(function () {
     $(".loader").show();
+    $('.close-container').hide();
     microsoftTeams.initialize();
     function closeTaskModule() {
         let closeTaskInfo = {
@@ -12,26 +13,26 @@ $(document).ready(function () {
         };
         microsoftTeams.tasks.submitTask(closeTaskInfo);
         return true;
-    };
+    }
     microsoftTeams.getContext(function (context) {
         if (context.theme === "default") {
             let head = document.getElementsByTagName("head")[0], // reference to document.head for appending/ removing link nodes
                 link = document.createElement("link"); // create the link node
-            link.setAttribute("href", "../../CSS/openReflections.css");
+            link.setAttribute("href", "../../../CSS/openReflections.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         } else if (context.theme === "dark") {
             let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
-            link.setAttribute("href", "../../CSS/openReflections-dark.css");
+            link.setAttribute("href", "../../../CSS/openReflections-dark.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
         } else {
             let head = document.getElementsByTagName("head")[0],
                 link = document.createElement("link");
-            link.setAttribute("href", "../../CSS/openReflections-dark.css");
+            link.setAttribute("href", "../../../CSS/openReflections-dark.css");
             link.setAttribute("rel", "stylesheet");
             link.setAttribute("type", "text/css");
             head.appendChild(link);
@@ -46,6 +47,8 @@ $(document).ready(function () {
                 $(".select-img").removeClass("active");
                 $("#img" + i).addClass("active");
                 $(".check-in").hide();
+                $(".divider").show();
+                $(".remove").show();
                 if (i === 1)
                     $(".emoji-selected").css("background-color", "#E4F4EB");
                 else if (i === 2)
@@ -75,14 +78,16 @@ $(document).ready(function () {
                 $(".select-img").removeClass("active");
                 $("#img" + imgid).addClass("active");
                 $(".check-in").hide();
+                $(".divider").show();
+                $(".remove").show();
                 $.ajax({
                     type: 'POST',
                     url: '/api/SaveUserFeedback',
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "application/json"
                     },
                     data: JSON.stringify({
-                        "feedbackId": parseInt(imgid), "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
+                        "feedbackId": parseInt(imgid), "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: userName
                     }),
                     success: function (data) {
                         if (data === "true") {
@@ -98,10 +103,10 @@ $(document).ready(function () {
                 type: 'POST',
                 url: '/api/GetUserFeedback',
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json"
                 },
                 data: JSON.stringify({
-                    "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
+                    "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: userName
                 }),
                 success: function (data) {
                     if (data !== null && data !== 0) {
@@ -134,11 +139,14 @@ $(document).ready(function () {
             $(".emoji-selected").css("background-color", "#F4F4F4");
             $(".selected-img").hide();
             $(".check-in").show();
+            $(".remove").hide();
+            $(".divider").hide();
+            $(".select-img").removeClass("active");
             $.ajax({
                 type: 'POST',
                 url: '/api/SaveUserFeedback',
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json"
                 },
                 data: JSON.stringify({
                     "feedbackId": 0, "reflectionId": $("#reflectionid").val(), "emailId": contextPrincipalName, "type": "", "messageId": "", action: "SaveUserFeedback", UserName: ""
@@ -164,7 +172,7 @@ function Checkin() {
         $(".check-in").hide();
         $(".selected-img").show();
     }
-   
+
 }
 
 
@@ -203,7 +211,7 @@ function GetReflections() {
                             reflection.Privacy === "anonymous"
                                 ? ""
                                 : feedback[i].map((x) => x.FullName).join(",");
-                        width = ((datacount * 100) / totalcount).toFixed(0);
+                        width = (datacount * 100 / totalcount).toFixed(0);
                     } else {
                         datacount = 0;
                         width = 0;
@@ -227,7 +235,7 @@ function GetReflections() {
                     }
                     blockdata =
                         blockdata +
-                        '<div class="media"><img src="../../Images/' +
+                    '<div onclick=openDetailReflection(' + i + ',"' + reflection.ReflectionID + '") class="media"><img src="../../../Images/' +
                         img +
                         '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' +
                         color +
@@ -246,17 +254,14 @@ function GetReflections() {
                             blockdata = index + 1 !== feedback[i].length ? blockdata + ',' : blockdata + '';
                             blockdata = blockdata+'</span><div class="card custom-profle-card ' +
                                 data.FeedbackID +
-                                '"> <div class="card-body"> <img src="../../Images/default_avatar_default_theme.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
+                                '"> <div class="card-body"> <img src="../../../Images/default_avatar_default_theme.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
                                 data.FullName +
                                 '</div > <div class="start-chat" style = "pointer-events: ' + GetChatConfig(data.FeedbackGivenBy) + ';"  > <span class="chat-icon" onclick = "microsoftTeams.executeDeepLink(' + "'" + chatUrl + data.FeedbackGivenBy + "'" + ');" ></span > <span class="st-chat-txt">Start a chat</span> </div > <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt"> ' +
                                 data.FeedbackGivenBy +
                                 " </span> </div> </div > </div > ";
                         });
                     }
-                   
-                    //enable this for detailed screen
-                    if (feedback[i] && feedback[i].length > 5)
-                        blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"' + reflection.ReflectionID + '")> more</span>';
+
                     blockdata =
                         blockdata +
                         '</div><div class="cnt-box">' +
@@ -282,19 +287,19 @@ function GetReflections() {
                 $(".custom-profle-card > *").on("click", function (e) {
                     e.stopPropagation();
                 });
-               
+                $('.close-container').hide();
                 return true;
-                
+
             } else {
                 alert("no data");
             }
-        },
+        }
     });
 }
 
 function GetChatConfig(userId) {
-    return (userId === contextPrincipalName) ? "none" : "all";
-};
+    return userId === contextPrincipalName ? "none" : "all";
+}
 
 function SendFeedbackCard() {
 
@@ -310,9 +315,8 @@ function openDetailReflection(feedbackId, reflectionId) {
     Object.keys(feedback).forEach((x) => {
         totalcount = totalcount + feedback[x].length;
     });
-    let datacount = feedback[feedbackId].length;
-    let names = feedback[feedbackId];
-    let width = ((datacount * 100) / totalcount).toFixed(0);
+    let datacount = feedback[feedbackId]?feedback[feedbackId].length:0;
+    let width = (datacount * 100 / totalcount).toFixed(0);
     if (feedbackId === 1) {
         color = "green";
         img = "Default_1.png";
@@ -329,7 +333,7 @@ function openDetailReflection(feedbackId, reflectionId) {
         color = "dark-red";
         img = "Default_5.png";
     }
-    let blockdata ='<div class="media"><img src="../../Images/' +
+    let blockdata ='<div class="media"><img src="../../../Images/' +
         img +
         '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' +
         color +
@@ -347,18 +351,22 @@ function openDetailReflection(feedbackId, reflectionId) {
         ")</span></div ></div >";
 
     let peopledata = "";
-    feedback[feedbackId].forEach((names, index) => {
-        peopledata =
-            peopledata + '<tr> <td class="text-left"><div class="media"><img class="align-self-center avatar" src="../../Images/default_avatar_default_theme.png" alt="image" width="40" heigth="40"> <div class="media-body ml-3 mt-1 names">' +
-            names.FullName + '</div> </div></td><td class="text-right"></td></tr >'
-    });
+    if (feedback[feedbackId]) {
+        feedback[feedbackId].forEach((names, index) => {
+            peopledata =
+                peopledata + '<tr> <td class="text-left"><div class="media"><img class="align-self-center avatar" src="../../../Images/default_avatar_default_theme.png" alt="image" width="40" heigth="40"> <div class="media-body ml-3 mt-1 names">' +
+                names.FullName + '</div> </div></td><td class="text-right"></td></tr >';
+        });
+        $("#peopledata").html(peopledata);
+    }
     $("#reviewblock").hide();
     $("#detaiilfeedbackblock").show();
     $("#feedbackblock").html(blockdata);
-    $("#peopledata").html(peopledata);
+    $("#doneButton").hide();
 }
 
 function closeDetailedFeedback() {
     $("#detaiilfeedbackblock").hide();
     $("#reviewblock").show();
+    $("#doneButton").show();
 }

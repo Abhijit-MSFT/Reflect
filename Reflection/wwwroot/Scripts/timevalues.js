@@ -5,11 +5,11 @@ $(document).ready(function () {
     let presentdate = new Date();
     let minutes = presentdate.getMinutes();
     if (minutes < 30) {
-        presentdate.setMinutes(30)
+        presentdate.setMinutes(30);
     }
     else {
-        presentdate.setHours(presentdate.getHours() + 1)
-        presentdate.setMinutes(00)
+        presentdate.setHours(presentdate.getHours() + 1);
+        presentdate.setMinutes(0);
     }
     let nextdate = new Date(presentdate.toISOString());
     nextdate.setDate(nextdate.getDate() + 1);
@@ -27,10 +27,10 @@ $(document).ready(function () {
             let timearray = x.split(':');
             if(timearray[0]>12)
             timearray[0] = timearray[0] - 12;
-            time = timearray.join(':') + ' PM'
+            time = timearray.join(':') + ' PM';
         }
         else {
-            time = x + ' AM'
+            time = x + ' AM';
         }
         optiondata = optiondata + '<option value="' + time + '" id="'+time+'">' + time + '</option>';
     });
