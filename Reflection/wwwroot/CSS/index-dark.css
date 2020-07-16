@@ -420,3 +420,8 @@ ul.ui-timepicker-viewport {
 .select2-container .select2-selection--single {
     height: 31px !important;
 }
+
+#customdata {
+    font-size: small;
+    cursor: pointer;
+}

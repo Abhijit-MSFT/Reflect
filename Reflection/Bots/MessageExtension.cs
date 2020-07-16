@@ -135,7 +135,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 _telemetry.TrackException(ex);
             }
         }
-
         protected override async Task<TaskModuleResponse> OnTeamsTaskModuleSubmitAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
         {
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
@@ -183,6 +182,16 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             }
         }
 
+        protected override async Task<InvokeResponse> OnInvokeActivityAsync(ITurnContext<IInvokeActivity> turnContext, CancellationToken cancellationToken)
+        {
+            if (turnContext.Activity.Name == "custom")
+            {
+                // Do something specific here...
+                return new InvokeResponse() { Status = 200 };
+            }
+
+            return await base.OnInvokeActivityAsync(turnContext, cancellationToken);
+        }
         protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
@@ -203,6 +212,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 response.feedbackId = feedbackId;
                 // Check if this is user's second feedback
                 FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId), response.emailId);
+                TaskInfo taskInfo = new TaskInfo();
                 if (response.feedbackId != 0)
                 {
                     if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
@@ -221,7 +231,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                         Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId));
                         var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, Guid.Parse(response.reflectionId));
-                        TaskInfo taskInfo = new TaskInfo();
+                        
                         taskInfo.question = question.Question;
                         taskInfo.postCreateBy = reflectData.CreatedBy;
                         taskInfo.privacy = reflectData.Privacy;
@@ -256,8 +266,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Console.WriteLine(e.Message.ToString());
                     }
                 }
-                
-
                 return new TaskModuleResponse
                 {
                     Task = new TaskModuleContinueResponse
@@ -267,7 +275,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             Height = 700,
                             Width = 600,
                             Title = "Check the pulse on emotinal well-being",
-                            Url = reldata.data.URL
+                            Url = reldata.data.URL + '/' + response.userName
+
                         },
                     },
                 };

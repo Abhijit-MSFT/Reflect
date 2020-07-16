@@ -201,8 +201,9 @@ function GetDefaultQuestions(userPrincipleName) {
         type: "GET",
         url: "api/GetAllDefaultQuestions/" + userPrincipleName,
         success: function (data) {
-            questions = data;
-            data.forEach((x) => {
+            let defaultquestions = data.filter(x => x.isDefaultFlag);
+            let myquestions = data.filter(x => !x.isDefaultFlag);
+            defaultquestions.forEach((x) => {
                 blockdata =
                     blockdata +
                     ' <option class="default-opt" id="' +
@@ -215,6 +216,23 @@ function GetDefaultQuestions(userPrincipleName) {
                     x.question +
                     "</option>";
             });
+            if (myquestions.length > 0) {
+                blockdata = blockdata + '<optgroup label="My Questions">My Questions</optgroup>';
+                myquestions.forEach((x) => {
+                    blockdata =
+                        blockdata +
+                        ' <option class="default-opt" id="' +
+                        x.questionID +
+                        '" value="' +
+                        x.question +
+                        '" title="' +
+                        x.question +
+                        '">' +
+                        x.question +
+                        "</option>";
+                });
+            }
+            
             $("#questions").append(blockdata);
             $("#selectedTxt").html($("#questions").val());
             $(".select2-search__field").attr("maxlength", "150");
@@ -266,9 +284,12 @@ function addShowHideButton() {
 $("#recurrance").on("change", function () {
     if (this.value === "Custom") {
         $(".custom-cal").show();
+        $("#customdata").show();
+        $("#customdata").html($("#finaldates").text());
         $(".day-select,.eve-week-start,.month-cal").hide();
     } else {
         $(".custom-cal").hide();
+        $("#customdata").hide();
     }
 });
 
@@ -330,3 +351,17 @@ $(".weekselect").on("click", function () {
     $("#slectedweeks").html(slectedweeks.join(","));
 });
 
+$(document).click(function (e) {
+    // Check if click was triggered on or within #customrecurrancediv
+    if ($(e.target).closest("#customrecurrancediv").length > 0 || $(e.target).closest("#customdata").length > 0) {
+        return false;
+    }
+    $(".custom-cal").hide();
+    if ($("#recurrance").val() === "Custom") {
+        $("#customdata").html($("#finaldates").text());
+    }
+});
+
+$("#customdata").click(function (e) {
+    $(".custom-cal").show();
+});

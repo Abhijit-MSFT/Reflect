@@ -84,12 +84,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             }
         }
 
-        [Route("openReflections/{reflectionid}/{feedbackId}")]
-        public ActionResult OpenReflections(Guid reflectionId, int feedbackId)
+        [Route("openReflections/{reflectionid}/{feedbackId}/{userName}")]
+        public ActionResult OpenReflections(Guid reflectionId, int feedbackId,string userName)
         {
             _telemetry.TrackEvent("OpenReflections");
             ViewBag.reflectionId = reflectionId;
             ViewBag.feedbackId = feedbackId;
+            ViewBag.userName = userName;
             return View();
         }
 
