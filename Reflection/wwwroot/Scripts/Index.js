@@ -201,7 +201,7 @@ function GetDefaultQuestions(userPrincipleName) {
         type: "GET",
         url: "api/GetAllDefaultQuestions/" + userPrincipleName,
         success: function (data) {
-            questions = data;
+             questions = data;
             let defaultquestions = data.filter(x => x.isDefaultFlag);
             let myquestions = data.filter(x => !x.isDefaultFlag);
             defaultquestions.forEach((x) => {
