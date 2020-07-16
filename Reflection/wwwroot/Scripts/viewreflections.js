@@ -46,6 +46,8 @@ $(document).ready(function () {
                 $(".select-img").removeClass("active");
                 $("#img" + i).addClass("active");
                 $(".check-in").hide();
+                $(".divider").show();
+                $(".remove").show();
                 if (i === 1)
                     $(".emoji-selected").css("background-color", "#E4F4EB");
                 else if (i === 2)
@@ -75,6 +77,8 @@ $(document).ready(function () {
                 $(".select-img").removeClass("active");
                 $("#img" + imgid).addClass("active");
                 $(".check-in").hide();
+                $(".divider").show();
+                $(".remove").show();
                 $.ajax({
                     type: 'POST',
                     url: '/api/SaveUserFeedback',
@@ -134,6 +138,8 @@ $(document).ready(function () {
             $(".emoji-selected").css("background-color", "#F4F4F4");
             $(".selected-img").hide();
             $(".check-in").show();
+            $(".remove").hide();
+            $(".divider").hide();
             $.ajax({
                 type: 'POST',
                 url: '/api/SaveUserFeedback',
@@ -164,7 +170,7 @@ function Checkin() {
         $(".check-in").hide();
         $(".selected-img").show();
     }
-   
+
 }
 
 
@@ -253,7 +259,7 @@ function GetReflections() {
                                 " </span> </div> </div > </div > ";
                         });
                     }
-                   
+
                     //enable this for detailed screen
                     if (feedback[i] && feedback[i].length > 5)
                         blockdata = blockdata + '<span onclick=openDetailReflection(' + i + ',"' + reflection.ReflectionID + '")> more</span>';
@@ -282,9 +288,9 @@ function GetReflections() {
                 $(".custom-profle-card > *").on("click", function (e) {
                     e.stopPropagation();
                 });
-               
+
                 return true;
-                
+
             } else {
                 alert("no data");
             }
