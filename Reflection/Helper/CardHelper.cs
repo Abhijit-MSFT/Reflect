@@ -108,7 +108,7 @@ namespace Reflection.Helper
                 var datastring = "/Images/reflectimages/" + reflectionId + "@" + Path.GetRandomFileName().Replace(".", "") + ".png";
                 string outputFileName = @"wwwroot" + datastring;
                 //Use RoundedImage...
-                Image RoundedImage = this.RoundCorners(thumbBMP, 10, Color.White);
+                Image RoundedImage = this.RoundCorners(thumbBMP, 10, Color.Transparent);
                 saveImage(RoundedImage, outputFileName);
 
                 return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
