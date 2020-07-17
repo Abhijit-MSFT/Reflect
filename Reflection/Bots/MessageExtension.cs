@@ -89,7 +89,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(Guid.Parse(response.reflectionId));
                             QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                             Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId));
-                            var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, Guid.Parse(response.reflectionId));
+                            var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, Guid.Parse(response.reflectionId),question.Question);
                             TaskInfo taskInfo = new TaskInfo();
                             taskInfo.question = question.Question;
                             taskInfo.postCreateBy = reflectData.CreatedBy;
@@ -153,7 +153,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(taskInfo.reflectionID);
                 QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                 Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(taskInfo.reflectionID);
-                var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, taskInfo.reflectionID);
+                var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, taskInfo.reflectionID, question.Question);
 
                 Attachment attachment = new Attachment()
                 {
@@ -231,7 +231,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(Guid.Parse(response.reflectionId));
                         QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                         Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId));
-                        var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, Guid.Parse(response.reflectionId));
+                        var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, Guid.Parse(response.reflectionId), question.Question);
                         
                         taskInfo.question = question.Question;
                         taskInfo.postCreateBy = reflectData.CreatedBy;
@@ -269,9 +269,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     {
                         Value = new TaskModuleTaskInfo()
                         {
-                            Height = 700,
+                            Height = 600,
                             Width = 600,
-                            Title = "Check the pulse on emotinal well-being",
+                            Title = "Make space for people to share how they feel",
                             Url = reldata.data.URL + '/' + response.userName
 
                         },
@@ -416,7 +416,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             {
                                 Height = 620,
                                 Width = 800,
-                                Title = "Invite people to share how they feel",
+                                Title = "Make space for people to share how they feel",
                                 Url = url
                             },
                         },
@@ -455,7 +455,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             {
                                 Height = 620,
                                 Width = 800,
-                                Title = "Invite people to share how they feel",
+                                Title = "Make space for people to share how they feel",
                                 Url = url
                             },
                         },

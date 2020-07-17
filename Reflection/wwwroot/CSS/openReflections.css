@@ -44,7 +44,7 @@
 
 .reflections-sc2 {
     font-family: Segoe UI;
-    font-size: 14px;
+    font-size: small;
     color: #666666;
     display: inline;
 }
@@ -80,20 +80,23 @@
     border-radius: 3px;
     box-sizing: border-box;
     border: 1px solid #6266a5;
-    font-size: 14px;
+    font-size: small;
     line-height: 2;
 }
 
 .feeling-abt {
     margin-top: 15px;
-    margin-bottom: 15px;
     font-family: Segoe UI;
     font-size: 18px;
     color: #000000;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .review-blk {
+    height: 23.2rem;
+    background: #f9f8f7;
+}
+.feedback-blk {
     height: auto;
     background: #f9f8f7;
 }
@@ -121,10 +124,27 @@
 div[class^="smile-desc"] {
     margin: 7px 0 0 0;
     font-family: Segoe UI;
-    font-size: 12px;
-    color: #000000;
     width: 376px;
     cursor: pointer;
+    font-size: small;
+    font-weight: 600;
+    color: #6266a5;
+}
+
+    div[class^="smile-desc"]::after {
+        content: "\E449";
+        font-family: "Teams Assets";
+        font-size: small;
+        color: #6266a5;
+        position: absolute;
+        float: right
+    }
+
+.no-reflections {
+    font-size: small;
+    font-weight: 600;
+    margin: 7px 0 0 0;
+    width: 376px;
 }
 
 .smils {
@@ -170,7 +190,7 @@ div[class^="smile-desc"] {
     border-radius: 3px;
     margin: 1rem 1rem 0 0;
     font-family: Segoe UI;
-    font-size: 16px;
+    font-size: small;
     color: #000000;
     text-align: left;
 }
@@ -232,7 +252,6 @@ div[class^="card custom-profle-card"] {
 
 .start-chat,
 .mail {
-    position: absolute;
     width: auto;
     height: 16px;
     top: 110px;
@@ -245,7 +264,7 @@ div[class^="card custom-profle-card"] {
 .mail-icon::before {
     content: "\E340";
     font-family: "Teams Assets";
-    font-size: 16px;
+    font-size: small;
     color: #484644;
     cursor: pointer;
     vertical-align: middle;
@@ -385,16 +404,17 @@ div[class^="card custom-profle-card"] {
 .emoji-selected {
     width: auto;
     height: 48px;
-    margin: 20px 0;
+    margin: 10px 0;
 }
 
 .ur-selected {
     font-family: Segoe UI;
     font-weight: 600;
-    font-size: 14px;
+    font-size: small;
     color: #333333;
     padding: 13px 4px 13px 13px;
     display: inline-block;
+    cursor: pointer;
 }
 
 .emoji-selected-img, .imgs-card {
@@ -426,7 +446,7 @@ div[class^="card custom-profle-card"] {
 .down-chev::after {
     content: "\E447";
     font-family: "Teams Assets";
-    font-size: 16px;
+    font-size: small;
     color: #6266a5;
     position: relative;
     top: 6px;
@@ -446,7 +466,7 @@ div[class^="card custom-profle-card"] {
 
 .remove {
     font-family: Segoe UI;
-    font-size: 16px;
+    font-size: small;
     align-items: center;
     text-align: center;
     color: #6264A7;
@@ -473,7 +493,7 @@ div[class^="card custom-profle-card"] {
 
 .check-in {
     font-family: Segoe UI;
-    font-size: 14px;
+    font-size: small;
     color: #6266A5;
 }
 
@@ -481,4 +501,37 @@ div[class^="card custom-profle-card"] {
     .custom-mc, .review-blk {
         height: auto;
     }
+}
+.previewimg {
+    width: 11px;
+    margin-bottom: 6px;
+    margin-right: 2px;
+    height: 12px;
+}
+.name {
+    font-family: Segoe UI;
+    margin-top: 1rem;
+    margin-left: 4rem;
+    font-weight: 600;
+}
+
+.names-list {
+    height: 17.5rem;
+    overflow: auto;
+    margin-top: 0.5rem;
+}
+.feedback-back {
+    border-top: 1px solid #dee2e6;
+    color: #6266a5;
+    padding-top: 8px;
+    cursor: pointer;
+}
+
+.back-chev::before {
+    content: "\E420";
+    font-family: "Teams Assets";
+    font-size: small;
+    color: #6266a5;
+    top: 6px;
+    cursor: pointer;
 }

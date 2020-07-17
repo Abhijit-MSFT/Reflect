@@ -40,7 +40,7 @@ namespace Reflection.Helper
         /// <param name="keyValues">Dictionary of int and FeedbackDataEntity holds the feedbacks received till now</param>
         /// <param name="reflectionId">Current reflection id</param>
         /// <returns>AdaptiveCard</returns>
-        public AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid? reflectionId)
+        public AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid? reflectionId, string questionName)
         {
             _telemetry.TrackEvent("FeedBackCard");
             try
@@ -105,7 +105,11 @@ namespace Reflection.Helper
                         }
                     }
                 }
-
+                else
+                {
+                    color = Brushes.LightGray;
+                    flagGraphics.FillRectangle(color, 0, 0, 1000, 40);
+                }
                 var datastring = "/Images/reflectimages/" + reflectionId + "@" + Path.GetRandomFileName().Replace(".", "") + ".png";
                 string outputFileName = @"wwwroot" + datastring;
                 //Use RoundedImage for image modification
@@ -116,6 +120,38 @@ namespace Reflection.Helper
                 {
                     Body = new List<AdaptiveElement>
                 {
+
+                    new AdaptiveColumnSet
+                    {
+                        Columns = new List<AdaptiveColumn>()
+                        {
+                            new AdaptiveColumn()
+                            {
+                                Width = AdaptiveColumnWidth.Auto,
+                                VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Medium,
+                                Items = new List<AdaptiveElement>()
+                                {
+
+                                    new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + "/Images/person.png") }
+                                },
+
+                            },
+                            new AdaptiveColumn()
+                            {
+                                Width = AdaptiveColumnWidth.Auto,
+                                VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Small,
+                                Items = new List<AdaptiveElement>()
+                                {
+                                    new AdaptiveTextBlock("Reflections for \""+ $"{questionName}\"") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
+
+                                }
+
+                            }
+                        }
+                    },
+
                     new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + datastring) },
                     new AdaptiveColumnSet
                     {
@@ -325,21 +361,9 @@ namespace Reflection.Helper
                 {
                     Body = new List<AdaptiveElement>
                     {
-                        new AdaptiveColumnSet
-                        {
-                            Columns = new List<AdaptiveColumn>()
-                            {
-                                new AdaptiveColumn()
-                                {
-                                    Width=AdaptiveColumnWidth.Auto,
-                                    Items = new List<AdaptiveElement>()
-                                    {
-                                        new AdaptiveTextBlock("Posted by "+ $"{data.postCreateBy}" + " | Reflections are " + $"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
-                                    }
-                                }
-                            }
-                        },
-                        new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100},
+                        
+                        new AdaptiveTextBlock("Created by "+ $"{data.postCreateBy} " + "| "+$"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Small, Wrap=true },
+                        new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100},                   
                         new AdaptiveColumnSet
                         {
                             Columns = new List<AdaptiveColumn>()

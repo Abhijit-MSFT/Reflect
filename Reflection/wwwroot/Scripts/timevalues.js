@@ -30,6 +30,12 @@ $(document).ready(function () {
             time = timearray.join(':') + ' PM';
         }
         else {
+            if (x.split(':')[0] === '00') {
+                let timearray = x.split(':');
+                timearray[0] = 12;
+                time = timearray.join(':') + ' AM';
+            }
+            else
             time = x + ' AM';
         }
         optiondata = optiondata + '<option value="' + time + '" id="'+time+'">' + time + '</option>';
