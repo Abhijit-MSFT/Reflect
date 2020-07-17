@@ -202,7 +202,6 @@ function GetReflections() {
                 let datacount = 0;
                 let width = 0;
                 let descriptio = "";
-                let chatUrl = "https://teams.microsoft.com/l/chat/0/0?users=";
                 Object.keys(JSON.parse(data.feedback)).forEach((x) => {
                     totalcount = totalcount + feedback[x].length;
                 });
@@ -243,7 +242,7 @@ function GetReflections() {
                     }
                     blockdata =
                         blockdata +
-                    '<div onclick=openDetailReflection(' + i + ',"' + reflection.ReflectionID + '") class="media"><img src="../../../Images/' +
+                    '<div  class="media"><img src="../../../Images/' +
                         img +
                         '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' +
                         color +
@@ -252,6 +251,7 @@ function GetReflections() {
                         '%"></div></div>';
 
                     if (description) {
+                        blockdata = blockdata + '<div onclick=openDetailReflection(' + i + ',"' + reflection.ReflectionID + '")>'
                         feedback[i].forEach((data, index) => {
                             blockdata =
                                 blockdata +
@@ -260,6 +260,7 @@ function GetReflections() {
                                 '">' +
                                 data.FullName+'</div > ';
                         });
+                        blockdata = blockdata + '</div>';
                     }
                     else {
                         blockdata = blockdata + '<div class="no-reflections">No Reflections</div>';
@@ -321,7 +322,7 @@ function openDetailReflection(feedbackId, reflectionId) {
         color = "dark-red";
         img = "Default_5.png";
     }
-    let blockdata ='<div class="media"><img src="../../../Images/' +
+    let blockdata ='<div class="media pb-2"><img src="../../../Images/' +
         img +
         '" class="align-self-start smils" alt="smile2"><div class="media-body cb-smile2"><div class="progress custom-pr"><div class="progress-bar bg-' +
         color +
@@ -338,12 +339,13 @@ function openDetailReflection(feedbackId, reflectionId) {
         datacount +
         ")</span></div ></div >";
 
+    let chatUrl = "https://teams.microsoft.com/l/chat/0/0?users=";
     let peopledata = "";
     if (feedback[feedbackId]) {
         feedback[feedbackId].forEach((names, index) => {
             peopledata =
                 peopledata + '<tr> <td class="text-left"><div class="media"><img class="align-self-center avatar" src="../../../Images/default_avatar_default_theme.png" alt="image" width="40" heigth="40"> <div class="media-body ml-3 mt-1 names">' +
-                names.FullName + '</div> </div></td><td class="text-right"></td></tr >';
+            names.FullName + '</div> </div></td><td class="text-right"><div class="start-chat" style = "pointer-events: ' + GetChatConfig(names.FeedbackGivenBy) + ';"  > <span class="chat-icon" onclick = "microsoftTeams.executeDeepLink(' + "'" + chatUrl + names.FeedbackGivenBy + "'" + ');" ></span ></div > </td></tr >';
         });
         $("#peopledata").html(peopledata);
     }

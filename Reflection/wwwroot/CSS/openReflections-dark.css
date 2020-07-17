@@ -246,7 +246,6 @@ div[class^="card custom-profle-card"] {
 
 .start-chat,
 .mail {
-    position: absolute;
     width: auto;
     height: 16px;
     top: 110px;

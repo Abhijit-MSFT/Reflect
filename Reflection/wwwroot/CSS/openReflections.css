@@ -252,7 +252,6 @@ div[class^="card custom-profle-card"] {
 
 .start-chat,
 .mail {
-    position: absolute;
     width: auto;
     height: 16px;
     top: 110px;
@@ -524,6 +523,15 @@ div[class^="card custom-profle-card"] {
 .feedback-back {
     border-top: 1px solid #dee2e6;
     color: #6266a5;
-    margin-top:2px;
-    cursor:pointer;
+    padding-top: 8px;
+    cursor: pointer;
+}
+
+.back-chev::before {
+    content: "\E420";
+    font-family: "Teams Assets";
+    font-size: small;
+    color: #6266a5;
+    top: 6px;
+    cursor: pointer;
 }

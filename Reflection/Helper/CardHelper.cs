@@ -160,7 +160,7 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { PixelWidth=20,PixelHeight=20, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1", HorizontalAlignment = AdaptiveHorizontalAlignment.Center}
+                                    new AdaptiveImage() { PixelWidth=12,PixelHeight=12, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1", HorizontalAlignment = AdaptiveHorizontalAlignment.Center}
                                 },
                                 
                             },
@@ -183,7 +183,7 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { PixelWidth=20,PixelHeight=20, Url = new Uri(_configuration["BaseUri"] + "/images/ref2.png"),Id = "2", HorizontalAlignment = AdaptiveHorizontalAlignment.Center}
+                                    new AdaptiveImage() { PixelWidth=12,PixelHeight=12, Url = new Uri(_configuration["BaseUri"] + "/images/ref2.png"),Id = "2", HorizontalAlignment = AdaptiveHorizontalAlignment.Center}
                                 }
 
                             },
