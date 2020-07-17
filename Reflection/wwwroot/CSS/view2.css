@@ -98,16 +98,7 @@
   margin: 14px 8px 14px 0px;
   color: black;
 }
-.name {
-  font-family: Segoe UI;
-  font-size: 12px;
-  margin-top: 1rem;
-}
-.names-list {
-  height: 371px;
-  overflow: auto;
-  margin-top: 0.5rem;
-}
+
 .names {
   font-family: Segoe UI;
   font-size: 14px;

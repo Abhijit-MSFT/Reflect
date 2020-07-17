@@ -129,6 +129,8 @@ $(document).ready(function () {
                         $(".select-img").removeClass("active");
                         $(".selected-img").hide();
                         $(".check-in").show();
+                        $(".divider").hide();
+                        $(".remove").hide();
                         $(".emoji-selected").css("background-color", "#F4F4F4");
                     }
                 }
@@ -208,9 +210,15 @@ function GetReflections() {
                     if (Object.keys(feedback).indexOf(i.toString()) !== -1) {
                         datacount = feedback[i].length;
                         description =
-                            reflection.Privacy === "anonymous"
+                            reflection.Privacy === "Anonymous-Names not displayed on reflections"
                                 ? ""
                                 : feedback[i].map((x) => x.FullName).join(",");
+                        if (reflection.Privacy === "Creator only-Names displayed to the creator only") {
+                            description =
+                                userName === reflection.CreatedBy
+                                ? description
+                                    : "";
+                        }
                         width = (datacount * 100 / totalcount).toFixed(0);
                     } else {
                         datacount = 0;
@@ -244,22 +252,17 @@ function GetReflections() {
                         '%"></div></div>';
 
                     if (description) {
-                        feedback[i].forEach((data,index) => {
+                        feedback[i].forEach((data, index) => {
                             blockdata =
                                 blockdata +
-                                '<span class="smile-desc" id="' +
+                                '<div class="smile-desc" id="' +
                                 data.FeedbackID +
                                 '">' +
-                                data.FullName;
-                            blockdata = index + 1 !== feedback[i].length ? blockdata + ',' : blockdata + '';
-                            blockdata = blockdata+'</span><div class="card custom-profle-card ' +
-                                data.FeedbackID +
-                                '"> <div class="card-body"> <img src="../../../Images/default_avatar_default_theme.png" alt="avatar" class="profile-pic" /> <div class="profile-name">' +
-                                data.FullName +
-                                '</div > <div class="start-chat" style = "pointer-events: ' + GetChatConfig(data.FeedbackGivenBy) + ';"  > <span class="chat-icon" onclick = "microsoftTeams.executeDeepLink(' + "'" + chatUrl + data.FeedbackGivenBy + "'" + ');" ></span > <span class="st-chat-txt">Start a chat</span> </div > <div class="mail"> <span class="mail-icon"></span> <span class="mail-txt"> ' +
-                                data.FeedbackGivenBy +
-                                " </span> </div> </div > </div > ";
+                                data.FullName+'</div > ';
                         });
+                    }
+                    else {
+                        blockdata = blockdata + '<div class="no-reflections">No Reflections</div>';
                     }
 
                     blockdata =
@@ -272,21 +275,6 @@ function GetReflections() {
                 }
                 $("#reviewblock").html(blockdata);
                 $("#detaiilfeedbackblock").hide();
-                $(".custom-profle-card ").css("display", "none");
-                $(".smile-desc").hover(function (event) {
-                    $(".custom-profle-card").css("display", "none");
-                    $("." + $(event.target)[0].id).show();
-                });
-
-                $("body").on("click blur", function (event) {
-                    if (!$(event.target).hasClass("custom-profle-card")) {
-                        $(".custom-profle-card").css("display", "none");
-                    }
-                });
-
-                $(".custom-profle-card > *").on("click", function (e) {
-                    e.stopPropagation();
-                });
                 $('.close-container').hide();
                 return true;
 

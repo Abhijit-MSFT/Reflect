@@ -100,6 +100,11 @@ namespace Reflection.Helper
                     }
 
                 }
+                else
+                {
+                    color = Brushes.LightGray;
+                    flagGraphics.FillRectangle(color, 0, 0, 1000, 40);
+                }
                 var datastring = "/Images/reflectimages/" + reflectionId + "@" + Path.GetRandomFileName().Replace(".", "") + ".png";
                 string outputFileName = @"wwwroot" + datastring;
                 //Use RoundedImage...
@@ -110,7 +115,38 @@ namespace Reflection.Helper
                 {
                     Body = new List<AdaptiveElement>
                 {
-                    new AdaptiveTextBlock("Reflections are "+ $"{questionName}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
+
+                    new AdaptiveColumnSet
+                    {
+                        Columns = new List<AdaptiveColumn>()
+                        {
+                            new AdaptiveColumn()
+                            {
+                                Width = AdaptiveColumnWidth.Auto,
+                                VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Medium,
+                                Items = new List<AdaptiveElement>()
+                                {
+
+                                    new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + "/Images/person.png") }
+                                },
+
+                            },
+                            new AdaptiveColumn()
+                            {
+                                Width = AdaptiveColumnWidth.Auto,
+                                VerticalContentAlignment=AdaptiveVerticalContentAlignment.Center,
+                                Spacing=AdaptiveSpacing.Small,
+                                Items = new List<AdaptiveElement>()
+                                {
+                                    new AdaptiveTextBlock("Reflections for \""+ $"{questionName}\"") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
+
+                                }
+
+                            }
+                        }
+                    },
+
                     new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + datastring) },
                     new AdaptiveColumnSet
                     {
@@ -124,7 +160,7 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { PixelWidth=12,PixelHeight=12, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1", HorizontalAlignment = AdaptiveHorizontalAlignment.Center}
+                                    new AdaptiveImage() { PixelWidth=20,PixelHeight=20, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1", HorizontalAlignment = AdaptiveHorizontalAlignment.Center}
                                 },
                                 
                             },
@@ -147,7 +183,7 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { PixelWidth=12,PixelHeight=12, Url = new Uri(_configuration["BaseUri"] + "/images/ref2.png"),Id = "2", HorizontalAlignment = AdaptiveHorizontalAlignment.Center}
+                                    new AdaptiveImage() { PixelWidth=20,PixelHeight=20, Url = new Uri(_configuration["BaseUri"] + "/images/ref2.png"),Id = "2", HorizontalAlignment = AdaptiveHorizontalAlignment.Center}
                                 }
 
                             },
@@ -339,22 +375,9 @@ namespace Reflection.Helper
                 {
                     Body = new List<AdaptiveElement>
                     {
-                        new AdaptiveColumnSet
-                        {
-                            Columns = new List<AdaptiveColumn>()
-                            {
-                                new AdaptiveColumn()
-                                {
-                                    Width=AdaptiveColumnWidth.Auto,
-                                    Items = new List<AdaptiveElement>()
-                                    {
-                                        new AdaptiveTextBlock("Created by "+ $"{data.postCreateBy}" + " | Reflections are " + $"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
-                                    }
-
-                                }
-                            }
-                        },
-                        new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100},
+                        
+                        new AdaptiveTextBlock("Created by "+ $"{data.postCreateBy} " + "| "+$"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Small, Wrap=true },
+                        new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100},                   
                         new AdaptiveColumnSet
                         {
                             Columns = new List<AdaptiveColumn>()

@@ -268,7 +268,7 @@ input[type="date"] {
 
 .created {
     font-family: Segoe UI;
-    font-size: 14px;
+    font-size: small;
     color: #666666;
     margin: 11px 0px 10px 16px;
     display: inline-flex;
@@ -619,4 +619,11 @@ button:focus {
 #customdata{
     font-size:small;
     cursor:pointer;
+}
+.previewimg {
+    width: 11px;
+    margin-top: 4px;
+    margin-left: 3px;
+    margin-right: 2px;
+    height: 12px;
 }

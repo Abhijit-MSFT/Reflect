@@ -285,7 +285,7 @@ input[type="date"] {
 
 .created {
     font-family: Segoe UI;
-    font-size: 14px;
+    font-size: small;
     color: #FFFFFF;
     opacity: 0.75;
     margin: 11px 0px 10px 16px;
@@ -424,4 +424,11 @@ ul.ui-timepicker-viewport {
 #customdata {
     font-size: small;
     cursor: pointer;
+}
+.previewimg {
+    width: 11px;
+    margin-top: 4px;
+    margin-left: 3px;
+    margin-right: 2px;
+    height: 12px;
 }

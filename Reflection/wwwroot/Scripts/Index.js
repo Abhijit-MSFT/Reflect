@@ -3,7 +3,9 @@ let userobject = {};
 let accesstoken = "";
 
 $(document).ready(function () {
-    $(".js-example-basic-single").select2();
+    $(".js-example-basic-single").select2({
+        minimumResultsForSearch: Infinity
+    });
     $(".js-example-tags").select2({
         tags: true,
         maximumInputLength: 150
@@ -59,11 +61,11 @@ $(document).ready(function () {
             let today = moment().format("YYYY-MM-DD");
             if ($("#execdate").val() !== today) {
                 $("#sendnow").attr("disabled", "true");
-                $("#exectime").select2().val("00:00 AM").trigger("change");
+                $("#exectime").select2({ minimumResultsForSearch: Infinity}).val("00:00 AM").trigger("change");
                 $(".select2-selection__arrow").remove();
             } else {
                 $("#sendnow").removeAttr("disabled");
-                $("#exectime").select2().val("Send now").trigger("change");
+                $("#exectime").select2({ minimumResultsForSearch: Infinity}).val("Send now").trigger("change");
                 $(".select2-selection__arrow").remove();
             }
             $("#startdatedisplay").html($("#execdate").val());
@@ -218,7 +220,7 @@ function GetDefaultQuestions(userPrincipleName) {
                     "</option>";
             });
             if (myquestions.length > 0) {
-                blockdata = blockdata + '<optgroup label="My Questions">My Questions</optgroup>';
+                blockdata = blockdata + '<optgroup label="My questions">My Questions</optgroup>';
                 myquestions.forEach((x) => {
                     blockdata =
                         blockdata +

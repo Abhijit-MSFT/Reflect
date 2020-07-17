@@ -272,9 +272,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     {
                         Value = new TaskModuleTaskInfo()
                         {
-                            Height = 700,
+                            Height = 600,
                             Width = 600,
-                            Title = "Check the pulse on emotinal well-being",
+                            Title = "Make space for people to share how they feel",
                             Url = reldata.data.URL + '/' + response.userName
 
                         },
@@ -410,7 +410,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             {
                                 Height = 620,
                                 Width = 800,
-                                Title = "Invite people to share how they feel",
+                                Title = "Make space for people to share how they feel",
                                 Url = url
                             },
                         },
@@ -450,7 +450,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             {
                                 Height = 620,
                                 Width = 800,
-                                Title = "Invite people to share how they feel",
+                                Title = "Make space for people to share how they feel",
                                 Url = url
                             },
                         },
