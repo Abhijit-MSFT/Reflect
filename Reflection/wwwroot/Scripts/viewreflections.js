@@ -262,7 +262,8 @@ function GetReflections() {
                         });
                         blockdata = blockdata + '</div>';
                     }
-                    else {
+                    else if (reflection.Privacy !== "Anonymous-Names not displayed on reflections" ||
+                        (reflection.Privacy !== "Creator only-Names displayed to the creator only" && userName !== reflection.CreatedBy)) {
                         blockdata = blockdata + '<div class="no-reflections">No Reflections</div>';
                     }
 

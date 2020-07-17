@@ -206,21 +206,7 @@ function GetDefaultQuestions(userPrincipleName) {
              questions = data;
             let defaultquestions = data.filter(x => x.isDefaultFlag);
             let myquestions = data.filter(x => !x.isDefaultFlag);
-            defaultquestions.forEach((x) => {
-                blockdata =
-                    blockdata +
-                    ' <option class="default-opt" id="' +
-                    x.questionID +
-                    '" value="' +
-                    x.question +
-                    '" title="' +
-                    x.question +
-                    '">' +
-                    x.question +
-                    "</option>";
-            });
             if (myquestions.length > 0) {
-                blockdata = blockdata + '<optgroup label="My questions">My Questions</optgroup>';
                 myquestions.forEach((x) => {
                     blockdata =
                         blockdata +
@@ -235,6 +221,20 @@ function GetDefaultQuestions(userPrincipleName) {
                         "</option>";
                 });
             }
+            blockdata = blockdata + '<optgroup label="Potential questions">Potential questions</optgroup>';
+            defaultquestions.forEach((x) => {
+                blockdata =
+                    blockdata +
+                    ' <option class="default-opt" id="' +
+                    x.questionID +
+                    '" value="' +
+                    x.question +
+                    '" title="' +
+                    x.question +
+                    '">' +
+                    x.question +
+                    "</option>";
+            });
             
             $("#questions").append(blockdata);
             $("#selectedTxt").html($("#questions").val());
