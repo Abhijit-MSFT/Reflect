@@ -414,7 +414,6 @@ div[class^="card custom-profle-card"] {
     color: #333333;
     padding: 13px 4px 13px 13px;
     display: inline-block;
-    cursor: pointer;
 }
 
 .emoji-selected-img, .imgs-card {
