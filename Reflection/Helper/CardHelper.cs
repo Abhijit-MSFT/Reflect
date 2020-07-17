@@ -36,7 +36,7 @@ namespace Reflection.Helper
         /// <param name="keyValues">Dictionary of int and FeedbackDataEntity holds the feedbacks received till now</param>
         /// <param name="reflectionId">Current reflection id</param>
         /// <returns>AdaptiveCard</returns>
-        public AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid? reflectionId)
+        public AdaptiveCard FeedBackCard(Dictionary<int, List<FeedbackDataEntity>> keyValues, Guid? reflectionId, string questionName)
         {
             _telemetry.TrackEvent("FeedBackCard");
             try
@@ -110,6 +110,7 @@ namespace Reflection.Helper
                 {
                     Body = new List<AdaptiveElement>
                 {
+                    new AdaptiveTextBlock("Reflections are "+ $"{questionName}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
                     new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + datastring) },
                     new AdaptiveColumnSet
                     {
@@ -347,7 +348,7 @@ namespace Reflection.Helper
                                     Width=AdaptiveColumnWidth.Auto,
                                     Items = new List<AdaptiveElement>()
                                     {
-                                        new AdaptiveTextBlock("Posted by "+ $"{data.postCreateBy}" + " | Reflections are " + $"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
+                                        new AdaptiveTextBlock("Created by "+ $"{data.postCreateBy}" + " | Reflections are " + $"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Medium, Wrap=true },
                                     }
 
                                 }
