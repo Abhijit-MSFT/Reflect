@@ -329,17 +329,17 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 reflectData.ReflectMessageId = resultid.Id;
                                 await reflectionDataRepository.InsertOrMergeAsync(reflectData);
                             }
-                            else
-                            {
-                                var reply = MessageFactory.Text(string.Empty);
-                                if (taskInfo.recurssionType == "Does not repeat")
-                                    reply.Text = "Your data is recorded and will be executed at time specified by you.";
-                                else if(taskInfo.recurssionType == "Custom")
-                                    reply.Text = "Your data is recorded and will be executed on " + taskInfo.customRecurssionTypeValue + " intervals.";
-                                else
-                                    reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals.";
-                                await turnContext.SendActivityAsync(reply);
-                            }
+                            //else
+                            //{
+                            //    //var reply = MessageFactory.Text(string.Empty);
+                            //    //if (taskInfo.recurssionType == "Does not repeat")
+                            //    //    //reply.Text = "Your data is recorded and will be executed at time specified by you.";
+                            //    //else if(taskInfo.recurssionType == "Custom")
+                            //    //    reply.Text = "Your data is recorded and will be executed on " + taskInfo.customRecurssionTypeValue + " intervals.";
+                            //    //else
+                            //    //    reply.Text = "Your data is recorded and will be executed on " + taskInfo.recurssionType + " intervals.";
+                            //    await turnContext.SendActivityAsync(reply);
+                            //}
                             return null;
                         }
                         catch (Exception ex)
