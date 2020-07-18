@@ -148,6 +148,7 @@ div[class^="smile-desc"] {
         float:right
     }
 .no-reflections {
+    color: #ffffff;
     font-size: small;
     font-weight: 600;
 }
