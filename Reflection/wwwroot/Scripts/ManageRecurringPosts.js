@@ -5,6 +5,7 @@ let editid = "";
 let weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 $(document).ready(function () {
     $(".loader").show();
+    $("#deleteIcon").hide();
     $("#edit").hide();
     let today = moment().format("YYYY-MM-DD");
     $("#execdate").val(today);
@@ -45,7 +46,7 @@ $("tbody#tablebody").on("click", "td.date-day", function () {
 });
 
 $('.delete-icon').click(function () {
-    $('#myModal').modal('show');
+    $('#deleteIcon').modal('show');
 });
 
 $('.edit-icon').click(function () {
@@ -122,8 +123,16 @@ function getRecurssions() {
                     sendpostat = (new DOMParser).parseFromString(x.CustomRecurssionTypeValue, "text/html").
                         documentElement.textContent + " at " + timehours + ":" + timeminutes + mode;
                 }
-                blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="edit-icon" id="edit' + x.RefID + '"></td><td class="delete-icon" id="delete' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
+                blockdata = blockdata + '<tr id="row1"><td class="hw-r-u">' + x.Question + '<div class="hru-desc">Created by: ' + x.CreatedBy + ' on ' + new Date(x.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td><td class="edit-icon" id="edit' + x.RefID + '"></td><td class="delete-icon" id="deleteIcon' + x.RefID + '" data-toggle="modal" data-target="#myalert"></td></tr>';
                 wholedata = wholedata + blockdata;
+
+                $(document).on("click", "#deleteIcon" + x.RefID, function (event) {
+                    $("#deleteIcon").show();
+                    $("#managetable").hide();
+                    deleteid = event.currentTarget.id.split('on')[1];
+                    let ques = recurssions.find(x => x.RefID === deleteid);
+                    $("#tabledeletebodydetails").html('<tr id="row1"><td class="hw-r-u">' + ques.Question + '<div class="hru-desc">Created by: ' + ques.CreatedBy + ' on ' + new Date(ques.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td></tr>');
+                });
 
                 $(document).on("click", "#edit" + x.RefID, function (event) {
                     $("#edit").show();
@@ -227,12 +236,13 @@ function getRecurssions() {
             $("#tablebody").html(wholedata);
             setTimeout(() => {
                 recurssions.forEach(x => {
-                    $(document).on("click", "#delete" + x.RefID, function (event) {
-                        deleteid = event.currentTarget.id.split('te')[1];
+                    $(document).on("click", "#deleteIcon" + x.RefID, function (event) {
+                        deleteid = event.currentTarget.id.split('on')[1];
                     });
                 });
             }, 100);
-
+            $("#deleteIcon").hide();
+            $("#managetable").show();
         }
     });
 
@@ -280,7 +290,6 @@ function saveRecurssion() {
                 $("#managetable").show();
                 getRecurssions();
             }
-
         }
     });
 }
@@ -362,5 +371,10 @@ $("#recurrance").on("change", function () {
 
 function cancelRecurssion() {
     $("#edit").hide();
+    $("#managetable").show();
+}
+
+function cancel() {
+    $("#deleteIcon").hide();
     $("#managetable").show();
 }

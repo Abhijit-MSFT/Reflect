@@ -400,6 +400,26 @@ input::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
 
+.edit-popup {
+    float: right;
+}
+
+.delete-recurr {
+    width: auto !important;
+}
+
+.back-button {
+    bottom: 5%;
+    position: absolute;
+}
+
+.deleterecurrbuttons {
+    margin-top: 2%;
+    bottom: 4%;
+    position: absolute;
+    right: 4%;
+}
+
 @media screen and (max-width: 425px) {
     .custom-mc, .review-blk {
         height: auto;
