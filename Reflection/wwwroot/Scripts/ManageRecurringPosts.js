@@ -210,7 +210,6 @@ function getRecurssions() {
                         $(div).html(x.CustomRecurssionTypeValue);
                         var type = $(div).find("#customtype").html().split('(')[0];
                         $("#dwm").val(type);
-                        $("#dwm").trigger("change");
                         $("#number").val($(div).find("#customnumber").html());
                         if (type === 'month') {
                             data = sendpostat.split(' ');
@@ -231,6 +230,7 @@ function getRecurssions() {
                                 $("#" + week).addClass('selectedweek');
                             });
                         }
+                        $("#dwm").trigger("change");
                     }
                     var postposition = $("#edit" + x.RefID).position().top + $("#edit" + x.RefID).height();
                     $(".post").css("top", postposition);
