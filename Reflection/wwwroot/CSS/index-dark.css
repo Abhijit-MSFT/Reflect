@@ -435,3 +435,28 @@ ul.ui-timepicker-viewport {
     bottom: 3%;
     right: 2%;
 }
+
+/*new-20th*/
+
+span.select2-dropdown.select2-dropdown--below {
+    background: #2D2C2C;
+    color: whitesmoke;
+}
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: #6c757d;
+    color: white;
+}
+.select2-container--default .select2-results__option--selected {
+    background-color: #252424;
+}
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    border: 1px solid #aaa;
+    background: #201F1F;
+}
+
+#confirmationMessage {
+    color: whitesmoke;
+    margin-top: 1rem;
+}
+
+/*new-20th end*/

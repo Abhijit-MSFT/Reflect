@@ -125,6 +125,7 @@ body {
 .custom-pr {
     height: 24px !important;
     width: auto;
+    background: #484848 !important;
 }
 
 .bg-green {
@@ -138,14 +139,14 @@ span[class^="smile-desc"] {
     cursor: pointer;
     font-size: small;
     font-weight: 600;
-    color: #333333;
+    color: #b671e8;
 }
 
 .description-data::after {
     content: "\E449";
     font-family: "Teams Assets";
     font-size: small;
-    color: #333333;
+    color: #b671e8;
     position: absolute;
     float: right;
     margin-top: 4px;
@@ -477,7 +478,7 @@ div[class^="card custom-profle-card"] {
     font-size: 16px;
     align-items: center;
     text-align: center;
-    color: #6264A7;
+    color: #b671e8;
     cursor: pointer;
     top: 2px;
     position: relative;
@@ -485,6 +486,7 @@ div[class^="card custom-profle-card"] {
 
 .emoji-cb {
     padding: .6rem;
+    background-color: #2D2C2C;
 }
 
 .active {
@@ -517,4 +519,36 @@ div[class^="card custom-profle-card"] {
     height: 22px;
     margin-bottom: 3px;
     margin-right: 4px;
+}
+
+.name, .names {
+    color: white;
+}
+
+.feedback-back {
+    color: #a6a7dc;
+    border-top: 1px solid #dee2e6;
+    padding-top: 8px;
+    cursor: pointer;
+}
+
+.name {
+    font-family: Segoe UI;
+    margin-top: 1rem;
+    margin-left: 4rem;
+    font-weight: 600;
+}
+
+.names-list {
+    height: 17.5rem;
+    overflow: auto;
+    margin-top: 0.5rem;
+}
+.back-chev::before {
+    content: "\E420";
+    font-family: "Teams Assets";
+    font-size: small;
+    color: #a6a7dc;
+    top: 6px;
+    cursor: pointer;
 }
