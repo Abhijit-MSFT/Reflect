@@ -128,7 +128,7 @@ namespace Reflection.Helper
                                 Items = new List<AdaptiveElement>()
                                 {
 
-                                    new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + "/Images/person.png") }
+                                    new AdaptiveImage() { Url = new Uri(_configuration["BaseUri"] + "/Images/person.png"), PixelWidth=12, PixelHeight=12, HorizontalAlignment=AdaptiveHorizontalAlignment.Center }
                                 },
 
                             },
@@ -375,7 +375,6 @@ namespace Reflection.Helper
                 {
                     Body = new List<AdaptiveElement>
                     {
-                        
                         new AdaptiveTextBlock("Created by "+ $"{data.postCreateBy} " + "| "+$"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Small, Wrap=true },
                         new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100},                   
                         new AdaptiveColumnSet
