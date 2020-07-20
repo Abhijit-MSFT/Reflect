@@ -136,7 +136,6 @@ function getRecurssions() {
 
                 $(document).on("click", "#edit" + x.RefID, function (event) {
                     $("#edit").show();
-                    $("#managetable").hide();
                     $(".day-select,.eve-week-start,.month-cal").hide();
                     editid = event.currentTarget.id.split('it')[1];
                     let singledata = blockdata;
@@ -229,8 +228,6 @@ function getRecurssions() {
                             });
                         }
                     }
-                    $("#tablebodydetails").html('<tr id="row1"><td class="hw-r-u">' + ques.Question + '<div class="hru-desc">Created by: ' + ques.CreatedBy + ' on ' + new Date(ques.RefCreatedDate).toDateString() + '</div></td><td class="privacy-cl">' + x.Privacy + '</td> <td class="date-day">' + sendpostat + '</td></tr>');
-
                 });
             });
             $("#tablebody").html(wholedata);
@@ -287,7 +284,6 @@ function saveRecurssion() {
             if (data === "true") {
                 $("#tablebody").html("");
                 $("#edit").hide();
-                $("#managetable").show();
                 getRecurssions();
             }
         }
