@@ -2,6 +2,7 @@
 let blockdata = "";
 let deleteid = "";
 let editid = "";
+let previouseditid = "";
 let weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 $(document).ready(function () {
     $(".loader").show();
@@ -135,9 +136,12 @@ function getRecurssions() {
                 });
 
                 $(document).on("click", "#edit" + x.RefID, function (event) {
-                    $("#edit").show();
-                    $(".day-select,.eve-week-start,.month-cal").hide();
                     editid = event.currentTarget.id.split('it')[1];
+                    if (editid === previouseditid)
+                        $("#edit").toggle();
+                    else
+                        $("#edit").show();
+                    $(".day-select,.eve-week-start,.month-cal").hide();
                     let singledata = blockdata;
                     let ques = recurssions.find(x => x.RefID === editid);
                     $("#currentrecurrsionquestion").html(ques.Question);
@@ -177,26 +181,27 @@ function getRecurssions() {
                     if (x.RecurssionType === "Monthly") {
                         sendpostat = "Every Month " + new Date(x.ExecutionDate).getDate() + " at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
                         $("#dwm").val("month");
-                        $("#dwm").trigger("change");
                         $("#customnumber").html("1");
                         $("#customtype").html("month");
+                        $("#dwm").trigger("change");
                     }
                     else if (x.RecurssionType === "Weekly") {
                         sendpostat = "Every Week " + weeks[new Date(x.ExecutionDate).getDay()] + " at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
+                        $(".weekselect").removeClass("selectedweek");
                         $("#dwm").val("week");
-                        $("#dwm").trigger("change");
                         $("#" + weeks[new Date(x.ExecutionDate).getDay()]).addClass("selectedweek");
                         $("#customnumber").html("1");
                         $("#customtype").html("week");
+                        $("#dwm").trigger("change");
                     }
                     else if (x.RecurssionType === "Every weekday") {
                         sendpostat = "Every Week Day " + " at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
                         $("#dwm").val("week");
-                        $("#dwm").trigger("change");
                         $(".weekselect").addClass("selectedweek");
                         $("#Sunday").removeClass("selectedweek");
                         $("#Saturday").removeClass("selectedweek");
                         $("#customtype").html("week day");
+                        $("#dwm").trigger("change");
                     }
                     else if (x.RecurssionType === "Custom") {
                         sendpostat = (new DOMParser).parseFromString(x.CustomRecurssionTypeValue, "text/html").
@@ -229,6 +234,7 @@ function getRecurssions() {
                     }
                     var postposition = $("#edit" + x.RefID).position().top + $("#edit" + x.RefID).height();
                     $(".post").css("top", postposition);
+                    previouseditid = event.currentTarget.id.split('it')[1];
                 });
             });
             $("#tablebody").html(wholedata);
