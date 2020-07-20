@@ -19,15 +19,21 @@
 </head>
 
 <body>
-    <div class="cont">
+    <div class="container" tabindex="-1" id="postSentMessage">
+        <div id="confirmationMessage"></div>
+        <div class="confirmation">
+            <button type="button" class="btn-send" onclick="done()">Done</button>
+        </div>
+    </div>
+    <div class="cont" id="initialPost">
         <div class="" role="document">
             <div class="mc">
                 <div class="">
                     <div class="question">Question (Max: 150 words)</div>
                     <div class="custom-in">
                         @*<input type="text" list="questions" maxlength="150" name="questions" id="questions-list" class="input-select" placeholder="Enter a reflection question" onchange="getSelectedOption(this)" />
-            <datalist class="htmlEle" id="questions">
-            </datalist>*@
+                            <datalist class="htmlEle" id="questions">
+                            </datalist>*@
                         <select placeholder="Enter a reflection question" class="form-control js-example-tags question-length" id="questions" onchange="getSelectedOption(this)">
                             <optgroup label="My questions">My questions</optgroup>
                         </select>

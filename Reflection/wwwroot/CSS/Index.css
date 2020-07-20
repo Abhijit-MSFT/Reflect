@@ -627,3 +627,9 @@ button:focus {
     margin-right: 2px;
     height: 12px;
 }
+
+.confirmation {
+    position: absolute;
+    bottom: 3%;
+    right: 2%;
+}

@@ -3,6 +3,8 @@ let userobject = {};
 let accesstoken = "";
 
 $(document).ready(function () {
+    let postTaskInfo = "";
+    $("#postSentMessage").hide();
     $(".js-example-basic-single").select2({
         minimumResultsForSearch: Infinity
     });
@@ -84,7 +86,6 @@ function SendAdaptiveCard() {
     let questionid = null;
     if (index !== -1) {
         questionid = questions[index].questionID;
-        console.log(questionid);
     }
     let rectype = "";
     if ($("#recurrance").val() === "Custom") {
@@ -151,9 +152,21 @@ function SendAdaptiveCard() {
     } else if (!$(".date-ip").val()) {
         alert("Please select " + $("#date").text());
     } else {
-        microsoftTeams.tasks.submitTask(taskInfo);
+        if (taskInfo.executionTime !== "Send now") {
+            postTaskInfo = taskInfo
+            $('#initialPost').hide();
+            $("#confirmationMessage").html("<div>You're all set! This post was sent and is scheduled for" + taskInfo.recurssionType + "," + taskInfo.executionDate + "at" + taskInfo.executionTime + "</div>");
+            $('.close-container').hide();
+            $('#postSentMessage').show();
+        } else {
+            microsoftTeams.tasks.submitTask(taskInfo);
+        }
     }
     return true;
+}
+
+function done() {
+    microsoftTeams.tasks.submitTask(postTaskInfo);
 }
 
 function combineDateAndTime(date, time) {
