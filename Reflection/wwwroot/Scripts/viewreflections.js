@@ -6,6 +6,12 @@ let totalcount = 0;
 $(document).ready(function () {
     $(".loader").show();
     $('.close-container').hide();
+    $('.check-in').mouseover(() => {
+        $('.custom-emoji-card').css('display', 'block');
+    });
+    $('.check-in').mouseout(() => {
+        $('.custom-emoji-card').css('display', 'none');
+    });
     microsoftTeams.initialize();
     function closeTaskModule() {
         let closeTaskInfo = {
