@@ -312,6 +312,7 @@ function SendFeedbackCard() {
 }
 
 function openDetailReflection(feedbackId, reflectionId) {
+    $('.emoji-selected').hide();
     totalcount = 0;
     Object.keys(feedback).forEach((x) => {
         totalcount = totalcount + feedback[x].length;
@@ -368,6 +369,7 @@ function openDetailReflection(feedbackId, reflectionId) {
 }
 
 function closeDetailedFeedback() {
+    $('.emoji-selected').show();
     $("#detaiilfeedbackblock").hide();
     $("#reviewblock").show();
     $("#doneButton").show();
