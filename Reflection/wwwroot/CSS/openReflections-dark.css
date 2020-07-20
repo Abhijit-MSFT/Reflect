@@ -497,14 +497,11 @@ div[class^="card custom-profle-card"] {
     display: inline-block;
 }
 
-    .parent-hover:hover .custom-emoji-card {
-        display: block;
-    }
-
 .check-in {
     font-family: Segoe UI;
     font-size: small;
     color: #6266A5;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 425px) {

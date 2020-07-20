@@ -12,6 +12,12 @@ $(document).ready(function () {
     $('.check-in').mouseout(() => {
         $('.custom-emoji-card').css('display', 'none');
     });
+    $('.parent-hover').mouseover(() => {
+        $('.custom-emoji-card').css('display', 'block');
+    });
+    $('.parent-hover').mouseout(() => {
+        $('.custom-emoji-card').css('display', 'none');
+    });
     microsoftTeams.initialize();
     function closeTaskModule() {
         let closeTaskInfo = {
