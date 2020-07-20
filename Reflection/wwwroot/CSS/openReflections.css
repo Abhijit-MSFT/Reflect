@@ -36,6 +36,7 @@
     font-size: 14px;
     color: #666666;
     display: inline-block;
+    margin-right: 16px;
 }
 
 .divider {
@@ -121,7 +122,7 @@
     background-color: #7bce95 !important;
 }
 
-div[class^="smile-desc"] {
+span[class^="smile-desc"] {
     margin: 7px 0 0 0;
     font-family: Segoe UI;
     width: 376px;
@@ -131,14 +132,15 @@ div[class^="smile-desc"] {
     color: #6266a5;
 }
 
-    div[class^="smile-desc"]::after {
-        content: "\E449";
-        font-family: "Teams Assets";
-        font-size: small;
-        color: #6266a5;
-        position: absolute;
-        float: right
-    }
+.description-data::after {
+    content: "\E449";
+    font-family: "Teams Assets";
+    font-size: small;
+    color: #6266a5;
+    position: absolute;
+    float: right;
+    margin-top: 4px;
+}
 
 .no-reflections {
     font-size: small;
@@ -502,10 +504,10 @@ div[class^="card custom-profle-card"] {
     }
 }
 .previewimg {
-    width: 11px;
-    margin-bottom: 6px;
-    margin-right: 2px;
-    height: 12px;
+    width: 15px;
+    height: 22px;
+    margin-bottom: 3px;
+    margin-right: 4px;
 }
 .name {
     font-family: Segoe UI;

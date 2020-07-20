@@ -288,7 +288,7 @@ input[type="date"] {
     font-size: small;
     color: #FFFFFF;
     opacity: 0.75;
-    margin: 11px 0px 10px 16px;
+    margin: 11px 16px 10px 16px;
     display: inline-flex;
     white-space: pre;
 }
@@ -309,7 +309,6 @@ input[type="date"] {
 }
 
 #privacytext {
-    margin-left: 4px;
     color: #FFFFFF;
     opacity: 0.75;
 }
@@ -426,11 +425,9 @@ ul.ui-timepicker-viewport {
     cursor: pointer;
 }
 .previewimg {
-    width: 11px;
-    margin-top: 4px;
-    margin-left: 3px;
-    margin-right: 2px;
-    height: 12px;
+    width: 15px;
+    height: 22px;
+    margin-right: 4px;
 }
 
 .confirmation {

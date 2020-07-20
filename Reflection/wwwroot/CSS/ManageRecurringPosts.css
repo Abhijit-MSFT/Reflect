@@ -183,7 +183,7 @@ td.edit-icon {
 }
 
 .edit-icon:before {
-    content: "\E328";
+    content: "\E41E";
     font-family: "Teams Assets";
     font-size: 16px;
     color: #6266a5;
@@ -398,6 +398,7 @@ input::-webkit-calendar-picker-indicator {
     border: 1px solid #6266a5;
     font-size: 14px;
     cursor: pointer;
+    cursor: pointer;
 }
 
 .edit-popup {
@@ -480,9 +481,9 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .editbuttons {
-    top: 68% !important;
     position: absolute;
-    right: 28.2%;
+    right: 5.2%;
+    bottom: 2%;
 }
 
 .repeat {
@@ -677,4 +678,8 @@ button:focus {
     .modal-mb-sc2 {
         margin: 32px 10px;
     }
+}
+.post {
+    position: absolute;
+    left: 398px;
 }

@@ -146,7 +146,6 @@ function getRecurssions() {
                     let timehours = "";
                     let timeminutes = "";
                     let mode = ' AM';
-
                     if (x.ExecutionTime) {
                         if ((new Date().getTimezoneOffset() / 60).toString().split('.').length > 1) {
                             timehours = parseInt(x.ExecutionTime.split(":")[0]) + parseInt(-1 * new Date().getTimezoneOffset() / 60);
@@ -228,6 +227,8 @@ function getRecurssions() {
                             });
                         }
                     }
+                    var postposition = $("#edit" + x.RefID).position().top + $("#edit" + x.RefID).height();
+                    $(".post").css("top", postposition);
                 });
             });
             $("#tablebody").html(wholedata);

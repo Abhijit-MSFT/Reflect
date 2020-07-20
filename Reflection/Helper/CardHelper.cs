@@ -375,7 +375,56 @@ namespace Reflection.Helper
                 {
                     Body = new List<AdaptiveElement>
                     {
-                        new AdaptiveTextBlock("Created by "+ $"{data.postCreateBy} " + "| "+$"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Small, Wrap=true },
+
+                        new AdaptiveColumnSet
+                        {
+                            Columns = new List<AdaptiveColumn>()
+                            {
+                                 new AdaptiveColumn()
+                                {
+                                    Width="12px",
+                                    Height=AdaptiveHeight.Auto,
+                                    Spacing=AdaptiveSpacing.None,
+                                    Items =new List<AdaptiveElement>()
+                                                {
+                                                  new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/iconCreator.png"),PixelHeight=15, PixelWidth=12, AltText="Creator",Size=AdaptiveImageSize.Small,HorizontalAlignment=AdaptiveHorizontalAlignment.Center,Spacing=AdaptiveSpacing.None } 
+                                               },
+                                },
+                                 new AdaptiveColumn()
+                                {
+                                    Width="150px",
+                                    Height=AdaptiveHeight.Auto,
+                                    Spacing=AdaptiveSpacing.Small,
+                                    Items=new List<AdaptiveElement>()
+                                    {
+                                     new AdaptiveTextBlock("Created by "+ $"{data.postCreateBy} ") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Small, Wrap=true }
+                                    },
+
+                                 },
+                                 new AdaptiveColumn()
+                                {
+                                    Width="12px",
+                                    Height=AdaptiveHeight.Auto,
+                                    Items=new List<AdaptiveElement>()
+                                    {
+                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/iconPrivacy.png"),PixelHeight=15, PixelWidth=12,AltText="Privacy",Size=AdaptiveImageSize.Small,HorizontalAlignment=AdaptiveHorizontalAlignment.Center,Spacing=AdaptiveSpacing.None }
+                                    },
+
+                                },
+                                 new AdaptiveColumn()
+                                {
+                                    Width="230px",
+                                    Height=AdaptiveHeight.Auto,
+                                    Spacing=AdaptiveSpacing.Small,
+                                    Items=new List<AdaptiveElement>()
+                                    {
+                                        new AdaptiveTextBlock($"{data.privacy}") { Color = AdaptiveTextColor.Default, Size=AdaptiveTextSize.Small, Wrap=true }
+                                    },
+
+                                }
+                            }
+                        },
+                        
                         new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100},                   
                         new AdaptiveColumnSet
                         {
