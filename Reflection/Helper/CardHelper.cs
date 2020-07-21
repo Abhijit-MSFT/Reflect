@@ -382,17 +382,19 @@ namespace Reflection.Helper
                             {
                                  new AdaptiveColumn()
                                 {
-                                    Width="12px",
+
+                                    Width=AdaptiveColumnWidth.Auto,
                                     Height=AdaptiveHeight.Auto,
-                                    Spacing=AdaptiveSpacing.None,
+                                    
                                     Items =new List<AdaptiveElement>()
                                                 {
-                                                  new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/iconCreator.png"),PixelHeight=15, PixelWidth=12, AltText="Creator",Size=AdaptiveImageSize.Small,HorizontalAlignment=AdaptiveHorizontalAlignment.Center,Spacing=AdaptiveSpacing.None } 
+                                                  new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/iconCreator.png"),PixelHeight=12, PixelWidth=12, AltText="Creator",HorizontalAlignment=AdaptiveHorizontalAlignment.Center } 
                                                },
                                 },
                                  new AdaptiveColumn()
                                 {
-                                    Width="150px",
+
+                                    Width=AdaptiveColumnWidth.Auto,
                                     Height=AdaptiveHeight.Auto,
                                     Spacing=AdaptiveSpacing.Small,
                                     Items=new List<AdaptiveElement>()
@@ -403,17 +405,18 @@ namespace Reflection.Helper
                                  },
                                  new AdaptiveColumn()
                                 {
-                                    Width="12px",
+                                    Width=AdaptiveColumnWidth.Auto,
                                     Height=AdaptiveHeight.Auto,
+                                    Spacing=AdaptiveSpacing.Medium,
                                     Items=new List<AdaptiveElement>()
                                     {
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/iconPrivacy.png"),PixelHeight=15, PixelWidth=12,AltText="Privacy",Size=AdaptiveImageSize.Small,HorizontalAlignment=AdaptiveHorizontalAlignment.Center,Spacing=AdaptiveSpacing.None }
+                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/iconPrivacy.png"),PixelHeight=12, PixelWidth=12,AltText="Privacy",HorizontalAlignment=AdaptiveHorizontalAlignment.Center,Spacing=AdaptiveSpacing.None }
                                     },
 
                                 },
                                  new AdaptiveColumn()
                                 {
-                                    Width="230px",
+                                    Width=AdaptiveColumnWidth.Auto,
                                     Height=AdaptiveHeight.Auto,
                                     Spacing=AdaptiveSpacing.Small,
                                     Items=new List<AdaptiveElement>()
