@@ -303,7 +303,7 @@ function GetChatConfig(userId) {
 }
 
 function SendFeedbackCard() {
-
+    $('.btn-send').css("cursor", "not-allowed");
     let taskInfo = {
         reflectionID: $("#reflectionid").val(),
         action: "postAdaptivecard"
