@@ -4,7 +4,14 @@ let deleteid = "";
 let editid = "";
 let previouseditid = "";
 let weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 $(document).ready(function () {
+    let show = $("#backButton").val();
+    $('.float-left').hide();
+    if (show === "True") {
+        $('.float-right').hide();
+        $('.float-left').show();
+    }
     $(".loader").show();
     $("#deleteIcon").hide();
     $("#edit").hide();
@@ -380,4 +387,12 @@ function cancelRecurssion() {
 function cancel() {
     $("#deleteIcon").hide();
     $("#managetable").show();
+}
+
+function closeTaskModule() {
+    let closeTaskInfo = {
+        action: "closeFirstTaskModule"
+    };
+    microsoftTeams.tasks.submitTask(closeTaskInfo);
+    return true;
 }

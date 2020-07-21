@@ -347,7 +347,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                     Height = 600,
                                     Width = 780,
                                     Title = "Make space for people to share how they feel",
-                                    Url = this._configuration["BaseUri"] + "/ManageRecurringPosts/" + postCreatedByEmail
+                                    Url = this._configuration["BaseUri"] + "/ManageRecurringPosts/" + postCreatedByEmail + "?pathfromindex=true"
                                 },
                             },
                         };

@@ -17,6 +17,7 @@
     <div class="loader"></div>
     <div class="manage-R" id="managetable">
         <!-- Modal -->
+        <input type="text" value=@ViewBag.showBack id="backButton" style="display:none" />
         <input type="text" value=@ViewBag.emailid id="contextemail" style="display:none" />
         <div class="" role="document">
             <div class="">
@@ -37,6 +38,9 @@
                     <div class="float-left" onclick="gotoIndex()">
                         <span class="left-chev"></span>
                         Back
+                    </div>
+                    <div class="float-right">
+                        <button type="button" class="btn-done" onclick="closeTaskModule()">Done</button>
                     </div>
                 </div>
             </div>

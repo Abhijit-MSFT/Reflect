@@ -62,8 +62,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         [Route("manageRecurringPosts/{emailid}")]
         public ActionResult ManageRecurringPosts(string emailid)
         {
+            bool showBack = Request.QueryString.Value.Contains("pathfromindex");
             _telemetry.TrackEvent("ManageRecurringPosts");
             ViewBag.emailid = emailid;
+            ViewBag.showBack = showBack.ToString();
             return View();
         }
 
