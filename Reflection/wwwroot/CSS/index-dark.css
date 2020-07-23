@@ -459,4 +459,39 @@ span.select2-dropdown.select2-dropdown--below {
     margin-top: 1rem;
 }
 
-/*new-20th end*/
+.spinner {
+    border-width: 8px;
+    border-style: solid;
+    border-color: #6264A7 #6264A7 #6264A7 transparent;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+    position: relative;
+    margin: auto;
+    top: 10rem;
+}
+
+    .spinner:before, .spinner:after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #6264A7;
+        position: absolute;
+        left: 4px;
+    }
+
+    .spinner:before {
+        top: 7px;
+    }
+
+    .spinner:after {
+        bottom: 7px;
+    }
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}

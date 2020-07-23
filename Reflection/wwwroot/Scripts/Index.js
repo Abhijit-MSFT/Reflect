@@ -4,6 +4,7 @@ let accesstoken = "";
 
 $(document).ready(function () {
     let postTaskInfo = "";
+    $(".spinner").hide();
     $("#postSentMessage").hide();
     $(".js-example-basic-single").select2({
         minimumResultsForSearch: Infinity
@@ -159,7 +160,8 @@ function SendAdaptiveCard() {
             $('.close-container').hide();
             $('#postSentMessage').show();
         } else {
-            $('.btn-send').css("cursor", "not-allowed");
+            $(".spinner").show();
+            $('#initialPost').hide();
             microsoftTeams.tasks.submitTask(taskInfo);
         }
     }
@@ -167,7 +169,8 @@ function SendAdaptiveCard() {
 }
 
 function done() {
-    $('.btn-send').css("cursor", "not-allowed");
+    $('#postSentMessage').hide();
+    $(".spinner").show();
     microsoftTeams.tasks.submitTask(postTaskInfo);
 }
 
