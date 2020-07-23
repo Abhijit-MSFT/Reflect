@@ -4,7 +4,7 @@ let reflection;
 let question;
 let totalcount = 0;
 $(document).ready(function () {
-    $(".loader").show();
+    $(".spinner").show();
     $('.close-container').hide();
     $('.check-in').mouseover(() => {
         $('.custom-emoji-card').css('display', 'block');
@@ -195,7 +195,7 @@ function GetReflections() {
         type: "GET",
         url: "/api/GetReflections/" + $("#reflectionid").val(),
         success: function (data) {
-            $(".loader").hide();
+            $(".spinner").hide();
             $(".modal-mb-sc2").show();
             $(".sc2br-blk").show();
             if (data) {
