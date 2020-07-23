@@ -292,122 +292,6 @@ div[class^="card custom-profle-card"] {
     color: #a6a8da;
 }
 
-/*loader*/
-*, ::after, ::before {
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.loader {
-    height: 60px;
-    width: 60px;
-    -webkit-animation: loader-1-1 4.8s linear infinite;
-    animation: loader-1-1 4.8s linear infinite;
-    margin: auto;
-    padding-top: 50%;
-}
-
-@-webkit-keyframes loader-1-1 {
-    0% {
-        -webkit-transform: rotate(0deg);
-    }
-
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
-}
-
-@keyframes loader-1-1 {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
-
-.loader span {
-    display: block;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin: auto;
-    height: 60px;
-    width: 60px;
-    clip: rect(0, 60px, 60px, 30px);
-    -webkit-animation: loader-1-2 1.2s linear infinite;
-    animation: loader-1-2 1.2s linear infinite;
-}
-
-@-webkit-keyframes loader-1-2 {
-    0% {
-        -webkit-transform: rotate(0deg);
-    }
-
-    100% {
-        -webkit-transform: rotate(220deg);
-    }
-}
-
-@keyframes loader-1-2 {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(220deg);
-    }
-}
-
-.loader span::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin: auto;
-    height: 60px;
-    width: 60px;
-    clip: rect(0, 60px, 60px, 30px);
-    border: 6px solid #6264A7;
-    border-radius: 50%;
-    -webkit-animation: loader-1-3 1.2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
-    animation: loader-1-3 1.2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
-}
-
-@-webkit-keyframes loader-1-3 {
-    0% {
-        -webkit-transform: rotate(-140deg);
-    }
-
-    50% {
-        -webkit-transform: rotate(-160deg);
-    }
-
-    100% {
-        -webkit-transform: rotate(140deg);
-    }
-}
-
-@keyframes loader-1-3 {
-    0% {
-        transform: rotate(-140deg);
-    }
-
-    50% {
-        transform: rotate(-160deg);
-    }
-
-    100% {
-        transform: rotate(140deg);
-    }
-}
-/*loader end*/
-
 .emoji-selected {
     width: auto;
     height: 48px;
@@ -548,4 +432,41 @@ div[class^="card custom-profle-card"] {
     color: #a6a7dc;
     top: 6px;
     cursor: pointer;
+}
+
+.spinner {
+    border-width: 8px;
+    border-style: solid;
+    border-color: #6264A7 #6264A7 #6264A7 transparent;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    animation: spin 2s linear infinite;
+    position: relative;
+    margin: auto;
+    top: 10rem;
+}
+
+    .spinner:before, .spinner:after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #6264A7;
+        position: absolute;
+        left: 4px;
+    }
+
+    .spinner:before {
+        top: 7px;
+    }
+
+    .spinner:after {
+        bottom: 7px;
+    }
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
 }
