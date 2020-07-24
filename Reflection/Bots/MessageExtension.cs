@@ -15,6 +15,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
     using Microsoft.Bot.Builder.Teams;
     using Microsoft.Bot.Schema;
     using Microsoft.Bot.Schema.Teams;
+    using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Configuration;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -30,13 +31,15 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         private readonly TelemetryClient _telemetry;
         private readonly ICard _cardHelper;
         private readonly IDataBase _dbHelper;
+        private readonly IMemoryCache _cache;
 
-        public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper, IDataBase dbHelper)
+        public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper, IDataBase dbHelper, IMemoryCache memoryCache)
         {
             _configuration = configuration;
             _telemetry = telemetry;
             _cardHelper = cardHelper;
             _dbHelper = dbHelper;
+            _cache = memoryCache;
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -197,7 +200,17 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
             try
             {
+                var cacheKey = "executionstarted";
+                bool isprocessstarted=true;
                 ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
+                if (_cache.TryGetValue(cacheKey, out isprocessstarted))
+                {
+                        Thread.Sleep(3000);
+                }
+                else
+                {
+                    _cache.Set(cacheKey, isprocessstarted);
+                }
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
@@ -231,7 +244,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                         Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId));
                         var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, Guid.Parse(response.reflectionId), question.Question);
-                        
+
                         taskInfo.question = question.Question;
                         taskInfo.postCreateBy = reflectData.CreatedBy;
                         taskInfo.privacy = reflectData.Privacy;
@@ -245,12 +258,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         reply.Attachments.Add(attachment);
                         if (reflectData.MessageID == null)
                         {
-
                             var result = turnContext.SendActivityAsync(reply, cancellationToken);
                             reflectData.MessageID = result.Result.Id;
                             //update messageid in reflectio table
                             await reflectionDataRepository.InsertOrMergeAsync(reflectData);
-
+                      
                         }
                         else
                         {
