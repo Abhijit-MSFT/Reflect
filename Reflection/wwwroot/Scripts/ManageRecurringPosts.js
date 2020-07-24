@@ -12,7 +12,7 @@ $(document).ready(function () {
         $('.float-right').hide();
         $('.float-left').show();
     }
-    $(".loader").show();
+    $(".spinner").show();
     $("#deleteIcon").hide();
     $("#edit").hide();
     let today = moment().format("YYYY-MM-DD");
@@ -77,7 +77,7 @@ function getRecurssions() {
         type: 'GET',
         url: '/api/GetRecurssions/' + email,
         success: function (data) {
-            $(".loader").hide();
+            $(".spinner").hide();
             $(".custom-tb").show();
             recurssions = JSON.parse(JSON.parse(data).recurssions);
             $("#questioncount").html("(" + recurssions.length + ")");
@@ -260,6 +260,8 @@ function getRecurssions() {
 }
 
 function deleteRecurssion() {
+    $("#deleteIcon").hide();
+    $(".spinner").show();
     $.ajax({
         type: 'GET',
         url: '/api/DeleteReflection/' + deleteid,
@@ -390,6 +392,8 @@ function cancel() {
 }
 
 function closeTaskModule() {
+    $("#managetable").hide();
+    $(".spinner").show();
     let closeTaskInfo = {
         action: "closeFirstTaskModule"
     };
