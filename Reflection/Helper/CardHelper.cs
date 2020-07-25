@@ -162,7 +162,7 @@ namespace Reflection.Helper
 
                                     new AdaptiveImage() { PixelWidth=12,PixelHeight=12, Url = new Uri(_configuration["BaseUri"] + "/images/ref1.png"),Id = "1", HorizontalAlignment = AdaptiveHorizontalAlignment.Center}
                                 },
-                                
+
                             },
                             new AdaptiveColumn()
                             {
@@ -371,7 +371,7 @@ namespace Reflection.Helper
 
             try
             {
-                return new AdaptiveCard(new AdaptiveSchemaVersion(1, 0))
+                return new AdaptiveCard(new AdaptiveSchemaVersion(1, 2))
                 {
                     Body = new List<AdaptiveElement>
                     {
@@ -385,10 +385,10 @@ namespace Reflection.Helper
 
                                     Width=AdaptiveColumnWidth.Auto,
                                     Height=AdaptiveHeight.Auto,
-                                    
+
                                     Items =new List<AdaptiveElement>()
                                                 {
-                                                  new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/iconCreator.png"),PixelHeight=12, PixelWidth=12, AltText="Creator",HorizontalAlignment=AdaptiveHorizontalAlignment.Center } 
+                                                  new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/iconCreator.png"),PixelHeight=12, PixelWidth=12, AltText="Creator",HorizontalAlignment=AdaptiveHorizontalAlignment.Center }
                                                },
                                 },
                                  new AdaptiveColumn()
@@ -427,104 +427,249 @@ namespace Reflection.Helper
                                 }
                             }
                         },
+
+                        new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100}  
                         
-                        new AdaptiveTextBlock($"{data.question}") { Id = ($"{data.question }"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100},                   
-                        new AdaptiveColumnSet
-                        {
-                            Columns = new List<AdaptiveColumn>()
-                            {
-                                 new AdaptiveColumn()
-                                {
-                                    Width=AdaptiveColumnWidth.Auto,
-                                    Height=AdaptiveHeight.Auto,
-                                    Items =new List<AdaptiveElement>()
+                        //new AdaptiveColumnSet
+                        //{
+                        //    Columns = new List<AdaptiveColumn>()
+                        //    {
+                        //         new AdaptiveColumn()
+                        //        {
+                        //            Width=AdaptiveColumnWidth.Auto,
+                        //            Height=AdaptiveHeight.Auto,
+                        //            Items=new List<AdaptiveElement>
+                        //            {
+                        //               new AdaptiveActionSet()
+                        //               {
+
+                        //                   Actions=new List<AdaptiveAction>
+                        //                   {
+                        //                         new AdaptiveSubmitAction()
+                        //                        {
+                        //                             Title="12",
+                        //                             IconUrl=_configuration["BaseUri"] + "/images/Default_1.png",
+                        //                             Type="Action.Submit",
+                        //                            Data =
+                        //                            new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                        //                            {
+                        //                                Data = new TaskModuleActionDetails()
+                        //                                {
+                        //                                    type ="task/fetch",
+                        //                                    URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/1",
+                        //                                }
+                        //                            }
+                        //                        },
+                        //                   }
+                        //               }
+                        //            }
+                        //        },
+                        //         new AdaptiveColumn()
+                        //        {
+                        //            Width=AdaptiveColumnWidth.Auto,
+                        //            Height=AdaptiveHeight.Auto,
+                        //            Items=new List<AdaptiveElement>
+                        //            {
+                        //               new AdaptiveActionSet()
+                        //               {
+
+                        //                   Actions=new List<AdaptiveAction>
+                        //                   {
+                        //                         new AdaptiveSubmitAction()
+                        //                        {
+                        //                             Title=" ",
+                        //                             IconUrl=_configuration["BaseUri"] + "/images/Default_2.png",
+                        //                             Type="Action.Submit",
+                        //                            Data =
+                        //                            new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                        //                            {
+                        //                                Data = new TaskModuleActionDetails()
+                        //                                {
+                        //                                    type ="task/fetch",
+                        //                                    URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/1",
+                        //                                }
+                        //                            }
+                        //                        },
+                        //                   }
+                        //               }
+                        //            }
+
+                        //         },
+                        //         new AdaptiveColumn()
+                        //        {
+                        //            Width=AdaptiveColumnWidth.Auto,
+                        //            Height=AdaptiveHeight.Auto,
+                        //            Items=new List<AdaptiveElement>
+                        //            {
+                        //               new AdaptiveActionSet()
+                        //               {
+
+                        //                   Actions=new List<AdaptiveAction>
+                        //                   {
+                        //                         new AdaptiveSubmitAction()
+                        //                        {
+                        //                            Title=" ",
+                        //                            IconUrl=_configuration["BaseUri"] + "/images/Default_3.png",
+                        //                            Type="Action.Submit",
+                        //                            Data =
+                        //                            new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                        //                            {
+                        //                                Data = new TaskModuleActionDetails()
+                        //                                {
+                        //                                    type ="task/fetch",
+                        //                                    URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/1",
+                        //                                }
+                        //                            }
+                        //                        },
+                        //                   }
+                        //               }
+                        //            }
+
+                        //        },
+                        //         new AdaptiveColumn()
+                        //        {
+                        //            Width=AdaptiveColumnWidth.Auto,
+                        //            Height=AdaptiveHeight.Auto,
+                        //            Items=new List<AdaptiveElement>
+                        //            {
+                        //               new AdaptiveActionSet()
+                        //               {
+
+                        //                   Actions=new List<AdaptiveAction>
+                        //                   {
+                        //                         new AdaptiveSubmitAction()
+                        //                        {
+                        //                             Title="4",
+                        //                             Type="Action.Submit",
+                        //                            Data =
+                        //                            new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                        //                            {
+                        //                                Data = new TaskModuleActionDetails()
+                        //                                {
+                        //                                    type ="task/fetch",
+                        //                                    URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/1",
+                        //                                }
+                        //                            }
+                        //                        },
+                        //                   }
+                        //               }
+                        //            }
+                        //        },
+                        //         new AdaptiveColumn()
+                        //        {
+                        //            Width=AdaptiveColumnWidth.Auto,
+                        //            Height=AdaptiveHeight.Auto,
+                        //            Items=new List<AdaptiveElement>
+                        //            {
+                        //               new AdaptiveActionSet()
+                        //               {
+
+                        //                   Actions=new List<AdaptiveAction>
+                        //                   {
+                        //                         new AdaptiveSubmitAction()
+                        //                        {
+                        //                            Title=" ",
+                        //                            IconUrl=_configuration["BaseUri"] + "/images/Default_5.png",
+                        //                            Type="Action.Submit",
+                        //                            Data =
+                        //                            new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                        //                            {
+                        //                                Data = new TaskModuleActionDetails()
+                        //                                {
+                        //                                    type ="task/fetch",
+                        //                                    URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/1",
+                        //                                }
+                        //                            }
+                        //                        },
+                        //                   }
+                        //               }
+                        //            }
+
+                        //        },
+                        //    }
+                        //}
+                    },
+                    Actions = new List<AdaptiveAction>
+                    {
+
+                    new AdaptiveSubmitAction()
                                                 {
-
-                                                    new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Default_1.png"),PixelHeight=32, PixelWidth=32, AltText="Good",
-                                                        Style =AdaptiveImageStyle.Default, Id="1", SelectAction = new AdaptiveSubmitAction() {Type = "Action.Submit", Title = "View reflections", DataJson=@"{'type':'task/fetch','reflectionId':'" + data.reflectionID +"' }", Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                                                    Title=" ",
+                                                    IconUrl=_configuration["BaseUri"] + "/images/Default_1.png",
+                                                    Type="Action.Submit",
+                                                    Data =
+                                                    new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                                                     {
                                                         Data = new TaskModuleActionDetails()
                                                         {
-                                                               type ="task/fetch",
-                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/1",
+                                                            type ="task/fetch",
+                                                            URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/1",
                                                         }
-                                                }}, } },
-                                },
-                                 new AdaptiveColumn()
-                                {
-                                    Width=AdaptiveColumnWidth.Auto,
-                                    Height=AdaptiveHeight.Auto,
-                                    Items=new List<AdaptiveElement>()
-                                    {
-
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Default_2.png"),PixelHeight=32, PixelWidth=32,
-                                            Style =AdaptiveImageStyle.Default, Id="2", SelectAction = new AdaptiveSubmitAction() { DataJson = @"{'feedbackId':'2', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" , Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                                                    },
+                                                    },
+                    new AdaptiveSubmitAction()
+                                                {
+                                                    Title=" ",
+                                                    IconUrl=_configuration["BaseUri"] + "/images/Default_2.png",
+                                                    Type="Action.Submit",
+                                                    Data =
+                                                    new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                                                     {
                                                         Data = new TaskModuleActionDetails()
                                                         {
-                                                               type ="task/fetch",
-                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/2",
+                                                            type ="task/fetch",
+                                                            URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/2",
                                                         }
-                                                }}, } },
-
-                                 },
-                                 new AdaptiveColumn()
-                                {
-                                    Width=AdaptiveColumnWidth.Auto,
-                                    Height=AdaptiveHeight.Auto,
-                                    Items=new List<AdaptiveElement>()
-                                    {
-
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Default_3.png"),PixelHeight=32, PixelWidth=32,
-                                            Style =AdaptiveImageStyle.Default, Id="3", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'3', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}", Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                                                    }
+                                                },
+                    new AdaptiveSubmitAction()
+                                                {
+                                                    Title=" ",
+                                                    IconUrl=_configuration["BaseUri"] + "/images/Default_3.png",
+                                                    Type="Action.Submit",
+                                                    Data =
+                                                    new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                                                     {
                                                         Data = new TaskModuleActionDetails()
                                                         {
-                                                               type ="task/fetch",
-                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/3",
+                                                            type ="task/fetch",
+                                                            URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/3",
                                                         }
-                                                }}, } },
-
-                                },
-                                 new AdaptiveColumn()
-                                {
-                                    Width=AdaptiveColumnWidth.Auto,
-                                    Height=AdaptiveHeight.Auto,
-                                    Items=new List<AdaptiveElement>()
-                                    {
-
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Default_4.png"),PixelHeight=32, PixelWidth=32,
-                                            Style =AdaptiveImageStyle.Default, Id="4", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'4', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}" , Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                                                    }
+                                                },
+                    new AdaptiveSubmitAction()
+                                                {
+                                                    Title=" ",
+                                                    IconUrl=_configuration["BaseUri"] + "/images/Default_4.png",
+                                                    Type="Action.Submit",
+                                                    Data =
+                                                    new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                                                     {
                                                         Data = new TaskModuleActionDetails()
                                                         {
-                                                               type ="task/fetch",
-                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/4",
+                                                            type ="task/fetch",
+                                                            URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/4",
                                                         }
-                                                }}, } },
-
-                                },
-                                 new AdaptiveColumn()
-                                {
-                                    Width=AdaptiveColumnWidth.Auto,
-                                    Height=AdaptiveHeight.Auto,
-                                    Items=new List<AdaptiveElement>()
-                                    {
-
-                                        new AdaptiveImage(){Url=new Uri(_configuration["BaseUri"] + "/images/Default_5.png"),PixelHeight=32, PixelWidth=32,
-                                            Style =AdaptiveImageStyle.Default, Id="5", SelectAction = new AdaptiveSubmitAction(){ DataJson = @"{'feedbackId':'5', 'type':'saveFeedback','messageId':'" + data.messageID +"','reflectionId':'" + data.reflectionID +"'}", Data = new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
+                                                    }
+                                                },
+                    new AdaptiveSubmitAction()
+                                                {
+                                                    Title=" ",
+                                                    IconUrl=_configuration["BaseUri"] + "/images/Default_5.png",
+                                                    Type="Action.Submit",
+                                                    Data =
+                                                    new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                                                     {
                                                         Data = new TaskModuleActionDetails()
                                                         {
-                                                               type ="task/fetch",
-                                                                URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/5",
+                                                            type ="task/fetch",
+                                                            URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/5",
                                                         }
-                                                }}, } },
+                                                    }
+                                                },
 
-                                },
-                            }
-                        }
                     }
+
                 };
 
             }
