@@ -200,17 +200,17 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
             try
             {
-                var cacheKey = "executionstarted";
-                bool isprocessstarted=true;
+                //var cacheKey = "executionstarted";
+                //bool isprocessstarted=true;
                 ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
-                if (_cache.TryGetValue(cacheKey, out isprocessstarted))
-                {
-                        Thread.Sleep(3000);
-                }
-                else
-                {
-                    _cache.Set(cacheKey, isprocessstarted);
-                }
+                //if (_cache.TryGetValue(cacheKey, out isprocessstarted))
+                //{
+                //        Thread.Sleep(3000);
+                //}
+                //else
+                //{
+                //    _cache.Set(cacheKey, isprocessstarted);
+                //}
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
@@ -340,6 +340,28 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(taskInfo.reflectionID);
                                 reflectData.ReflectMessageId = resultid.Id;
                                 await reflectionDataRepository.InsertOrMergeAsync(reflectData);
+                                try
+                                {   
+
+                                    var feedbackCard = _cardHelper.FeedBackCard(new Dictionary<int, List<FeedbackDataEntity>>(), taskInfo.reflectionID, taskInfo.question);
+
+                                    Attachment attachmentfeedback = new Attachment()
+                                    {
+                                        ContentType = AdaptiveCard.ContentType,
+                                        Content = feedbackCard
+                                    };
+                                    var replyfeedback = Activity.CreateMessageActivity();
+                                    replyfeedback.Attachments.Add(attachmentfeedback);
+                                    var result = turnContext.SendActivityAsync(replyfeedback, cancellationToken);
+                                    reflectData.MessageID = result.Result.Id;
+                                    //update messageid in reflectio table
+                                    await reflectionDataRepository.InsertOrMergeAsync(reflectData);
+                                }
+                                catch (System.Exception e)
+                                {
+                                    _telemetry.TrackException(e);
+                                    Console.WriteLine(e.Message.ToString());
+                                }
                             }
                             return null;
                         }
