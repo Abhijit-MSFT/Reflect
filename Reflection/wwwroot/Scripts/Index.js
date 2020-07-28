@@ -1,10 +1,10 @@
 ﻿let questions = [];
 let userobject = {};
 let accesstoken = "";
+let postTaskInfo = "";
 
 $(document).ready(function () {
-    let postTaskInfo = "";
-    $(".spinner").hide();
+    $(".spinner").show();
     $("#postSentMessage").hide();
     $(".js-example-basic-single").select2({
         minimumResultsForSearch: Infinity
@@ -103,7 +103,6 @@ function SendAdaptiveCard() {
     }
     else rectype = $("#recurrance").val();
 
-
     let exectime = "";
     if ($("#exectime").val() !== "Send now") {
         if ((new Date().getTimezoneOffset() / 60).toString().split('.').length > 1) {
@@ -156,7 +155,7 @@ function SendAdaptiveCard() {
         if (taskInfo.executionTime !== "Send now") {
             postTaskInfo = taskInfo
             $('#initialPost').hide();
-            $("#confirmationMessage").html("<div>You're all set! This post was sent and is scheduled for " + taskInfo.executionDate + " at " + $("#exectime").val() + " (" + taskInfo.recurssionType + ")" + "</div>");
+            $("#confirmationMessage").html("<div class='u-set'>You're all set! This post was sent and is scheduled for " + taskInfo.executionDate + " at " + $("#exectime").val() + " (" + taskInfo.recurssionType + ")" + "</div>");
             $('.close-container').hide();
             $('#postSentMessage').show();
         } else {
@@ -178,12 +177,10 @@ function combineDateAndTime(date, time) {
     if ($('#exectime').val() !== "Send now") {
             time = getTwentyFourHourTime(time);
             return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
-        
     }
     else {
         return "";
     }
-
 }
 
 function getTwentyFourHourTime(time) {
@@ -221,7 +218,7 @@ function GetDefaultQuestions(userPrincipleName) {
         type: "GET",
         url: "api/GetAllDefaultQuestions/" + userPrincipleName,
         success: function (data) {
-             questions = data;
+            questions = data;
             let defaultquestions = data.filter(x => x.isDefaultFlag);
             let myquestions = data.filter(x => !x.isDefaultFlag);
             if (myquestions.length > 0) {
@@ -253,7 +250,8 @@ function GetDefaultQuestions(userPrincipleName) {
                     x.question +
                     "</option>";
             });
-            
+            $(".spinner").hide();
+            $(".mc-content").show();
             $("#questions").append(blockdata);
             $("#selectedTxt").html($("#questions").val());
             $(".select2-search__field").attr("maxlength", "150");
@@ -373,7 +371,6 @@ $(".weekselect").on("click", function () {
 });
 
 $(document).click(function (e) {
-    // Check if click was triggered on or within #customrecurrancediv
     if ($(e.target).closest("#customrecurrancediv").length > 0 || $(e.target).closest("#customdata").length > 0) {
         return false;
     }

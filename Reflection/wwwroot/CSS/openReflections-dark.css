@@ -60,17 +60,6 @@ body {
     display: inline;
 }
 
-    /*.reflections-sc2::before {
-        content: "\E329";
-        font-family: "Teams Assets";
-        font-size: small;
-        color: #ffffff;
-        opacity: 0.7;
-        margin-right: 1%;
-        top: 2px;
-        position: relative;
-    }*/
-
 .float-right {
     float: right !important;
     position: relative;
@@ -340,12 +329,9 @@ div[class^="card custom-profle-card"] {
     font-size: 16px;
     color: #333333;
     position: relative;
-    top: 6px;
-    /*    margin-left: 4px;*/
+    top: 4px;
     cursor: pointer;
 }
-
-
 
 .custom-emoji-card {
     position: absolute;

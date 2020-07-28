@@ -79,6 +79,9 @@ body {
 
 .custom-tb {
     margin-top: 19px;
+}
+
+.mf-manage {
     display: none;
 }
 
@@ -118,7 +121,7 @@ body {
     margin: 19px 0 0 15px;
     border-top: 1px solid #3b3a39;
     font-weight: 500;
-    padding-left:0px !important;
+    padding-left: 0px !important;
 }
 
 .privacy-cl {
@@ -204,7 +207,7 @@ td.edit-icon {
 
 .mf {
     border-top: 2px solid #3b3a39;
-    display:block;
+    display: block;
 }
 
 .float-left {
@@ -374,10 +377,11 @@ input::-webkit-calendar-picker-indicator {
     justify-content: flex-end;
     width: 100%;
 }
-    .btn-cancle:focus,
-    .btn-send:focus {
-        outline-color: #dddddd;
-    }
+
+.btn-cancle:focus,
+.btn-send:focus {
+    outline-color: #dddddd;
+}
 
 .btn-send {
     background-color: #6266A5;
@@ -479,6 +483,7 @@ input::-webkit-calendar-picker-indicator {
         margin: 32px 10px;
     }
 }
+
 .post {
     position: absolute;
     left: 398px;
