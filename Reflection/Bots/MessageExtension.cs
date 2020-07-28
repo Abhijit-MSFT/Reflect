@@ -57,7 +57,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 {
                     var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
                     var reply = Activity.CreateMessageActivity();
-                    var adaptiveupdatereply = Activity.CreateMessageActivity();
                     if (response.type == ReflectConstants.SaveFeedBack)
                     {
                         var name = (turnContext.Activity.From.Name).Split();
@@ -88,24 +87,14 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             taskInfo.postCreateBy = reflectData.CreatedBy;
                             taskInfo.privacy = reflectData.Privacy;
                             taskInfo.reflectionID = reflectData.ReflectionID;
-                            var updateadaptivecard = _cardHelper.CreateNewReflect(taskInfo); 
                             Attachment attachment = new Attachment()
                             {
                                 ContentType = AdaptiveCard.ContentType,
                                 Content = adaptiveCard
                             };
-                            Attachment attachmentadaptive = new Attachment()
-                            {
-                                ContentType = AdaptiveCard.ContentType,
-                                Content = updateadaptivecard
-                            };
                             reply.Attachments.Add(attachment);
-                            adaptiveupdatereply.Attachments.Add(attachmentadaptive);
-                            adaptiveupdatereply.Id = reflectData.ReflectMessageId;
-                            await turnContext.UpdateActivityAsync(adaptiveupdatereply);
                             if (reflectData.MessageID == null)
                             {
-
                                 var result = turnContext.SendActivityAsync(reply, cancellationToken);
                                 reflectData.MessageID = result.Result.Id;
                                 //update messageid in reflectio table
