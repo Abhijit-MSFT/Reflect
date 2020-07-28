@@ -3,6 +3,7 @@ let feedback;
 let reflection;
 let question;
 let totalcount = 0;
+
 $(document).ready(function () {
     $(".spinner").show();
     $('.close-container').hide();
@@ -108,8 +109,8 @@ $(document).ready(function () {
                     }
                 });
             });
-
         }
+
         if (feedbackvalue === "0") {
             $.ajax({
                 type: 'POST',
@@ -147,8 +148,8 @@ $(document).ready(function () {
                     }
                 }
             });
-
         }
+
         $(".remove").click(function () {
             $(".emoji-selected").css("background-color", "#F4F4F4");
             $(".selected-img").hide();
@@ -169,7 +170,6 @@ $(document).ready(function () {
                     if (data === "true") {
                         GetReflections();
                     }
-
                 }
             });
         });
@@ -186,9 +186,7 @@ function Checkin() {
         $(".check-in").hide();
         $(".selected-img").show();
     }
-
 }
-
 
 function GetReflections() {
     $.ajax({
@@ -344,7 +342,6 @@ function openDetailReflection(feedbackId, reflectionId) {
         '" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:' +
         width.toString() +
         '%"></div></div>';
-
 
     blockdata =
         blockdata +

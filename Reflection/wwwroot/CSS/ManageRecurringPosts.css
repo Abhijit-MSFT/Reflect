@@ -4,8 +4,8 @@
     font-style: normal;
 }
 
-.manage-R{
-    margin:0 32px;
+.manage-R {
+    margin: 0 32px;
 }
 
 .custom-mh {
@@ -71,6 +71,9 @@
 
 .custom-tb {
     margin-top: 19px;
+}
+
+.mf-manage {
     display: none;
 }
 
@@ -105,7 +108,7 @@
     color: #252423;
     margin: 19px 0 0 15px;
     font-weight: 500;
-    padding-left:0px !important;
+    padding-left: 0px !important;
 }
 
 .privacy-cl {
@@ -158,8 +161,6 @@ tr:last-child {
     color: #484644;
     vertical-align: middle !important;
 }
-
-    
 
 td.delete-icon {
     vertical-align: middle;
@@ -302,7 +303,6 @@ td.edit-icon {
     outline: none;
 }
 
-
 input[type="date"]::-webkit-calendar-picker-indicator {
     color: transparent;
     background: none;
@@ -335,8 +335,6 @@ input::-webkit-calendar-picker-indicator {
     right: 10px;
     bottom: 28px;
 }
-
-
 
 .date, .blk-head {
     margin-top: .5rem;
@@ -652,6 +650,7 @@ button:focus {
         margin: 32px 10px;
     }
 }
+
 .post {
     position: absolute;
     left: 398px;
