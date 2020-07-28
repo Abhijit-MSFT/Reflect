@@ -26,5 +26,9 @@ namespace Reflection.Interfaces
         Task DeleteRecurrsionDataAsync(Guid reflectionId);
         Task<string> RemoveReflectionId(string reflectMessageId);
         Task<string> GetUserEmailId<T>(ITurnContext<T> turnContext) where T : Microsoft.Bot.Schema.IActivity;
+
+        string Encrypt(string text);
+
+        string Decrypt(string text);
     }
 }
