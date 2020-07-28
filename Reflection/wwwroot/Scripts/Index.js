@@ -1,7 +1,7 @@
 ﻿let questions = [];
 let userobject = {};
 let accesstoken = "";
-
+let weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 $(document).ready(function () {
     let postTaskInfo = "";
     $(".spinner").hide();
@@ -18,7 +18,7 @@ $(document).ready(function () {
     let today = moment().format("YYYY-MM-DD");
     $("#execdate").val(today);
     $("#startdatedisplay").html(today);
-    $("#customnumber").html($("#number").val());
+    $("#custom number").html($("#number").val());
     $("#customtype").html($("#dwm").val() + "(s)");
     $(".select2-selection__arrow").remove();
     let monthval = "";
@@ -89,7 +89,7 @@ function SendAdaptiveCard() {
         questionid = questions[index].questionID;
     }
     let rectype = "";
-    if ($("#recurrance").val() === "Custom") {
+    if ($("#recurrence").val() === "Custom") {
         if ($("#dwm").val() === "month") {
             if ($("input[name='days-check']:checked").val() === "days") {
                 rectype = "Day " + $("#monthdate").val()+" "+$("#finaldates").html();
@@ -101,7 +101,7 @@ function SendAdaptiveCard() {
         }
         else rectype = $("#finaldates").html();
     }
-    else rectype = $("#recurrance").val();
+    else rectype = $("#recurrence").val();
 
 
     let exectime = "";
@@ -141,7 +141,7 @@ function SendAdaptiveCard() {
         nextExecutionDate: combineDateAndTime($("#execdate").val(), $("#exectime").val()),
         postDate: "",
         isDefaultQuestion: false,
-        recurssionType: $("#recurrance").val(),
+        recurssionType: $("#recurrence").val(),
         customRecurssionTypeValue: rectype,
         action: "sendAdaptiveCard"
     };
@@ -154,9 +154,9 @@ function SendAdaptiveCard() {
         alert("Please select " + $("#date").text());
     } else {
         if (taskInfo.executionTime !== "Send now") {
-            postTaskInfo = taskInfo
+            postTaskInfo = taskInfo;
             $('#initialPost').hide();
-            $("#confirmationMessage").html("<div>You're all set! This post was sent and is scheduled for " + taskInfo.executionDate + " at " + $("#exectime").val() + " (" + taskInfo.recurssionType + ")" + "</div>");
+            $("#confirmationMessage").html("<div>You're all set! This post was sent and is scheduled for " + taskInfo.recurssionType + ", " + taskInfo.executionDate + " at " + $("#exectime").val() + "</div>");
             $('.close-container').hide();
             $('#postSentMessage').show();
         } else {
@@ -176,14 +176,51 @@ function done() {
 
 function combineDateAndTime(date, time) {
     if ($('#exectime').val() !== "Send now") {
-            time = getTwentyFourHourTime(time);
+        time = getTwentyFourHourTime(time);
+        if ($("#recurrence").val() === "Weekly" || $("#recurrence").val() === "Monthly" || $("#recurrence").val() === "Daily" || $("#recurrence").val() === "Every Weekday" && new Date(date).getDay !== 0 && new Date(date).getDay !== 6)
             return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
-        
+        else if ($("#recurrence").val() === "Every Weekday") {
+            if (new Date(date).getDay === 0)
+                return new Date(moment(`${date} ${time}`).add(1, 'days').format('YYYY-MM-DD HH:mm')).toUTCString();
+            if (new Date(date).getDay === 6)
+                return new Date(moment(`${date} ${time}`).add(2, 'days').format('YYYY-MM-DD HH:mm')).toUTCString();
+        }
+        else if ($("#recurrence").val() === "Custom") {
+            customvalue = $("dwm").val();
+            if (customvalue === "day")
+                return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+            else if (customvalue === "week") {
+                if ($("#slectedweeks").html().split(',').length === 1) {
+                    if (weeks[new Date(date).getDay()] === $("#slectedweeks").html())
+                        return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+                    else {
+                        let nextweekdate = nextWeekdayDate(date, weeks.indexOf($("#slectedweeks").html()));
+                        return new Date(moment(`${nextweekdate} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+                    }
+
+                }
+                else {
+                    if ($("#slectedweeks").html().split(',').indexOf(weeks[new Date(date).getDay()])) {
+                        return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+                    }
+                }
+
+            }
+        }
+        else {
+            return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+        }
     }
     else {
         return "";
     }
 
+}
+
+function nextWeekdayDate(date, day_in_week) {
+    var ret = new Date(date || new Date());
+    ret.setDate(ret.getDate() + (day_in_week - 1 - ret.getDay() + 7) % 7 + 1);
+    return ret;
 }
 
 function getTwentyFourHourTime(time) {
@@ -302,7 +339,7 @@ function addShowHideButton() {
     }
 }
 
-$("#recurrance").on("change", function () {
+$("#recurrence").on("change", function () {
     if (this.value === "Custom") {
         $(".custom-cal").show();
         $("#customdata").show();
@@ -373,12 +410,12 @@ $(".weekselect").on("click", function () {
 });
 
 $(document).click(function (e) {
-    // Check if click was triggered on or within #customrecurrancediv
-    if ($(e.target).closest("#customrecurrancediv").length > 0 || $(e.target).closest("#customdata").length > 0) {
+    // Check if click was triggered on or within #customrecurrencediv
+    if ($(e.target).closest("#customrecurrencediv").length > 0 || $(e.target).closest("#customdata").length > 0) {
         return false;
     }
     $(".custom-cal").hide();
-    if ($("#recurrance").val() === "Custom") {
+    if ($("#recurrence").val() === "Custom") {
         $("#customdata").html($("#finaldates").text());
     }
 });

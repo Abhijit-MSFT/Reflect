@@ -13,6 +13,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
     using Microsoft.ApplicationInsights;
     using Microsoft.Bot.Builder;
     using Microsoft.Bot.Builder.Teams;
+    using Microsoft.Bot.Connector;
     using Microsoft.Bot.Schema;
     using Microsoft.Bot.Schema.Teams;
     using Microsoft.Extensions.Caching.Memory;
@@ -31,15 +32,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         private readonly TelemetryClient _telemetry;
         private readonly ICard _cardHelper;
         private readonly IDataBase _dbHelper;
-        private readonly IMemoryCache _cache;
 
-        public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper, IDataBase dbHelper, IMemoryCache memoryCache)
+        public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper, IDataBase dbHelper)
         {
             _configuration = configuration;
             _telemetry = telemetry;
             _cardHelper = cardHelper;
             _dbHelper = dbHelper;
-            _cache = memoryCache;
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -97,7 +96,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             {
                                 var result = turnContext.SendActivityAsync(reply, cancellationToken);
                                 reflectData.MessageID = result.Result.Id;
-                                //update messageid in reflectio table
+                                //update message-id in reflection table
                                 await reflectionDataRepository.InsertOrMergeAsync(reflectData);
 
                             }
@@ -153,7 +152,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                     var result = turnContext.SendActivityAsync(reply, cancellationToken);
                     reflectData.MessageID = result.Result.Id;
-                    //update messageid in reflectio table
+                    //update messageid in reflection table
                     await reflectionDataRepository.InsertOrMergeAsync(reflectData);
 
                 }
@@ -239,7 +238,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         {
                             var result = turnContext.SendActivityAsync(reply, cancellationToken);
                             reflectData.MessageID = result.Result.Id;
-                            //update messageid in reflectio table
+                            //update messageid in reflection table
                             await reflectionDataRepository.InsertOrMergeAsync(reflectData);
                       
                         }
@@ -330,10 +329,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                         Content = feedbackCard
                                     };
                                     var replyfeedback = Activity.CreateMessageActivity();
+                                    replyfeedback.ReplyToId = reflectData.ReflectMessageId;
                                     replyfeedback.Attachments.Add(attachmentfeedback);
+                                    var connector = turnContext.TurnState.Get<IConnectorClient>() as ConnectorClient;
                                     var result = turnContext.SendActivityAsync(replyfeedback, cancellationToken);
                                     reflectData.MessageID = result.Result.Id;
-                                    //update messageid in reflectio table
+                                    //update messageid in reflection table
                                     await reflectionDataRepository.InsertOrMergeAsync(reflectData);
                                 }
                                 catch (System.Exception e)

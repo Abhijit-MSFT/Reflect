@@ -70,12 +70,23 @@ namespace Reflection.Repositories.RecurssionData
         public async Task<List<RecurssionDataEntity>> GetAllRecurssionData()
         {
             DateTime dateTime = DateTime.UtcNow;
+            dateTime = dateTime.AddSeconds(-dateTime.Second);
+            dateTime= dateTime.AddMilliseconds(-dateTime.Millisecond);
             _telemetry.TrackEvent("GetAllRecurssionData");
             try
             {
                 var recurssionData = await this.GetAllAsync(PartitionKeyNames.RecurssionDataTable.TableName);
                 var recData = recurssionData.Where(c => c.NextExecutionDate != null).ToList();
                 var intervalRecords = recData.Where(r => dateTime.Subtract((DateTime)r.NextExecutionDate).TotalSeconds < 60 && dateTime.Subtract((DateTime)r.NextExecutionDate).TotalSeconds > 0).ToList();
+                //var intervalRecords = new List<RecurssionDataEntity>();
+                //recData.ForEach(data =>
+                //{
+                //    var nextexecutiondatetime = (DateTime)data.NextExecutionDate;
+                //    nextexecutiondatetime = nextexecutiondatetime.AddSeconds(-nextexecutiondatetime.Second);
+                //    nextexecutiondatetime = nextexecutiondatetime.AddMilliseconds(-nextexecutiondatetime.Millisecond);
+                //    if (nextexecutiondatetime == dateTime)
+                //        intervalRecords.Add(data);
+                //});
                 return intervalRecords;
             }
             catch (Exception ex)

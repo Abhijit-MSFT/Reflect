@@ -234,6 +234,10 @@ namespace Reflection.Helper
 
                 switch (recurssionEntity.RecursstionType.ToLower().Trim())
                 {
+                    case "daily":
+                        DateTime? nextExecutionDay = DateTime.Now.AddDays(1);
+                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextExecutionDay ? nextExecutionDay : null;
+                        break;
                     case "every weekday":
                         DateTime? nextWeekDay = GetNextWeekday();
                         recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextWeekDay ? nextWeekDay : null;
