@@ -336,7 +336,7 @@ namespace Reflection.Helper
                         RowKey = rowKey.ToString(),
                         FeedbackID = feedbackID,
                         FullName = taskInfo.userName,
-                        ReflectionID = Guid.Parse(taskInfo.reflectionId),
+                        ReflectionID = taskInfo.reflectionId,
                         FeedbackGivenBy = taskInfo.emailId,
                         Feedback = Convert.ToInt32(taskInfo.feedbackId)
 

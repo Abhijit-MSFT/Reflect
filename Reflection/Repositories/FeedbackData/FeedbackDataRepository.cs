@@ -72,7 +72,7 @@ namespace Reflection.Repositories.FeedbackData
             }
         }
 
-        public async Task<FeedbackDataEntity> GetReflectionFeedback(Guid reflid, string email)
+        public async Task<FeedbackDataEntity> GetReflectionFeedback(Guid? reflid, string email)
         {
             _telemetry.TrackEvent("GetReflectionFeedback");
             try

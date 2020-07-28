@@ -280,14 +280,18 @@ namespace Reflection.Helper
                     {
                         Type = "Action.Submit",
                         Title = "View reflections",
-                        DataJson=@"{'type':'task/fetch','reflectionId':'" + reflectionId +"' }",
                         Data =
                         new TaskModuleActionHelper.AdaptiveCardValue<TaskModuleActionDetails>()
                         {
-                            Data = new TaskModuleActionDetails()
+                           Data=new TaskModuleActionDetails()
                             {
                                 type ="task/fetch",
-                                URL =_configuration["BaseUri"] + "/openReflections/" + reflectionId+"/0",
+                                URL =_configuration["BaseUri"] + "/openReflections/",
+                            },
+                            DataJson=new DataJson
+                            {
+                                ReflectionId=reflectionId,
+                                FeedbackId=0
                             }
                         }
                     },
@@ -603,7 +607,12 @@ namespace Reflection.Helper
                                                         Data = new TaskModuleActionDetails()
                                                         {
                                                             type ="task/fetch",
-                                                            URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/1",
+                                                            URL =_configuration["BaseUri"] + "/openReflections/"
+                                                        },
+                                                        DataJson=new DataJson
+                                                        {
+                                                            ReflectionId=data.reflectionID,
+                                                            FeedbackId=1
                                                         }
                                                     },
                                                     },
@@ -619,6 +628,11 @@ namespace Reflection.Helper
                                                         {
                                                             type ="task/fetch",
                                                             URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/2",
+                                                        },
+                                                        DataJson=new DataJson
+                                                        {
+                                                            ReflectionId=data.reflectionID,
+                                                            FeedbackId=2
                                                         }
                                                     }
                                                 },
@@ -634,6 +648,11 @@ namespace Reflection.Helper
                                                         {
                                                             type ="task/fetch",
                                                             URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/3",
+                                                        },
+                                                        DataJson=new DataJson
+                                                        {
+                                                            ReflectionId=data.reflectionID,
+                                                            FeedbackId=3
                                                         }
                                                     }
                                                 },
@@ -649,6 +668,11 @@ namespace Reflection.Helper
                                                         {
                                                             type ="task/fetch",
                                                             URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/4",
+                                                        },
+                                                        DataJson=new DataJson
+                                                        {
+                                                            ReflectionId=data.reflectionID,
+                                                            FeedbackId=4
                                                         }
                                                     }
                                                 },
@@ -664,6 +688,11 @@ namespace Reflection.Helper
                                                         {
                                                             type ="task/fetch",
                                                             URL =_configuration["BaseUri"] + "/openReflections/" + data.reflectionID+"/5",
+                                                        },
+                                                        DataJson=new DataJson
+                                                        {
+                                                            ReflectionId=data.reflectionID,
+                                                            FeedbackId=5
                                                         }
                                                     }
                                                 },
