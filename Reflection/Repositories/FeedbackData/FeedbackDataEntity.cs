@@ -21,7 +21,7 @@ namespace Reflection.Repositories.FeedbackData
         /// <summary>
         /// Gets or sets reflection Id.
         /// </summary>
-        public Guid ReflectionID { get; set; }
+        public Guid? ReflectionID { get; set; }
 
         /// <summary>
         /// Gets or sets FeedbackGivenBy.

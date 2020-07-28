@@ -54,7 +54,7 @@ namespace Reflection.Model
     public class UserfeedbackInfo
     {
         public int feedbackId { get; set; }
-        public string reflectionId { get; set; }
+        public Guid? reflectionId { get; set; }
         public string action { get; set; }
         public string type { get; set; }
         public string userName { get; set; }
@@ -70,6 +70,8 @@ namespace Reflection.Model
     public class ReflctionData
     {
         public Data data { get; set; }
+
+        public DataJson datajson { get; set; }
     }
 
     public class Data
@@ -77,7 +79,14 @@ namespace Reflection.Model
         public string URL { get; set; }
         public string type { get; set; }
     }
+     
+    public class DataJson
+    {
+        public Guid? ReflectionId { get; set; }
 
+        public int FeedbackId { get; set; }
+
+    }
     public class QuestionTest
     {
         public string Question { get; set; }
@@ -91,6 +100,8 @@ namespace Reflection.Model
             public object Type { get; set; } = JsonConvert.DeserializeObject("{\"type\": \"task/fetch\" }");
             [JsonProperty("data")]
             public T Data { get; set; }
+            [JsonProperty("datajson")]
+            public DataJson DataJson { get; set; }
         }
     }
 

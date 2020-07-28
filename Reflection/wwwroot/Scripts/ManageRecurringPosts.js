@@ -61,7 +61,6 @@ $('.edit-icon').click(function () {
     $('#edit').modal('show');
 });
 
-
 $(".date-ip").on("change", function () {
     this.setAttribute(
         "data-date",
@@ -70,7 +69,6 @@ $(".date-ip").on("change", function () {
     );
 }).trigger("change");
 
-
 function getRecurssions() {
     let email = $("#contextemail").val();
     $.ajax({
@@ -78,7 +76,7 @@ function getRecurssions() {
         url: '/api/GetRecurssions/' + email,
         success: function (data) {
             $(".spinner").hide();
-            $(".custom-tb").show();
+            $(".mf-manage").show();
             recurssions = JSON.parse(JSON.parse(data).recurssions);
             $("#questioncount").html("(" + recurssions.length + ")");
             daysInWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

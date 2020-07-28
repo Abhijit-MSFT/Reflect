@@ -13,6 +13,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
     using Microsoft.ApplicationInsights;
     using Microsoft.Bot.Builder;
     using Microsoft.Bot.Builder.Teams;
+    using Microsoft.Bot.Connector;
     using Microsoft.Bot.Schema;
     using Microsoft.Bot.Schema.Teams;
     using Microsoft.Extensions.Caching.Memory;
@@ -31,15 +32,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         private readonly TelemetryClient _telemetry;
         private readonly ICard _cardHelper;
         private readonly IDataBase _dbHelper;
-        private readonly IMemoryCache _cache;
 
-        public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper, IDataBase dbHelper, IMemoryCache memoryCache)
+        public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper, IDataBase dbHelper)
         {
             _configuration = configuration;
             _telemetry = telemetry;
             _cardHelper = cardHelper;
             _dbHelper = dbHelper;
-            _cache = memoryCache;
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -57,7 +56,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 {
                     var response = JsonConvert.DeserializeObject<UserfeedbackInfo>(turnContext.Activity.Value.ToString());
                     var reply = Activity.CreateMessageActivity();
-                    var adaptiveupdatereply = Activity.CreateMessageActivity();
                     if (response.type == ReflectConstants.SaveFeedBack)
                     {
                         var name = (turnContext.Activity.From.Name).Split();
@@ -65,7 +63,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         response.emailId = await _dbHelper.GetUserEmailId(turnContext);
 
                         //Check if this is user's second feedback
-                        FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId), response.emailId);
+                        FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
                         if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
                         {
                             feebackData.Feedback = response.feedbackId;
@@ -79,36 +77,26 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         try
                         {
                             //Check if message id is present in reflect data
-                            ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(Guid.Parse(response.reflectionId));
+                            ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
                             QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
-                            Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId));
-                            var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, Guid.Parse(response.reflectionId),question.Question);
+                            Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
+                            var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, response.reflectionId,question.Question);
                             TaskInfo taskInfo = new TaskInfo();
                             taskInfo.question = question.Question;
                             taskInfo.postCreateBy = reflectData.CreatedBy;
                             taskInfo.privacy = reflectData.Privacy;
                             taskInfo.reflectionID = reflectData.ReflectionID;
-                            var updateadaptivecard = _cardHelper.CreateNewReflect(taskInfo); 
                             Attachment attachment = new Attachment()
                             {
                                 ContentType = AdaptiveCard.ContentType,
                                 Content = adaptiveCard
                             };
-                            Attachment attachmentadaptive = new Attachment()
-                            {
-                                ContentType = AdaptiveCard.ContentType,
-                                Content = updateadaptivecard
-                            };
                             reply.Attachments.Add(attachment);
-                            adaptiveupdatereply.Attachments.Add(attachmentadaptive);
-                            adaptiveupdatereply.Id = reflectData.ReflectMessageId;
-                            await turnContext.UpdateActivityAsync(adaptiveupdatereply);
                             if (reflectData.MessageID == null)
                             {
-
                                 var result = turnContext.SendActivityAsync(reply, cancellationToken);
                                 reflectData.MessageID = result.Result.Id;
-                                //update messageid in reflectio table
+                                //update message-id in reflection table
                                 await reflectionDataRepository.InsertOrMergeAsync(reflectData);
 
                             }
@@ -164,7 +152,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                     var result = turnContext.SendActivityAsync(reply, cancellationToken);
                     reflectData.MessageID = result.Result.Id;
-                    //update messageid in reflectio table
+                    //update messageid in reflection table
                     await reflectionDataRepository.InsertOrMergeAsync(reflectData);
 
                 }
@@ -200,17 +188,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
             try
             {
-                //var cacheKey = "executionstarted";
-                //bool isprocessstarted=true;
                 ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
-                //if (_cache.TryGetValue(cacheKey, out isprocessstarted))
-                //{
-                //        Thread.Sleep(3000);
-                //}
-                //else
-                //{
-                //    _cache.Set(cacheKey, isprocessstarted);
-                //}
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
@@ -219,12 +197,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 var name = (turnContext.Activity.From.Name).Split();
                 response.userName = name[0] + ' ' + name[1];
                 response.emailId = await _dbHelper.GetUserEmailId(turnContext);
-                var reflectionid = reldata.data.URL.Replace("https://", "").Split('/')[2];
-                var feedbackId = Convert.ToInt32(reldata.data.URL.Replace("https://", "").Split('/')[3]);
+                var reflectionid = reldata.datajson.ReflectionId;
+                var feedbackId = reldata.datajson.FeedbackId;
                 response.reflectionId = reflectionid;
                 response.feedbackId = feedbackId;
                 // Check if this is user's second feedback
-                FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId), response.emailId);
+                FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
                 TaskInfo taskInfo = new TaskInfo();
                 if (response.feedbackId != 0)
                 {
@@ -240,10 +218,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     try
                     {
                         //Check if message id is present in reflect data
-                        ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(Guid.Parse(response.reflectionId));
+                        ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
                         QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
-                        Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(response.reflectionId));
-                        var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, Guid.Parse(response.reflectionId), question.Question);
+                        Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
+                        var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, response.reflectionId, question.Question);
 
                         taskInfo.question = question.Question;
                         taskInfo.postCreateBy = reflectData.CreatedBy;
@@ -260,7 +238,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         {
                             var result = turnContext.SendActivityAsync(reply, cancellationToken);
                             reflectData.MessageID = result.Result.Id;
-                            //update messageid in reflectio table
+                            //update messageid in reflection table
                             await reflectionDataRepository.InsertOrMergeAsync(reflectData);
                       
                         }
@@ -287,7 +265,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             Height = 600,
                             Width = 600,
                             Title = "Make space for people to share how they feel",
-                            Url = reldata.data.URL + '/' + response.userName
+                            Url = reldata.data.URL+ reflectionid+'/'+feedbackId + '/' + response.userName
 
                         },
                     },
@@ -351,10 +329,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                         Content = feedbackCard
                                     };
                                     var replyfeedback = Activity.CreateMessageActivity();
+                                    //replyfeedback.ReplyToId = reflectData.ReflectMessageId;
                                     replyfeedback.Attachments.Add(attachmentfeedback);
+                                    var connector = turnContext.TurnState.Get<IConnectorClient>() as ConnectorClient;
                                     var result = turnContext.SendActivityAsync(replyfeedback, cancellationToken);
                                     reflectData.MessageID = result.Result.Id;
-                                    //update messageid in reflectio table
+                                    //update messageid in reflection table
                                     await reflectionDataRepository.InsertOrMergeAsync(reflectData);
                                 }
                                 catch (System.Exception e)
@@ -453,7 +433,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                         }
                         await turnContext.DeleteActivityAsync(replymessageid[1]);
-                        activity.Text = "Refelct Id removed successfully";
+                        activity.Text = "This Reflect poll has been removed";
                         await turnContext.SendActivityAsync(activity);
 
                     }

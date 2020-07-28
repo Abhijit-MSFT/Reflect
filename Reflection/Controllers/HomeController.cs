@@ -215,7 +215,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                 _telemetry.TrackEvent("SaveUserFeedback");
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 // Check if this is user's second feedback
-                FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(data.reflectionId), data.emailId);
+                FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(data.reflectionId, data.emailId);
                 if (data.feedbackId == 0)
                 {
                     await feedbackDataRepository.DeleteFeedback(feebackData);
@@ -250,7 +250,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                 _telemetry.TrackEvent("GetUserFeedback");
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 // Check if this is user's second feedback
-                FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(Guid.Parse(data.reflectionId), data.emailId);
+                FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(data.reflectionId, data.emailId);
                
                     if (feebackData != null && data.emailId == feebackData.FeedbackGivenBy)
                     {

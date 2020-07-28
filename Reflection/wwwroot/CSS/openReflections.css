@@ -337,8 +337,7 @@ div[class^="card custom-profle-card"] {
     font-size: small;
     color: #6266a5;
     position: relative;
-    top: 6px;
-    /*    margin-left: 4px;*/
+    top: 4px;
     cursor: pointer;
 }
 

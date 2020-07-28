@@ -178,7 +178,15 @@ input[type="text"].input-select::placeholder {
 }
 
 .cont {
-    margin:0 32px;
+    margin: 0 32px;
+}
+
+.mc-content {
+    display: none;
+}
+
+.u-set {
+    margin-top: 1rem;
 }
 
 .custom-rw {
@@ -216,11 +224,13 @@ input[type="date"] {
     background: #201f1f;
     color: #ffffff;
 }
+
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     color: #ffffff !important;
     line-height: 32px !important;
     font-size: 14px !important;
 }
+
 .select2-container--default .select2-selection--single {
     border: none !important;
     background-color: #201f1f !important;
@@ -358,7 +368,7 @@ input[type="date"] {
 
     .btn-cancle:focus,
     .btn-send:focus {
-        outline-color: #dddddd;
+        outline: 5px auto #ffffff !important;
     }
 
 .btn-send:disabled {
@@ -399,6 +409,7 @@ input[type="date"] {
     margin-left: 12px;
     cursor: pointer;
 }
+
 input#timepick {
     width: 100%;
     background-color: #2d2c2c;
@@ -414,8 +425,9 @@ ul.ui-timepicker-viewport {
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     font-size: 14px;
     text-align: left;
-    color:whitesmoke;
+    color: whitesmoke;
 }
+
 .select2-container .select2-selection--single {
     height: 31px !important;
 }
@@ -424,6 +436,7 @@ ul.ui-timepicker-viewport {
     font-size: small;
     cursor: pointer;
 }
+
 .previewimg {
     width: 15px;
     height: 15px;
@@ -435,21 +448,27 @@ ul.ui-timepicker-viewport {
     position: absolute;
     bottom: 3%;
     right: 2%;
+    padding: 0 32px;
 }
 
-/*new-20th*/
+.select2-container {
+    width: 100% !important;
+}
 
 span.select2-dropdown.select2-dropdown--below {
     background: #2D2C2C;
     color: whitesmoke;
 }
+
 .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
     background-color: #6c757d;
     color: white;
 }
+
 .select2-container--default .select2-results__option--selected {
     background-color: #252424;
 }
+
 .select2-container--default .select2-search--dropdown .select2-search__field {
     border: 1px solid #aaa;
     background: #201F1F;
@@ -471,6 +490,7 @@ span.select2-dropdown.select2-dropdown--below {
     position: relative;
     margin: auto;
     top: 10rem;
+    z-index: 9999;
 }
 
     .spinner:before, .spinner:after {

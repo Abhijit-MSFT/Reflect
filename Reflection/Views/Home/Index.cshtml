@@ -20,21 +20,18 @@
 
 <body>
     <div class="spinner"><span></span></div>
-    <div class="container" tabindex="-1" id="postSentMessage">
-        <div id="confirmationMessage"></div>
-        <div class="confirmation">
-            <button type="button" class="btn-send" onclick="done()">Send</button>
+    <div class="mc-content">
+        <div class="container" tabindex="-1" id="postSentMessage">
+            <div id="confirmationMessage"></div>
+            <div class="confirmation">
+                <button type="button" class="btn-send" onclick="done()">Send</button>
+            </div>
         </div>
-    </div>
-    <div class="cont" id="initialPost">
-        <div class="" role="document">
+        <div class="cont" id="initialPost">
             <div class="mc">
                 <div class="">
                     <div class="question">Question (Max: 150 words)</div>
                     <div class="custom-in">
-                        @*<input type="text" list="questions" maxlength="150" name="questions" id="questions-list" class="input-select" placeholder="Enter a reflection question" onchange="getSelectedOption(this)" />
-                            <datalist class="htmlEle" id="questions">
-                            </datalist>*@
                         <select placeholder="Enter a reflection question" class="form-control js-example-tags question-length" id="questions" onchange="getSelectedOption(this)">
                             <optgroup label="My questions">My questions</optgroup>
                         </select>
@@ -70,18 +67,19 @@
                             <div class="col-6 custom-col">
                                 <div class="blk-head rec">Recurrence</div>
                                 <div class="selc">
-                                    <select class="cs htmlEle js-example-tags" id="recurrance" data-minimum-results-for-search="Infinity">
-                                        <option value="Does not repeat" selected class="recurranceoption">Does not repeat </option>
-                                        <option value="Every weekday" class="recurranceoption">Every weekday (Mon-Fri)</option>
-                                        <option value="Weekly" class="recurranceoption">Weekly</option>
-                                        <option value="Monthly" class="recurranceoption">Monthly</option>
-                                        <option value="Custom" class="recurranceoption">Custom</option>
+                                    <select class="cs htmlEle js-example-tags" id="recurrence" data-minimum-results-for-search="Infinity">
+                                        <option value="Does not repeat" selected class="recurrenceoption">Does not repeat </option>
+                                        <option value="Every weekday" class="recurrenceoption">Every weekday (Mon-Fri)</option>
+                                        <option value="Daily" class="recurrenceoption">Daily</option>
+                                        <option value="Weekly" class="recurrenceoption">Weekly</option>
+                                        <option value="Monthly" class="recurrenceoption">Monthly</option>
+                                        <option value="Custom" class="recurrenceoption">Custom</option>
                                     </select>
                                     <span class="sel-chev2"></span>
                                 </div>
                                 <div id="customdata"></div>
                             </div>
-                            <div class="custom-cal col-6 custom-col" id="customrecurrancediv">
+                            <div class="custom-cal col-6 custom-col" id="customrecurrencediv">
                                 <div class="card day">
                                     <div class="card-body">
                                         <div class="recurrence">Recurrence</div>
@@ -145,7 +143,8 @@
                                             </div>
                                         </div>
 
-                                        <div class="finaldates" id="finaldates">Every <span id="customnumber"></span> <span id="customtype"></span> <span id="slectedweeks"></span> starting from <span id="startdatedisplay"></span></div>
+                                        <div class="finaldates" id="finaldates">Every <span id="customnumber"></span> <span id="customtype"></span> <span id="slectedweeks"></span> starting from <span id="startdatedisplay"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -153,7 +152,7 @@
                     </div>
                     <div class="prev">Preview</div>
                     <div class="br-blk">
-                        <div class="created"><img src="~/Images/iconCreator.png" class="previewimg" />Created by <span id="usertext"></span></div>
+                        <div class="created"><img src="~/Images/iconCreator.png" class="previewimg" />Created by<span id="usertext"></span></div>
                         <div class="reflections"><img src="~/Images/iconPrivacy.png" class="previewimg" /> <span id="privacytext">  </span></div>
                         <div class="feeling" id="selectedTxt"></div>
                         <div class="smiles">
@@ -175,12 +174,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="mf modal-footer">
+                <div class="mf modal-footer" tabindex="-1">
                     <span class="clk"></span>
-                    <span class="manage" onclick="openTaskModule()">Scheduled reflections <span id="recurssionscount"></span> </span>
-                    <div class="float-right">
-                        <button type="button" class="btn-cancle" data-dismiss="modal" onclick="closeTaskModule()">Close</button>
-                        <button type="button" class="btn-send" onclick="SendAdaptiveCard()">Confirm</button>
+                    <span class="manage" onclick="openTaskModule()" tabindex="0">Scheduled reflections <span id="recurssionscount"></span> </span>
+                    <div class="float-right" tabindex="-1">
+                        <button type="button" class="btn-cancle" data-dismiss="modal" onclick="closeTaskModule()" tabindex="0">Close</button>
+                        <button type="button" class="btn-send" onclick="SendAdaptiveCard()" tabindex="0">Confirm</button>
                     </div>
                 </div>
             </div>
