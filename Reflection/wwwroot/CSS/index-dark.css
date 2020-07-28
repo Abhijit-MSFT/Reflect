@@ -358,7 +358,7 @@ input[type="date"] {
 
     .btn-cancle:focus,
     .btn-send:focus {
-        outline-color: #dddddd;
+        outline: 5px auto #ffffff !important;
     }
 
 .btn-send:disabled {
@@ -436,8 +436,6 @@ ul.ui-timepicker-viewport {
     bottom: 3%;
     right: 2%;
 }
-
-/*new-20th*/
 
 span.select2-dropdown.select2-dropdown--below {
     background: #2D2C2C;

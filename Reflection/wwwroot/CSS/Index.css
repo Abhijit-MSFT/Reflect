@@ -209,7 +209,6 @@ input::-webkit-calendar-picker-indicator {
 
 input[type="date"] {
     -webkit-appearance: media-slider;
-    outline-color: white;
     padding: 0 8px;
 }
 
@@ -335,7 +334,7 @@ input[type="date"] {
 
     .btn-cancle:focus,
     .btn-send:focus {
-        outline-color: #dddddd;
+        outline: 5px auto #000000 !important;
     }
 
 .btn-send:disabled {
