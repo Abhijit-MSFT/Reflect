@@ -189,17 +189,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
             try
             {
-                //var cacheKey = "executionstarted";
-                //bool isprocessstarted=true;
                 ReflctionData reldata = JsonConvert.DeserializeObject<ReflctionData>(taskModuleRequest.Data.ToString());
-                //if (_cache.TryGetValue(cacheKey, out isprocessstarted))
-                //{
-                //        Thread.Sleep(3000);
-                //}
-                //else
-                //{
-                //    _cache.Set(cacheKey, isprocessstarted);
-                //}
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
