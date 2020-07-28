@@ -156,7 +156,7 @@ function SendAdaptiveCard() {
         if (taskInfo.executionTime !== "Send now") {
             postTaskInfo = taskInfo
             $('#initialPost').hide();
-            $("#confirmationMessage").html("<div>You're all set! This post was sent and is scheduled for " + taskInfo.recurssionType + ", " + taskInfo.executionDate + " at " + $("#exectime").val() + "</div>");
+            $("#confirmationMessage").html("<div>You're all set! This post was sent and is scheduled for " + taskInfo.executionDate + " at " + $("#exectime").val() + " (" + taskInfo.recurssionType + ")" + "</div>");
             $('.close-container').hide();
             $('#postSentMessage').show();
         } else {
