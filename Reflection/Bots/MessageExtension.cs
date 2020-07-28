@@ -3,11 +3,6 @@
 // </copyright>
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
     using AdaptiveCards;
     using Bogus;
     using Microsoft.ApplicationInsights;
@@ -16,7 +11,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
     using Microsoft.Bot.Connector;
     using Microsoft.Bot.Schema;
     using Microsoft.Bot.Schema.Teams;
-    using Microsoft.Extensions.Caching.Memory;
     using Microsoft.Extensions.Configuration;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
@@ -26,6 +20,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
     using Reflection.Repositories.QuestionsData;
     using Reflection.Repositories.RecurssionData;
     using Reflection.Repositories.ReflectionData;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     public class MessageExtension : TeamsActivityHandler
     {
         private readonly IConfiguration _configuration;
@@ -80,7 +79,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
                             QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                             Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
-                            var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, response.reflectionId,question.Question);
+                            var adaptiveCard = _cardHelper.FeedBackCard(feedbacks, response.reflectionId, question.Question);
                             TaskInfo taskInfo = new TaskInfo();
                             taskInfo.question = question.Question;
                             taskInfo.postCreateBy = reflectData.CreatedBy;
@@ -240,7 +239,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             reflectData.MessageID = result.Result.Id;
                             //update messageid in reflection table
                             await reflectionDataRepository.InsertOrMergeAsync(reflectData);
-                      
+
                         }
                         else
                         {
@@ -265,7 +264,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             Height = 600,
                             Width = 600,
                             Title = "Make space for people to share how they feel",
-                            Url = reldata.data.URL+ reflectionid+'/'+feedbackId + '/' + response.userName
+                            Url = reldata.data.URL + reflectionid + '/' + feedbackId + '/' + response.userName
 
                         },
                     },
@@ -319,7 +318,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                 reflectData.ReflectMessageId = resultid.Id;
                                 await reflectionDataRepository.InsertOrMergeAsync(reflectData);
                                 try
-                                {   
+                                {
 
                                     var feedbackCard = _cardHelper.FeedBackCard(new Dictionary<int, List<FeedbackDataEntity>>(), taskInfo.reflectionID, taskInfo.question);
 

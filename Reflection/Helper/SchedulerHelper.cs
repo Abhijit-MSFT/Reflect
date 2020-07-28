@@ -4,16 +4,12 @@ using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OData.Edm;
 using Reflection.Interfaces;
 using Reflection.Model;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -73,7 +69,7 @@ namespace Reflection.Helper
                         Content = newPostCard
                     };
                     var proactiveNotification = await new ProactiveMessageHelper(_configuration).SendChannelNotification(channelAccount, reflectionData.ServiceUrl, reflectionData.ChannelID, "", newPostCardAttachment);
-                    if(proactiveNotification.IsSuccessful && proactiveNotification.MessageId != null)
+                    if (proactiveNotification.IsSuccessful && proactiveNotification.MessageId != null)
                     {
                         reflectionData.ReflectMessageId = proactiveNotification.MessageId.Split("=")[1];
                         await _dbHelper.UpdateReflectionMessageIdAsync(reflectionData);

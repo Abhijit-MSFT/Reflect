@@ -2,11 +2,11 @@
 using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Bot.Schema;
 using Microsoft.Bot.Schema.Teams;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Reflection.Model;
 using System;
 using System.Threading.Tasks;
-using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
-using Microsoft.Extensions.Configuration;
 
 namespace Reflection.Helper
 {

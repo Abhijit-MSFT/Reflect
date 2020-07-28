@@ -13,7 +13,6 @@ using Reflection.Interfaces;
 using Reflection.Model;
 using Reflection.Repositories.FeedbackData;
 using Reflection.Repositories.QuestionsData;
-using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
 using System;
 using System.Collections.Generic;
@@ -87,7 +86,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         }
 
         [Route("openReflections/{reflectionid}/{feedbackId}/{userName}")]
-        public ActionResult OpenReflections(Guid reflectionId, int feedbackId,string userName)
+        public ActionResult OpenReflections(Guid reflectionId, int feedbackId, string userName)
         {
             _telemetry.TrackEvent("OpenReflections");
             ViewBag.reflectionId = reflectionId;
@@ -105,7 +104,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
-       
+
 
         [Route("api/GetReflections/{reflectionid}")]
         public async Task<string> GetReflections(Guid reflectionid)
@@ -220,7 +219,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                 {
                     await feedbackDataRepository.DeleteFeedback(feebackData);
                 }
-                else {
+                else
+                {
                     if (feebackData != null && data.emailId == feebackData.FeedbackGivenBy)
                     {
                         feebackData.Feedback = data.feedbackId;
@@ -251,16 +251,16 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
                 // Check if this is user's second feedback
                 FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(data.reflectionId, data.emailId);
-               
-                    if (feebackData != null && data.emailId == feebackData.FeedbackGivenBy)
-                    {
+
+                if (feebackData != null && data.emailId == feebackData.FeedbackGivenBy)
+                {
                     return feebackData.Feedback;
-                    }
-                    else
-                    {
+                }
+                else
+                {
                     return 0;
-                    }
-                
+                }
+
             }
             catch (Exception e)
             {

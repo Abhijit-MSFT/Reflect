@@ -18,11 +18,11 @@ using Reflection.Repositories.RecurssionData;
 using Reflection.Repositories.ReflectionData;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
-using System.IO;
+using System.Threading.Tasks;
 
 namespace Reflection.Helper
 {
@@ -31,7 +31,7 @@ namespace Reflection.Helper
         private IConfiguration _configuration;
         private TelemetryClient _telemetry;
         List<string> weekdays = new List<string>();
-        
+
 
         public DBHelper(IConfiguration configuration, TelemetryClient telemetry)
         {
@@ -178,7 +178,7 @@ namespace Reflection.Helper
                     QuestionRowKey = taskInfo.questionRowKey,
                     ReflectionID = taskInfo.reflectionID,
                     RecursstionType = taskInfo.recurssionType,
-                    CustomRecurssionTypeValue=taskInfo.customRecurssionTypeValue,
+                    CustomRecurssionTypeValue = taskInfo.customRecurssionTypeValue,
                     CreatedDate = DateTime.Now,
                     ExecutionDate = taskInfo.executionDate,
                     ExecutionTime = taskInfo.executionTime,
@@ -230,7 +230,7 @@ namespace Reflection.Helper
             {
                 DateTime nextExecutionDate = Convert.ToDateTime(recurssionEntity.NextExecutionDate);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
-               
+
 
                 switch (recurssionEntity.RecursstionType.ToLower().Trim())
                 {
@@ -256,7 +256,7 @@ namespace Reflection.Helper
                     case "custom":
                         if (recurssionEntity.CustomRecurssionTypeValue.Contains("week"))
                         {
-                            var selectedweeks=new List<string>();
+                            var selectedweeks = new List<string>();
                             weekdays.ForEach(x =>
                             {
                                 if (recurssionEntity.CustomRecurssionTypeValue.Contains(x))
@@ -268,14 +268,14 @@ namespace Reflection.Helper
                             {
                                 goto case "weekly";
                             }
-                            else if(selectedweeks.Count==5 && selectedweeks.IndexOf("Saturday")==-1 && selectedweeks.IndexOf("Sunday") == -1)
+                            else if (selectedweeks.Count == 5 && selectedweeks.IndexOf("Saturday") == -1 && selectedweeks.IndexOf("Sunday") == -1)
                             {
                                 goto case "every weekday";
                             }
                             else
                             {
                                 var weekindex = selectedweeks.IndexOf(nextExecutionDate.DayOfWeek.ToString());
-                                if((weekindex+1)< selectedweeks.Count)
+                                if ((weekindex + 1) < selectedweeks.Count)
                                 {
                                     int addDays = weekdays.IndexOf(selectedweeks[weekindex + 1]) - weekdays.IndexOf(selectedweeks[weekindex]);
                                     DateTime? nextcustomweeklyday = DateTime.Now.AddDays(addDays);
@@ -299,7 +299,7 @@ namespace Reflection.Helper
                             recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextcustomdailyday ? nextcustomdailyday : null;
                             break;
                         }
-                           
+
                     default:
                         break;
                 }
@@ -542,7 +542,7 @@ namespace Reflection.Helper
         }
 
 
-       public  string Encrypt(string text)
+        public string Encrypt(string text)
         {
             var _key = Encoding.UTF8.GetBytes(_configuration["chipher"]);
 
@@ -575,7 +575,7 @@ namespace Reflection.Helper
             }
         }
 
-        public  string Decrypt(string encrypted)
+        public string Decrypt(string encrypted)
         {
             var b = Convert.FromBase64String(encrypted);
 
