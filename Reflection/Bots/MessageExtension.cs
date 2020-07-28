@@ -453,7 +453,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                         }
                         await turnContext.DeleteActivityAsync(replymessageid[1]);
-                        activity.Text = "Refelct Id removed successfully";
+                        activity.Text = "This Reflect poll has been removed";
                         await turnContext.SendActivityAsync(activity);
 
                     }
