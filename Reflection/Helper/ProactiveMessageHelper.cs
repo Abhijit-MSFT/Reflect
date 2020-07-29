@@ -8,6 +8,7 @@ namespace Reflection.Helper
 {
     using System;
     using System.Threading.Tasks;
+    using Microsoft.Bot.Builder;
     using Microsoft.Bot.Connector;
     using Microsoft.Bot.Connector.Authentication;
     using Microsoft.Bot.Schema;
@@ -70,7 +71,7 @@ namespace Reflection.Helper
         /// <param name="messageText">messageText.</param>
         /// <param name="attachment">attachment.</param>
         /// <returns>.</returns>
-        public async Task<NotificationSendStatus> SendChannelNotification(ChannelAccount botAccount, string serviceUrl, string channelId, string messageText, Attachment attachment)
+        public async Task<NotificationSendStatus> SendChannelNotification(ChannelAccount botAccount, string serviceUrl, string channelId, string messageText, Attachment attachment, string ReflectMessageId="")
         {
             try
             {
@@ -81,7 +82,6 @@ namespace Reflection.Helper
                 {
                     replyMessage.Attachments.Add(attachment);
                 }
-
                 MicrosoftAppCredentials.TrustServiceUrl(serviceUrl, DateTime.MaxValue);
                 using (var connectorClient = new ConnectorClient(new Uri(serviceUrl), _configuration["MicrosoftAppId"], _configuration["MicrosoftAppPassword"]))
                 {
@@ -106,10 +106,21 @@ namespace Reflection.Helper
                     // Define the Retry Policy
                     var retryPolicy = new RetryPolicy(new BotSdkTransientExceptionDetectionStrategy(), exponentialBackoffRetryStrategy);
 
-                    var conversationResource = await
-                                            connectorClient.Conversations.CreateConversationAsync(parameters);
-
-                    return new NotificationSendStatus() { MessageId = conversationResource.Id, IsSuccessful = true };
+                    if (ReflectMessageId == "")
+                    {
+                        var conversationResource = await
+                                                connectorClient.Conversations.CreateConversationAsync(parameters);
+                        return new NotificationSendStatus() { MessageId = conversationResource.Id, IsSuccessful = true };
+                    }
+                    else
+                    {
+                        var conversationId = $"{channelId};messageid={ReflectMessageId}";
+                        var replyActivity = MessageFactory.Attachment(attachment);
+                        replyActivity.Conversation = new ConversationAccount(id: conversationId);
+                        var resultfeedback = await connectorClient.Conversations.SendToConversationAsync((Activity)replyActivity);
+                        return new NotificationSendStatus() { MessageId = resultfeedback.Id, IsSuccessful = true };
+                    }
+                    
                 }
             }
             catch (Exception ex)

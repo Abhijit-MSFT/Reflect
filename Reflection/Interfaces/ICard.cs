@@ -24,5 +24,7 @@ namespace Reflection.Interfaces
         Task<string> saveImage(Image data, string Filepath);
 
         AdaptiveCard CreateNewReflect(TaskInfo data);
+
+        AdaptiveCard ConfirmationCard(string messageId);
     }
 }

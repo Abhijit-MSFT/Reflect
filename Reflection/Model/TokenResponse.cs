@@ -4,16 +4,16 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Reflection.Model
-{
-    /// <summary>
-    /// TokenResponse.
-    /// </summary>
-    public class TokenResponse
+ namespace Reflection.Model
     {
-        /// <summary>
-        /// Gets or sets access_token.
-        /// </summary>
-        public string access_token { get; set; }
-    }
-}
+         /// <summary>
+         /// Token Response.
+         /// </summary>
+        public class TokenResponse
+        {
+            /// <summary>
+            /// Gets or sets access_token.
+            /// </summary>
+            public string Access_token { get; set; }
+        }
+     }

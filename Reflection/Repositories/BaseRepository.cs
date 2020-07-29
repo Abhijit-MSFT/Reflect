@@ -19,6 +19,9 @@ namespace Reflection.Repositories
     public class BaseRepository<T>
         where T : TableEntity, new()
     {
+        /// <summary>
+        /// defaultPartitionKey variable for partition key.
+        /// </summary>
         private readonly string defaultPartitionKey;
 
         /// <summary>
@@ -92,7 +95,7 @@ namespace Reflection.Repositories
         /// Get an entity by the keys in the table storage.
         /// </summary>
         /// <param name="partitionKey">The partition key of the entity.</param>
-        /// <param name="rowKey">The row key fo the entity.</param>
+        /// <param name="rowKey">The row key for the entity.</param>
         /// <returns>The entity matching the keys.</returns>
         public async Task<T> GetAsync(string partitionKey, string rowKey)
         {
@@ -139,6 +142,12 @@ namespace Reflection.Repositories
             return entities;
         }
 
+        /// <summary>
+        /// CombineFilters combines all the filters selected.
+        /// </summary>
+        /// <param name="filter1">filter1 key value.</param>
+        /// <param name="filter2">filter2 key value.</param>
+        /// <returns>All data entities.</returns>
         private string CombineFilters(string filter1, string filter2)
         {
             if (string.IsNullOrWhiteSpace(filter1) && string.IsNullOrWhiteSpace(filter2))
@@ -157,6 +166,11 @@ namespace Reflection.Repositories
             return TableQuery.CombineFilters(filter1, TableOperators.And, filter2);
         }
 
+        /// <summary>
+        /// GetPartitionKeyFilter after filter .
+        /// </summary>
+        /// <param name="partition">partition key value</param>
+        /// <returns>filtered partition key.</returns>
         private string GetPartitionKeyFilter(string partition)
         {
             var filter = TableQuery.GenerateFilterCondition(
@@ -166,6 +180,13 @@ namespace Reflection.Repositories
             return filter;
         }
 
+        /// <summary>
+        /// ExecuteQueryAsync for executing query.
+        /// </summary>
+        /// <param name="query">query to be executed</param>
+        /// <param name="count">count query to be executed</param>
+        /// <param name="ct">cancellation token data</param>
+        /// <returns>filtered partition key.</returns>
         private async Task<IList<T>> ExecuteQueryAsync(
             TableQuery<T> query,
             int? count = null,
@@ -197,5 +218,4 @@ namespace Reflection.Repositories
             }
         }
     }
-
 }

@@ -371,14 +371,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                         ContentType = AdaptiveCard.ContentType,
                                         Content = feedbackCard,
                                     };
-                                    var replyfeedback = Activity.CreateMessageActivity();
+                                    using var connector = new ConnectorClient(new Uri(reflectData.ServiceUrl), _configuration["MicrosoftAppId"], _configuration["MicrosoftAppPassword"]);
 
-                                    // replyfeedback.ReplyToId = reflectData.ReflectMessageId;
-                                    replyfeedback.Attachments.Add(attachmentfeedback);
-                                    var connector = turnContext.TurnState.Get<IConnectorClient>() as ConnectorClient;
-                                    var result = turnContext.SendActivityAsync(replyfeedback, cancellationToken);
-                                    reflectData.MessageID = result.Result.Id;
-
+                                    var conversationId = $"{reflectData.ChannelID};messageid={reflectData.ReflectMessageId}";
+                                    var replyActivity = MessageFactory.Attachment(new Attachment { ContentType = AdaptiveCard.ContentType, Content = feedbackCard });
+                                    replyActivity.Conversation = new ConversationAccount(id: conversationId);
+                                    var resultfeedback = await connector.Conversations.SendToConversationAsync((Activity)replyActivity, cancellationToken);
+                                    reflectData.MessageID = resultfeedback.Id;
                                     // update messageid in reflection table
                                     await reflectionDataRepository.InsertOrMergeAsync(reflectData);
                                 }
@@ -428,6 +427,34 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             },
                         };
                         return responsefeedback;
+                    case "removeposts":
+                        try
+                        {
+                            var activity = Activity.CreateMessageActivity();
+                            if (taskInfo.isDelete)
+                            {
+                                var messageId = await _dbHelper.RemoveReflectionId(taskInfo.messageID);
+                                if (messageId != null)
+                                {
+                                    await turnContext.DeleteActivityAsync(messageId);
+
+                                }
+                                await turnContext.DeleteActivityAsync(taskInfo.messageID);
+                                activity.Text = "This Reflect poll has been removed";
+                                await turnContext.SendActivityAsync(activity);
+                                return null;
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _telemetry.TrackException(ex);
+                            return null;
+                        }
+
                     default:
                         return null;
                 };
@@ -477,16 +504,28 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     if (turnContext.Activity.Conversation.Id != null)
                     {
                         var replymessageid = turnContext.Activity.Conversation.Id.Split("=");
-                        var activity = Activity.CreateMessageActivity();
-                        string messageId = await _dbHelper.RemoveReflectionId(replymessageid[1]);
-                        if (messageId != null)
-                        {
-                            await turnContext.DeleteActivityAsync(messageId);
+                        string messageId = replymessageid[1];
+                        var confirmcard = _cardHelper.ConfirmationCard(messageId);
 
-                        }
-                        await turnContext.DeleteActivityAsync(replymessageid[1]);
-                        activity.Text = "This Reflect poll has been removed";
-                        await turnContext.SendActivityAsync(activity);
+                        Attachment attachmentfeedback = new Attachment()
+                        {
+                            ContentType = AdaptiveCard.ContentType,
+                            Content = confirmcard,
+                        };
+                        var response = new MessagingExtensionActionResponse()
+                        {
+                            Task = new TaskModuleContinueResponse()
+                            {
+                                Value = new TaskModuleTaskInfo()
+                                {
+                                    Height = 100,
+                                    Width = 300,
+                                    Title = "Make space for people to share how they feel",
+                                    Card = attachmentfeedback
+                                },
+                            },
+                        };
+                        return response;
 
                     }
 

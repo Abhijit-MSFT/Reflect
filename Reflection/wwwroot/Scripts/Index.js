@@ -3,7 +3,6 @@ let userobject = {};
 let accesstoken = "";
 let weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 let postTaskInfo = "";
-
 $(document).ready(function () {
     $(".spinner").show();
     $("#postSentMessage").hide();
@@ -343,7 +342,7 @@ $("#recurrence").on("change", function () {
     if (this.value === "Custom") {
         $(".custom-cal").show();
         $("#customdata").show();
-        $("#customdata").html($("#finaldates").text());
+        $("#customdata").html('<span class="cutomdatavalue">'+$("#finaldates").text()+'</span>');
         $(".day-select,.eve-week-start,.month-cal").hide();
     } else {
         $(".custom-cal").hide();
@@ -410,13 +409,12 @@ $(".weekselect").on("click", function () {
 });
 
 $(document).click(function (e) {
-    // Check if click was triggered on or within #customrecurrencediv
     if ($(e.target).closest("#customrecurrencediv").length > 0 || $(e.target).closest("#customdata").length > 0) {
         return false;
     }
     $(".custom-cal").hide();
     if ($("#recurrence").val() === "Custom") {
-        $("#customdata").html($("#finaldates").text());
+        $("#customdata").html('<span class="cutomdatavalue">' + $("#finaldates").text() + '</span>')
     }
 });
 

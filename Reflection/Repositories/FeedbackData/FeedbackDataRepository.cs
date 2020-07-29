@@ -18,12 +18,17 @@ namespace Reflection.Repositories.FeedbackData
     /// </summary>
     public class FeedbackDataRepository : BaseRepository<FeedbackDataEntity>
     {
-        private TelemetryClient _telemetry;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserDataRepository"/> class.
+        /// telemetry ref declaration.
+        /// </summary>
+        private TelemetryClient telemetryref;
+
+        /// <summary>
+        /// Initializes a new instance of the UserDataRepository class.
         /// </summary>
         /// <param name="configuration">Represents the application configuration.</param>
+        /// <param name="telemetry">Represents the application telemetry.</param>
         /// <param name="isFromAzureFunction">Flag to show if created from Azure Function.</param>
         public FeedbackDataRepository(IConfiguration configuration, TelemetryClient telemetry, bool isFromAzureFunction = false)
             : base(
@@ -32,7 +37,7 @@ namespace Reflection.Repositories.FeedbackData
                 PartitionKeyNames.FeedbackDataTable.FeedbackDataPartition,
                 isFromAzureFunction)
         {
-            _telemetry = telemetry;
+            telemetryref = telemetry;
         }
 
         /// <summary>
@@ -42,7 +47,7 @@ namespace Reflection.Repositories.FeedbackData
         /// <returns>Questions which have default flag true.</returns>
         public async Task<Dictionary<int, List<FeedbackDataEntity>>> GetReflectionFeedback(Guid? reflectionId)
         {
-            _telemetry.TrackEvent("GetReflectionFeedback");
+            telemetryref.TrackEvent("GetReflectionFeedback");
 
             try
             {
@@ -54,7 +59,7 @@ namespace Reflection.Repositories.FeedbackData
             }
             catch (Exception ex)
             {
-                _telemetry.TrackException(ex);
+                telemetryref.TrackException(ex);
                 return null;
             }
         }
@@ -66,7 +71,7 @@ namespace Reflection.Repositories.FeedbackData
         /// <returns>.</returns>
         public async Task<FeedbackDataEntity> GetFeedbackonRefId(Guid? reflid)
         {
-            _telemetry.TrackEvent("GetReflectionFeedback");
+            telemetryref.TrackEvent("GetReflectionFeedback");
             try
             {
                 var allFeedbacks = await this.GetAllAsync(PartitionKeyNames.FeedbackDataTable.TableName);
@@ -75,7 +80,7 @@ namespace Reflection.Repositories.FeedbackData
             }
             catch (Exception ex)
             {
-                _telemetry.TrackException(ex);
+                telemetryref.TrackException(ex);
                 return null;
             }
         }
@@ -88,7 +93,7 @@ namespace Reflection.Repositories.FeedbackData
         /// <returns>.</returns>
         public async Task<FeedbackDataEntity> GetReflectionFeedback(Guid? reflid, string email)
         {
-            _telemetry.TrackEvent("GetReflectionFeedback");
+            telemetryref.TrackEvent("GetReflectionFeedback");
             try
             {
                 var allFeedbacks = await this.GetAllAsync(PartitionKeyNames.FeedbackDataTable.TableName);
@@ -97,7 +102,7 @@ namespace Reflection.Repositories.FeedbackData
             }
             catch (Exception ex)
             {
-                _telemetry.TrackException(ex);
+                telemetryref.TrackException(ex);
                 return null;
             }
         }
@@ -109,7 +114,7 @@ namespace Reflection.Repositories.FeedbackData
         /// <returns>.</returns>
         public async Task<string> DeleteFeedback(FeedbackDataEntity feedback)
         {
-            _telemetry.TrackEvent("DeleteFeedback");
+            telemetryref.TrackEvent("DeleteFeedback");
             try
             {
                 await this.DeleteAsync(feedback);
@@ -117,7 +122,7 @@ namespace Reflection.Repositories.FeedbackData
             }
             catch (Exception ex)
             {
-                _telemetry.TrackException(ex);
+                telemetryref.TrackException(ex);
                 return "false";
             }
         }
