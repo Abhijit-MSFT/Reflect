@@ -535,5 +535,48 @@ namespace Reflection.Helper
                 return null;
             }
         }
+
+        public AdaptiveCard ConfirmationCard(string messageId)
+        {
+            _telemetry.TrackEvent("ConfirmationCard");
+
+            try
+            {
+                return new AdaptiveCard(new AdaptiveSchemaVersion(1, 2))
+                {
+                    Body = new List<AdaptiveElement>
+                    {
+                       
+                        new AdaptiveTextBlock("Are you sure to delete") { Id = ($"{messageId}"), Weight = AdaptiveTextWeight.Bolder, Size=AdaptiveTextSize.Large, Wrap=true, MaxWidth=100}
+                    },
+                    Actions = new List<AdaptiveAction>
+                    {
+                    new AdaptiveSubmitAction()
+                                    {
+                                    Title="Yes",
+                                    Type="Action.Submit",
+                                    Style="positive",
+                                    Data =messageId,
+                                    DataJson="{ \"MessageId\":"+ messageId+", \"IsDelete\": \"true\",\"Action\": \"removeposts\" }"
+                                    },
+                     new AdaptiveSubmitAction()
+                                    {
+                                    Title="No",
+                                    Type="Action.Submit",
+                                    Style="destructive",
+                                    Data =messageId,
+                                    DataJson="{ \"MessageId\":"+ messageId+", \"IsDelete\": \"false\",\"Action\": \"removeposts\" }"
+                                    },
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+            }
+        }
+
+
     }
 }

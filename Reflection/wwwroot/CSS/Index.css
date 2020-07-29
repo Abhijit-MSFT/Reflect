@@ -626,11 +626,21 @@ button:focus {
     font-size: 14px !important;
 }
 
-#customdata {
+.cutomdatavalue {
     font-size: small;
     cursor: pointer;
+    color: #6264a5;
 }
 
+.cutomdatavalue::after {
+    content: "\E328";
+    font-family: "Teams Assets";
+    font-size: small;
+    color: #6264a5;
+    position: absolute;
+    margin-left: 7px;
+    margin-top: 4px;
+}
 .previewimg {
     width: 15px;
     height: 15px;

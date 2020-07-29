@@ -7,6 +7,7 @@
 namespace Reflection.Helper
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
     using AdaptiveCards;
@@ -17,6 +18,7 @@ namespace Reflection.Helper
     using Microsoft.Extensions.Hosting;
     using Reflection.Interfaces;
     using Reflection.Model;
+    using Reflection.Repositories.FeedbackData;
     using Reflection.Repositories.QuestionsData;
     using Reflection.Repositories.RecurssionData;
     using Reflection.Repositories.ReflectionData;
@@ -90,11 +92,22 @@ namespace Reflection.Helper
                         ContentType = AdaptiveCard.ContentType,
                         Content = newPostCard
                     };
+                    var PostCardFeedback = _cardHelper.FeedBackCard(new Dictionary<int, List<FeedbackDataEntity>>(), taskInfo.reflectionID, taskInfo.question); ;
+                    Attachment PostCardFeedbackAttachment = new Attachment()
+                    {
+                        ContentType = AdaptiveCard.ContentType,
+                        Content = PostCardFeedback
+                    };
                     var proactiveNotification = await new ProactiveMessageHelper(_configuration).SendChannelNotification(channelAccount, reflectionData.ServiceUrl, reflectionData.ChannelID, "", newPostCardAttachment);
                     if (proactiveNotification.IsSuccessful && proactiveNotification.MessageId != null)
                     {
                         reflectionData.ReflectMessageId = proactiveNotification.MessageId.Split("=")[1];
-                        await _dbHelper.UpdateReflectionMessageIdAsync(reflectionData);
+                        var feedbackproactivemessage = await new ProactiveMessageHelper(_configuration).SendChannelNotification(channelAccount, reflectionData.ServiceUrl, reflectionData.ChannelID, "", PostCardFeedbackAttachment, reflectionData.ReflectMessageId);
+                        if (feedbackproactivemessage.IsSuccessful && proactiveNotification.MessageId != null)
+                        {
+                            reflectionData.MessageID = feedbackproactivemessage.MessageId;
+                            await _dbHelper.UpdateReflectionMessageIdAsync(reflectionData);
+                        }
                     }
                     await _dbHelper.UpdateRecurssionDataNextExecutionDateTimeAsync(recurssionDataEntity);
                 }

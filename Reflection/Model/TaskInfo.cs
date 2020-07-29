@@ -103,6 +103,12 @@ namespace Reflection.Model
         public string messageID { get; set; }
 
         /// <summary>
+        /// Gets or sets isDelete.
+        /// </summary>
+        public bool isDelete { get; set; }
+        
+
+        /// <summary>
         /// Gets or sets channelID.
         /// </summary>
         public string channelID { get; set; }

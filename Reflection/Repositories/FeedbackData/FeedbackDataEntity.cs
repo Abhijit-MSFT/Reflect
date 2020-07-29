@@ -10,7 +10,7 @@ namespace Reflection.Repositories.FeedbackData
     using Microsoft.Azure.Cosmos.Table;
 
     /// <summary>
-    /// FeedbackDataEntity.
+    /// Feedback DataEntity.
     /// </summary>
     public class FeedbackDataEntity : TableEntity
     {
