@@ -261,18 +261,17 @@ function GetReflections() {
                         '%"></div></div>';
 
                     if (description) {
+                        let userNames = feedback[i].map((x) => x.FullName).join(", ");
                         blockdata = blockdata + '<div class="description-data" onclick=openDetailReflection(' + i + ',"' + reflection.ReflectionID + '")>'
-                        feedback[i].forEach((data, index) => {
                             blockdata =
                                 blockdata +
                                 '<span class="smile-desc" id="' +
                                 data.FeedbackID +
                                 '">' +
-                            data.FullName +'</span> ';
-                        });
+                            userNames +'</span> ';
                         blockdata = blockdata + '</div>';
                     }
-                    else if (reflection.Privacy !== "Anonymous – Names not displayed on reflections" || (reflection.Privacy === "Creator only – Names displayed to the creator only" && userName === reflection.CreatedBy)) {
+                    else if (reflection.Privacy !== "Anonymous – Names not displayed on reflections" && (reflection.Privacy === "Creator only – Names displayed to the creator only" && userName === reflection.CreatedBy)) {
                         blockdata = blockdata + '<div class="no-reflections">No Reflections</div>';
                     }
 
