@@ -1,30 +1,33 @@
-﻿// <copyright file="UserDataEntity.cs" company="Microsoft">
-// Copyright (c) Microsoft. All rights reserved.
+﻿// -----------------------------------------------------------------------
+// <copyright file="UserDataEntity.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
-
+// -----------------------------------------------------------------------
 
 namespace Reflection.Repositories.UserData
 {
     using Microsoft.Azure.Cosmos.Table;
 
+    /// <summary>
+    /// UserData Entity.
+    /// </summary>
     public class UserDataEntity : TableEntity
     {
-        
         /// <summary>
         /// Gets or sets UserID.
         /// </summary>
         public string UserID { get; set; }
-        
+
         /// <summary>
         /// Gets or sets FirstName.
         /// </summary>
         public string FirstName { get; set; }
-        
+
         /// <summary>
         /// Gets or sets LastName.
         /// </summary>
         public string LastName { get; set; }
-        
+
         /// <summary>
         /// Gets or sets Email.
         /// </summary>
@@ -39,7 +42,5 @@ namespace Reflection.Repositories.UserData
         /// Gets or sets Role.
         /// </summary>
         public string Role { get; set; }
-
-
     }
 }

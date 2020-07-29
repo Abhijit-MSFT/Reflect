@@ -1,17 +1,18 @@
-﻿// <copyright file="BaseRepository.cs" company="Microsoft">
-// Copyright (c) Microsoft. All rights reserved.
+﻿// -----------------------------------------------------------------------
+// <copyright file="BaseRepository.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
+// -----------------------------------------------------------------------
 
 namespace Reflection.Repositories
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Microsoft.Azure.Cosmos.Table;
     using Microsoft.Extensions.Configuration;
-    
+
     /// <summary>
     /// Base repository for the data stored in the Azure Table Storage.
     /// </summary>

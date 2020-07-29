@@ -1,6 +1,8 @@
-﻿// <copyright file="UserDataRepository.cs" company="Microsoft">
-// Copyright (c) Microsoft. All rights reserved.
+﻿// -----------------------------------------------------------------------
+// <copyright file="UserDataRepository.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
+// -----------------------------------------------------------------------
 
 namespace Reflection.Repositories.UserData
 {
@@ -9,7 +11,6 @@ namespace Reflection.Repositories.UserData
     /// <summary>
     /// Repository of the user data stored in the table storage.
     /// </summary>
-    /// 
     public class UserDataRepository : BaseRepository<UserDataEntity>
     {
         /// <summary>
