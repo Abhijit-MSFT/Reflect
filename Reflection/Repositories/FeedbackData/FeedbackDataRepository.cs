@@ -25,7 +25,7 @@ namespace Reflection.Repositories.FeedbackData
         private TelemetryClient telemetryref;
 
         /// <summary>
-        /// Initializes a new instance of the UserDataRepository class.
+        /// Initializes a new instance of the <see cref="FeedbackDataRepository"/> class.
         /// </summary>
         /// <param name="configuration">Represents the application configuration.</param>
         /// <param name="telemetry">Represents the application telemetry.</param>
