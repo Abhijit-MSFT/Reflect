@@ -31,7 +31,7 @@ namespace Reflection.Repositories.FeedbackData
 
         /// <summary>
         /// Gets or sets FeedbackGivenBy.
-        /// </summary>        
+        /// </summary>
         public string FeedbackGivenBy { get; set; }
 
         /// <summary>

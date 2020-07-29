@@ -97,7 +97,7 @@ namespace Reflection.Helper
                     };
                     await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
 
-                    if (await questionsDataRepository.IsQuestionAlreadtPresent(taskInfo.question, taskInfo.postCreatedByEmail) == false)
+                    if (await questionsDataRepository.IsQuestionAlreadyPresent(taskInfo.question, taskInfo.postCreatedByEmail) == false)
                     {
                         await SaveQuestionsDataAsync(taskInfo);
                     }

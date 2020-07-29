@@ -1,13 +1,17 @@
-﻿using Bogus.DataSets;
-using Microsoft.Azure.Cosmos.Table;
-using Microsoft.Bot.Schema;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="QuestionsDataEntity.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Reflection.Repositories.QuestionsData
 {
+    using System;
+    using Microsoft.Azure.Cosmos.Table;
+
+    /// <summary>
+    /// QuestionsDataEntity.
+    /// </summary>
     public class QuestionsDataEntity : TableEntity
     {
         /// <summary>
@@ -21,7 +25,7 @@ namespace Reflection.Repositories.QuestionsData
         public string Question { get; set; }
 
         /// <summary>
-        /// Gets or sets CreatedDate.
+        /// Gets or sets QuestionCreatedDate.
         /// </summary>
         public DateTime QuestionCreatedDate { get; set; }
 
@@ -31,10 +35,13 @@ namespace Reflection.Repositories.QuestionsData
         public bool IsDefaultFlag { get; set; }
 
         /// <summary>
-        /// Gets or sets user email id.
+        /// Gets or sets CreatedBy.
         /// </summary>
         public string CreatedBy { get; set; }
 
+        /// <summary>
+        /// Gets or sets CreatedByEmail.
+        /// </summary>
         public string CreatedByEmail { get; set; }
 
     }
