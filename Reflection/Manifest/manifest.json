@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.5/MicrosoftTeams.schema.json",
   "manifestVersion": "1.5",
   "version": "1.0.0",
-  "id": "ee733610-f70c-44f7-92c5-ed5af9d776b5",
+  "id": "388a3952-5ace-44b5-bc1b-082372ad709b",
   "packageName": "com.contoso.helloworld",
   "developer": {
     "name": "Contoso",
@@ -10,37 +10,41 @@
     "privacyUrl": "https://www.microsoft.com/privacy",
     "termsOfUseUrl": "https://www.microsoft.com/termsofuse"
   },
+  
   "name": {
-    "short": "Reflect local",
-    "full": "Reflect Bot"
+    "short": "Reflect",
+    "full": "Reflect"
   },
   "description": {
     "short": "Communication",
-    "full": "Help People be more aware of their own, and each other's, emotional state during communication so they can collaborate in ways."
+    "full": "Help people be more aware of their own, and each others, emotional state during communication so they can collaborate in more meaningful ways."
   },
   "icons": {
     "outline": "outline.png",
     "color": "logo.png"
   },
-  "accentColor": "#60A18E",
+  "accentColor": "#6264A7",
+  "staticTabs": [],
+  "configurableTabs": [],
   "bots": [
     {
-      "botId": "ee733610-f70c-44f7-92c5-ed5af9d776b5",
+      "botId": "388a3952-5ace-44b5-bc1b-082372ad709b",
       "scopes": [
         "team",
-        "groupchat"
+        "groupchat",
+		"personal"
       ]
     }
   ],
   "composeExtensions": [
     {
-      "botId": "ee733610-f70c-44f7-92c5-ed5af9d776b5",
+      "botId": "388a3952-5ace-44b5-bc1b-082372ad709b",
       "canUpdateConfiguration": false,
       "commands": [
         {
           "id": "recurringreflections",
-          "description": "Manage recurring posts",
-          "title": "Manage recurring posts",
+          "description": "Scheduled reflections",
+          "title": "Scheduled reflections",
           "type": "action",
           "initialRun": false,
           "context": [ "message" ],
@@ -92,5 +96,5 @@
     "identity",
     "messageTeamMembers"
   ],
-  "validDomains": [ "*.ngrok.io" ]
+  "validDomains": [ "*.azurewebsites.net" ]
 }
