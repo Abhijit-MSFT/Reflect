@@ -1,20 +1,29 @@
-﻿using AdaptiveCards;
-using Microsoft.ApplicationInsights;
-using Microsoft.Bot.Schema;
-using Microsoft.Bot.Schema.Teams;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Reflection.Interfaces;
-using Reflection.Model;
-using Reflection.Repositories.QuestionsData;
-using Reflection.Repositories.RecurssionData;
-using Reflection.Repositories.ReflectionData;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="SchedulerHelper.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Reflection.Helper
 {
+    using System;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using AdaptiveCards;
+    using Microsoft.ApplicationInsights;
+    using Microsoft.Bot.Schema;
+    using Microsoft.Bot.Schema.Teams;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Hosting;
+    using Reflection.Interfaces;
+    using Reflection.Model;
+    using Reflection.Repositories.QuestionsData;
+    using Reflection.Repositories.RecurssionData;
+    using Reflection.Repositories.ReflectionData;
+
+    /// <summary>
+    /// Scheduler Helper.
+    /// </summary>
     public class SchedulerHelper : IHostedService
     {
         private Timer _timer;
@@ -23,6 +32,10 @@ namespace Reflection.Helper
         private readonly ICard _cardHelper;
         private readonly IDataBase _dbHelper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SchedulerHelper"/> class.
+        /// Scheduler Helper.
+        /// </summary>
         public SchedulerHelper(TelemetryClient telemetry, IConfiguration configuration, ICard cardHelper, IDataBase dbHelper)
         {
             _telemetry = telemetry;
@@ -31,6 +44,11 @@ namespace Reflection.Helper
             _dbHelper = dbHelper;
         }
 
+        /// <summary>
+        /// StartAsync.
+        /// </summary>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>.</returns>
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("StartAsync");
@@ -40,6 +58,10 @@ namespace Reflection.Helper
             return Task.CompletedTask;
         }
 
+        /// <summary>
+        /// RunJob.
+        /// </summary>
+        /// <param name="state">state.</param>
         private async void RunJob(object state)
         {
             _telemetry.TrackEvent("RunJob");
@@ -81,9 +103,13 @@ namespace Reflection.Helper
             {
                 _telemetry.TrackException(ex);
             }
-
         }
 
+        /// <summary>
+        /// StopAsync.
+        /// </summary>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>.</returns>
         public Task StopAsync(CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("StopAsync");
