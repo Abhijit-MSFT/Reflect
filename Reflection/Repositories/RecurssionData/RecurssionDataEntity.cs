@@ -1,11 +1,17 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="RecurssionDataEntity.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Reflection.Repositories.RecurssionData
 {
+    using System;
+    using Microsoft.Azure.Cosmos.Table;
+
+    /// <summary>
+    /// RecurssionData Entity.
+    /// </summary>
     public class RecurssionDataEntity : TableEntity
     {
         /// <summary>
@@ -38,6 +44,9 @@ namespace Reflection.Repositories.RecurssionData
         /// </summary>
         public string ExecutionTime { get; set; }
 
+        /// <summary>
+        /// Gets or sets RecurssionEndDate.
+        /// </summary>
         public DateTime? RecurssionEndDate { get; set; }
 
         /// <summary>
