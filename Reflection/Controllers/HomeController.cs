@@ -4,24 +4,24 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Reflection.Helper;
-using Reflection.Interfaces;
-using Reflection.Model;
-using Reflection.Repositories.FeedbackData;
-using Reflection.Repositories.QuestionsData;
-using Reflection.Repositories.ReflectionData;
-
 namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using Microsoft.ApplicationInsights;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using Reflection.Helper;
+    using Reflection.Interfaces;
+    using Reflection.Model;
+    using Reflection.Repositories.FeedbackData;
+    using Reflection.Repositories.QuestionsData;
+    using Reflection.Repositories.ReflectionData;
+
     /// <summary>
     /// Home controller.
     /// </summary>

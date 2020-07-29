@@ -1,20 +1,22 @@
+// -----------------------------------------------------------------------
 // <copyright file="BotController.cs" company="Microsoft">
-// Copyright (c) Microsoft. All rights reserved.
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
 // Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.6.2
-
-using System;
-using System.Threading.Tasks;
-using Microsoft.ApplicationInsights;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Integration.AspNet.Core;
+// -----------------------------------------------------------------------
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
 {
-    // This ASP Controller is created to handle a request. Dependency Injection will provide the Adapter and IBot
-    // implementation at runtime. Multiple different IBot implementations running at different endpoints can be
-    // achieved by specifying a more specific type for the bot constructor argument.
+    using System;
+    using System.Threading.Tasks;
+    using Microsoft.ApplicationInsights;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Bot.Builder;
+    using Microsoft.Bot.Builder.Integration.AspNet.Core;
+
+    /// <summary>
+    /// Bot controller.
+    /// </summary>
     [Route("api/messages")]
     [ApiController]
     public class BotController : ControllerBase
@@ -23,6 +25,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         private readonly IBot Bot;
         private readonly TelemetryClient _telemetry;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BotController"/> class.
+        /// Bot controller.
+        /// </summary>
         public BotController(IBotFrameworkHttpAdapter adapter, IBot bot, TelemetryClient telemetry)
         {
             Adapter = adapter;
@@ -30,6 +36,9 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             _telemetry = telemetry;
         }
 
+        /// <summary>
+        /// Task post async.
+        /// </summary>
         [HttpPost]
         public async Task PostAsync()
         {
@@ -42,8 +51,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             {
                 _telemetry.TrackException(ex);
             }
-
-
         }
     }
 }
