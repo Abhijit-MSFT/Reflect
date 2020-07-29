@@ -1,8 +1,15 @@
-﻿// <copyright file="MessageExtension.cs" company="Microsoft">
-// Copyright (c) Microsoft. All rights reserved.
+﻿// -----------------------------------------------------------------------
+// <copyright file="MessageExtension.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
+// -----------------------------------------------------------------------
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using AdaptiveCards;
     using Bogus;
     using Microsoft.ApplicationInsights;
@@ -20,11 +27,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
     using Reflection.Repositories.QuestionsData;
     using Reflection.Repositories.RecurssionData;
     using Reflection.Repositories.ReflectionData;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
+
+    /// <summary>
+    /// MessageExtension.
+    /// </summary>
     public class MessageExtension : TeamsActivityHandler
     {
         private readonly IConfiguration _configuration;
@@ -32,6 +38,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
         private readonly ICard _cardHelper;
         private readonly IDataBase _dbHelper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MessageExtension"/> class.
+        /// Message Extension.
+        /// </summary>
         public MessageExtension(IConfiguration configuration, TelemetryClient telemetry, ICard cardHelper, IDataBase dbHelper)
         {
             _configuration = configuration;
@@ -40,6 +50,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             _dbHelper = dbHelper;
         }
 
+        /// <summary>
+        /// On message activity sync.
+        /// </summary>
+        /// <param name="turnContext">turnContext.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>.</returns>
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("OnMessageActivityAsync");
@@ -61,7 +77,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         response.userName = name[0] + ' ' + name[1];
                         response.emailId = await _dbHelper.GetUserEmailId(turnContext);
 
-                        //Check if this is user's second feedback
+                        // Check if this is user's second feedback
                         FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
                         if (feebackData != null && response.emailId == feebackData.FeedbackGivenBy)
                         {
@@ -75,7 +91,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                         try
                         {
-                            //Check if message id is present in reflect data
+                            // Check if message id is present in reflect data
                             ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
                             QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                             Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
@@ -95,7 +111,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             {
                                 var result = turnContext.SendActivityAsync(reply, cancellationToken);
                                 reflectData.MessageID = result.Result.Id;
-                                //update message-id in reflection table
+                                // update message-id in reflection table
                                 await reflectionDataRepository.InsertOrMergeAsync(reflectData);
 
                             }
@@ -125,6 +141,14 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 _telemetry.TrackException(ex);
             }
         }
+
+        /// <summary>
+        /// On Teams Task Module Submit Async.
+        /// </summary>
+        /// <param name="turnContext">turnContext.</param>
+        /// <param name="taskModuleRequest">taskModuleRequest.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>.</returns>
         protected override async Task<TaskModuleResponse> OnTeamsTaskModuleSubmitAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
         {
             ReflectionDataRepository reflectionDataRepository = new ReflectionDataRepository(_configuration, _telemetry);
@@ -134,7 +158,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             {
                 TaskInfo taskInfo = JsonConvert.DeserializeObject<TaskInfo>(taskModuleRequest.Data.ToString());
                 var reply = Activity.CreateMessageActivity();
-                //Check if message id is present in reflect data
+
+                // Check if message id is present in reflect data
                 ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(taskInfo.reflectionID);
                 QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                 Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(taskInfo.reflectionID);
@@ -151,7 +176,8 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
 
                     var result = turnContext.SendActivityAsync(reply, cancellationToken);
                     reflectData.MessageID = result.Result.Id;
-                    //update messageid in reflection table
+
+                    // update messageid in reflection table
                     await reflectionDataRepository.InsertOrMergeAsync(reflectData);
 
                 }
@@ -172,16 +198,29 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             }
         }
 
+        /// <summary>
+        /// On Invoke Activity Async.
+        /// </summary>
+        /// <param name="turnContext">turnContext.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>.</returns>
         protected override async Task<InvokeResponse> OnInvokeActivityAsync(ITurnContext<IInvokeActivity> turnContext, CancellationToken cancellationToken)
         {
             if (turnContext.Activity.Name == "custom")
             {
-                // Do something specific here...
                 return new InvokeResponse() { Status = 200 };
             }
 
             return await base.OnInvokeActivityAsync(turnContext, cancellationToken);
         }
+
+        /// <summary>
+        /// On Teams Task Module Fetch Async.
+        /// </summary>
+        /// <param name="turnContext">turnContext.</param>
+        /// <param name="taskModuleRequest">taskModuleRequest.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>.</returns>
         protected override async Task<TaskModuleResponse> OnTeamsTaskModuleFetchAsync(ITurnContext<IInvokeActivity> turnContext, TaskModuleRequest taskModuleRequest, CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("OnTeamsTaskModuleFetchAsync");
@@ -200,6 +239,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 var feedbackId = reldata.datajson.FeedbackId;
                 response.reflectionId = reflectionid;
                 response.feedbackId = feedbackId;
+
                 // Check if this is user's second feedback
                 FeedbackDataEntity feebackData = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId, response.emailId);
                 TaskInfo taskInfo = new TaskInfo();
@@ -214,9 +254,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     {
                         await _dbHelper.SaveReflectionFeedbackDataAsync(response);
                     }
+
                     try
                     {
-                        //Check if message id is present in reflect data
+                        // Check if message id is present in reflect data
                         ReflectionDataEntity reflectData = await reflectionDataRepository.GetReflectionData(response.reflectionId);
                         QuestionsDataEntity question = await questiondatarepository.GetQuestionData(reflectData.QuestionID);
                         Dictionary<int, List<FeedbackDataEntity>> feedbacks = await feedbackDataRepository.GetReflectionFeedback(response.reflectionId);
@@ -229,7 +270,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Attachment attachment = new Attachment()
                         {
                             ContentType = AdaptiveCard.ContentType,
-                            Content = adaptiveCard
+                            Content = adaptiveCard,
                         };
                         var reply = Activity.CreateMessageActivity();
                         reply.Attachments.Add(attachment);
@@ -237,16 +278,14 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         {
                             var result = turnContext.SendActivityAsync(reply, cancellationToken);
                             reflectData.MessageID = result.Result.Id;
-                            //update messageid in reflection table
-                            await reflectionDataRepository.InsertOrMergeAsync(reflectData);
 
+                            // update messageid in reflection table
+                            await reflectionDataRepository.InsertOrMergeAsync(reflectData);
                         }
                         else
                         {
                             reply.Id = reflectData.MessageID;
                             await turnContext.UpdateActivityAsync(reply);
-
-
                         }
                     }
                     catch (System.Exception e)
@@ -255,6 +294,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                         Console.WriteLine(e.Message.ToString());
                     }
                 }
+
                 return new TaskModuleResponse
                 {
                     Task = new TaskModuleContinueResponse
@@ -264,22 +304,25 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             Height = 600,
                             Width = 600,
                             Title = "Make space for people to share how they feel",
-                            Url = reldata.data.URL + reflectionid + '/' + feedbackId + '/' + response.userName
-
+                            Url = reldata.data.URL + reflectionid + '/' + feedbackId + '/' + response.userName,
                         },
                     },
                 };
-
             }
             catch (Exception ex)
             {
                 _telemetry.TrackException(ex);
                 return null;
             }
-
-
         }
 
+        /// <summary>
+        /// On Teams Messaging Extension Submit Action Async.
+        /// </summary>
+        /// <param name="turnContext">turnContext.</param>
+        /// <param name="action">action.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>.</returns>
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionSubmitActionAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("OnTeamsMessagingExtensionSubmitActionAsync");
@@ -325,15 +368,17 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                     Attachment attachmentfeedback = new Attachment()
                                     {
                                         ContentType = AdaptiveCard.ContentType,
-                                        Content = feedbackCard
+                                        Content = feedbackCard,
                                     };
                                     var replyfeedback = Activity.CreateMessageActivity();
-                                    //replyfeedback.ReplyToId = reflectData.ReflectMessageId;
+
+                                    // replyfeedback.ReplyToId = reflectData.ReflectMessageId;
                                     replyfeedback.Attachments.Add(attachmentfeedback);
                                     var connector = turnContext.TurnState.Get<IConnectorClient>() as ConnectorClient;
                                     var result = turnContext.SendActivityAsync(replyfeedback, cancellationToken);
                                     reflectData.MessageID = result.Result.Id;
-                                    //update messageid in reflection table
+
+                                    // update messageid in reflection table
                                     await reflectionDataRepository.InsertOrMergeAsync(reflectData);
                                 }
                                 catch (System.Exception e)
@@ -349,6 +394,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                             _telemetry.TrackException(ex);
                             return null;
                         }
+
                     case "ManageRecurringPosts":
                         var postCreatedByEmail = await _dbHelper.GetUserEmailId(turnContext);
                         var response = new MessagingExtensionActionResponse()
@@ -376,7 +422,7 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                                     Height = 600,
                                     Width = 780,
                                     Title = "Make space for people to share how they feel",
-                                    Url = this._configuration["BaseUri"] + "/openReflectionFeedback/" + taskInfo.reflectionID + "/" + taskInfo.feedback
+                                    Url = this._configuration["BaseUri"] + "/openReflectionFeedback/" + taskInfo.reflectionID + "/" + taskInfo.feedback,
                                 },
                             },
                         };
@@ -384,7 +430,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                     default:
                         return null;
                 };
-
             }
             catch (Exception ex)
             {
@@ -393,6 +438,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             }
         }
 
+        /// <summary>
+        /// On Teams Messaging Extension Fetch Task Async.
+        /// </summary>
+        /// <param name="turnContext">turnContext.</param>
+        /// <param name="action">action.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>response.</returns>
         protected override async Task<MessagingExtensionActionResponse> OnTeamsMessagingExtensionFetchTaskAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionAction action, CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("OnTeamsMessagingExtensionFetchTaskAsync");
@@ -471,6 +523,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             }
         }
 
+        /// <summary>
+        /// On Teams Messaging Extension Fetch Task Async.
+        /// </summary>
+        /// <param name="turnContext">turnContext.</param>
+        /// <param name="query">action.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>response.</returns>
         protected override Task<MessagingExtensionResponse> OnTeamsMessagingExtensionQueryAsync(ITurnContext<IInvokeActivity> turnContext, MessagingExtensionQuery query, CancellationToken cancellationToken)
         {
             _telemetry.TrackEvent("OnTeamsMessagingExtensionQueryAsync");
@@ -516,6 +575,67 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
             }
         }
 
+        /// <summary>
+        /// On Teams Messaging Extension Select Item Async.
+        /// </summary>
+        /// <param name="turnContext">turnContext.</param>
+        /// <param name="query">action.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>Attachment.</returns>
+        protected override Task<MessagingExtensionResponse> OnTeamsMessagingExtensionSelectItemAsync(ITurnContext<IInvokeActivity> turnContext, JObject query, CancellationToken cancellationToken)
+        {
+            _telemetry.TrackEvent("OnTeamsMessagingExtensionSelectItemAsync");
+
+            try
+            {
+                return Task.FromResult(new MessagingExtensionResponse
+                {
+                    ComposeExtension = new MessagingExtensionResult
+                    {
+                        AttachmentLayout = "list",
+                        Type = "result",
+                        Attachments = new MessagingExtensionAttachment[]
+                        {
+                        new ThumbnailCard()
+                        .ToAttachment()
+                            .ToMessagingExtensionAttachment()
+                        }
+                    },
+                });
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// On Teams Messaging Extension Card Button Clicked Async.
+        /// </summary>
+        /// <param name="turnContext">turnContext.</param>
+        /// <param name="cardData">cardData.</param>
+        /// <param name="cancellationToken">cancellationToken.</param>
+        /// <returns>Attachment.</returns>
+        protected async override Task OnTeamsMessagingExtensionCardButtonClickedAsync(ITurnContext<IInvokeActivity> turnContext, JObject cardData, CancellationToken cancellationToken)
+        {
+            _telemetry.TrackEvent("OnTeamsMessagingExtensionCardButtonClickedAsync");
+            try
+            {
+                var reply = MessageFactory.Text("OnTeamsMessagingExtensionCardButtonClickedAsync Value: " + JsonConvert.SerializeObject(turnContext.Activity.Value));
+                await turnContext.SendActivityAsync(reply, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                _telemetry.TrackException(ex);
+            }
+        }
+
+        /// <summary>
+        /// Gets Attachment.
+        /// </summary>
+        /// <param name="title">title.</param>
+        /// <returns>Attachment.</returns>
         private MessagingExtensionAttachment GetAttachment(string title)
         {
             _telemetry.TrackEvent("GetAttachment");
@@ -539,49 +659,5 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web
                 return null;
             }
         }
-
-        protected override Task<MessagingExtensionResponse> OnTeamsMessagingExtensionSelectItemAsync(ITurnContext<IInvokeActivity> turnContext, JObject query, CancellationToken cancellationToken)
-        {
-            _telemetry.TrackEvent("OnTeamsMessagingExtensionSelectItemAsync");
-
-            try
-            {
-                return Task.FromResult(new MessagingExtensionResponse
-                {
-                    ComposeExtension = new MessagingExtensionResult
-                    {
-                        AttachmentLayout = "list",
-                        Type = "result",
-                        Attachments = new MessagingExtensionAttachment[]{
-                        new ThumbnailCard()
-                            .ToAttachment()
-                            .ToMessagingExtensionAttachment()
-                    }
-                    },
-                });
-
-            }
-            catch (Exception ex)
-            {
-                _telemetry.TrackException(ex);
-                return null;
-            }
-
-        }
-
-        protected async override Task OnTeamsMessagingExtensionCardButtonClickedAsync(ITurnContext<IInvokeActivity> turnContext, JObject cardData, CancellationToken cancellationToken)
-        {
-            _telemetry.TrackEvent("OnTeamsMessagingExtensionCardButtonClickedAsync");
-            try
-            {
-                var reply = MessageFactory.Text("OnTeamsMessagingExtensionCardButtonClickedAsync Value: " + JsonConvert.SerializeObject(turnContext.Activity.Value));
-                await turnContext.SendActivityAsync(reply, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                _telemetry.TrackException(ex);
-            }
-        }
     }
-
 }
