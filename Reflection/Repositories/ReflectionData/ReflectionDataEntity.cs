@@ -1,8 +1,17 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="ReflectionDataEntity.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Reflection.Repositories.ReflectionData
 {
+    using System;
+    using Microsoft.Azure.Cosmos.Table;
+
+    /// <summary>
+    /// ReflectionDataEntity.
+    /// </summary>
     public class ReflectionDataEntity : TableEntity
     {
         /// <summary>
@@ -62,15 +71,17 @@ namespace Reflection.Repositories.ReflectionData
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// Reflect Message Id
+        /// Gets or sets Reflect Message Id.
         /// </summary>
         public string ReflectMessageId { get; set; }
+
         /// <summary>
-        /// TenantId
+        /// Gets or sets TenantId.
         /// </summary>
         public string TenantId { get; set; }
+
         /// <summary>
-        /// ServiceUrl
+        /// Gets or sets ServiceUrl.
         /// </summary>
         public string ServiceUrl { get; set; }
     }

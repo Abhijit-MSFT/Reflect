@@ -272,7 +272,6 @@ namespace Reflection.Model
         /// Gets or sets FeedbackId.
         /// </summary>
         public int FeedbackId { get; set; }
-
     }
 
     /// <summary>
@@ -410,6 +409,4 @@ namespace Reflection.Model
         public static readonly string RecurringPosts = "recurringreflections";
         public static readonly string CreateReflect = "createreflect";
     }
-
-
 }
