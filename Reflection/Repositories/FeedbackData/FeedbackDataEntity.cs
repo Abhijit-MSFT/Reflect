@@ -1,11 +1,17 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="FeedbackDataEntity.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Reflection.Repositories.FeedbackData
 {
+    using System;
+    using Microsoft.Azure.Cosmos.Table;
+
+    /// <summary>
+    /// FeedbackDataEntity.
+    /// </summary>
     public class FeedbackDataEntity : TableEntity
     {
         /// <summary>

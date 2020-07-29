@@ -1,13 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="FeedbackDataRepository.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Reflection.Repositories.FeedbackData
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.ApplicationInsights;
     using Microsoft.Extensions.Configuration;
 
+    /// <summary>
+    /// FeedbackData Repository.
+    /// </summary>
     public class FeedbackDataRepository : BaseRepository<FeedbackDataEntity>
     {
         private TelemetryClient _telemetry;
@@ -27,13 +35,11 @@ namespace Reflection.Repositories.FeedbackData
             _telemetry = telemetry;
         }
 
-
         /// <summary>
-        /// Get the default questions.
+        /// Get reflection feedback.
         /// </summary>
-        /// <param name=""></param>
-        /// <returns>Questions which have default flag true</returns>
-        /// 
+        /// <param name="reflectionId">reflectionId.</param>
+        /// <returns>Questions which have default flag true.</returns>
         public async Task<Dictionary<int, List<FeedbackDataEntity>>> GetReflectionFeedback(Guid? reflectionId)
         {
             _telemetry.TrackEvent("GetReflectionFeedback");
@@ -48,13 +54,16 @@ namespace Reflection.Repositories.FeedbackData
             }
             catch (Exception ex)
             {
-
                 _telemetry.TrackException(ex);
                 return null;
-
             }
         }
 
+        /// <summary>
+        /// Get reflection ref id.
+        /// </summary>
+        /// <param name="reflid">reflid.</param>
+        /// <returns>.</returns>
         public async Task<FeedbackDataEntity> GetFeedbackonRefId(Guid? reflid)
         {
             _telemetry.TrackEvent("GetReflectionFeedback");
@@ -68,10 +77,15 @@ namespace Reflection.Repositories.FeedbackData
             {
                 _telemetry.TrackException(ex);
                 return null;
-
             }
         }
 
+        /// <summary>
+        /// Get Reflection Feedback.
+        /// </summary>
+        /// <param name="reflid">reflid.</param>
+        /// <param name="email">email.</param>
+        /// <returns>.</returns>
         public async Task<FeedbackDataEntity> GetReflectionFeedback(Guid? reflid, string email)
         {
             _telemetry.TrackEvent("GetReflectionFeedback");
@@ -85,11 +99,15 @@ namespace Reflection.Repositories.FeedbackData
             {
                 _telemetry.TrackException(ex);
                 return null;
-
             }
         }
 
-        public async Task<string>  DeleteFeedback(FeedbackDataEntity feedback)
+        /// <summary>
+        /// Delete Feedback.
+        /// </summary>
+        /// <param name="feedback">feedback.</param>
+        /// <returns>.</returns>
+        public async Task<string> DeleteFeedback(FeedbackDataEntity feedback)
         {
             _telemetry.TrackEvent("DeleteFeedback");
             try
@@ -101,7 +119,6 @@ namespace Reflection.Repositories.FeedbackData
             {
                 _telemetry.TrackException(ex);
                 return "false";
-
             }
         }
     }
