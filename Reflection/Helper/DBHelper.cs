@@ -170,7 +170,7 @@ namespace Reflection.Helper
         }
 
         /// <summary>
-        /// Save Reflection Recurssion data in Table Storage.
+        /// Save Reflection Recursion data in Table Storage.
         /// </summary>
         /// <param name="taskInfo">This parameter is a ViewModel.</param>
         /// <returns>Null.</returns>
@@ -237,7 +237,7 @@ namespace Reflection.Helper
         }
 
         /// <summary>
-        /// Update recurssion table based on day.
+        /// Update recursion table based on day.
         /// </summary>
         /// <param name="recurssionEntity">recurssionEntity.</param>
         /// <returns>Null.</returns>
@@ -431,7 +431,7 @@ namespace Reflection.Helper
         /// <summary>
         /// Get the data from the Recurrence able storage based on the email id.
         /// </summary>
-        /// <param name="email">emilid of the creator of the reflection.</param>
+        /// <param name="email">email id of the creator of the reflection.</param>
         /// <returns>RecurssionScreenData model.</returns>
         public async Task<List<RecurssionScreenData>> GetRecurrencePostsDataAsync(string email)
         {
@@ -497,7 +497,7 @@ namespace Reflection.Helper
         }
 
         /// <summary>
-        /// Remove reflectionid based in messageid
+        /// Remove reflection id based in messageid
         /// </summary>
         /// <param name="reflectionMessageId">reflectionMessageId</param>
         /// <returns>messageid.</returns>
@@ -526,7 +526,7 @@ namespace Reflection.Helper
         }
 
         /// <summary>
-        /// Save Edit Recurssion Data Async.
+        /// Save Edit Recursion Data Async.
         /// </summary>
         /// <param name="reflection">reflection.</param>
         /// <returns>.</returns>
@@ -557,7 +557,7 @@ namespace Reflection.Helper
         /// <returns>.</returns>
         public string Encrypt(string text)
         {
-            var _key = Encoding.UTF8.GetBytes(_configuration["chipher"]);
+            var _key = Encoding.UTF8.GetBytes(_configuration["cipher"]);
 
             using (var aes = Aes.Create())
             {
@@ -603,7 +603,7 @@ namespace Reflection.Helper
             Buffer.BlockCopy(b, 0, iv, 0, iv.Length);
             Buffer.BlockCopy(b, iv.Length, cipher, 0, iv.Length);
 
-            var _key = Encoding.UTF8.GetBytes(_configuration["chipher"]);
+            var _key = Encoding.UTF8.GetBytes(_configuration["cipher"]);
 
             using (var aes = Aes.Create())
             {
