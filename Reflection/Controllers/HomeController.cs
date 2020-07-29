@@ -1,7 +1,12 @@
-﻿// <copyright file="HomeController.cs" company="Microsoft">
-// Copyright (c) Microsoft. All rights reserved.
+﻿// -----------------------------------------------------------------------
+// <copyright file="HomeController.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
+// -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +19,12 @@ using Reflection.Model;
 using Reflection.Repositories.FeedbackData;
 using Reflection.Repositories.QuestionsData;
 using Reflection.Repositories.ReflectionData;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
 {
+    /// <summary>
+    /// Home controller.
+    /// </summary>
     public class HomeController : Controller
     {
         private readonly QuestionsDataRepository _repository;
@@ -29,6 +34,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
         private readonly TelemetryClient _telemetry;
         private readonly IDataBase _dbHelper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HomeController"/> class.
+        /// Home controller.
+        /// </summary>
         public HomeController(QuestionsDataRepository dataRepository, IConfiguration configuration,
             ReflectionDataRepository refrepository, IWebHostEnvironment webHostEnvironment, TelemetryClient telemetry, IDataBase dbHelper)
         {
@@ -40,6 +49,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             _dbHelper = dbHelper;
         }
 
+        /// <summary>
+        /// Renders index view.
+        /// </summary>
+        /// <param name="userName">userName.</param>
+        /// <returns>View.</returns>
         [Route("{userName}")]
         public ActionResult Index(string userName)
         {
@@ -48,9 +62,15 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             {
                 ViewBag.UserName = userName;
             }
+
             return View();
         }
 
+        /// <summary>
+        /// Renders index view.
+        /// </summary>
+        /// <param name="userName">userName.</param>
+        /// <returns>View.</returns>
         [Route("hello")]
         public ActionResult Hello()
         {
@@ -58,6 +78,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View("Index");
         }
 
+        /// <summary>
+        /// Renders manageRecurringPosts view.
+        /// </summary>
+        /// <param name="emailid">emailid.</param>
+        /// <returns>View.</returns>
         [Route("manageRecurringPosts/{emailid}")]
         public ActionResult ManageRecurringPosts(string emailid)
         {
@@ -68,7 +93,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
-
+        /// <summary>
+        /// Deletes a reflection.
+        /// </summary>
+        /// <param name="reflectionid">reflectionid.</param>
+        /// <returns>View.</returns>
         [Route("api/DeleteReflection/{reflectionid}")]
         public async Task<string> DeleteReflection(string reflectionid)
         {
@@ -85,6 +114,13 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Renders reflection view.
+        /// </summary>
+        /// <param name="reflectionId">reflectionid.</param>
+        /// /// <param name="feedbackId">feedbackId.</param>
+        /// /// <param name="userName">userName.</param>
+        /// <returns>View.</returns>
         [Route("openReflections/{reflectionid}/{feedbackId}/{userName}")]
         public ActionResult OpenReflections(Guid reflectionId, int feedbackId, string userName)
         {
@@ -95,6 +131,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Renders reflection feedback view.
+        /// </summary>
+        /// <param name="reflectionId">reflectionid.</param>
+        /// /// <param name="feedbackId">feedbackId.</param>
+        /// <returns>View.</returns>
         [Route("openReflectionFeedback/{reflectionid}/{feedbackId}")]
         public ActionResult OpenReflectionFeedback(Guid reflectionId, int feedbackId)
         {
@@ -104,8 +146,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
-
-
+        /// <summary>
+        /// Gets registered reflections.
+        /// </summary>
+        /// <param name="reflectionid">reflectionid.</param>
+        /// <returns>View.</returns>
         [Route("api/GetReflections/{reflectionid}")]
         public async Task<string> GetReflections(Guid reflectionid)
         {
@@ -127,6 +172,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
 
 
         }
+
+        /// <summary>
+        /// Gets registered recurssions.
+        /// </summary>
+        /// <param name="email">email.</param>
+        /// <returns>View.</returns>
         [Route("api/GetRecurssions/{email}")]
         public async Task<string> GetRecurssions(string email)
         {
@@ -146,6 +197,10 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
 
         }
 
+        /// <summary>
+        /// Renders configure view.
+        /// </summary>
+        /// <returns>View.</returns>
         [Route("configure")]
         public ActionResult Configure()
         {
@@ -153,6 +208,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Gets all default questions to post.
+        /// </summary>
+        /// <param name="userName">userName.</param>
+        /// <returns>Questions.</returns>
         [Route("api/GetAllDefaultQuestions/{userName}")]
         public async Task<List<QuestionsDataEntity>> GetAllDefaultQuestions(string userName)
         {
@@ -169,6 +229,12 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Creates a new reflection adaptive card.
+        /// </summary>
+        /// <param name="taskInfo">taskInfo.</param>
+        /// <returns>Output.</returns>
         [HttpPost]
         [Route("ReflectionAdaptiveCard")]
         public string ReflectionAdaptiveCard([FromBody]TaskInfo taskInfo)
@@ -188,6 +254,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a new reflection adaptive card.
+        /// </summary>
+        /// <param name="data">data.</param>
+        /// <returns>Boolean.</returns>
         [HttpPost]
         [Route("api/SaveRecurssionData")]
         public async Task<string> SaveRecurssionData([FromBody]RecurssionScreenData data)
@@ -205,6 +276,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             }
         }
 
+        /// <summary>
+        /// Saves user feedback.
+        /// </summary>
+        /// <param name="data">data.</param>
+        /// <returns>Boolean.</returns>
         [HttpPost]
         [Route("api/SaveUserFeedback")]
         public async Task<string> SaveUserFeedback([FromBody]UserfeedbackInfo data)
@@ -240,7 +316,11 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Get user feedback.
+        /// </summary>
+        /// <param name="data">data.</param>
+        /// <returns>Feedback.</returns>
         [HttpPost]
         [Route("api/GetUserFeedback")]
         public async Task<int?> GetUserFeedback([FromBody]UserfeedbackInfo data)
