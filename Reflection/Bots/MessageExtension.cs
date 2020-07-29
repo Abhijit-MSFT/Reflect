@@ -3,6 +3,7 @@
 //      Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
 // -----------------------------------------------------------------------
+
 namespace Microsoft.Teams.Samples.HelloWorld.Web
 {
     using System;
