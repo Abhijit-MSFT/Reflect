@@ -13,22 +13,22 @@ namespace Reflection.Model
     {
         /// <summary>
         /// Gets or sets IsSuccessful.
-        /// </summary>   
+        /// </summary>
         public bool IsSuccessful { get; set; }
 
         /// <summary>
         /// Gets or sets FailureMessage.
-        /// </summary>   
+        /// </summary>
         public string FailureMessage { get; set; }
 
         /// <summary>
         /// Gets or sets MessageId.
-        /// </summary>   
+        /// </summary>
         public string MessageId { get; set; }
 
         /// <summary>
         /// Gets or sets Name.
-        /// </summary>   
+        /// </summary>
         public string Name { get; set; }
     }
 }
