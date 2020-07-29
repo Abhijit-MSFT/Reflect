@@ -1,11 +1,16 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿// -----------------------------------------------------------------------
+// <copyright file="DatabaseItem.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
+// </copyright>
+// -----------------------------------------------------------------------
 
 namespace Reflection.Model
 {
+    using Newtonsoft.Json;
+
+    /// <summary>
+    /// DatabaseItem.
+    /// </summary>
     public class DatabaseItem
     {
         [JsonProperty("type")]
