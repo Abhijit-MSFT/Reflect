@@ -1,38 +1,46 @@
-﻿// <copyright file="DBHelper.cs" company="Microsoft">
-// Copyright (c) Microsoft. All rights reserved.
+﻿// -----------------------------------------------------------------------
+// <copyright file="DBHelper.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
 // </copyright>
-
-using Microsoft.ApplicationInsights;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Connector;
-using Microsoft.Bot.Schema;
-using Microsoft.Bot.Schema.Teams;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json.Linq;
-using Reflection.Interfaces;
-using Reflection.Model;
-using Reflection.Repositories;
-using Reflection.Repositories.FeedbackData;
-using Reflection.Repositories.QuestionsData;
-using Reflection.Repositories.RecurssionData;
-using Reflection.Repositories.ReflectionData;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+// -----------------------------------------------------------------------
 
 namespace Reflection.Helper
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Security.Cryptography;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Microsoft.ApplicationInsights;
+    using Microsoft.Bot.Builder;
+    using Microsoft.Bot.Connector;
+    using Microsoft.Bot.Schema;
+    using Microsoft.Bot.Schema.Teams;
+    using Microsoft.Extensions.Configuration;
+    using Newtonsoft.Json.Linq;
+    using Reflection.Interfaces;
+    using Reflection.Model;
+    using Reflection.Repositories;
+    using Reflection.Repositories.FeedbackData;
+    using Reflection.Repositories.QuestionsData;
+    using Reflection.Repositories.RecurssionData;
+    using Reflection.Repositories.ReflectionData;
+
+    /// <summary>
+    /// DB Helper.
+    /// </summary>
     public class DBHelper : IDataBase
     {
         private IConfiguration _configuration;
         private TelemetryClient _telemetry;
         List<string> weekdays = new List<string>();
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DBHelper"/> class.
+        /// DB Helper.
+        /// </summary>
         public DBHelper(IConfiguration configuration, TelemetryClient telemetry)
         {
             _configuration = configuration;
@@ -44,14 +52,13 @@ namespace Reflection.Helper
             weekdays.Add("Thursday");
             weekdays.Add("Friday");
             weekdays.Add("Saturday");
-
         }
 
         /// <summary>
-        /// Save Reflection data in Table Storage based on different conditions
+        /// Save Reflection data in Table Storage based on different conditions.
         /// </summary>
-        /// <param name="taskInfo">This parameter is a ViewModel</param>
-        /// <returns>Null</returns>
+        /// <param name="taskInfo">This parameter is a ViewModel.</param>
+        /// <returns>Null.</returns>
         public async Task SaveReflectionDataAsync(TaskInfo taskInfo)
         {
             _telemetry.TrackEvent("SaveReflectionDataAsync");
@@ -112,6 +119,11 @@ namespace Reflection.Helper
             }
         }
 
+        /// <summary>
+        /// Updates reflection message id.
+        /// </summary>
+        /// <param name="reflectionDataEntity">reflectionDataEntity.</param>
+        /// <returns>Null.</returns>
         public async Task UpdateReflectionMessageIdAsync(ReflectionDataEntity reflectionDataEntity)
         {
             _telemetry.TrackEvent("SaveReflectionMessageIdAsync");
@@ -125,11 +137,12 @@ namespace Reflection.Helper
                 _telemetry.TrackException(ex);
             }
         }
+
         /// <summary>
-        /// Save Question data in Table Storage based on different conditions
+        /// Save Question data in Table Storage based on different conditions.
         /// </summary>
-        /// <param name="taskInfo">This parameter is a ViewModel</param>
-        /// <returns>Null</returns>
+        /// <param name="taskInfo">This parameter is a ViewModel.</param>
+        /// <returns>Null.</returns>
         public async Task SaveQuestionsDataAsync(TaskInfo taskInfo)
         {
             _telemetry.TrackEvent("DeleteReflections");
@@ -156,12 +169,11 @@ namespace Reflection.Helper
             }
         }
 
-
         /// <summary>
-        /// Save Reflection Recurssion data in Table Storage
+        /// Save Reflection Recurssion data in Table Storage.
         /// </summary>
-        /// <param name="taskInfo">This parameter is a ViewModel</param>
-        /// <returns>Null</returns>
+        /// <param name="taskInfo">This parameter is a ViewModel.</param>
+        /// <returns>Null.</returns>
         public async Task SaveRecurssionDataAsync(TaskInfo taskInfo)
         {
             _telemetry.TrackEvent("SaveRecurssionDataAsync");
@@ -192,37 +204,43 @@ namespace Reflection.Helper
                 _telemetry.TrackException(ex);
             }
         }
+
         /// <summary>
-        /// Get the next working day
+        /// Get the next working day.
         /// </summary>
-        /// <param name=""></param>
-        /// <returns>next week day</returns>
+        /// <returns>next week day.</returns>
         public DateTime GetNextWeekday()
         {
             DateTime nextWorkingDay = DateTime.UtcNow.AddDays(1);
             while (nextWorkingDay.DayOfWeek == DayOfWeek.Saturday || nextWorkingDay.DayOfWeek == DayOfWeek.Sunday)
+            {
                 nextWorkingDay = nextWorkingDay.AddDays(1);
+            }
+
             return nextWorkingDay;
         }
 
         /// <summary>
-        /// Get the next working day
+        /// Get the next working day.
         /// </summary>
-        /// <param name="currentDay">currentDay</param>
-        /// <returns>next working day</returns>
+        /// <param name="day">day.</param>
+        /// <returns>next working day.</returns>
         public DateTime GetNextWeeklyday(DayOfWeek day)
         {
             DateTime nextWeeklyday = DateTime.UtcNow.AddDays(1);
             while (nextWeeklyday.DayOfWeek != day)
+            {
                 nextWeeklyday = nextWeeklyday.AddDays(1);
+            }
+
             return nextWeeklyday;
         }
 
         /// <summary>
-        /// Update recurssion table based on day
+        /// Update recurssion table based on day.
         /// </summary>
-        /// <param name="recurssionEntity"></param>
-        /// <returns>Null</returns>
+        /// <param name="recurssionEntity">recurssionEntity.</param>
+        /// <returns>Null.</returns>
         public async Task UpdateRecurssionDataNextExecutionDateTimeAsync(RecurssionDataEntity recurssionEntity)
         {
             _telemetry.TrackEvent("UpdateRecurssionDataNextExecutionDateTimeAsync");
@@ -230,7 +248,6 @@ namespace Reflection.Helper
             {
                 DateTime nextExecutionDate = Convert.ToDateTime(recurssionEntity.NextExecutionDate);
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
-
 
                 switch (recurssionEntity.RecursstionType.ToLower().Trim())
                 {
@@ -282,8 +299,10 @@ namespace Reflection.Helper
                                     recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextcustomweeklyday ? nextcustomweeklyday : null;
                                 }
                             }
+
                             break;
                         }
+
                         if (recurssionEntity.CustomRecurssionTypeValue.Contains("month"))
                         {
                             if (recurssionEntity.CustomRecurssionTypeValue.Contains("Day"))
@@ -291,7 +310,9 @@ namespace Reflection.Helper
                                 goto case "monthly";
                             }
                             else
+                            {
                                 break;
+                            }
                         }
                         else
                         {
@@ -303,6 +324,7 @@ namespace Reflection.Helper
                     default:
                         break;
                 }
+
                 await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
             }
             catch (Exception ex)
@@ -314,15 +336,13 @@ namespace Reflection.Helper
         /// <summary>
         /// Add Reflection data in Table Storage.
         /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
+        /// <param name="taskInfo">taskInfo.</param>
         /// <returns>A task that represents the work queued to execute.</returns>
         public async Task SaveReflectionFeedbackDataAsync(UserfeedbackInfo taskInfo)
         {
             _telemetry.TrackEvent("DeleteReflections");
             try
             {
-
                 FeedbackDataRepository feedbackDataRepository = new FeedbackDataRepository(_configuration, _telemetry);
 
                 if (taskInfo != null)
@@ -350,7 +370,11 @@ namespace Reflection.Helper
             }
         }
 
-        //make above method and below method generic - need this change
+        /// <summary>
+        /// Gets user email id.
+        /// </summary>
+        /// <param name="turnContext">turnContext.</param>
+        /// <returns>A task that represents the work queued to execute.</returns>
         public async Task<string> GetUserEmailId<T>(ITurnContext<T> turnContext) where T : Microsoft.Bot.Schema.IActivity
         {
             _telemetry.TrackEvent("GetUserEmailId");
@@ -367,31 +391,14 @@ namespace Reflection.Helper
             catch (Exception ex)
             {
                 _telemetry.TrackException(ex);
-                return "";
+                return string.Empty;
             }
         }
 
         /// <summary>
-        /// Add Reflection data in Table Storage.
+        /// Gets view reflections data.
         /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
-        /// <returns>A task that represents the work queued to execute.</returns>
-        private IEnumerable<TeamsChannelAccount> AsTeamsChannelAccounts(IEnumerable<ChannelAccount> channelAccountList)
-        {
-            _telemetry.TrackEvent("AsTeamsChannelAccounts");
-
-            foreach (ChannelAccount channelAccount in channelAccountList)
-            {
-                yield return JObject.FromObject(channelAccount).ToObject<TeamsChannelAccount>();
-            }
-        }
-
-        /// <summary>
-        /// Add Reflection data in Table Storage.
-        /// </summary>
-        /// <param name="reflectionDataRepository">The reflection data repository.</param>
-        /// <param name="turnContext">Bot conversation update activity instance.</param>
+        /// <param name="reflectionId">reflectionId.</param>
         /// <returns>A task that represents the work queued to execute.</returns>
         public async Task<ViewReflectionsEntity> GetViewReflectionsData(Guid reflectionId)
         {
@@ -404,7 +411,7 @@ namespace Reflection.Helper
                 ViewReflectionsEntity viewReflectionsEntity = new ViewReflectionsEntity();
                 QuestionsDataRepository questionsDataRepository = new QuestionsDataRepository(_configuration, _telemetry);
 
-                //Get reflection data
+                // Get reflection data
                 ReflectionDataEntity refData = await reflectionDataRepository.GetReflectionData(reflectionId) ?? null;
                 Dictionary<int, List<FeedbackDataEntity>> feedbackData = await feedbackDataRepository.GetReflectionFeedback(reflectionId) ?? null;
                 List<QuestionsDataEntity> questions = await questionsDataRepository.GetQuestionsByQID(refData.QuestionID) ?? null;
@@ -419,14 +426,13 @@ namespace Reflection.Helper
                 _telemetry.TrackException(ex);
                 return null;
             }
-
         }
 
         /// <summary>
-        /// Get the data from the Recurrence able storage based on the email id
+        /// Get the data from the Recurrence able storage based on the email id.
         /// </summary>
-        /// <param name="emailid">emilid of the creator of the reflection</param>
-        /// <returns>RecurssionScreenData model</returns>
+        /// <param name="email">emilid of the creator of the reflection.</param>
+        /// <returns>RecurssionScreenData model.</returns>
         public async Task<List<RecurssionScreenData>> GetRecurrencePostsDataAsync(string email)
         {
             _telemetry.TrackEvent("GetRecurrencePostsDataAsync");
@@ -457,6 +463,7 @@ namespace Reflection.Helper
                     if (recurssionScreenData.RecurssionType != null)
                         screenData.Add(recurssionScreenData);
                 }
+
                 return screenData;
             }
             catch (Exception ex)
@@ -465,11 +472,12 @@ namespace Reflection.Helper
                 return null;
             }
         }
+
         /// <summary>
         /// Delete recurrence data based on the reflection id
         /// </summary>
-        /// <param name="reflectionid">reflectionid</param>
-        /// <returns>Null</returns>
+        /// <param name="reflectionId">reflectionId.</param>
+        /// <returns>Null.</returns>
         public async Task DeleteRecurrsionDataAsync(Guid reflectionId)
         {
             try
@@ -491,8 +499,8 @@ namespace Reflection.Helper
         /// <summary>
         /// Remove reflectionid based in messageid
         /// </summary>
-        /// <param name="messageid">messageid</param>
-        /// <returns>messageid</returns>
+        /// <param name="reflectionMessageId">reflectionMessageId</param>
+        /// <returns>messageid.</returns>
         public async Task<string> RemoveReflectionId(string reflectionMessageId)
         {
             string messageId = null;
@@ -508,19 +516,20 @@ namespace Reflection.Helper
                 await reflectionDataRepository.DeleteAsync(reflection);
 
             }
+
             catch (Exception ex)
             {
                 _telemetry.TrackException(ex);
             }
+
             return messageId;
         }
+
         /// <summary>
-        /// update Reflection and recurssion related to that reflection
+        /// Save Edit Recurssion Data Async.
         /// </summary>
-        /// <param name="Iconfiguration">Reads The config from app settings</param>
-        /// <param name="reflection">COmbination of reflection and recurssion to save data</param>
-
-
+        /// <param name="reflection">reflection.</param>
+        /// <returns>.</returns>
         public async Task SaveEditRecurssionDataAsync(RecurssionScreenData reflection)
         {
             try
@@ -541,7 +550,11 @@ namespace Reflection.Helper
             }
         }
 
-
+        /// <summary>
+        /// Encrypts the given text.
+        /// </summary>
+        /// <param name="text">text.</param>
+        /// <returns>.</returns>
         public string Encrypt(string text)
         {
             var _key = Encoding.UTF8.GetBytes(_configuration["chipher"]);
@@ -575,6 +588,11 @@ namespace Reflection.Helper
             }
         }
 
+        /// <summary>
+        /// Decrypts the encrypted text.
+        /// </summary>
+        /// <param name="encrypted">text.</param>
+        /// <returns>.</returns>
         public string Decrypt(string encrypted)
         {
             var b = Convert.FromBase64String(encrypted);
@@ -607,7 +625,20 @@ namespace Reflection.Helper
                 }
             }
         }
+
+        /// <summary>
+        /// Add Reflection data in Table Storage.
+        /// </summary>
+        /// <param name="channelAccountList">channelAccountList.</param>
+        /// <returns>A task that represents the work queued to execute.</returns>
+        private IEnumerable<TeamsChannelAccount> AsTeamsChannelAccounts(IEnumerable<ChannelAccount> channelAccountList)
+        {
+            _telemetry.TrackEvent("AsTeamsChannelAccounts");
+
+            foreach (ChannelAccount channelAccount in channelAccountList)
+            {
+                yield return JObject.FromObject(channelAccount).ToObject<TeamsChannelAccount>();
+            }
+        }
     }
 }
-
-
