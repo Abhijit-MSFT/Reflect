@@ -211,7 +211,7 @@ function GetReflections() {
                 let totalcount = 0;
                 let datacount = 0;
                 let width = 0;
-                let descriptio = "";
+                let description = "";
                 Object.keys(JSON.parse(data.feedback)).forEach((x) => {
                     totalcount = totalcount + feedback[x].length;
                 });
@@ -219,10 +219,10 @@ function GetReflections() {
                     if (Object.keys(feedback).indexOf(i.toString()) !== -1) {
                         datacount = feedback[i].length;
                         description =
-                            reflection.Privacy === "Anonymous-Names not displayed on reflections"
+                            reflection.Privacy === "Anonymous – Names not displayed on reflections"
                                 ? ""
                                 : feedback[i].map((x) => x.FullName).join(",");
-                        if (reflection.Privacy === "Creator only-Names displayed to the creator only") {
+                        if (reflection.Privacy === "Creator only – Names displayed to the creator only") {
                             description =
                                 userName === reflection.CreatedBy
                                 ? description
@@ -272,7 +272,7 @@ function GetReflections() {
                         });
                         blockdata = blockdata + '</div>';
                     }
-                    else if (reflection.Privacy !== "Anonymous-Names not displayed on reflections" || (reflection.Privacy === "Creator only-Names displayed to the creator only" && userName === reflection.CreatedBy)) {
+                    else if (reflection.Privacy !== "Anonymous – Names not displayed on reflections" || (reflection.Privacy === "Creator only – Names displayed to the creator only" && userName === reflection.CreatedBy)) {
                         blockdata = blockdata + '<div class="no-reflections">No Reflections</div>';
                     }
 
