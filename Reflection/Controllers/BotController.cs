@@ -5,7 +5,7 @@
 // Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.6.2
 // -----------------------------------------------------------------------
 
-namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
+namespace Microsoft.Teams.Apps.Reflect.Web.Controllers
 {
     using System;
     using System.Threading.Tasks;

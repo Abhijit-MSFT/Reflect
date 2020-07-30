@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Microsoft.Teams.Samples.HelloWorld.Web
+namespace Microsoft.Teams.Apps.Reflect.Web
 {
     using System;
     using System.Collections.Generic;

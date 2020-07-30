@@ -5,7 +5,7 @@
 // Generated with Bot Builder V4 SDK Template for Visual Studio CoreBot v4.6.2
 // -----------------------------------------------------------------------
 
-namespace Microsoft.Teams.Samples.HelloWorld.Web
+namespace Microsoft.Teams.Apps.Reflect.Web
 {
     using Microsoft.Bot.Builder.Integration.AspNet.Core;
     using Microsoft.Bot.Builder.TraceExtensions;

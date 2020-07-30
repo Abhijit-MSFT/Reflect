@@ -6,7 +6,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Microsoft.Teams.Samples.HelloWorld.Web
+namespace Microsoft.Teams.Apps.Reflect.Web
 {
     using Microsoft.AspNetCore;
     using Microsoft.AspNetCore.Hosting;

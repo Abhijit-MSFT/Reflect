@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
+namespace Microsoft.Teams.Apps.Reflect.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -64,18 +64,6 @@ namespace Microsoft.Teams.Samples.HelloWorld.Web.Controllers
             }
 
             return View();
-        }
-
-        /// <summary>
-        /// Renders index view.
-        /// </summary>
-        /// <param name="userName">userName.</param>
-        /// <returns>View.</returns>
-        [Route("hello")]
-        public ActionResult Hello()
-        {
-            _telemetry.TrackEvent("Hello");
-            return View("Index");
         }
 
         /// <summary>

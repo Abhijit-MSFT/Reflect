@@ -1,27 +1,36 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-//
-// Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.6.2
+﻿// -----------------------------------------------------------------------
+// <copyright file="Startup.cs" company="Microsoft">
+//      Copyright (c) Microsoft Corporation.  All rights reserved.
+//      Licensed under the MIT License.
+//      Generated with Bot Builder V4 SDK Template for Visual Studio EchoBot v4.6.2
+// </copyright>
+// -----------------------------------------------------------------------
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Integration.AspNet.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Reflection.Helper;
-using Reflection.Interfaces;
-using Reflection.Model;
-using Reflection.Repositories.QuestionsData;
-using Reflection.Repositories.RecurssionData;
-using Reflection.Repositories.ReflectionData;
-
-namespace Microsoft.Teams.Samples.HelloWorld.Web
+namespace Microsoft.Teams.Apps.Reflect.Web
 {
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Bot.Builder;
+    using Microsoft.Bot.Builder.Integration.AspNet.Core;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Reflection.Helper;
+    using Reflection.Interfaces;
+    using Reflection.Repositories.QuestionsData;
+    using Reflection.Repositories.ReflectionData;
+
+    /// <summary>
+    /// Startup class.
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// Renders index view.
+        /// </summary>
+        /// <param name="configuration">configuration.</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
