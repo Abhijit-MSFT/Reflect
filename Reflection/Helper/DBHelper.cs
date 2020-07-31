@@ -14,6 +14,7 @@ namespace Reflection.Helper
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.ApplicationInsights;
+    using Microsoft.Azure.Documents;
     using Microsoft.Bot.Builder;
     using Microsoft.Bot.Connector;
     using Microsoft.Bot.Schema;
@@ -551,15 +552,17 @@ namespace Reflection.Helper
                 reflectionDataEntity.ReflectionID = reflectionid;
                 reflectionDataEntity.RefCreatedDate = DateTime.Now;
                 reflectionDataEntity.RecurrsionID = recurrsionid;
-                await reflectionDataRepository.CreateOrUpdateAsync(reflectionDataEntity);
+                reflectionDataEntity.RowKey = Guid.NewGuid().ToString();
+                await reflectionDataRepository.CreateAsync(reflectionDataEntity);
                 recurssionDataEntity = recurssion;
                 recurssionDataEntity.ReflectionID = reflectionid;
                 recurssionDataEntity.CreatedDate = DateTime.Now;
                 recurssionDataEntity.RecurssionID = recurrsionid;
                 recurssionDataEntity.RecursstionType = reflection.RecurssionType;
                 recurssionDataEntity.CustomRecurssionTypeValue = reflection.CustomRecurssionTypeValue;
+                recurssionDataEntity.RowKey = Guid.NewGuid().ToString();
                 recurssionDataEntity.NextExecutionDate = reflection.NextExecutionDate;
-                await recurssionDataRepository.CreateOrUpdateAsync(recurssionDataEntity);
+                await recurssionDataRepository.CreateAsync(recurssionDataEntity);
                 recurssion.NextExecutionDate = null;
                 await recurssionDataRepository.CreateOrUpdateAsync(recurssion);
             }
