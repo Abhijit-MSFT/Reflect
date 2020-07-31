@@ -299,7 +299,7 @@ namespace Microsoft.Teams.Apps.Reflect.Web.Controllers
             }
             catch (Exception e)
             {
-                _telemetry.TrackEvent("SaveRecurssionData Exception " + e);
+                _telemetry.TrackEvent("SaveUserFeedback Exception " + e);
                 return "false";
             }
         }
@@ -332,7 +332,7 @@ namespace Microsoft.Teams.Apps.Reflect.Web.Controllers
             }
             catch (Exception e)
             {
-                _telemetry.TrackEvent("SaveRecurssionData Exception " + e);
+                _telemetry.TrackEvent("GetUserFeedback Exception " + e);
                 return null;
             }
         }
