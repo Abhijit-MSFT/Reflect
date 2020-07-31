@@ -4,7 +4,7 @@ let deleteid = "";
 let editid = "";
 let previouseditid = "";
 let weeks = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
+let currentrecurrsion = {};
 $(document).ready(function () {
     let show = $("#backButton").val();
     $('.float-left').hide();
@@ -116,7 +116,10 @@ function getRecurssions() {
                         }
                     }
                 }
-                if (x.RecurssionType === "Monthly") {
+                if (x.RecurssionType === "Daily") {
+                    sendpostat = "Every 1 Day at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
+                }
+                else if (x.RecurssionType === "Monthly") {
                     sendpostat = "Every Month " + new Date(x.ExecutionDate).getDate() + " at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
                 }
                 else if (x.RecurssionType === "Weekly") {
@@ -148,10 +151,7 @@ function getRecurssions() {
                         $("#edit").show();
                     $(".day-select,.eve-week-start,.month-cal").hide();
                     let singledata = blockdata;
-                    let ques = recurssions.find(x => x.RefID === editid);
-                    $("#currentrecurrsionquestion").html(ques.Question);
-                    let date = moment(ques.ExecutionDate).format("ddd MMM DD, YYYY");
-                    $("#execdate").attr("data-date", date);
+                    currentrecurrsion= recurssions.find(x => x.RefID === editid);
                     let timehours = "";
                     let timeminutes = "";
                     let mode = ' AM';
@@ -183,7 +183,15 @@ function getRecurssions() {
                             }
                         }
                     }
-                    if (x.RecurssionType === "Monthly") {
+                    currentrecurrsion.time = timehours + ":" + timeminutes + mode;
+                    if (x.RecurssionType === "Daily") {
+                        sendpostat = "Every Day at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
+                        $("#dwm").val("day");
+                        $("#customnumber").html("1");
+                        $("#customtype").html("day");
+                        $("#dwm").trigger("change");
+                    }
+                    else if (x.RecurssionType === "Monthly") {
                         sendpostat = "Every Month " + new Date(x.ExecutionDate).getDate() + " at " + timehours + ":" + timeminutes + mode + " starting from " + new Date(x.ExecutionDate).toLocaleDateString();
                         $("#dwm").val("month");
                         $("#customnumber").html("1");
@@ -273,6 +281,8 @@ function deleteRecurssion() {
     });
 }
 
+
+
 function saveRecurssion() {
     let rectype = "";
         if ($("#dwm").val() === "month") {
@@ -284,7 +294,9 @@ function saveRecurssion() {
             }
 
         }
-        else rectype = $("#finaldates").html();
+    else rectype = $("#finaldates").html();
+    currentrecurrsion.recurssionType = "Custom";
+    nextexecutiondate = combineDateAndTime(currentrecurrsion.ExecutionDate, currentrecurrsion.time);
     $.ajax({
         type: 'POST',
         url: '/api/SaveRecurssionData',
@@ -292,7 +304,7 @@ function saveRecurssion() {
             "Content-Type": "application/json"
         },
         data: JSON.stringify({
-            "refID": editid, "recurssionType": "Custom", customRecurssionTypeValue: rectype
+            "refID": editid, "recurssionType": "Custom", customRecurssionTypeValue: rectype, nextExecutionDate: nextexecutiondate
         }),
         success: function (data) {
             if (data === "true") {
@@ -303,6 +315,55 @@ function saveRecurssion() {
         }
     });
 }
+
+function combineDateAndTime(date, time) {
+        time = getTwentyFourHourTime(time);
+        customvalue = $("#dwm").val();
+    if (customvalue === "day" || customvalue === "month")
+                return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+            else if (customvalue === "week") {
+                if ($("#slectedweeks").html().split(',').length === 1) {
+                    if (weeks[new Date(date).getDay()] === $("#slectedweeks").html())
+                        return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+                    else {
+                        let nextweekdate = nextWeekdayDate(date, weeks.indexOf($("#slectedweeks").html()));
+                        nextweekdate.setHours(time.split(":")[0]);
+                        nextweekdate.setMinutes(time.split(":")[1]);
+                        return nextweekdate.toISOString();
+                    }
+
+                }
+                else {
+                    if ($("#slectedweeks").html().split(',').indexOf(weeks[new Date(date).getDay()])) {
+                        return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+                    }
+                }
+
+    }
+       
+}
+
+function nextWeekdayDate(date, day_in_week) {
+    var ret = new Date(date || new Date());
+    ret.setDate(ret.getDate() + (day_in_week - 1 - ret.getDay() + 7) % 7 + 1);
+    return ret;
+}
+
+function getTwentyFourHourTime(time) {
+    var hours = Number(time.match(/^(\d+)/)[1]);
+    var minutes = Number(time.match(/:(\d+)/)[1]);
+    var AMPM = time.match(/\s(.*)$/)[1].toLowerCase();
+
+    if (AMPM === "pm" && hours < 12) hours = hours + 12;
+    if (AMPM === "am" && hours === 12) hours = hours - 12;
+    var sHours = hours.toString();
+    var sMinutes = minutes.toString();
+    if (hours < 10) sHours = "0" + sHours;
+    if (minutes < 10) sMinutes = "0" + sMinutes;
+
+    return sHours + ':' + sMinutes;
+}
+
 
 function gotoIndex() {
     let linkInfo = {

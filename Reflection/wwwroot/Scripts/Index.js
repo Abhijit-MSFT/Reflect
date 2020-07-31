@@ -185,7 +185,7 @@ function combineDateAndTime(date, time) {
                 return new Date(moment(`${date} ${time}`).add(2, 'days').format('YYYY-MM-DD HH:mm')).toUTCString();
         }
         else if ($("#recurrence").val() === "Custom") {
-            customvalue = $("dwm").val();
+            customvalue = $("#dwm").val();
             if (customvalue === "day")
                 return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
             else if (customvalue === "week") {
@@ -194,7 +194,9 @@ function combineDateAndTime(date, time) {
                         return new Date(moment(`${date} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
                     else {
                         let nextweekdate = nextWeekdayDate(date, weeks.indexOf($("#slectedweeks").html()));
-                        return new Date(moment(`${nextweekdate} ${time}`, 'YYYY-MM-DD HH:mm').format()).toUTCString();
+                        nextweekdate.setHours(time.split(":")[0]);
+                        nextweekdate.setMinutes(time.split(":")[1]);
+                        return nextweekdate.toISOString();
                     }
 
                 }

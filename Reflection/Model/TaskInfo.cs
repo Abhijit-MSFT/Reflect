@@ -172,6 +172,11 @@ namespace Reflection.Model
         /// Gets or sets feedback.
         /// </summary>
         public int feedback { get; set; }
+
+        /// <summary>
+        /// Gets or sets Schedule Id.
+        /// </summary>
+        public string scheduleId { get; set; }
     }
 
     /// <summary>
@@ -213,6 +218,8 @@ namespace Reflection.Model
         /// Gets or sets messageId.
         /// </summary>
         public string messageId { get; set; }
+
+
     }
 
     /// <summary>

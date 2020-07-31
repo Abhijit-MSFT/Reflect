@@ -56,6 +56,21 @@ namespace Reflection.Repositories
         /// </summary>
         public CloudTable Table { get; }
 
+
+
+        /// <summary>
+        /// Create an entity in the table storage.
+        /// </summary>
+        /// <param name="entity">Entity to be created.</param>
+        /// <returns>A task that represents the work queued to execute.</returns>
+        public async Task CreateAsync(T entity)
+        {
+            var operation = TableOperation.Insert(entity);
+
+            await this.Table.ExecuteAsync(operation);
+        }
+
+
         /// <summary>
         /// Create or update an entity in the table storage.
         /// </summary>

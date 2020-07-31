@@ -14,6 +14,7 @@ namespace Reflection.Helper
     using System.Text;
     using System.Threading.Tasks;
     using Microsoft.ApplicationInsights;
+    using Microsoft.Azure.Documents;
     using Microsoft.Bot.Builder;
     using Microsoft.Bot.Connector;
     using Microsoft.Bot.Schema;
@@ -93,7 +94,8 @@ namespace Reflection.Helper
                         IsActive = taskInfo.IsActive,
                         ReflectMessageId = taskInfo.reflectMessageId,
                         TenantId = taskInfo.teantId,
-                        ServiceUrl = taskInfo.serviceUrl
+                        ServiceUrl = taskInfo.serviceUrl,
+                        ScheduleId=taskInfo.scheduleId
                     };
                     await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
 
@@ -158,7 +160,7 @@ namespace Reflection.Helper
                     IsDefaultFlag = false,
                     QuestionCreatedDate = DateTime.Now,
                     CreatedBy = taskInfo.postCreateBy,
-                    CreatedByEmail = taskInfo.postCreatedByEmail
+                    CreatedByEmail = taskInfo.postCreatedByEmail,
                 };
 
                 await questionsDataRepository.CreateOrUpdateAsync(questionEntity);
@@ -195,7 +197,8 @@ namespace Reflection.Helper
                     ExecutionDate = taskInfo.executionDate,
                     ExecutionTime = taskInfo.executionTime,
                     RecurssionEndDate = taskInfo.executionDate.AddDays(60),
-                    NextExecutionDate = taskInfo.nextExecutionDate
+                    NextExecutionDate = taskInfo.nextExecutionDate,
+                    ScheduleId=taskInfo.scheduleId
                 };
                 await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
             }
@@ -458,9 +461,11 @@ namespace Reflection.Helper
                     recurssionScreenData.Question = allQuestionsData.Where(c => c.QuestionID.ToString() == reflection.QuestionID.ToString()).Select(d => d.Question).FirstOrDefault().ToString();
                     recurssionScreenData.ExecutionDate = rec.ExecutionDate;
                     recurssionScreenData.ExecutionTime = rec.ExecutionTime;
+                    recurssionScreenData.NextExecutionDate = rec.NextExecutionDate;
                     recurssionScreenData.RecurssionType = rec.RecursstionType;
                     recurssionScreenData.CustomRecurssionTypeValue = rec.CustomRecurssionTypeValue;
-                    if (recurssionScreenData.RecurssionType != null)
+                    recurssionScreenData.ScheduleId = rec.ScheduleId;
+                    if (recurssionScreenData.RecurssionType != null && recurssionScreenData.NextExecutionDate!=null)
                         screenData.Add(recurssionScreenData);
                 }
 
@@ -539,10 +544,27 @@ namespace Reflection.Helper
                 RecurssionDataRepository recurssionDataRepository = new RecurssionDataRepository(_configuration, _telemetry);
                 var reflectiondata = await reflectionDataRepository.GetReflectionData(reflection.RefID);
                 var recurssion = await recurssionDataRepository.GetRecurssionData(reflectiondata.RecurrsionID);
-                recurssion.RecursstionType = reflection.RecurssionType;
-                recurssion.CustomRecurssionTypeValue = reflection.CustomRecurssionTypeValue;
+                ReflectionDataEntity reflectionDataEntity = new ReflectionDataEntity();
+                RecurssionDataEntity recurssionDataEntity = new RecurssionDataEntity();
+                var reflectionid = Guid.NewGuid();
+                var recurrsionid = Guid.NewGuid();
+                reflectionDataEntity = reflectiondata;
+                reflectionDataEntity.ReflectionID = reflectionid;
+                reflectionDataEntity.RefCreatedDate = DateTime.Now;
+                reflectionDataEntity.RecurrsionID = recurrsionid;
+                reflectionDataEntity.RowKey = Guid.NewGuid().ToString();
+                await reflectionDataRepository.CreateAsync(reflectionDataEntity);
+                recurssionDataEntity = recurssion;
+                recurssionDataEntity.ReflectionID = reflectionid;
+                recurssionDataEntity.CreatedDate = DateTime.Now;
+                recurssionDataEntity.RecurssionID = recurrsionid;
+                recurssionDataEntity.RecursstionType = reflection.RecurssionType;
+                recurssionDataEntity.CustomRecurssionTypeValue = reflection.CustomRecurssionTypeValue;
+                recurssionDataEntity.RowKey = Guid.NewGuid().ToString();
+                recurssionDataEntity.NextExecutionDate = reflection.NextExecutionDate;
+                await recurssionDataRepository.CreateAsync(recurssionDataEntity);
+                recurssion.NextExecutionDate = null;
                 await recurssionDataRepository.CreateOrUpdateAsync(recurssion);
-                await reflectionDataRepository.CreateOrUpdateAsync(reflectiondata);
             }
             catch (Exception ex)
             {

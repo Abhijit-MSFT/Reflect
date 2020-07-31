@@ -57,5 +57,15 @@ namespace Reflection.Model
         /// Gets or sets CustomRecurssionTypeValue.
         /// </summary>
         public string CustomRecurssionTypeValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets ExecutionTime.
+        /// </summary>
+        public DateTime? NextExecutionDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets ScheduleId.
+        /// </summary>
+        public string ScheduleId { get; set; }
     }
 }
