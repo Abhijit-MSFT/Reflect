@@ -84,5 +84,10 @@ namespace Reflection.Repositories.ReflectionData
         /// Gets or sets ServiceUrl.
         /// </summary>
         public string ServiceUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets Schedule Id.
+        /// </summary>
+        public string ScheduleId { get; set; }
     }
 }

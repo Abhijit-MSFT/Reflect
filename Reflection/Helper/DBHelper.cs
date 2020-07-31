@@ -93,7 +93,8 @@ namespace Reflection.Helper
                         IsActive = taskInfo.IsActive,
                         ReflectMessageId = taskInfo.reflectMessageId,
                         TenantId = taskInfo.teantId,
-                        ServiceUrl = taskInfo.serviceUrl
+                        ServiceUrl = taskInfo.serviceUrl,
+                        ScheduleId=taskInfo.scheduleId
                     };
                     await reflectionDataRepository.InsertOrMergeAsync(reflectEntity);
 
@@ -158,7 +159,7 @@ namespace Reflection.Helper
                     IsDefaultFlag = false,
                     QuestionCreatedDate = DateTime.Now,
                     CreatedBy = taskInfo.postCreateBy,
-                    CreatedByEmail = taskInfo.postCreatedByEmail
+                    CreatedByEmail = taskInfo.postCreatedByEmail,
                 };
 
                 await questionsDataRepository.CreateOrUpdateAsync(questionEntity);
@@ -195,7 +196,8 @@ namespace Reflection.Helper
                     ExecutionDate = taskInfo.executionDate,
                     ExecutionTime = taskInfo.executionTime,
                     RecurssionEndDate = taskInfo.executionDate.AddDays(60),
-                    NextExecutionDate = taskInfo.nextExecutionDate
+                    NextExecutionDate = taskInfo.nextExecutionDate,
+                    ScheduleId=taskInfo.scheduleId
                 };
                 await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
             }

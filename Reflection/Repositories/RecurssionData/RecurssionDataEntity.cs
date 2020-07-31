@@ -69,5 +69,10 @@ namespace Reflection.Repositories.RecurssionData
         /// </summary>
         public string CustomRecurssionTypeValue { get; set; }
 
+        /// <summary>
+        /// Gets or sets Schedule Id.
+        /// </summary>
+        public string ScheduleId { get; set; }
+
     }
 }

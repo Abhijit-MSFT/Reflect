@@ -349,6 +349,7 @@ namespace Microsoft.Teams.Apps.Reflect.Web
                             taskInfo.reflectionRowKey = Guid.NewGuid().ToString();
                             taskInfo.serviceUrl = turnContext.Activity.ServiceUrl;
                             taskInfo.teantId = turnContext.Activity.Conversation.TenantId;
+                            taskInfo.scheduleId = Guid.NewGuid().ToString();
                             await _dbHelper.SaveReflectionDataAsync(taskInfo);
                             if (taskInfo.postSendNowFlag == true)
                             {
