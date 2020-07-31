@@ -35,7 +35,7 @@ namespace Reflection.Interfaces
 
         Task UpdateReflectionMessageIdAsync(ReflectionDataEntity reflectionDataEntity);
 
-        Task UpdateRecurssionDataNextExecutionDateTimeAsync(RecurssionDataEntity recurssionEntity);
+        DateTime? GetCalculatedNextExecutionDateTimeAsync(RecurssionDataEntity recurssionEntity);
 
         Task DeleteRecurrsionDataAsync(Guid reflectionId);
 

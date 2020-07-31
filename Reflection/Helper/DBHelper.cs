@@ -240,13 +240,14 @@ namespace Reflection.Helper
         }
 
         /// <summary>
-        /// Update recursion table based on day.
+        /// Get the calculated next execution date time.
         /// </summary>
         /// <param name="recurssionEntity">recurssionEntity.</param>
-        /// <returns>Null.</returns>
-        public async Task UpdateRecurssionDataNextExecutionDateTimeAsync(RecurssionDataEntity recurssionEntity)
+        /// <returns>Calculated next execution date time.</returns>
+        public DateTime? GetCalculatedNextExecutionDateTimeAsync(RecurssionDataEntity recurssionEntity)
         {
             _telemetry.TrackEvent("UpdateRecurssionDataNextExecutionDateTimeAsync");
+            DateTime? calculatedNextExecutionDate = null;
             try
             {
                 DateTime nextExecutionDate = Convert.ToDateTime(recurssionEntity.NextExecutionDate);
@@ -256,22 +257,22 @@ namespace Reflection.Helper
                 {
                     case "daily":
                         DateTime? nextExecutionDay = DateTime.Now.AddDays(1);
-                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextExecutionDay ? nextExecutionDay : null;
+                        calculatedNextExecutionDate = recurssionEntity.RecurssionEndDate >= nextExecutionDay ? nextExecutionDay : null;
                         break;
                     case "every weekday":
                         DateTime? nextWeekDay = GetNextWeekday();
-                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextWeekDay ? nextWeekDay : null;
+                        calculatedNextExecutionDate = recurssionEntity.RecurssionEndDate >= nextWeekDay ? nextWeekDay : null;
                         break;
                     case "weekly":
                         DateTime? nextWeeklyday = GetNextWeeklyday(nextExecutionDate.DayOfWeek);
-                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextWeeklyday ? nextWeeklyday : null;
+                        calculatedNextExecutionDate = recurssionEntity.RecurssionEndDate >= nextWeeklyday ? nextWeeklyday : null;
                         break;
                     case "monthly":
                         DateTime? nextMonthlyday = nextExecutionDate.AddMonths(1);
-                        recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextMonthlyday ? nextMonthlyday : null;
+                        calculatedNextExecutionDate = recurssionEntity.RecurssionEndDate >= nextMonthlyday ? nextMonthlyday : null;
                         break;
                     case "does not repeat":
-                        recurssionEntity.NextExecutionDate = null;
+                        calculatedNextExecutionDate = null;
                         break;
                     case "custom":
                         if (recurssionEntity.CustomRecurssionTypeValue.Contains("week"))
@@ -299,7 +300,7 @@ namespace Reflection.Helper
                                 {
                                     int addDays = weekdays.IndexOf(selectedweeks[weekindex + 1]) - weekdays.IndexOf(selectedweeks[weekindex]);
                                     DateTime? nextcustomweeklyday = DateTime.Now.AddDays(addDays);
-                                    recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextcustomweeklyday ? nextcustomweeklyday : null;
+                                    calculatedNextExecutionDate = recurssionEntity.RecurssionEndDate >= nextcustomweeklyday ? nextcustomweeklyday : null;
                                 }
                             }
 
@@ -320,20 +321,19 @@ namespace Reflection.Helper
                         else
                         {
                             DateTime? nextcustomdailyday = DateTime.Now.AddDays(1);
-                            recurssionEntity.NextExecutionDate = recurssionEntity.RecurssionEndDate >= nextcustomdailyday ? nextcustomdailyday : null;
+                            calculatedNextExecutionDate = recurssionEntity.RecurssionEndDate >= nextcustomdailyday ? nextcustomdailyday : null;
                             break;
                         }
 
                     default:
                         break;
                 }
-
-                await recurssionDataRepository.CreateOrUpdateAsync(recurssionEntity);
             }
             catch (Exception ex)
             {
                 _telemetry.TrackException(ex);
             }
+            return calculatedNextExecutionDate;
         }
 
         /// <summary>
