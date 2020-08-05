@@ -275,6 +275,8 @@ function GetDefaultQuestions(userPrincipleName) {
                         x.question +
                         "</option>";
                 });
+            } else {
+                blockdata = blockdata + '<option class="default-opt" disabled>' + 'No custom questions entered yet' + '</option>';
             }
             blockdata = blockdata + '<optgroup label="Potential questions">Potential questions</optgroup>';
             defaultquestions.forEach((x) => {
@@ -299,6 +301,7 @@ function GetDefaultQuestions(userPrincipleName) {
         }
     });
 }
+
 function GetRecurssionsCount(userPrincipleName) {
     $.ajax({
         type: "GET",
