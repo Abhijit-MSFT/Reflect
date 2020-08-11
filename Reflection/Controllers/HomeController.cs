@@ -67,6 +67,19 @@ namespace Microsoft.Teams.Apps.Reflect.Web.Controllers
         }
 
         /// <summary>
+        /// Renders index view.
+        /// </summary>
+        /// <param name="userName">userName.</param>
+        /// <returns>View.</returns>
+        [Route("")]
+        public ActionResult Home()
+        {
+            _telemetry.TrackEvent("Home");
+
+            return View();
+        }
+
+        /// <summary>
         /// Renders manageRecurringPosts view.
         /// </summary>
         /// <param name="emailid">emailid.</param>
