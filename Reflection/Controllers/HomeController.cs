@@ -69,7 +69,6 @@ namespace Microsoft.Teams.Apps.Reflect.Web.Controllers
         /// <summary>
         /// Renders index view.
         /// </summary>
-        /// <param name="userName">userName.</param>
         /// <returns>View.</returns>
         [Route("")]
         public ActionResult Home()
